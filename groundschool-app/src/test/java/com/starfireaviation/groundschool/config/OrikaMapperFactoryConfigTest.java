@@ -33,7 +33,7 @@ public class OrikaMapperFactoryConfigTest {
     private MapperFactory mapperFactory;
 
     /**
-     * ClassMapBuilder baseDataClassMapBuilder
+     * ClassMapBuilder userClassMapBuilder
      */
     @Mock
     private ClassMapBuilder<User, UserEntity> userClassMapBuilder;
@@ -59,10 +59,12 @@ public class OrikaMapperFactoryConfigTest {
     @Test
     public void configureTest() {
         initUserMapper();
+        initRoleMapper();
 
         orikaMapperFactoryConfig.configure(mapperFactory);
 
         assertUserMapper();
+        assertRoleMapper();
     }
 
     /**
@@ -97,5 +99,39 @@ public class OrikaMapperFactoryConfigTest {
         //                        Mockito.times(1))
         //                .customize(ArgumentMatchers.<Mapper<User, UserEntity>>any());
         Mockito.verify(userClassMapBuilder, Mockito.times(1)).register();
+    }
+
+    /**
+     * RoleMapper
+     */
+    private void initRoleMapper() {
+        //        Mockito.when(mapperFactory.classMap(Role.class, RoleEntity.class)).thenReturn(
+        //                roleClassMapBuilder);
+        //        Mockito.when(roleClassMapBuilder.exclude(ArgumentMatchers.any())).thenReturn(
+        //                roleClassMapBuilder);
+        //        Mockito.when(roleClassMapBuilder.byDefault()).thenReturn(
+        //                roleClassMapBuilder);
+        //        Mockito.when(roleClassMapBuilder.customize(ArgumentMatchers.any(Mapper.class))).thenReturn(
+        //                roleClassMapBuilder);
+        //        Mockito
+        //                .when(
+        //                        roleClassMapBuilder.field(
+        //                                ArgumentMatchers.anyString(),
+        //                                ArgumentMatchers.anyString()))
+        //                .thenReturn(roleClassMapBuilder);
+    }
+
+    /**
+     * RoleMapper
+     */
+    private void assertRoleMapper() {
+        //        Mockito.verify(mapperFactory, Mockito.times(1)).classMap(Role.class, RoleEntity.class);
+        //        Mockito.verify(roleClassMapBuilder, Mockito.times(1)).byDefault();
+        //        Mockito
+        //                .verify(
+        //                        roleClassMapBuilder,
+        //                        Mockito.times(1))
+        //                .customize(ArgumentMatchers.<Mapper<Role, RoleEntity>>any());
+        //        Mockito.verify(roleClassMapBuilder, Mockito.times(1)).register();
     }
 }

@@ -37,7 +37,7 @@ public interface UserService {
      *
      * @return list of Users
      */
-    public List<User> findAll();
+    public List<User> findAllUsers();
 
     /**
      * Gets a user
@@ -45,6 +45,6 @@ public interface UserService {
      * @param id Long
      * @return User
      */
-    public User findById(long id);
+    public User findUserById(long id);
 
 }

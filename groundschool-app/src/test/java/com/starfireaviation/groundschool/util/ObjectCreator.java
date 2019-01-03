@@ -194,7 +194,6 @@ public class ObjectCreator {
         mockUser.setFirstName(FIRST_NAME);
         mockUser.setLastName(LAST_NAME);
         mockUser.setEmail(EMAIL);
-        mockUser.setRole(ROLE);
         return mockUser;
     }
 
@@ -211,7 +210,6 @@ public class ObjectCreator {
         mockUser.setFirstName(FIRST_NAME);
         mockUser.setLastName(LAST_NAME);
         mockUser.setEmail(EMAIL);
-        mockUser.setRole(ROLE);
         return mockUser;
     }
 

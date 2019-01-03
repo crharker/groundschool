@@ -27,5 +27,9 @@ public class OrikaMapperFactoryConfig implements OrikaMapperFactoryConfigurer {
                 .classMap(User.class, UserEntity.class)
                 .byDefault()
                 .register();
+        //        mapperFactory
+        //                .classMap(Role.class, RoleEntity.class)
+        //                .byDefault()
+        //                .register();
     }
 }

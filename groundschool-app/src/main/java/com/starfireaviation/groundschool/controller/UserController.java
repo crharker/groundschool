@@ -62,7 +62,10 @@ public class UserController {
      * @return User
      */
     @PostMapping
-    public User create(@RequestBody User user) {
+    public User post(@RequestBody User user) {
+        if (user == null) {
+            return user;
+        }
         return userService.store(user);
     }
 
@@ -75,8 +78,8 @@ public class UserController {
     @GetMapping(path = {
             "/{id}"
     })
-    public User findOne(@PathVariable("id") long id) {
-        return userService.findById(id);
+    public User get(@PathVariable("id") long id) {
+        return userService.findUserById(id);
     }
 
     /**
@@ -86,7 +89,10 @@ public class UserController {
      * @return User
      */
     @PutMapping
-    public User update(@RequestBody User user) {
+    public User put(@RequestBody User user) {
+        if (user == null) {
+            return user;
+        }
         return userService.store(user);
     }
 
@@ -104,12 +110,12 @@ public class UserController {
     }
 
     /**
-     * Geta ll users
+     * Get all users
      *
      * @return list of Users
      */
     @GetMapping
-    public List<User> findAll() {
-        return userService.findAll();
+    public List<User> list() {
+        return userService.findAllUsers();
     }
 }

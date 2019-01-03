@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService {
      * UserRepository
      */
     @Autowired
-    private UserRepository repository;
+    private UserRepository userRepository;
 
     /**
      * MapperFacade
@@ -52,7 +52,7 @@ public class UserServiceImpl implements UserService {
      * @param mapperFacade MapperFacade
      */
     public UserServiceImpl(UserRepository userRepository, MapperFacade mapperFacade) {
-        repository = userRepository;
+        this.userRepository = userRepository;
         mapper = mapperFacade;
     }
 
@@ -64,7 +64,7 @@ public class UserServiceImpl implements UserService {
         if (user == null) {
             return user;
         }
-        return mapper.map(repository.save(mapper.map(user, UserEntity.class)), User.class);
+        return mapper.map(userRepository.save(mapper.map(user, UserEntity.class)), User.class);
     }
 
     /**
@@ -72,9 +72,9 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public User delete(long id) {
-        User user = mapper.map(findById(id), User.class);
+        User user = mapper.map(findUserById(id), User.class);
         if (user != null) {
-            repository.delete(mapper.map(user, UserEntity.class));
+            userRepository.delete(mapper.map(user, UserEntity.class));
         }
         return user;
     }
@@ -83,9 +83,9 @@ public class UserServiceImpl implements UserService {
      * {@inheritDoc} Required implementation.
      */
     @Override
-    public List<User> findAll() {
+    public List<User> findAllUsers() {
         List<User> users = new ArrayList<>();
-        List<UserEntity> userEntities = repository.findAll();
+        List<UserEntity> userEntities = userRepository.findAll();
         for (UserEntity userEntity : userEntities) {
             users.add(mapper.map(userEntity, User.class));
         }
@@ -96,8 +96,8 @@ public class UserServiceImpl implements UserService {
      * {@inheritDoc} Required implementation.
      */
     @Override
-    public User findById(long id) {
-        return mapper.map(repository.findById(id), User.class);
+    public User findUserById(long id) {
+        return mapper.map(userRepository.findById(id), User.class);
     }
 
 }

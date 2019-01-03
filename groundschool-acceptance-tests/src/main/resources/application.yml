@@ -1,0 +1,70 @@
+# NEP properties
+nep:
+  environment: internet-lab
+  application-key: 8a808f0d653509ed01653e3c33c00026
+  application-name: punchh-adapter
+  url: https://nep-gateway.swenglabs.ncr.com
+
+  tech-users:
+    default:
+      shared-key: 9ed80242e2c84379a4bc1c4baf0eef0e
+      secret-key: 56e60fd9be5f45758465b04ca00bf780
+
+# CXF-specific settings
+cxf:
+
+  # If `true`, all requests/responses in your application will be written to
+  # configured log outputs/appenders.  Great for debugging.
+  logging-enabled: true
+
+  # The path of the CXF servlet that processes service requests, relative to
+  # the application's context path.
+  servlet-path: /services
+
+  # The path of your REST services, relative to the CXF servlet path.  This
+  # is combined with the `cxf.servlet-path` property to generate the path to
+  # your services, relative to the application context path.  For instance:
+  # `/services/rest`
+  address: /rest
+
+spring:
+  profiles:
+    active: log-dev
+
+punchh:
+  test:
+    order-number-length: 8
+    customer-org-name: punchh-org
+    promotions-max-time-box-duration: 5
+
+---
+
+spring:
+  profiles: integration-test,local-test
+
+test:
+  adapter:
+    uri: http://localhost:8080/services/rest
+    version: @version@:1.0
+
+punchh:
+  test:
+    order-number-length: 8
+    customer-org-name: punchh-org
+    promotions-max-time-box-duration: 5
+
+---
+
+spring:
+  profiles: integration-test,acceptance-test
+
+test:
+  adapter:
+    uri: ${nep.url}/punchh-adapter
+    version: @version@:1.0
+
+punchh:
+  test:
+    order-number-length: 8
+    customer-org-name: punchh-org
+    promotions-max-time-box-duration: 5

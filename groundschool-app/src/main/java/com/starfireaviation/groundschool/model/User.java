@@ -45,7 +45,7 @@ public class User extends Base {
     /**
      * Role
      */
-    private String role;
+    private Role role;
 
     /**
      * Retrieves the value for {@link #username}.
@@ -88,7 +88,7 @@ public class User extends Base {
      *
      * @return the current value
      */
-    public String getRole() {
+    public Role getRole() {
         return role;
     }
 
@@ -97,7 +97,7 @@ public class User extends Base {
      *
      * @param role the new value to set
      */
-    public void setRole(String role) {
+    public void setRole(Role role) {
         this.role = role;
     }
 

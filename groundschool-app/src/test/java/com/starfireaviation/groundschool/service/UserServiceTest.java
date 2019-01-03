@@ -102,7 +102,7 @@ public class UserServiceTest {
     public void testAllUsers() {
         User mockUser = ObjectCreator.getUser();
 
-        List<User> users = userService.findAll();
+        List<User> users = userService.findAllUsers();
 
         Assert.assertNotNull(users);
         Assert.assertTrue(users.size() > 0);
@@ -124,7 +124,7 @@ public class UserServiceTest {
      */
     @Test
     public void testGetUser() {
-        User user = userService.findById(ObjectCreator.ID);
+        User user = userService.findUserById(ObjectCreator.ID);
 
         Assert.assertNotNull(user);
     }

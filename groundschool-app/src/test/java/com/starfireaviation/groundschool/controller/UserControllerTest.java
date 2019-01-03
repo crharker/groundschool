@@ -67,7 +67,7 @@ public class UserControllerTest {
     public void testPost() {
         Mockito.doReturn(mockUser).when(userService).store(ArgumentMatchers.any());
 
-        User user = userController.create(mockUser);
+        User user = userController.post(mockUser);
 
         Assert.assertNotNull(user);
         Assert.assertNotNull(user.getId());
@@ -77,7 +77,6 @@ public class UserControllerTest {
         Assert.assertSame(ObjectCreator.FIRST_NAME, user.getFirstName());
         Assert.assertSame(ObjectCreator.LAST_NAME, user.getLastName());
         Assert.assertSame(ObjectCreator.EMAIL, user.getEmail());
-        Assert.assertSame(ObjectCreator.ROLE, user.getRole());
 
         Mockito.verify(userService, times(1)).store(ArgumentMatchers.any());
         Mockito.verifyNoMoreInteractions(userService);
@@ -90,7 +89,7 @@ public class UserControllerTest {
     public void testPut() {
         Mockito.doReturn(mockUser).when(userService).store(ArgumentMatchers.any());
 
-        User user = userController.update(mockUser);
+        User user = userController.put(mockUser);
 
         Assert.assertNotNull(user);
         Assert.assertNotNull(user.getId());
@@ -100,7 +99,6 @@ public class UserControllerTest {
         Assert.assertSame(ObjectCreator.FIRST_NAME, user.getFirstName());
         Assert.assertSame(ObjectCreator.LAST_NAME, user.getLastName());
         Assert.assertSame(ObjectCreator.EMAIL, user.getEmail());
-        Assert.assertSame(ObjectCreator.ROLE, user.getRole());
 
         Mockito.verify(userService, times(1)).store(ArgumentMatchers.any());
         Mockito.verifyNoMoreInteractions(userService);
@@ -111,9 +109,9 @@ public class UserControllerTest {
      */
     @Test
     public void testGet() {
-        Mockito.doReturn(mockUser).when(userService).findById(ArgumentMatchers.anyLong());
+        Mockito.doReturn(mockUser).when(userService).findUserById(ArgumentMatchers.anyLong());
 
-        User user = userController.findOne(ObjectCreator.ID);
+        User user = userController.get(ObjectCreator.ID);
 
         Assert.assertNotNull(user);
         Assert.assertNotNull(user.getId());
@@ -123,9 +121,8 @@ public class UserControllerTest {
         Assert.assertSame(ObjectCreator.FIRST_NAME, user.getFirstName());
         Assert.assertSame(ObjectCreator.LAST_NAME, user.getLastName());
         Assert.assertSame(ObjectCreator.EMAIL, user.getEmail());
-        Assert.assertSame(ObjectCreator.ROLE, user.getRole());
 
-        Mockito.verify(userService, times(1)).findById(ArgumentMatchers.anyLong());
+        Mockito.verify(userService, times(1)).findUserById(ArgumentMatchers.anyLong());
         Mockito.verifyNoMoreInteractions(userService);
     }
 
@@ -146,7 +143,6 @@ public class UserControllerTest {
         Assert.assertSame(ObjectCreator.FIRST_NAME, user.getFirstName());
         Assert.assertSame(ObjectCreator.LAST_NAME, user.getLastName());
         Assert.assertSame(ObjectCreator.EMAIL, user.getEmail());
-        Assert.assertSame(ObjectCreator.ROLE, user.getRole());
 
         Mockito.verify(userService, times(1)).delete(ArgumentMatchers.anyLong());
         Mockito.verifyNoMoreInteractions(userService);
@@ -159,9 +155,9 @@ public class UserControllerTest {
     public void testGetAllUsers() {
         List<User> mockUsers = new ArrayList<>();
         mockUsers.add(mockUser);
-        Mockito.doReturn(mockUsers).when(userService).findAll();
+        Mockito.doReturn(mockUsers).when(userService).findAllUsers();
 
-        List<User> users = userController.findAll();
+        List<User> users = userController.list();
 
         Assert.assertNotNull(users);
         Assert.assertTrue("No users found in list", users.size() > 0);
@@ -174,9 +170,8 @@ public class UserControllerTest {
         Assert.assertSame(ObjectCreator.FIRST_NAME, user.getFirstName());
         Assert.assertSame(ObjectCreator.LAST_NAME, user.getLastName());
         Assert.assertSame(ObjectCreator.EMAIL, user.getEmail());
-        Assert.assertSame(ObjectCreator.ROLE, user.getRole());
 
-        Mockito.verify(userService, times(1)).findAll();
+        Mockito.verify(userService, times(1)).findAllUsers();
         Mockito.verifyNoMoreInteractions(userService);
     }
 
