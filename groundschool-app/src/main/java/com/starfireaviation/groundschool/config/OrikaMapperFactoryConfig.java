@@ -5,7 +5,15 @@
  */
 package com.starfireaviation.groundschool.config;
 
+import com.starfireaviation.groundschool.model.Answer;
+import com.starfireaviation.groundschool.model.MemberDetails;
+import com.starfireaviation.groundschool.model.Question;
+import com.starfireaviation.groundschool.model.ReferenceMaterial;
 import com.starfireaviation.groundschool.model.User;
+import com.starfireaviation.groundschool.model.sql.AnswerEntity;
+import com.starfireaviation.groundschool.model.sql.MemberDetailsEntity;
+import com.starfireaviation.groundschool.model.sql.QuestionEntity;
+import com.starfireaviation.groundschool.model.sql.ReferenceMaterialEntity;
 import com.starfireaviation.groundschool.model.sql.UserEntity;
 
 import ma.glasnost.orika.MapperFactory;
@@ -27,9 +35,21 @@ public class OrikaMapperFactoryConfig implements OrikaMapperFactoryConfigurer {
                 .classMap(User.class, UserEntity.class)
                 .byDefault()
                 .register();
-        //        mapperFactory
-        //                .classMap(Role.class, RoleEntity.class)
-        //                .byDefault()
-        //                .register();
+        mapperFactory
+                .classMap(MemberDetails.class, MemberDetailsEntity.class)
+                .byDefault()
+                .register();
+        mapperFactory
+                .classMap(Question.class, QuestionEntity.class)
+                .byDefault()
+                .register();
+        mapperFactory
+                .classMap(Answer.class, AnswerEntity.class)
+                .byDefault()
+                .register();
+        mapperFactory
+                .classMap(ReferenceMaterial.class, ReferenceMaterialEntity.class)
+                .byDefault()
+                .register();
     }
 }
