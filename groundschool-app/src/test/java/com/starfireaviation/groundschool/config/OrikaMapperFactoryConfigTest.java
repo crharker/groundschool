@@ -13,14 +13,22 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import com.starfireaviation.groundschool.model.Answer;
+import com.starfireaviation.groundschool.model.Event;
+import com.starfireaviation.groundschool.model.LessonPlan;
 import com.starfireaviation.groundschool.model.MemberDetails;
 import com.starfireaviation.groundschool.model.Question;
+import com.starfireaviation.groundschool.model.Quiz;
 import com.starfireaviation.groundschool.model.ReferenceMaterial;
+import com.starfireaviation.groundschool.model.Statistic;
 import com.starfireaviation.groundschool.model.User;
 import com.starfireaviation.groundschool.model.sql.AnswerEntity;
+import com.starfireaviation.groundschool.model.sql.EventEntity;
+import com.starfireaviation.groundschool.model.sql.LessonPlanEntity;
 import com.starfireaviation.groundschool.model.sql.MemberDetailsEntity;
 import com.starfireaviation.groundschool.model.sql.QuestionEntity;
+import com.starfireaviation.groundschool.model.sql.QuizEntity;
 import com.starfireaviation.groundschool.model.sql.ReferenceMaterialEntity;
+import com.starfireaviation.groundschool.model.sql.StatisticEntity;
 import com.starfireaviation.groundschool.model.sql.UserEntity;
 
 import ma.glasnost.orika.Mapper;
@@ -71,6 +79,30 @@ public class OrikaMapperFactoryConfigTest {
     private ClassMapBuilder<MemberDetails, MemberDetailsEntity> memberDetailsClassMapBuilder;
 
     /**
+     * ClassMapBuilder lessonPlanClassMapBuilder
+     */
+    @Mock
+    private ClassMapBuilder<LessonPlan, LessonPlanEntity> lessonPlanClassMapBuilder;
+
+    /**
+     * ClassMapBuilder quizClassMapBuilder
+     */
+    @Mock
+    private ClassMapBuilder<Quiz, QuizEntity> quizClassMapBuilder;
+
+    /**
+     * ClassMapBuilder statisticClassMapBuilder
+     */
+    @Mock
+    private ClassMapBuilder<Statistic, StatisticEntity> statisticClassMapBuilder;
+
+    /**
+     * ClassMapBuilder eventClassMapBuilder
+     */
+    @Mock
+    private ClassMapBuilder<Event, EventEntity> eventClassMapBuilder;
+
+    /**
      * OrikaMapperFactoryConfig
      */
     private OrikaMapperFactoryConfig orikaMapperFactoryConfig;
@@ -96,6 +128,10 @@ public class OrikaMapperFactoryConfigTest {
         initAnswerMapper();
         initReferenceMaterialMapper();
         initMemberDetailsMapper();
+        initLessonPlanMapper();
+        initQuizMapper();
+        initStatisticMapper();
+        initEventMapper();
 
         orikaMapperFactoryConfig.configure(mapperFactory);
 
@@ -105,6 +141,10 @@ public class OrikaMapperFactoryConfigTest {
         assertAnswerMapper();
         assertReferenceMaterialMapper();
         assertMemberDetailsMapper();
+        assertLessonPlanMapper();
+        assertQuizMapper();
+        assertStatisticMapper();
+        assertEventMapper();
     }
 
     /**
@@ -249,6 +289,114 @@ public class OrikaMapperFactoryConfigTest {
         Mockito.verify(mapperFactory, Mockito.times(1)).classMap(MemberDetails.class, MemberDetailsEntity.class);
         Mockito.verify(memberDetailsClassMapBuilder, Mockito.times(1)).byDefault();
         Mockito.verify(memberDetailsClassMapBuilder, Mockito.times(1)).register();
+    }
+
+    /**
+     * LessonPlanMapper
+     */
+    private void initLessonPlanMapper() {
+        Mockito.when(mapperFactory.classMap(LessonPlan.class, LessonPlanEntity.class)).thenReturn(
+                lessonPlanClassMapBuilder);
+        Mockito.when(lessonPlanClassMapBuilder.exclude(ArgumentMatchers.any())).thenReturn(
+                lessonPlanClassMapBuilder);
+        Mockito.when(lessonPlanClassMapBuilder.byDefault()).thenReturn(
+                lessonPlanClassMapBuilder);
+        Mockito
+                .when(
+                        lessonPlanClassMapBuilder.field(
+                                ArgumentMatchers.anyString(),
+                                ArgumentMatchers.anyString()))
+                .thenReturn(lessonPlanClassMapBuilder);
+    }
+
+    /**
+     * LessonPlanMapper
+     */
+    private void assertLessonPlanMapper() {
+        Mockito.verify(mapperFactory, Mockito.times(1)).classMap(LessonPlan.class, LessonPlanEntity.class);
+        Mockito.verify(lessonPlanClassMapBuilder, Mockito.times(1)).byDefault();
+        Mockito.verify(lessonPlanClassMapBuilder, Mockito.times(1)).register();
+    }
+
+    /**
+     * QuizMapper
+     */
+    private void initQuizMapper() {
+        Mockito.when(mapperFactory.classMap(Quiz.class, QuizEntity.class)).thenReturn(
+                quizClassMapBuilder);
+        Mockito.when(quizClassMapBuilder.exclude(ArgumentMatchers.any())).thenReturn(
+                quizClassMapBuilder);
+        Mockito.when(quizClassMapBuilder.byDefault()).thenReturn(
+                quizClassMapBuilder);
+        Mockito
+                .when(
+                        quizClassMapBuilder.field(
+                                ArgumentMatchers.anyString(),
+                                ArgumentMatchers.anyString()))
+                .thenReturn(quizClassMapBuilder);
+    }
+
+    /**
+     * QuizMapper
+     */
+    private void assertQuizMapper() {
+        Mockito.verify(mapperFactory, Mockito.times(1)).classMap(Quiz.class, QuizEntity.class);
+        Mockito.verify(quizClassMapBuilder, Mockito.times(1)).byDefault();
+        Mockito.verify(quizClassMapBuilder, Mockito.times(1)).register();
+    }
+
+    /**
+     * StatisticMapper
+     */
+    private void initStatisticMapper() {
+        Mockito.when(mapperFactory.classMap(Statistic.class, StatisticEntity.class)).thenReturn(
+                statisticClassMapBuilder);
+        Mockito.when(statisticClassMapBuilder.exclude(ArgumentMatchers.any())).thenReturn(
+                statisticClassMapBuilder);
+        Mockito.when(statisticClassMapBuilder.byDefault()).thenReturn(
+                statisticClassMapBuilder);
+        Mockito
+                .when(
+                        statisticClassMapBuilder.field(
+                                ArgumentMatchers.anyString(),
+                                ArgumentMatchers.anyString()))
+                .thenReturn(statisticClassMapBuilder);
+    }
+
+    /**
+     * StatisticMapper
+     */
+    private void assertStatisticMapper() {
+        Mockito.verify(mapperFactory, Mockito.times(1)).classMap(Statistic.class, StatisticEntity.class);
+        Mockito.verify(statisticClassMapBuilder, Mockito.times(1)).byDefault();
+        Mockito.verify(statisticClassMapBuilder, Mockito.times(1)).register();
+    }
+
+    /**
+     * EventMapper
+     */
+    private void initEventMapper() {
+        Mockito.when(mapperFactory.classMap(Event.class, EventEntity.class)).thenReturn(
+                eventClassMapBuilder);
+        Mockito.when(eventClassMapBuilder.exclude(ArgumentMatchers.any())).thenReturn(
+                eventClassMapBuilder);
+        Mockito.when(eventClassMapBuilder.byDefault()).thenReturn(
+                eventClassMapBuilder);
+        Mockito
+                .when(
+                        eventClassMapBuilder.field(
+                                ArgumentMatchers.anyString(),
+                                ArgumentMatchers.anyString()))
+                .thenReturn(eventClassMapBuilder);
+    }
+
+    /**
+     * EventMapper
+     */
+    private void assertEventMapper() {
+        Mockito.verify(mapperFactory, Mockito.times(1)).classMap(Event.class, EventEntity.class);
+        Mockito.verify(eventClassMapBuilder, Mockito.times(1)).byDefault();
+        Mockito.verify(eventClassMapBuilder, Mockito.times(1)).register();
     }
 
 }

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.starfireaviation.groundschool.model.MemberDetails;
+import com.starfireaviation.groundschool.service.ExternalDataRetrievalService;
 import com.starfireaviation.groundschool.service.MemberDetailsService;
 
 import java.util.List;
@@ -38,6 +39,12 @@ public class MemberDetailsController {
      */
     @Autowired
     private MemberDetailsService memberDetailsService;
+
+    /**
+     * ExternalDataRetrievalService
+     */
+    @Autowired
+    private ExternalDataRetrievalService externalDataRetrievalService;
 
     /**
      * Initializes an instance of <code>MemberDetailsController</code> with the default data.
@@ -118,4 +125,15 @@ public class MemberDetailsController {
     public List<MemberDetails> list() {
         return memberDetailsService.findAllMemberDetails();
     }
+
+    /**
+     * Rebuilds member details from EAA690.net
+     */
+    @PostMapping(path = {
+            "/rebuild"
+    })
+    public void rebuild() {
+        externalDataRetrievalService.rebuildMemberDetails();
+    }
+
 }

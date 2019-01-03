@@ -21,6 +21,10 @@ public enum ChapterMembershipType {
      */
     FAMILY,
     /**
+     * STUDENT
+     */
+    STUDENT,
+    /**
      * UNKNOWN
      */
     UNKNOWN;

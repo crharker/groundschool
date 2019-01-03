@@ -129,7 +129,7 @@ public class MemberDetailsEntity extends BaseEntity {
     /**
      * Tail Number
      */
-    @Column(name = "tail_number", nullable = true, length = 10)
+    @Column(name = "tail_number", nullable = true, length = 50)
     private String tailNumber;
 
     /**

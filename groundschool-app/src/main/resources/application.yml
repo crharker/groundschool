@@ -24,3 +24,18 @@ logging:
      hibernate:
        SQL: DEBUG
        type: TRACE
+
+EAA690:
+  authentication:
+    username: brian.michael@yahoo.com
+    password: jaoudy
+    signing-key: <<HIDDEN>>
+    token-prefix: "Bearer "
+    authorities-key: scopes
+    header-string: Authorization
+
+groundschool:
+  timeout:
+    read: 10000
+    connect: 1000
+    access-token-validity: 18000000
