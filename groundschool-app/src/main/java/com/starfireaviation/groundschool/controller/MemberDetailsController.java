@@ -133,7 +133,17 @@ public class MemberDetailsController {
             "/rebuild"
     })
     public void rebuild() {
-        externalDataRetrievalService.rebuildMemberDetails();
+        externalDataRetrievalService.rebuildMemberDetails(false);
+    }
+
+    /**
+     * Rebuilds member details from EAA690.net
+     */
+    @PostMapping(path = {
+            "/rebuild/init"
+    })
+    public void rebuildInitialize() {
+        externalDataRetrievalService.rebuildMemberDetails(true);
     }
 
 }

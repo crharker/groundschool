@@ -14,6 +14,8 @@ public interface ExternalDataRetrievalService {
 
     /**
      * Rebuilds member details
+     *
+     * @param scheduleNextRun whether or not to schedule the next run
      */
-    public void rebuildMemberDetails();
+    public void rebuildMemberDetails(boolean scheduleNextRun);
 }

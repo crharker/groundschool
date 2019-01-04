@@ -8,6 +8,7 @@ package com.starfireaviation.groundschool.service.impl;
 import java.net.URI;
 import java.time.Duration;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -24,6 +25,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.starfireaviation.groundschool.model.JobType;
 import com.starfireaviation.groundschool.model.MemberDetails;
 import com.starfireaviation.groundschool.model.Statistic;
 import com.starfireaviation.groundschool.model.StatisticType;
@@ -31,6 +33,7 @@ import com.starfireaviation.groundschool.properties.EAA690Properties;
 import com.starfireaviation.groundschool.service.ExternalDataRetrievalService;
 import com.starfireaviation.groundschool.service.MemberDetailsService;
 import com.starfireaviation.groundschool.service.StatisticService;
+import com.starfireaviation.groundschool.service.TimeService;
 import com.starfireaviation.groundschool.util.HtmlResponseParser;
 
 /**
@@ -59,6 +62,12 @@ public class ExternalDataRetrievalServiceImpl implements ExternalDataRetrievalSe
     private MemberDetailsService memberDetailsService;
 
     /**
+     * TimeService
+     */
+    @Autowired
+    private TimeService timeService;
+
+    /**
      * RestTemplate
      */
     @Autowired
@@ -74,7 +83,7 @@ public class ExternalDataRetrievalServiceImpl implements ExternalDataRetrievalSe
      * {@inheritDoc} Required implementation.
      */
     @Override
-    public void rebuildMemberDetails() {
+    public void rebuildMemberDetails(boolean scheduleNextRun) {
         Instant start = Instant.now();
         LOGGER.info("Getting EAA690.net login cookie...");
         final String cookie = getEAA690NetLoginCookie();
@@ -109,6 +118,11 @@ public class ExternalDataRetrievalServiceImpl implements ExternalDataRetrievalSe
                 }
             }
         }
+        if (scheduleNextRun) {
+            Date nextRunDate = Date.from(Instant.now().plus(12, ChronoUnit.HOURS));
+            LOGGER.info(String.format("Scheduling next run at %s", nextRunDate));
+            timeService.add(1L, false, nextRunDate, null, JobType.MEMBER_DETAILS_REFRESH);
+        }
         statisticsService.store(
                 new Statistic(
                         StatisticType.REBUILD_MEMBER_DETAILS,
@@ -123,6 +137,12 @@ public class ExternalDataRetrievalServiceImpl implements ExternalDataRetrievalSe
      * @return MemberDetails
      */
     private static MemberDetails merge(MemberDetails oldMemberDetails, MemberDetails newMemberDetails) {
+        if (oldMemberDetails == null) {
+            return newMemberDetails;
+        }
+        if (newMemberDetails == null) {
+            return oldMemberDetails;
+        }
         MemberDetails memberDetails = new MemberDetails();
         memberDetails.setAddressLine1(
                 mergeStringValue(oldMemberDetails.getAddressLine1(), newMemberDetails.getAddressLine1()));
