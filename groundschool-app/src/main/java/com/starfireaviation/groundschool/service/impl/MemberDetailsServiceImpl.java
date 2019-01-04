@@ -101,4 +101,20 @@ public class MemberDetailsServiceImpl implements MemberDetailsService {
         return mapper.map(memberDetailsRepository.findById(id), MemberDetails.class);
     }
 
+    /**
+     * {@inheritDoc} Required implementation.
+     */
+    @Override
+    public MemberDetails findByLocalId(long id) {
+        return mapper.map(memberDetailsRepository.findByLocalId(id), MemberDetails.class);
+    }
+
+    /**
+     * {@inheritDoc} Required implementation.
+     */
+    @Override
+    public MemberDetails findByUserId(long id) {
+        return mapper.map(memberDetailsRepository.findByUserId(id), MemberDetails.class);
+    }
+
 }

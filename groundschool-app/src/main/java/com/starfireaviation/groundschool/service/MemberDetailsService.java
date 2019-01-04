@@ -47,4 +47,20 @@ public interface MemberDetailsService {
      */
     public MemberDetails findById(long id);
 
+    /**
+     * Gets a memberDetails
+     *
+     * @param id Long
+     * @return MemberDetails
+     */
+    public MemberDetails findByLocalId(long id);
+
+    /**
+     * Gets a memberDetails
+     *
+     * @param id Long
+     * @return MemberDetails
+     */
+    public MemberDetails findByUserId(long id);
+
 }

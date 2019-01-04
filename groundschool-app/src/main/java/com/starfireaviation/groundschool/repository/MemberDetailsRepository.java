@@ -41,6 +41,22 @@ public interface MemberDetailsRepository extends Repository<MemberDetailsEntity,
     MemberDetailsEntity findById(long id);
 
     /**
+     * Gets a memberDetails
+     *
+     * @param id Long
+     * @return MemberDetailsEntity
+     */
+    MemberDetailsEntity findByLocalId(long id);
+
+    /**
+     * Gets a memberDetails
+     *
+     * @param id Long
+     * @return MemberDetailsEntity
+     */
+    MemberDetailsEntity findByUserId(long id);
+
+    /**
      * Saves a memberDetails
      *
      * @param user User

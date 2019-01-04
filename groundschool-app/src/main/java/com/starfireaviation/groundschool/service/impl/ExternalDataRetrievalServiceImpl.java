@@ -9,6 +9,7 @@ import java.net.URI;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -93,12 +94,17 @@ public class ExternalDataRetrievalServiceImpl implements ExternalDataRetrievalSe
                     MemberDetails fullDetails = getEAA690MemberDetails(eaa690MemberDetails.getLocalId());
                     fullDetails.setFirstName(eaa690MemberDetails.getFirstName());
                     fullDetails.setLastName(eaa690MemberDetails.getLastName());
-                    memberDetailsService.store(fullDetails);
+                    memberDetailsService.store(
+                            merge(memberDetailsService.findByLocalId(eaa690MemberDetails.getLocalId()), fullDetails));
                 }
                 if (eaa690MemberDetails.getLastName() != null && eaa690MemberDetails.getEaaNumber() != null) {
                     LOGGER.info("Retrieving EAA member info...");
                     memberDetailsService.store(
-                            getEAAMemberInfo(eaa690MemberDetails.getLastName(), eaa690MemberDetails.getEaaNumber()));
+                            merge(
+                                    memberDetailsService.findByLocalId(eaa690MemberDetails.getLocalId()),
+                                    getEAAMemberInfo(
+                                            eaa690MemberDetails.getLastName(),
+                                            eaa690MemberDetails.getEaaNumber())));
                     resetEAARESTfulState();
                 }
             }
@@ -107,6 +113,85 @@ public class ExternalDataRetrievalServiceImpl implements ExternalDataRetrievalSe
                 new Statistic(
                         StatisticType.REBUILD_MEMBER_DETAILS,
                         String.format("Duration [%s]", Duration.between(start, Instant.now()))));
+    }
+
+    /**
+     * Merges old and new MemberDetails
+     *
+     * @param oldMemberDetails MemberDetails
+     * @param newMemberDetails MemberDetails
+     * @return MemberDetails
+     */
+    private static MemberDetails merge(MemberDetails oldMemberDetails, MemberDetails newMemberDetails) {
+        MemberDetails memberDetails = new MemberDetails();
+        memberDetails.setAddressLine1(
+                mergeStringValue(oldMemberDetails.getAddressLine1(), newMemberDetails.getAddressLine1()));
+        memberDetails.setCellPhone(mergeStringValue(oldMemberDetails.getCellPhone(), newMemberDetails.getCellPhone()));
+        memberDetails.setChapterDatePaid(
+                mergeDateValue(oldMemberDetails.getChapterDatePaid(), newMemberDetails.getChapterDatePaid()));
+        memberDetails.setChapterMember(newMemberDetails.isChapterMember());
+        memberDetails.setChapterMembershipType(
+                newMemberDetails.getChapterMembershipType() == null
+                        ? oldMemberDetails.getChapterMembershipType()
+                        : newMemberDetails.getChapterMembershipType());
+        memberDetails.setChapterPaid(newMemberDetails.isChapterPaid());
+        memberDetails.setCity(mergeStringValue(oldMemberDetails.getCity(), newMemberDetails.getCity()));
+        memberDetails.setEaaMemberExpiryDate(
+                mergeDateValue(oldMemberDetails.getEaaMemberExpiryDate(), newMemberDetails.getEaaMemberExpiryDate()));
+        memberDetails.setEaaNumber(mergeStringValue(oldMemberDetails.getEaaNumber(), newMemberDetails.getEaaNumber()));
+        memberDetails.setEaaPaid(newMemberDetails.isEaaPaid());
+        memberDetails.setEaaYouthProtection(newMemberDetails.isEaaYouthProtection());
+        memberDetails.setEaaYouthProtectionExpiryDate(
+                mergeDateValue(
+                        oldMemberDetails.getEaaYouthProtectionExpiryDate(),
+                        newMemberDetails.getEaaYouthProtectionExpiryDate()));
+        memberDetails.setEmail(mergeStringValue(oldMemberDetails.getEmail(), newMemberDetails.getEmail()));
+        memberDetails.setFirstName(mergeStringValue(oldMemberDetails.getFirstName(), newMemberDetails.getFirstName()));
+        memberDetails.setHomePhone(mergeStringValue(oldMemberDetails.getHomePhone(), newMemberDetails.getHomePhone()));
+        memberDetails.setId(mergeLongValue(oldMemberDetails.getId(), newMemberDetails.getId()));
+        memberDetails.setLastName(mergeStringValue(oldMemberDetails.getLastName(), newMemberDetails.getLastName()));
+        memberDetails.setLocalId(mergeLongValue(oldMemberDetails.getLocalId(), newMemberDetails.getLocalId()));
+        memberDetails.setSpouseName(
+                mergeStringValue(oldMemberDetails.getSpouseName(), newMemberDetails.getSpouseName()));
+        memberDetails.setState(mergeStringValue(oldMemberDetails.getState(), newMemberDetails.getState()));
+        memberDetails.setTailNumber(
+                mergeStringValue(oldMemberDetails.getTailNumber(), newMemberDetails.getTailNumber()));
+        memberDetails.setUserId(mergeLongValue(oldMemberDetails.getUserId(), newMemberDetails.getUserId()));
+        memberDetails.setZipCode(mergeStringValue(oldMemberDetails.getZipCode(), newMemberDetails.getZipCode()));
+        return memberDetails;
+    }
+
+    /**
+     * Merge old and new string values
+     *
+     * @param oldValue String
+     * @param newValue String
+     * @return String
+     */
+    private static String mergeStringValue(String oldValue, String newValue) {
+        return newValue == null ? oldValue : newValue;
+    }
+
+    /**
+     * Merge old and new long values
+     *
+     * @param oldValue Long
+     * @param newValue Long
+     * @return Long
+     */
+    private static Long mergeLongValue(Long oldValue, Long newValue) {
+        return newValue == null ? oldValue : newValue;
+    }
+
+    /**
+     * Merge old and new date values
+     *
+     * @param oldValue Date
+     * @param newValue Date
+     * @return Date
+     */
+    private static Date mergeDateValue(Date oldValue, Date newValue) {
+        return newValue == null ? oldValue : newValue;
     }
 
     /**

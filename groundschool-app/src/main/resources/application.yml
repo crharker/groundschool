@@ -22,13 +22,13 @@ logging:
   level:
     org:
      hibernate:
-       SQL: DEBUG
+       SQL: INFO
        type: TRACE
 
 EAA690:
   authentication:
     username: brian.michael@yahoo.com
-    password: jaoudy
+    password: <<HIDDEN>>
     signing-key: <<HIDDEN>>
     token-prefix: "Bearer "
     authorities-key: scopes
