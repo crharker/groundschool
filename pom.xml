@@ -13,7 +13,7 @@
         <!-- module>groundschool-ui</module -->
         <module>groundschool-app</module>
         <!-- module>groundschool-performance-tests</module -->
-        <!-- module>groundschool-acceptance-tests</module -->
+        <module>groundschool-acceptance-tests</module>
     </modules>
 
 </project>

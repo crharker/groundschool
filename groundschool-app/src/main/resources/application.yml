@@ -32,7 +32,7 @@ logging:
 EAA690:
   authentication:
     username: brian.michael@yahoo.com
-    password: <<HIDDEN>>
+    password: jaoudy
     signing-key: <<HIDDEN>>
     token-prefix: "Bearer "
     authorities-key: scopes
