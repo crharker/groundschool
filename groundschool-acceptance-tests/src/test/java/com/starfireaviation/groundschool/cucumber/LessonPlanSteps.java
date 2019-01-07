@@ -15,7 +15,7 @@ import cucumber.api.java.en.Then;
  *
  * @author brianmichael
  */
-public class LessonPlanSteps {
+public class LessonPlanSteps extends BaseSteps {
 
     /**
      * Given a lesson plan exists

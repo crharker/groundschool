@@ -6,23 +6,23 @@
 package com.starfireaviation.groundschool.cucumber;
 
 import java.io.IOException;
-import cucumber.api.java.en.Given;
+
+import cucumber.api.java.en.Then;
 
 /**
- * RoleSteps
+ * CommonSteps
  *
  * @author brianmichael
  */
-public class RoleSteps extends BaseSteps {
+public class CommonSteps {
 
     /**
-     * Given I am a (.+) user
+     * Then I should receive a operation not permitted error
      *
-     * @param role user role
      * @throws IOException when things go wrong
      */
-    @Given("^I am a (.+) user$")
-    public void iAmAUser(String role) throws IOException {
+    @Then("^I should receive a operation not permitted error$")
+    public void iShouldReceiveAOperationNotPermittedError() throws IOException {
         // Do something
     }
 

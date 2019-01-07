@@ -15,7 +15,7 @@ import cucumber.api.java.en.Then;
  *
  * @author brianmichael
  */
-public class ReferenceMaterialSteps {
+public class ReferenceMaterialSteps extends BaseSteps {
 
     /**
      * Given a reference material exists

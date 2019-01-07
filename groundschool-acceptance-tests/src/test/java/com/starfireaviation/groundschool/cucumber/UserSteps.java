@@ -15,7 +15,7 @@ import cucumber.api.java.en.Then;
  *
  * @author brianmichael
  */
-public class UserSteps {
+public class UserSteps extends BaseSteps {
 
     /**
      * Given a user exists
@@ -24,16 +24,6 @@ public class UserSteps {
      */
     @Given("^a user exists$")
     public void aUserExists() throws IOException {
-        // Do something
-    }
-
-    /**
-     * Given a member exists
-     *
-     * @throws IOException when things go wrong
-     */
-    @Given("^a member exists$")
-    public void aMemberExists() throws IOException {
         // Do something
     }
 
@@ -54,16 +44,6 @@ public class UserSteps {
      */
     @When("^I list all users$")
     public void iListAllUsers() throws IOException {
-        // Do something
-    }
-
-    /**
-     * When I list all members
-     *
-     * @throws IOException when things go wrong
-     */
-    @When("^I list all members$")
-    public void iListAllMembers() throws IOException {
         // Do something
     }
 
@@ -138,16 +118,6 @@ public class UserSteps {
     }
 
     /**
-     * Then I should receive a list of members
-     *
-     * @throws IOException when things go wrong
-     */
-    @Then("^I should receive a list of members$")
-    public void receiveAListOfMembers() throws IOException {
-        // Do something
-    }
-
-    /**
      * Then I should receive the user
      *
      * @throws IOException when things go wrong
@@ -194,16 +164,6 @@ public class UserSteps {
      */
     @Then("^I should receive an authentication token$")
     public void iShouldReceiveAnAuthenticationToken() throws IOException {
-        // Do something
-    }
-
-    /**
-     * Then I should receive a operation not permitted error
-     *
-     * @throws IOException when things go wrong
-     */
-    @Then("^I should receive a operation not permitted error$")
-    public void iShouldReceiveAOperationNotPermittedError() throws IOException {
         // Do something
     }
 

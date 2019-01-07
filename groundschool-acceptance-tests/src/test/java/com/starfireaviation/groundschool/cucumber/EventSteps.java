@@ -15,7 +15,7 @@ import cucumber.api.java.en.Then;
  *
  * @author brianmichael
  */
-public class EventSteps {
+public class EventSteps extends BaseSteps {
 
     /**
      * Given an event exists

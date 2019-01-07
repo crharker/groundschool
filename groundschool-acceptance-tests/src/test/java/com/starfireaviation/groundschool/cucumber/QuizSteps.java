@@ -15,7 +15,7 @@ import cucumber.api.java.en.Then;
  *
  * @author brianmichael
  */
-public class QuizSteps {
+public class QuizSteps extends BaseSteps {
 
     /**
      * Given a quiz exists
