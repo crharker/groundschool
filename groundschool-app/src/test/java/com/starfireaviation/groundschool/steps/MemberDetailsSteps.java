@@ -3,9 +3,8 @@
  * Copyright 2019 Starfire Aviation, LLC
  *-----------------------------------------------------------------------------
  */
-package com.starfireaviation.groundschool.cucumber;
+package com.starfireaviation.groundschool.steps;
 
-import java.io.IOException;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.When;
 import cucumber.api.java.en.Then;
@@ -20,30 +19,30 @@ public class MemberDetailsSteps extends BaseSteps {
     /**
      * Given a member exists
      *
-     * @throws IOException when things go wrong
+     * @throws Exception when things go wrong
      */
     @Given("^a member exists$")
-    public void aMemberExists() throws IOException {
+    public void aMemberExists() throws Exception {
         // Do something
     }
 
     /**
      * When I list all members
      *
-     * @throws IOException when things go wrong
+     * @throws Exception when things go wrong
      */
     @When("^I list all members$")
-    public void iListAllMembers() throws IOException {
+    public void iListAllMembers() throws Exception {
         // Do something
     }
 
     /**
      * Then I should receive a list of members
      *
-     * @throws IOException when things go wrong
+     * @throws Exception when things go wrong
      */
     @Then("^I should receive a list of members$")
-    public void receiveAListOfMembers() throws IOException {
+    public void receiveAListOfMembers() throws Exception {
         // Do something
     }
 

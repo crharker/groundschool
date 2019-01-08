@@ -3,7 +3,7 @@
  * Copyright 2019 Starfire Aviation, LLC
  *-----------------------------------------------------------------------------
  */
-package com.starfireaviation.groundschool.cucumber;
+package com.starfireaviation.groundschool;
 
 import org.junit.runner.RunWith;
 
@@ -16,7 +16,10 @@ import cucumber.api.junit.Cucumber;
  * @author brianmichael
  */
 @RunWith(Cucumber.class)
-@CucumberOptions(features = "classpath:Feature")
+@CucumberOptions(
+        plugin = {
+                "pretty"
+        })
 public class CucumberIntegrationTest {
     // CucumberIntegrationTest
 }

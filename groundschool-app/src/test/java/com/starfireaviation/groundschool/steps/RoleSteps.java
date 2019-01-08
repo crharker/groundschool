@@ -3,9 +3,8 @@
  * Copyright 2019 Starfire Aviation, LLC
  *-----------------------------------------------------------------------------
  */
-package com.starfireaviation.groundschool.cucumber;
+package com.starfireaviation.groundschool.steps;
 
-import java.io.IOException;
 import cucumber.api.java.en.Given;
 
 /**
@@ -19,10 +18,10 @@ public class RoleSteps extends BaseSteps {
      * Given I am a (.+) user
      *
      * @param role user role
-     * @throws IOException when things go wrong
+     * @throws Exception when things go wrong
      */
     @Given("^I am a (.+) user$")
-    public void iAmAUser(String role) throws IOException {
+    public void iAmAUser(String role) throws Exception {
         // Do something
     }
 

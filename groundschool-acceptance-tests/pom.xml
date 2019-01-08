@@ -169,7 +169,7 @@
                     <glue>
                       <package>com.starfireaviation.groundschool</package>
                     </glue>
-                    <featuresDirectory>src/test/resources/Feature/</featuresDirectory>
+                    <featuresDirectory>src/test/resources/com/starfireaviation/groundschool/</featuresDirectory>
                     <parallelScheme>SCENARIO</parallelScheme>
                   </configuration>
                 </execution>

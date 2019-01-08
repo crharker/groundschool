@@ -3,9 +3,8 @@
  * Copyright 2019 Starfire Aviation, LLC
  *-----------------------------------------------------------------------------
  */
-package com.starfireaviation.groundschool.cucumber;
+package com.starfireaviation.groundschool.steps;
 
-import java.io.IOException;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.When;
 import cucumber.api.java.en.Then;
@@ -20,150 +19,150 @@ public class UserSteps extends BaseSteps {
     /**
      * Given a user exists
      *
-     * @throws IOException when things go wrong
+     * @throws Exception when things go wrong
      */
     @Given("^a user exists$")
-    public void aUserExists() throws IOException {
+    public void aUserExists() throws Exception {
         // Do something
     }
 
     /**
      * Given a user does not exist
      *
-     * @throws IOException when things go wrong
+     * @throws Exception when things go wrong
      */
     @Given("^a user does not exist$")
-    public void anUserDoesNotExists() throws IOException {
+    public void anUserDoesNotExists() throws Exception {
         // Do something
     }
 
     /**
      * When I list all users
      *
-     * @throws IOException when things go wrong
+     * @throws Exception when things go wrong
      */
     @When("^I list all users$")
-    public void iListAllUsers() throws IOException {
+    public void iListAllUsers() throws Exception {
         // Do something
     }
 
     /**
      * When I retrieve a user
      *
-     * @throws IOException when things go wrong
+     * @throws Exception when things go wrong
      */
     @When("^I retrieve a user$")
-    public void iRetrieveAUser() throws IOException {
+    public void iRetrieveAUser() throws Exception {
         // Do something
     }
 
     /**
      * When I retrieve my details
      *
-     * @throws IOException when things go wrong
+     * @throws Exception when things go wrong
      */
     @When("^I retrieve my details$")
-    public void iRetrieveMyDetails() throws IOException {
+    public void iRetrieveMyDetails() throws Exception {
         // Do something
     }
 
     /**
      * When I update a user
      *
-     * @throws IOException when things go wrong
+     * @throws Exception when things go wrong
      */
     @When("^I update a user$")
-    public void iUpdateAUser() throws IOException {
+    public void iUpdateAUser() throws Exception {
         // Do something
     }
 
     /**
      * When I delete a user
      *
-     * @throws IOException when things go wrong
+     * @throws Exception when things go wrong
      */
     @When("^I delete a user$")
-    public void iDeleteAUser() throws IOException {
+    public void iDeleteAUser() throws Exception {
         // Do something
     }
 
     /**
      * When I signup
      *
-     * @throws IOException when things go wrong
+     * @throws Exception when things go wrong
      */
     @When("^I signup$")
-    public void iSignup() throws IOException {
+    public void iSignup() throws Exception {
         // Do something
     }
 
     /**
      * When I login
      *
-     * @throws IOException when things go wrong
+     * @throws Exception when things go wrong
      */
     @When("^I login$")
-    public void iLogin() throws IOException {
+    public void iLogin() throws Exception {
         // Do something
     }
 
     /**
      * Then I should receive a list of users
      *
-     * @throws IOException when things go wrong
+     * @throws Exception when things go wrong
      */
     @Then("^I should receive a list of users$")
-    public void receiveAListOfUsers() throws IOException {
+    public void receiveAListOfUsers() throws Exception {
         // Do something
     }
 
     /**
      * Then I should receive the user
      *
-     * @throws IOException when things go wrong
+     * @throws Exception when things go wrong
      */
     @Then("^I should receive the user details$")
-    public void receiveTheUser() throws IOException {
+    public void receiveTheUser() throws Exception {
         // Do something
     }
 
     /**
      * Then The user should be updated
      *
-     * @throws IOException when things go wrong
+     * @throws Exception when things go wrong
      */
     @Then("^The user should be updated$")
-    public void theUserShouldBeUpdated() throws IOException {
+    public void theUserShouldBeUpdated() throws Exception {
         // Do something
     }
 
     /**
      * Then I should receive a user not found error
      *
-     * @throws IOException when things go wrong
+     * @throws Exception when things go wrong
      */
     @Then("^I should receive a user not found error$")
-    public void iReceiveAUserNotFoundError() throws IOException {
+    public void iReceiveAUserNotFoundError() throws Exception {
         // Do something
     }
 
     /**
      * Then The user should be deleted
      *
-     * @throws IOException when things go wrong
+     * @throws Exception when things go wrong
      */
     @Then("^The user should be deleted$")
-    public void theUserShouldBeDeleted() throws IOException {
+    public void theUserShouldBeDeleted() throws Exception {
         // Do something
     }
 
     /**
      * Then I should receive an authentication token
      *
-     * @throws IOException when things go wrong
+     * @throws Exception when things go wrong
      */
     @Then("^I should receive an authentication token$")
-    public void iShouldReceiveAnAuthenticationToken() throws IOException {
+    public void iShouldReceiveAnAuthenticationToken() throws Exception {
         // Do something
     }
 

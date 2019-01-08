@@ -3,7 +3,7 @@
  * Copyright 2019 Starfire Aviation, LLC
  *-----------------------------------------------------------------------------
  */
-package com.starfireaviation.groundschool.cucumber;
+package com.starfireaviation.groundschool.steps;
 
 import java.io.IOException;
 import java.io.InputStream;
