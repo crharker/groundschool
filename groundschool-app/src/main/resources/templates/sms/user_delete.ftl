@@ -1,5 +1,1 @@
-<html>
-    <body>
-        <h3>Hi ${user}, welcome to the application!</h3>
-    </body>
-</html>
+Hi ${firstName} ${lastName}, we are sorry to see you go!

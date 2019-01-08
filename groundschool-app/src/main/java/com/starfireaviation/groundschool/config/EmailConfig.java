@@ -14,15 +14,17 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 import com.starfireaviation.groundschool.properties.EmailProperties;
+import com.starfireaviation.groundschool.properties.SMSProperties;
 
 /**
- * RestConfig
+ * EmailConfig
  *
  * @author brianmichael
  */
 @Configuration
 @EnableConfigurationProperties({
-        EmailProperties.class
+        EmailProperties.class,
+        SMSProperties.class
 })
 public class EmailConfig {
 

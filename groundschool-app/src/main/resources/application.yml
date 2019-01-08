@@ -5,7 +5,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/eaa
     username: root
-    password: root
+    password: <<HIDDEN>>
     driver-class-name: com.mysql.jdbc.Driver
   jpa:
     properties:
@@ -51,6 +51,8 @@ groundschool:
     username: bsmichael@gmail.com
     password: <<HIDDEN>>
   sms:
-    from-address: 4047355660
+    from-address: 4704227400
+    account-sid: <<HIDDEN>>
+    auth-id: <<HIDDEN>>
   slack:
     from-address: brianmichael

@@ -5,6 +5,8 @@
  */
 package com.starfireaviation.groundschool.service;
 
+import com.starfireaviation.groundschool.model.SMSMessage;
+
 /**
  * SMSService
  *
@@ -24,4 +26,11 @@ public interface SMSService {
             String toAddress,
             String body);
 
+    /**
+     * Receives a SMS message and returns response
+     *
+     * @param message received
+     * @return response
+     */
+    public String receiveMessage(SMSMessage message);
 }

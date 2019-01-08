@@ -1,5 +1,1 @@
-<html>
-    <body>
-        <h3>Hi ${user}, welcome to the application!</h3>
-    </body>
-</html>
+Hi ${firstName} ${lastName}, please verify your user settings by going to ${host}/users/verify/${userId}/SMS
