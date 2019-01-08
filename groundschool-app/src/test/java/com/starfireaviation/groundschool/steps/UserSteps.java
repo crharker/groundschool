@@ -107,6 +107,17 @@ public class UserSteps extends BaseSteps {
     }
 
     /**
+     * When I verify my <setting> setting
+     *
+     * @param setting user setting
+     * @throws Exception when things go wrong
+     */
+    @When("^I verify my (.+) setting$")
+    public void iVerifySetting(String setting) throws Exception {
+        // Do something
+    }
+
+    /**
      * Then I should receive a list of users
      *
      * @throws Exception when things go wrong
@@ -163,6 +174,17 @@ public class UserSteps extends BaseSteps {
      */
     @Then("^I should receive an authentication token$")
     public void iShouldReceiveAnAuthenticationToken() throws Exception {
+        // Do something
+    }
+
+    /**
+     * Then My <setting> should be verified
+     *
+     * @param setting user setting
+     * @throws Exception when things go wrong
+     */
+    @Then("^My (.+) should be verified$")
+    public void mySettingShouldBeVerified(String setting) throws Exception {
         // Do something
     }
 

@@ -28,6 +28,17 @@ Background:
     Then I should receive the user details
 
   @acceptance
+  Scenario Outline: Student verifies user settings
+    When I verify my <setting> setting
+    Then My <setting> should be verified
+
+  Examples:
+    | setting |
+    | email |
+    | sms   |
+    | slack |
+
+  @acceptance
   Scenario: Admin logs in
     When I login
     Then I should receive an authentication token
