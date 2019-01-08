@@ -45,6 +45,6 @@ public interface UserService {
      * @param id Long
      * @return User
      */
-    public User findUserById(long id);
+    public User findById(long id);
 
 }

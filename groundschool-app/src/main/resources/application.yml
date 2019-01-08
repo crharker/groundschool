@@ -43,3 +43,10 @@ groundschool:
     read: 10000
     connect: 1000
     access-token-validity: 18000000
+  email:
+    from-address: bsmichael@gmail.com
+    bcc-address: bsmichael@gmail.com
+  sms:
+    from-address: 4047355660
+  slack:
+    from-address: brianmichael

@@ -72,7 +72,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public User delete(long id) {
-        User user = mapper.map(findUserById(id), User.class);
+        final User user = mapper.map(findById(id), User.class);
         if (user != null) {
             userRepository.delete(mapper.map(user, UserEntity.class));
         }
@@ -84,8 +84,8 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public List<User> findAllUsers() {
-        List<User> users = new ArrayList<>();
-        List<UserEntity> userEntities = userRepository.findAll();
+        final List<User> users = new ArrayList<>();
+        final List<UserEntity> userEntities = userRepository.findAll();
         for (UserEntity userEntity : userEntities) {
             users.add(mapper.map(userEntity, User.class));
         }
@@ -96,7 +96,7 @@ public class UserServiceImpl implements UserService {
      * {@inheritDoc} Required implementation.
      */
     @Override
-    public User findUserById(long id) {
+    public User findById(long id) {
         return mapper.map(userRepository.findById(id), User.class);
     }
 

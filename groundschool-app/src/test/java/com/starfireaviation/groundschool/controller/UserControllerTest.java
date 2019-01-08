@@ -20,6 +20,7 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import com.starfireaviation.groundschool.model.User;
+import com.starfireaviation.groundschool.service.NotificationService;
 import com.starfireaviation.groundschool.service.UserService;
 import com.starfireaviation.groundschool.util.ObjectCreator;
 
@@ -47,6 +48,12 @@ public class UserControllerTest {
     private UserService userService;
 
     /**
+     * NotificationService
+     */
+    @Mock
+    private NotificationService notificationService;
+
+    /**
      * Test setup
      */
     @Before
@@ -56,8 +63,9 @@ public class UserControllerTest {
         mockUser = ObjectCreator.getUser();
 
         Mockito.doReturn(ObjectCreator.getUser()).when(userService).store(ArgumentMatchers.any());
+        Mockito.doNothing().when(notificationService).send(ArgumentMatchers.any(), ArgumentMatchers.any());
 
-        userController = new UserController(userService);
+        userController = new UserController(userService, notificationService);
     }
 
     /**
@@ -79,7 +87,9 @@ public class UserControllerTest {
         Assert.assertSame(ObjectCreator.EMAIL, user.getEmail());
 
         Mockito.verify(userService, times(1)).store(ArgumentMatchers.any());
+        Mockito.verify(notificationService, times(1)).send(ArgumentMatchers.any(), ArgumentMatchers.any());
         Mockito.verifyNoMoreInteractions(userService);
+        Mockito.verifyNoMoreInteractions(notificationService);
     }
 
     /**
@@ -101,7 +111,9 @@ public class UserControllerTest {
         Assert.assertSame(ObjectCreator.EMAIL, user.getEmail());
 
         Mockito.verify(userService, times(1)).store(ArgumentMatchers.any());
+        Mockito.verify(notificationService, times(1)).send(ArgumentMatchers.any(), ArgumentMatchers.any());
         Mockito.verifyNoMoreInteractions(userService);
+        Mockito.verifyNoMoreInteractions(notificationService);
     }
 
     /**
@@ -109,7 +121,7 @@ public class UserControllerTest {
      */
     @Test
     public void testGet() {
-        Mockito.doReturn(mockUser).when(userService).findUserById(ArgumentMatchers.anyLong());
+        Mockito.doReturn(mockUser).when(userService).findById(ArgumentMatchers.anyLong());
 
         User user = userController.get(ObjectCreator.ID);
 
@@ -122,7 +134,7 @@ public class UserControllerTest {
         Assert.assertSame(ObjectCreator.LAST_NAME, user.getLastName());
         Assert.assertSame(ObjectCreator.EMAIL, user.getEmail());
 
-        Mockito.verify(userService, times(1)).findUserById(ArgumentMatchers.anyLong());
+        Mockito.verify(userService, times(1)).findById(ArgumentMatchers.anyLong());
         Mockito.verifyNoMoreInteractions(userService);
     }
 
@@ -145,7 +157,9 @@ public class UserControllerTest {
         Assert.assertSame(ObjectCreator.EMAIL, user.getEmail());
 
         Mockito.verify(userService, times(1)).delete(ArgumentMatchers.anyLong());
+        Mockito.verify(notificationService, times(1)).send(ArgumentMatchers.any(), ArgumentMatchers.any());
         Mockito.verifyNoMoreInteractions(userService);
+        Mockito.verifyNoMoreInteractions(notificationService);
     }
 
     /**

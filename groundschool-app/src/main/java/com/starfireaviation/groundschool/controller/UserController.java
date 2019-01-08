@@ -16,7 +16,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.starfireaviation.groundschool.model.NotificationEventType;
+import com.starfireaviation.groundschool.model.NotificationType;
 import com.starfireaviation.groundschool.model.User;
+import com.starfireaviation.groundschool.service.NotificationService;
 import com.starfireaviation.groundschool.service.UserService;
 
 import java.util.List;
@@ -40,6 +43,12 @@ public class UserController {
     private UserService userService;
 
     /**
+     * NotificationService
+     */
+    @Autowired
+    private NotificationService notificationService;
+
+    /**
      * Initializes an instance of <code>UserController</code> with the default data.
      */
     public UserController() {
@@ -50,9 +59,11 @@ public class UserController {
      * Initializes an instance of <code>UserController</code> with the default data.
      *
      * @param userService UserService
+     * @param notificationService NotificationService
      */
-    public UserController(UserService userService) {
+    public UserController(UserService userService, NotificationService notificationService) {
         this.userService = userService;
+        this.notificationService = notificationService;
     }
 
     /**
@@ -63,10 +74,18 @@ public class UserController {
      */
     @PostMapping
     public User post(@RequestBody User user) {
-        if (user == null) {
-            return user;
-        }
-        return userService.store(user);
+        return storeUser(user);
+    }
+
+    /**
+     * Updates a user
+     *
+     * @param user User
+     * @return User
+     */
+    @PutMapping
+    public User put(@RequestBody User user) {
+        return storeUser(user);
     }
 
     /**
@@ -79,21 +98,7 @@ public class UserController {
             "/{id}"
     })
     public User get(@PathVariable("id") long id) {
-        return userService.findUserById(id);
-    }
-
-    /**
-     * Updates a user
-     *
-     * @param user User
-     * @return User
-     */
-    @PutMapping
-    public User put(@RequestBody User user) {
-        if (user == null) {
-            return user;
-        }
-        return userService.store(user);
+        return userService.findById(id);
     }
 
     /**
@@ -106,7 +111,9 @@ public class UserController {
             "/{id}"
     })
     public User delete(@PathVariable("id") long id) {
-        return userService.delete(id);
+        final User response = userService.delete(id);
+        notificationService.send(response.getId(), NotificationEventType.USER_DELETE);
+        return response;
     }
 
     /**
@@ -118,4 +125,50 @@ public class UserController {
     public List<User> list() {
         return userService.findAllUsers();
     }
+
+    /**
+     * Verifies a user's notification settings for a given NotificationType
+     *
+     * @param userId user ID
+     * @param type NotificationType
+     */
+    @PostMapping(path = {
+            "/verify/{userId}/{type}"
+    })
+    public void verify(@PathVariable("userId") long userId, @PathVariable("type") NotificationType type) {
+        final User user = userService.findById(userId);
+        if (user != null) {
+            switch (type) {
+                case EMAIL:
+                    user.setEmailVerified(true);
+                    break;
+                case SMS:
+                    user.setSmsVerified(true);
+                    break;
+                case SLACK:
+                    user.setSlackVerified(true);
+                    break;
+                default:
+                    break;
+            }
+            userService.store(user);
+            notificationService.send(userId, NotificationEventType.USER_VERIFIED);
+        }
+    }
+
+    /**
+     * Combine POST and PUT operations
+     *
+     * @param user User
+     * @return User
+     */
+    private User storeUser(User user) {
+        if (user == null) {
+            return user;
+        }
+        final User response = userService.store(user);
+        notificationService.send(response.getId(), NotificationEventType.USER_SETTINGS);
+        return response;
+    }
+
 }

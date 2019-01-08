@@ -124,7 +124,7 @@ public class UserServiceTest {
      */
     @Test
     public void testGetUser() {
-        User user = userService.findUserById(ObjectCreator.ID);
+        User user = userService.findById(ObjectCreator.ID);
 
         Assert.assertNotNull(user);
     }

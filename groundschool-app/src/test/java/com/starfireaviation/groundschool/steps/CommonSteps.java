@@ -5,7 +5,6 @@
  */
 package com.starfireaviation.groundschool.steps;
 
-import cucumber.api.PendingException;
 import cucumber.api.Scenario;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.Then;
@@ -53,7 +52,7 @@ public class CommonSteps extends BaseSteps {
     @Then("^I should receive a operation not permitted error$")
     public void iShouldReceiveAOperationNotPermittedError() throws Exception {
         // Do something
-        throw new PendingException();
+        // TODO throw new PendingException();
     }
 
 }

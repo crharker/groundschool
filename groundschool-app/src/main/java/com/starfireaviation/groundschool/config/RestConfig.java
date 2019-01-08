@@ -15,6 +15,9 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.web.client.RestTemplate;
 
 import com.starfireaviation.groundschool.properties.EAA690Properties;
+import com.starfireaviation.groundschool.properties.EmailProperties;
+import com.starfireaviation.groundschool.properties.SMSProperties;
+import com.starfireaviation.groundschool.properties.SlackProperties;
 import com.starfireaviation.groundschool.properties.TimeoutProperties;
 
 /**
@@ -25,7 +28,10 @@ import com.starfireaviation.groundschool.properties.TimeoutProperties;
 @Configuration
 @EnableConfigurationProperties({
         TimeoutProperties.class,
-        EAA690Properties.class
+        EAA690Properties.class,
+        EmailProperties.class,
+        SMSProperties.class,
+        SlackProperties.class
 })
 public class RestConfig {
 

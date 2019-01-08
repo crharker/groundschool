@@ -23,6 +23,31 @@ public class User extends Base {
     private String email;
 
     /**
+     * Email verified
+     */
+    private boolean emailVerified;
+
+    /**
+     * SMS
+     */
+    private String sms;
+
+    /**
+     * SMS verified
+     */
+    private boolean smsVerified;
+
+    /**
+     * Slack
+     */
+    private String slack;
+
+    /**
+     * Slack verified
+     */
+    private boolean slackVerified;
+
+    /**
      * Username
      */
     private String username;
@@ -153,6 +178,96 @@ public class User extends Base {
      */
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    /**
+     * Retrieves the value for {@link #emailVerified}.
+     *
+     * @return the current value
+     */
+    public boolean isEmailVerified() {
+        return emailVerified;
+    }
+
+    /**
+     * Provides a value for {@link #emailVerified}.
+     *
+     * @param emailVerified the new value to set
+     */
+    public void setEmailVerified(boolean emailVerified) {
+        this.emailVerified = emailVerified;
+    }
+
+    /**
+     * Retrieves the value for {@link #sms}.
+     *
+     * @return the current value
+     */
+    public String getSms() {
+        return sms;
+    }
+
+    /**
+     * Provides a value for {@link #sms}.
+     *
+     * @param sms the new value to set
+     */
+    public void setSms(String sms) {
+        this.sms = sms;
+    }
+
+    /**
+     * Retrieves the value for {@link #smsVerified}.
+     *
+     * @return the current value
+     */
+    public boolean isSmsVerified() {
+        return smsVerified;
+    }
+
+    /**
+     * Provides a value for {@link #smsVerified}.
+     *
+     * @param smsVerified the new value to set
+     */
+    public void setSmsVerified(boolean smsVerified) {
+        this.smsVerified = smsVerified;
+    }
+
+    /**
+     * Retrieves the value for {@link #slack}.
+     *
+     * @return the current value
+     */
+    public String getSlack() {
+        return slack;
+    }
+
+    /**
+     * Provides a value for {@link #slack}.
+     *
+     * @param slack the new value to set
+     */
+    public void setSlack(String slack) {
+        this.slack = slack;
+    }
+
+    /**
+     * Retrieves the value for {@link #slackVerified}.
+     *
+     * @return the current value
+     */
+    public boolean isSlackVerified() {
+        return slackVerified;
+    }
+
+    /**
+     * Provides a value for {@link #slackVerified}.
+     *
+     * @param slackVerified the new value to set
+     */
+    public void setSlackVerified(boolean slackVerified) {
+        this.slackVerified = slackVerified;
     }
 
 }
