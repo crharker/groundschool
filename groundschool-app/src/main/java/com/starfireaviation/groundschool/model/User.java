@@ -28,6 +28,11 @@ public class User extends Base {
     private boolean emailVerified;
 
     /**
+     * Email enabled
+     */
+    private boolean emailEnabled;
+
+    /**
      * SMS
      */
     private String sms;
@@ -38,6 +43,11 @@ public class User extends Base {
     private boolean smsVerified;
 
     /**
+     * SMS enabled
+     */
+    private boolean smsEnabled;
+
+    /**
      * Slack
      */
     private String slack;
@@ -46,6 +56,11 @@ public class User extends Base {
      * Slack verified
      */
     private boolean slackVerified;
+
+    /**
+     * Slack enabled
+     */
+    private boolean slackEnabled;
 
     /**
      * Username
@@ -268,6 +283,60 @@ public class User extends Base {
      */
     public void setSlackVerified(boolean slackVerified) {
         this.slackVerified = slackVerified;
+    }
+
+    /**
+     * Retrieves the value for {@link #emailEnabled}.
+     *
+     * @return the current value
+     */
+    public boolean isEmailEnabled() {
+        return emailEnabled;
+    }
+
+    /**
+     * Provides a value for {@link #emailEnabled}.
+     *
+     * @param emailEnabled the new value to set
+     */
+    public void setEmailEnabled(boolean emailEnabled) {
+        this.emailEnabled = emailEnabled;
+    }
+
+    /**
+     * Retrieves the value for {@link #smsEnabled}.
+     *
+     * @return the current value
+     */
+    public boolean isSmsEnabled() {
+        return smsEnabled;
+    }
+
+    /**
+     * Provides a value for {@link #smsEnabled}.
+     *
+     * @param smsEnabled the new value to set
+     */
+    public void setSmsEnabled(boolean smsEnabled) {
+        this.smsEnabled = smsEnabled;
+    }
+
+    /**
+     * Retrieves the value for {@link #slackEnabled}.
+     *
+     * @return the current value
+     */
+    public boolean isSlackEnabled() {
+        return slackEnabled;
+    }
+
+    /**
+     * Provides a value for {@link #slackEnabled}.
+     *
+     * @param slackEnabled the new value to set
+     */
+    public void setSlackEnabled(boolean slackEnabled) {
+        this.slackEnabled = slackEnabled;
     }
 
 }

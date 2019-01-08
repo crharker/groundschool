@@ -2,6 +2,22 @@ server:
   contextPath: /user-portal
 
 spring:
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: bsmichael@gmail.com
+    password: <<HIDDEN>>
+    #protocol: smtp
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+          connectiontimeout: 5000
+          timeout: 3000
+          writetimeout: 5000
   datasource:
     url: jdbc:mysql://localhost:3306/eaa
     username: root

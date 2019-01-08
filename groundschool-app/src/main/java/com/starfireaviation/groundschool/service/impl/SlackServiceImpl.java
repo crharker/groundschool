@@ -5,6 +5,8 @@
  */
 package com.starfireaviation.groundschool.service.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.starfireaviation.groundschool.service.SlackService;
@@ -18,6 +20,11 @@ import com.starfireaviation.groundschool.service.SlackService;
 public class SlackServiceImpl implements SlackService {
 
     /**
+     * Logger
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(SlackServiceImpl.class);
+
+    /**
      * {@inheritDoc} Required implementation.
      */
     @Override
@@ -25,8 +32,12 @@ public class SlackServiceImpl implements SlackService {
             String fromAddress,
             String toAddress,
             String body) {
-        // TODO Auto-generated method stub
-
+        LOGGER.info(
+                String.format(
+                        "Sending... fromAddress [%s]; toAddress [%s]; body [%s]",
+                        fromAddress,
+                        toAddress,
+                        body));
     }
 
 }

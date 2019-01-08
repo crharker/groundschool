@@ -21,6 +21,7 @@ public interface EmailService {
      * @param bccAddress bcc address
      * @param subject subject
      * @param body body
+     * @param html message body contains HTML?
      */
     public void send(
             String fromAddress,
@@ -28,6 +29,7 @@ public interface EmailService {
             String ccAddress,
             String bccAddress,
             String subject,
-            String body);
+            String body,
+            boolean html);
 
 }

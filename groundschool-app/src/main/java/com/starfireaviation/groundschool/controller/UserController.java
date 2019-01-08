@@ -132,7 +132,7 @@ public class UserController {
      * @param userId user ID
      * @param type NotificationType
      */
-    @PostMapping(path = {
+    @GetMapping(path = {
             "/verify/{userId}/{type}"
     })
     public void verify(@PathVariable("userId") long userId, @PathVariable("type") NotificationType type) {
