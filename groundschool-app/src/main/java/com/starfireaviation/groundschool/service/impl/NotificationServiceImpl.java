@@ -95,6 +95,11 @@ public class NotificationServiceImpl implements NotificationService {
      */
     @Override
     public void send(Long userId, NotificationEventType notificationEventType) {
+        LOGGER.info(
+                String.format(
+                        "send() called with userId [%s]; notificationEventType [%s]",
+                        userId,
+                        notificationEventType));
         switch (notificationEventType) {
             case USER_SETTINGS:
                 userSettings(userId);
@@ -118,6 +123,7 @@ public class NotificationServiceImpl implements NotificationService {
     private void userDelete(Long userId) {
         final User user = userService.findById(userId);
         if (user == null) {
+            LOGGER.warn("userDelete() returning as no user was found");
             return;
         }
         if (user.getEmail() != null && user.isEmailVerified() && user.isEmailEnabled()) {
@@ -175,6 +181,7 @@ public class NotificationServiceImpl implements NotificationService {
     private void userSettingsVerified(Long userId) {
         final User user = userService.findById(userId);
         if (user == null) {
+            LOGGER.warn("userSettingsVerified() returning as no user was found");
             return;
         }
         if (user.getEmail() != null && user.isEmailVerified() && user.isEmailEnabled()) {
@@ -232,9 +239,11 @@ public class NotificationServiceImpl implements NotificationService {
     private void userSettings(Long userId) {
         final User user = userService.findById(userId);
         if (user == null) {
+            LOGGER.warn("userSettings() returning as no user was found");
             return;
         }
-        if (user.getEmail() != null && user.isEmailVerified() && user.isEmailEnabled()) {
+        if (user.getEmail() != null && !user.isEmailVerified() && user.isEmailEnabled()) {
+            LOGGER.info("userSettings() sending email");
             try {
                 freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates/email");
                 emailService.send(
@@ -253,7 +262,8 @@ public class NotificationServiceImpl implements NotificationService {
                 LOGGER.warn(e.getMessage());
             }
         }
-        if (user.getSms() != null && user.isSmsVerified() && user.isSmsEnabled()) {
+        if (user.getSms() != null && !user.isSmsVerified() && user.isSmsEnabled()) {
+            LOGGER.info("userSettings() sending sms");
             try {
                 freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates/sms");
                 smsService.send(
@@ -266,7 +276,8 @@ public class NotificationServiceImpl implements NotificationService {
                 LOGGER.warn(e.getMessage());
             }
         }
-        if (user.getSlack() != null && user.isSlackVerified() && user.isSlackEnabled()) {
+        if (user.getSlack() != null && !user.isSlackVerified() && user.isSlackEnabled()) {
+            LOGGER.info("userSettings() sending Slack message");
             try {
                 freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates/slack");
                 slackService.send(
@@ -279,6 +290,7 @@ public class NotificationServiceImpl implements NotificationService {
                 LOGGER.warn(e.getMessage());
             }
         }
+        LOGGER.info("userSettings() complete");
     }
 
     /**

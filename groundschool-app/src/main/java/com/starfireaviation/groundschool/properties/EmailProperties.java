@@ -29,6 +29,30 @@ public class EmailProperties {
     private String bccAddress;
 
     /**
+     * Host
+     */
+    @Value("${groundschool.email.host}")
+    private String host;
+
+    /**
+     * Port
+     */
+    @Value("${groundschool.email.port}")
+    private Integer port;
+
+    /**
+     * Username
+     */
+    @Value("${groundschool.email.username}")
+    private String username;
+
+    /**
+     * Password
+     */
+    @Value("${groundschool.email.password}")
+    private String password;
+
+    /**
      * Retrieves the value for {@link #fromAddress}.
      *
      * @return the current value
@@ -62,6 +86,78 @@ public class EmailProperties {
      */
     public void setBccAddress(String bccAddress) {
         this.bccAddress = bccAddress;
+    }
+
+    /**
+     * Retrieves the value for {@link #host}.
+     *
+     * @return the current value
+     */
+    public String getHost() {
+        return host;
+    }
+
+    /**
+     * Provides a value for {@link #host}.
+     *
+     * @param host the new value to set
+     */
+    public void setHost(String host) {
+        this.host = host;
+    }
+
+    /**
+     * Retrieves the value for {@link #port}.
+     *
+     * @return the current value
+     */
+    public Integer getPort() {
+        return port;
+    }
+
+    /**
+     * Provides a value for {@link #port}.
+     *
+     * @param port the new value to set
+     */
+    public void setPort(Integer port) {
+        this.port = port;
+    }
+
+    /**
+     * Retrieves the value for {@link #username}.
+     *
+     * @return the current value
+     */
+    public String getUsername() {
+        return username;
+    }
+
+    /**
+     * Provides a value for {@link #username}.
+     *
+     * @param username the new value to set
+     */
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    /**
+     * Retrieves the value for {@link #password}.
+     *
+     * @return the current value
+     */
+    public String getPassword() {
+        return password;
+    }
+
+    /**
+     * Provides a value for {@link #password}.
+     *
+     * @param password the new value to set
+     */
+    public void setPassword(String password) {
+        this.password = password;
     }
 
 }

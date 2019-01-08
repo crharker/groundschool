@@ -2,22 +2,6 @@ server:
   contextPath: /user-portal
 
 spring:
-  mail:
-    host: smtp.gmail.com
-    port: 587
-    username: bsmichael@gmail.com
-    password: <<HIDDEN>>
-    #protocol: smtp
-    properties:
-      mail:
-        smtp:
-          auth: true
-          starttls:
-            enable: true
-            required: true
-          connectiontimeout: 5000
-          timeout: 3000
-          writetimeout: 5000
   datasource:
     url: jdbc:mysql://localhost:3306/eaa
     username: root
@@ -48,7 +32,7 @@ logging:
 EAA690:
   authentication:
     username: brian.michael@yahoo.com
-    password: jaoudy
+    password: <<HIDDEN>>
     signing-key: <<HIDDEN>>
     token-prefix: "Bearer "
     authorities-key: scopes
@@ -62,6 +46,10 @@ groundschool:
   email:
     from-address: bsmichael@gmail.com
     bcc-address: bsmichael@gmail.com
+    host: smtp.gmail.com
+    port: 587
+    username: bsmichael@gmail.com
+    password: <<HIDDEN>>
   sms:
     from-address: 4047355660
   slack:
