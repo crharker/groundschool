@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import com.starfireaviation.groundschool.model.NotificationEventType;
+import com.starfireaviation.groundschool.model.NotificationType;
 import com.starfireaviation.groundschool.model.SMSMessage;
 import com.starfireaviation.groundschool.model.Statistic;
 import com.starfireaviation.groundschool.model.StatisticType;
@@ -137,18 +138,27 @@ public class SMSServiceImpl implements SMSService {
             if (smsMessageEntity.isOpen()) {
                 userId = smsMessageEntity.getUserId();
                 closeAllMessages(userId);
+                boolean success = false;
                 switch (smsMessageEntity.getNotificationEventType()) {
                     case USER_SETTINGS:
-                        response = processUserSettingsResponse(userId, message);
+                        success = processUserSettingsResponse(userId, message);
                         break;
                     case USER_VERIFIED:
-                        response = processUserVerifiedResponse(userId, message);
+                        success = processUserVerifiedResponse(userId, message);
                         break;
                     case USER_DELETE:
-                        response = processUserDeletedResponse(userId, message);
+                        success = processUserDeletedResponse(userId, message);
                         break;
                     default:
                         break;
+                }
+                if (!success) {
+                    notificationService.resend(
+                            userId,
+                            NotificationType.SMS,
+                            smsMessageEntity.getNotificationEventType(),
+                            message.getBody(),
+                            smsMessageEntity.getMessage());
                 }
             }
         }
@@ -237,11 +247,11 @@ public class SMSServiceImpl implements SMSService {
      *
      * @param userId user ID
      * @param message to be processed
-     * @return message
+     * @return success
      */
-    private static String processUserVerifiedResponse(Long userId, SMSMessage message) {
+    private static boolean processUserVerifiedResponse(Long userId, SMSMessage message) {
         // Do nothing
-        return null;
+        return true;
     }
 
     /**
@@ -249,9 +259,10 @@ public class SMSServiceImpl implements SMSService {
      *
      * @param userId user ID
      * @param message to be processed
-     * @return message
+     * @return success
      */
-    private String processUserSettingsResponse(Long userId, SMSMessage message) {
+    private boolean processUserSettingsResponse(Long userId, SMSMessage message) {
+        boolean success = true;
         // STOP, CONFIRM, DECLINE, other
         final String body = message.getBody();
         if (body != null) {
@@ -266,11 +277,13 @@ public class SMSServiceImpl implements SMSService {
                     notificationService.send(userId, NotificationEventType.USER_VERIFIED);
                     break;
                 case DECLINE:
+                    handleDecline(userId);
+                    break;
                 default:
-                    // Do nothing
+                    success = false;
             }
         }
-        return null;
+        return success;
     }
 
     /**
@@ -285,15 +298,26 @@ public class SMSServiceImpl implements SMSService {
     }
 
     /**
+     * Handles DECLINE SMSResponseOption
+     *
+     * @param userId user ID
+     */
+    private void handleDecline(Long userId) {
+        User user = userService.findById(userId);
+        user.setSmsEnabled(false);
+        userService.store(user);
+    }
+
+    /**
      * Process user deleted response
      *
      * @param userId user ID
      * @param message to be processed
-     * @return message
+     * @return success
      */
-    private static String processUserDeletedResponse(Long userId, SMSMessage message) {
+    private static boolean processUserDeletedResponse(Long userId, SMSMessage message) {
         // Do nothing
-        return null;
+        return true;
     }
 
 }
