@@ -22,15 +22,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import com.starfireaviation.groundschool.model.Event;
 import com.starfireaviation.groundschool.model.NotificationEventType;
 import com.starfireaviation.groundschool.model.NotificationType;
 import com.starfireaviation.groundschool.model.SMSMessage;
+import com.starfireaviation.groundschool.model.SMSResponseOption;
 import com.starfireaviation.groundschool.model.Statistic;
 import com.starfireaviation.groundschool.model.StatisticType;
 import com.starfireaviation.groundschool.model.User;
 import com.starfireaviation.groundschool.model.sql.SMSMessageEntity;
 import com.starfireaviation.groundschool.properties.SMSProperties;
 import com.starfireaviation.groundschool.repository.SMSMessageRepository;
+import com.starfireaviation.groundschool.service.EventService;
 import com.starfireaviation.groundschool.service.NotificationService;
 import com.starfireaviation.groundschool.service.SMSService;
 import com.starfireaviation.groundschool.service.StatisticService;
@@ -77,6 +80,12 @@ public class SMSServiceImpl implements SMSService {
     private UserService userService;
 
     /**
+     * EventService
+     */
+    @Autowired
+    private EventService eventService;
+
+    /**
      * NotificationService
      */
     @Autowired
@@ -95,6 +104,7 @@ public class SMSServiceImpl implements SMSService {
     public void send(
             Long userId,
             Long eventId,
+            Long quizId,
             Long questionId,
             NotificationEventType type,
             String fromAddress,
@@ -110,7 +120,8 @@ public class SMSServiceImpl implements SMSService {
         Twilio.init(smsProperties.getAccountSid(), smsProperties.getAuthId());
         Message message = Message.creator(new PhoneNumber(toAddress), new PhoneNumber(fromAddress), body).create();
         LOGGER.info(String.format("Status [%s]", message.getStatus()));
-        smsMessageRepository.save(new SMSMessageEntity(userId, eventId, questionId, toAddress, new Date(), body, type));
+        smsMessageRepository.save(
+                new SMSMessageEntity(userId, eventId, quizId, questionId, toAddress, new Date(), body, type));
         Statistic statistic = new Statistic(
                 StatisticType.SMS_MESSAGE_SENT,
                 String.format(
@@ -131,6 +142,7 @@ public class SMSServiceImpl implements SMSService {
         Instant start = Instant.now();
         LOGGER.info(String.format("receiveMessage() message received was [%s]", message));
         Long userId = null;
+        Long eventId = null;
         String response = replyWithNoOpenMessagesMsg();
         final List<SMSMessageEntity> smsMessageEntities = smsMessageRepository.findByTo(
                 stripCountryCode(message.getFrom()));
@@ -139,6 +151,7 @@ public class SMSServiceImpl implements SMSService {
             SMSMessageEntity smsMessageEntity = sortedSMSMessages.get(0);
             if (smsMessageEntity.isOpen()) {
                 userId = smsMessageEntity.getUserId();
+                eventId = smsMessageEntity.getEventId();
                 closeAllMessages(userId);
                 boolean success = false;
                 switch (smsMessageEntity.getNotificationEventType()) {
@@ -151,6 +164,9 @@ public class SMSServiceImpl implements SMSService {
                     case USER_DELETE:
                         success = processUserDeletedResponse(userId, message);
                         break;
+                    case EVENT_RSVP:
+                        success = processEventRSVPResponse(eventId, userId, message);
+                        break;
                     default:
                         break;
                 }
@@ -161,6 +177,11 @@ public class SMSServiceImpl implements SMSService {
                             smsMessageEntity.getNotificationEventType(),
                             message.getBody(),
                             smsMessageEntity.getMessage());
+                }
+            } else {
+                final String body = message.getBody();
+                if (body != null && SMSResponseOption.STOP == SMSResponseParser.determineResponse(body)) {
+                    handleStop(userId);
                 }
             }
         }
@@ -251,8 +272,11 @@ public class SMSServiceImpl implements SMSService {
      * @param message to be processed
      * @return success
      */
-    private static boolean processUserVerifiedResponse(Long userId, SMSMessage message) {
-        // Do nothing
+    private boolean processUserVerifiedResponse(Long userId, SMSMessage message) {
+        final String body = message.getBody();
+        if (body != null && SMSResponseOption.STOP == SMSResponseParser.determineResponse(body)) {
+            handleStop(userId);
+        }
         return true;
     }
 
@@ -265,6 +289,7 @@ public class SMSServiceImpl implements SMSService {
      */
     private boolean processUserSettingsResponse(Long userId, SMSMessage message) {
         boolean success = true;
+        User user = null;
         // STOP, CONFIRM, DECLINE, other
         final String body = message.getBody();
         if (body != null) {
@@ -273,13 +298,15 @@ public class SMSServiceImpl implements SMSService {
                     handleStop(userId);
                     break;
                 case CONFIRM:
-                    User user = userService.findById(userId);
+                    user = userService.findById(userId);
                     user.setSmsVerified(true);
                     userService.store(user);
-                    notificationService.send(userId, NotificationEventType.USER_VERIFIED);
+                    notificationService.send(userId, NotificationType.SMS, NotificationEventType.USER_VERIFIED);
                     break;
                 case DECLINE:
-                    handleDecline(userId);
+                    user = userService.findById(userId);
+                    user.setSmsEnabled(false);
+                    userService.store(user);
                     break;
                 default:
                     success = false;
@@ -300,26 +327,54 @@ public class SMSServiceImpl implements SMSService {
     }
 
     /**
-     * Handles DECLINE SMSResponseOption
-     *
-     * @param userId user ID
-     */
-    private void handleDecline(Long userId) {
-        User user = userService.findById(userId);
-        user.setSmsEnabled(false);
-        userService.store(user);
-    }
-
-    /**
      * Process user deleted response
      *
      * @param userId user ID
      * @param message to be processed
      * @return success
      */
-    private static boolean processUserDeletedResponse(Long userId, SMSMessage message) {
-        // Do nothing
+    private boolean processUserDeletedResponse(Long userId, SMSMessage message) {
+        final String body = message.getBody();
+        if (body != null && SMSResponseOption.STOP == SMSResponseParser.determineResponse(body)) {
+            handleStop(userId);
+        }
         return true;
+    }
+
+    /**
+     * Process event RSVP response
+     *
+     * @param eventId event ID
+     * @param userId user ID
+     * @param message to be processed
+     * @return success
+     */
+    private boolean processEventRSVPResponse(Long eventId, Long userId, SMSMessage message) {
+        boolean success = true;
+        Event event = null;
+        User user = null;
+        // STOP, CONFIRM, DECLINE, other
+        final String body = message.getBody();
+        if (body != null) {
+            switch (SMSResponseParser.determineResponse(body)) {
+                case STOP:
+                    handleStop(userId);
+                    break;
+                case CONFIRM:
+                    event = eventService.findById(eventId);
+                    user = userService.findById(userId);
+                    eventService.rsvp(event, user, true);
+                    break;
+                case DECLINE:
+                    event = eventService.findById(eventId);
+                    user = userService.findById(userId);
+                    eventService.rsvp(event, user, false);
+                    break;
+                default:
+                    success = false;
+            }
+        }
+        return success;
     }
 
 }

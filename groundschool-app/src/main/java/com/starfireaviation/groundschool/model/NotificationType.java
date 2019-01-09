@@ -13,6 +13,10 @@ package com.starfireaviation.groundschool.model;
 public enum NotificationType {
 
     /**
+     * ALL
+     */
+    ALL,
+    /**
      * EMAIL
      */
     EMAIL,

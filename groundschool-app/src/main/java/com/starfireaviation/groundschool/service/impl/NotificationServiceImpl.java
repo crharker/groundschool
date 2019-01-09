@@ -95,7 +95,7 @@ public class NotificationServiceImpl implements NotificationService {
      * {@inheritDoc} Required implementation.
      */
     @Override
-    public void send(Long userId, NotificationEventType notificationEventType) {
+    public void send(Long userId, NotificationType notificationType, NotificationEventType notificationEventType) {
         LOGGER.info(
                 String.format(
                         "send() called with userId [%s]; notificationEventType [%s]",
@@ -103,13 +103,16 @@ public class NotificationServiceImpl implements NotificationService {
                         notificationEventType));
         switch (notificationEventType) {
             case USER_SETTINGS:
-                userSettings(userId);
+                userSettings(userId, notificationType);
                 break;
             case USER_VERIFIED:
-                userSettingsVerified(userId);
+                userSettingsVerified(userId, notificationType);
                 break;
             case USER_DELETE:
-                userDelete(userId);
+                userDelete(userId, notificationType);
+                break;
+            case EVENT_RSVP:
+                eventRSVP(userId, notificationType);
                 break;
             default:
         }
@@ -134,20 +137,36 @@ public class NotificationServiceImpl implements NotificationService {
      * Sends notification for user settings verification
      *
      * @param userId Long
+     * @param notificationType NotificationType
      */
-    private void userSettingsVerified(Long userId) {
+    private void userSettingsVerified(Long userId, NotificationType notificationType) {
         final User user = userService.findById(userId);
         if (user == null) {
             LOGGER.warn("userSettingsVerified() returning as no user was found");
             return;
         }
-        if (user.getEmail() != null && user.isEmailVerified() && user.isEmailEnabled()) {
+        if (user.getEmail() != null
+                && user.isEmailVerified()
+                && user.isEmailEnabled()
+                && (notificationType == null
+                        || notificationType == NotificationType.ALL
+                        || notificationType == NotificationType.EMAIL)) {
             sendUserSettingsVerifiedEmail(user);
         }
-        if (user.getSms() != null && user.isSmsVerified() && user.isSmsEnabled()) {
+        if (user.getSms() != null
+                && user.isSmsVerified()
+                && user.isSmsEnabled()
+                && (notificationType == null
+                        || notificationType == NotificationType.ALL
+                        || notificationType == NotificationType.SMS)) {
             sendUserSettingsVerifiedSMS(user);
         }
-        if (user.getSlack() != null && user.isSlackVerified() && user.isSlackEnabled()) {
+        if (user.getSlack() != null
+                && user.isSlackVerified()
+                && user.isSlackEnabled()
+                && (notificationType == null
+                        || notificationType == NotificationType.ALL
+                        || notificationType == NotificationType.SLACK)) {
             sendUserSettingsVerifiedSlackMessage(user);
         }
     }
@@ -156,20 +175,36 @@ public class NotificationServiceImpl implements NotificationService {
      * Sends notification for user settings change
      *
      * @param userId Long
+     * @param notificationType NotificationType
      */
-    private void userSettings(Long userId) {
+    private void userSettings(Long userId, NotificationType notificationType) {
         final User user = userService.findById(userId);
         if (user == null) {
             LOGGER.warn("userSettings() returning as no user was found");
             return;
         }
-        if (user.getEmail() != null && !user.isEmailVerified() && user.isEmailEnabled()) {
+        if (user.getEmail() != null
+                && !user.isEmailVerified()
+                && user.isEmailEnabled()
+                && (notificationType == null
+                        || notificationType == NotificationType.ALL
+                        || notificationType == NotificationType.EMAIL)) {
             sendUserSettingsChangeEmail(user);
         }
-        if (user.getSms() != null && !user.isSmsVerified() && user.isSmsEnabled()) {
+        if (user.getSms() != null
+                && !user.isSmsVerified()
+                && user.isSmsEnabled()
+                && (notificationType == null
+                        || notificationType == NotificationType.ALL
+                        || notificationType == NotificationType.SMS)) {
             sendUserSettingsChangeSMS(user);
         }
-        if (user.getSlack() != null && !user.isSlackVerified() && user.isSlackEnabled()) {
+        if (user.getSlack() != null
+                && !user.isSlackVerified()
+                && user.isSlackEnabled()
+                && (notificationType == null
+                        || notificationType == NotificationType.ALL
+                        || notificationType == NotificationType.SLACK)) {
             sendUserSettingsChangeSlackMessage(user);
         }
         LOGGER.info("userSettings() complete");
@@ -179,21 +214,95 @@ public class NotificationServiceImpl implements NotificationService {
      * Sends notification for user deletion
      *
      * @param userId Long
+     * @param notificationType NotificationType
      */
-    private void userDelete(Long userId) {
+    private void userDelete(Long userId, NotificationType notificationType) {
         final User user = userService.findById(userId);
         if (user == null) {
             LOGGER.warn("userDelete() returning as no user was found");
             return;
         }
-        if (user.getEmail() != null && user.isEmailVerified() && user.isEmailEnabled()) {
+        if (user.getEmail() != null
+                && user.isEmailVerified()
+                && user.isEmailEnabled()
+                && (notificationType == null
+                        || notificationType == NotificationType.ALL
+                        || notificationType == NotificationType.EMAIL)) {
             sendUserDeleteEmail(user);
         }
-        if (user.getSms() != null && user.isSmsVerified() && user.isSmsEnabled()) {
+        if (user.getSms() != null
+                && user.isSmsVerified()
+                && user.isSmsEnabled()
+                && (notificationType == null
+                        || notificationType == NotificationType.ALL
+                        || notificationType == NotificationType.SMS)) {
             sendUserDeleteSMS(user);
         }
-        if (user.getSlack() != null && user.isSlackVerified() && user.isSlackEnabled()) {
+        if (user.getSlack() != null
+                && user.isSlackVerified()
+                && user.isSlackEnabled()
+                && (notificationType == null
+                        || notificationType == NotificationType.ALL
+                        || notificationType == NotificationType.SLACK)) {
             sendUserDeleteSlackMessage(user);
+        }
+    }
+
+    /**
+     * Sends notification to RSVP for an upcoming event
+     *
+     * @param userId Long
+     * @param notificationType NotificationType
+     */
+    private void eventRSVP(Long userId, NotificationType notificationType) {
+        final User user = userService.findById(userId);
+        if (user == null) {
+            LOGGER.warn("userDelete() returning as no user was found");
+            return;
+        }
+        if (user.getEmail() != null
+                && user.isEmailVerified()
+                && user.isEmailEnabled()
+                && (notificationType == null
+                        || notificationType == NotificationType.ALL
+                        || notificationType == NotificationType.EMAIL)) {
+            sendEventRSVPEmail(user);
+        }
+        if (user.getSms() != null
+                && user.isSmsVerified()
+                && user.isSmsEnabled()
+                && (notificationType == null
+                        || notificationType == NotificationType.ALL
+                        || notificationType == NotificationType.SMS)) {
+            sendEventRSVPSMS(user);
+        }
+        if (user.getSlack() != null
+                && user.isSlackVerified()
+                && user.isSlackEnabled()
+                && (notificationType == null
+                        || notificationType == NotificationType.ALL
+                        || notificationType == NotificationType.SLACK)) {
+            sendEventRSVPSlackMessage(user);
+        }
+    }
+
+    /**
+     * Sends a slack message to RSVP for an upcoming event
+     *
+     * @param user User
+     */
+    private void sendEventRSVPSlackMessage(final User user) {
+        try {
+            freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates/slack");
+            slackService.send(
+                    user.getId(),
+                    slackProperties.getFromAddress(),
+                    user.getSlack(),
+                    FreeMarkerTemplateUtils.processTemplateIntoString(
+                            freemarkerConfig.getTemplate("event_rsvp.ftl"),
+                            getModelForUser(user)));
+        } catch (IOException | TemplateException e) {
+            LOGGER.warn(e.getMessage());
         }
     }
 
@@ -208,7 +317,7 @@ public class NotificationServiceImpl implements NotificationService {
             slackService.send(
                     user.getId(),
                     slackProperties.getFromAddress(),
-                    user.getSms(),
+                    user.getSlack(),
                     FreeMarkerTemplateUtils.processTemplateIntoString(
                             freemarkerConfig.getTemplate("user_delete.ftl"),
                             getModelForUser(user)));
@@ -229,11 +338,36 @@ public class NotificationServiceImpl implements NotificationService {
                     user.getId(),
                     null,
                     null,
+                    null,
                     NotificationEventType.USER_DELETE,
                     smsProperties.getFromAddress(),
                     user.getSms(),
                     FreeMarkerTemplateUtils.processTemplateIntoString(
                             freemarkerConfig.getTemplate("user_delete.ftl"),
+                            getModelForUser(user)));
+        } catch (IOException | TemplateException e) {
+            LOGGER.warn(e.getMessage());
+        }
+    }
+
+    /**
+     * Sends an SMS message to RSVP for an upcoming event
+     *
+     * @param user User
+     */
+    private void sendEventRSVPSMS(final User user) {
+        try {
+            freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates/sms");
+            smsService.send(
+                    user.getId(),
+                    null,
+                    null,
+                    null,
+                    NotificationEventType.EVENT_RSVP,
+                    smsProperties.getFromAddress(),
+                    user.getSms(),
+                    FreeMarkerTemplateUtils.processTemplateIntoString(
+                            freemarkerConfig.getTemplate("event_rsvp.ftl"),
                             getModelForUser(user)));
         } catch (IOException | TemplateException e) {
             LOGGER.warn(e.getMessage());
@@ -267,6 +401,32 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     /**
+     * Sends an email to RSVP for an upcoming event
+     *
+     * @param user User
+     */
+    private void sendEventRSVPEmail(final User user) {
+        try {
+            freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates/email");
+            emailService.send(
+                    user.getId(),
+                    emailProperties.getFromAddress(),
+                    user.getEmail(),
+                    null,
+                    null,
+                    FreeMarkerTemplateUtils.processTemplateIntoString(
+                            freemarkerConfig.getTemplate("event_rsvp_subject.ftl"),
+                            getModelForUser(user)),
+                    FreeMarkerTemplateUtils.processTemplateIntoString(
+                            freemarkerConfig.getTemplate("event_rsvp_body.ftl"),
+                            getModelForUser(user)),
+                    true);
+        } catch (IOException | TemplateException e) {
+            LOGGER.warn(e.getMessage());
+        }
+    }
+
+    /**
      * Sends a Slack message for user settings verified
      *
      * @param user User
@@ -277,7 +437,7 @@ public class NotificationServiceImpl implements NotificationService {
             slackService.send(
                     user.getId(),
                     slackProperties.getFromAddress(),
-                    user.getSms(),
+                    user.getSlack(),
                     FreeMarkerTemplateUtils.processTemplateIntoString(
                             freemarkerConfig.getTemplate("user_settings_verified.ftl"),
                             getModelForUser(user)));
@@ -296,6 +456,7 @@ public class NotificationServiceImpl implements NotificationService {
             freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates/sms");
             smsService.send(
                     user.getId(),
+                    null,
                     null,
                     null,
                     NotificationEventType.USER_VERIFIED,
@@ -346,7 +507,7 @@ public class NotificationServiceImpl implements NotificationService {
             slackService.send(
                     user.getId(),
                     slackProperties.getFromAddress(),
-                    user.getSms(),
+                    user.getSlack(),
                     FreeMarkerTemplateUtils.processTemplateIntoString(
                             freemarkerConfig.getTemplate("user_verify_settings.ftl"),
                             getModelForUser(user)));
@@ -365,6 +526,7 @@ public class NotificationServiceImpl implements NotificationService {
             freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates/sms");
             smsService.send(
                     user.getId(),
+                    null,
                     null,
                     null,
                     NotificationEventType.USER_SETTINGS,
@@ -396,6 +558,7 @@ public class NotificationServiceImpl implements NotificationService {
             model.put("original_message", originalMessage);
             smsService.send(
                     user.getId(),
+                    null,
                     null,
                     null,
                     NotificationEventType.USER_SETTINGS,

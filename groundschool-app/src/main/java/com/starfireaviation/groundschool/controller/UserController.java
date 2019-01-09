@@ -112,7 +112,7 @@ public class UserController {
     })
     public User delete(@PathVariable("id") long id) {
         final User response = userService.delete(id);
-        notificationService.send(response.getId(), NotificationEventType.USER_DELETE);
+        notificationService.send(response.getId(), NotificationType.ALL, NotificationEventType.USER_DELETE);
         return response;
     }
 
@@ -148,7 +148,7 @@ public class UserController {
                 default:
             }
             userService.store(user);
-            notificationService.send(userId, NotificationEventType.USER_VERIFIED);
+            notificationService.send(userId, NotificationType.ALL, NotificationEventType.USER_VERIFIED);
         }
     }
 
@@ -163,7 +163,7 @@ public class UserController {
             return user;
         }
         final User response = userService.store(user);
-        notificationService.send(response.getId(), NotificationEventType.USER_SETTINGS);
+        notificationService.send(response.getId(), NotificationType.ALL, NotificationEventType.USER_SETTINGS);
         return response;
     }
 

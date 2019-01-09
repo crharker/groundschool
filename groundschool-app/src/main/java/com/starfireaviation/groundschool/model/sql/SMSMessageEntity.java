@@ -67,6 +67,12 @@ public class SMSMessageEntity extends BaseEntity {
     private Long eventId;
 
     /**
+     * QuizID
+     */
+    @Column(name = "quiz_id")
+    private Long quizId;
+
+    /**
      * QuestionID
      */
     @Column(name = "question_id")
@@ -91,6 +97,7 @@ public class SMSMessageEntity extends BaseEntity {
      *
      * @param userId user ID
      * @param eventId event ID
+     * @param quizId event ID
      * @param questionId question ID
      * @param to phone number
      * @param time message was sent
@@ -100,6 +107,7 @@ public class SMSMessageEntity extends BaseEntity {
     public SMSMessageEntity(
             Long userId,
             Long eventId,
+            Long quizId,
             Long questionId,
             String to,
             Date time,
@@ -107,6 +115,7 @@ public class SMSMessageEntity extends BaseEntity {
             NotificationEventType type) {
         this.userId = userId;
         this.eventId = eventId;
+        this.quizId = quizId;
         this.questionId = questionId;
         this.to = to;
         this.time = time;

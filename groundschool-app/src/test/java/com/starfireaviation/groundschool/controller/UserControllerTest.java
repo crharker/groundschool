@@ -63,7 +63,10 @@ public class UserControllerTest {
         mockUser = ObjectCreator.getUser();
 
         Mockito.doReturn(ObjectCreator.getUser()).when(userService).store(ArgumentMatchers.any());
-        Mockito.doNothing().when(notificationService).send(ArgumentMatchers.any(), ArgumentMatchers.any());
+        Mockito.doNothing().when(notificationService).send(
+                ArgumentMatchers.any(),
+                ArgumentMatchers.any(),
+                ArgumentMatchers.any());
 
         userController = new UserController(userService, notificationService);
     }
@@ -87,7 +90,10 @@ public class UserControllerTest {
         Assert.assertSame(ObjectCreator.EMAIL, user.getEmail());
 
         Mockito.verify(userService, times(1)).store(ArgumentMatchers.any());
-        Mockito.verify(notificationService, times(1)).send(ArgumentMatchers.any(), ArgumentMatchers.any());
+        Mockito.verify(notificationService, times(1)).send(
+                ArgumentMatchers.any(),
+                ArgumentMatchers.any(),
+                ArgumentMatchers.any());
         Mockito.verifyNoMoreInteractions(userService);
         Mockito.verifyNoMoreInteractions(notificationService);
     }
@@ -111,7 +117,10 @@ public class UserControllerTest {
         Assert.assertSame(ObjectCreator.EMAIL, user.getEmail());
 
         Mockito.verify(userService, times(1)).store(ArgumentMatchers.any());
-        Mockito.verify(notificationService, times(1)).send(ArgumentMatchers.any(), ArgumentMatchers.any());
+        Mockito.verify(notificationService, times(1)).send(
+                ArgumentMatchers.any(),
+                ArgumentMatchers.any(),
+                ArgumentMatchers.any());
         Mockito.verifyNoMoreInteractions(userService);
         Mockito.verifyNoMoreInteractions(notificationService);
     }
@@ -157,7 +166,10 @@ public class UserControllerTest {
         Assert.assertSame(ObjectCreator.EMAIL, user.getEmail());
 
         Mockito.verify(userService, times(1)).delete(ArgumentMatchers.anyLong());
-        Mockito.verify(notificationService, times(1)).send(ArgumentMatchers.any(), ArgumentMatchers.any());
+        Mockito.verify(notificationService, times(1)).send(
+                ArgumentMatchers.any(),
+                ArgumentMatchers.any(),
+                ArgumentMatchers.any());
         Mockito.verifyNoMoreInteractions(userService);
         Mockito.verifyNoMoreInteractions(notificationService);
     }

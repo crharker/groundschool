@@ -23,5 +23,9 @@ public enum NotificationEventType {
     /**
      * USER_DELETE
      */
-    USER_DELETE;
+    USER_DELETE,
+    /**
+     * EVENT_RSVP
+     */
+    EVENT_RSVP;
 }

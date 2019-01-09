@@ -19,9 +19,10 @@ public interface NotificationService {
      * Sends a notification
      *
      * @param userId Long
+     * @param notificationType NotificationType
      * @param notificationEventType NotificationEventType
      */
-    public void send(Long userId, NotificationEventType notificationEventType);
+    public void send(Long userId, NotificationType notificationType, NotificationEventType notificationEventType);
 
     /**
      * Re-sends a notification

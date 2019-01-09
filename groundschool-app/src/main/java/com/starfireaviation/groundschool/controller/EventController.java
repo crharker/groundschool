@@ -17,7 +17,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.starfireaviation.groundschool.model.Event;
+import com.starfireaviation.groundschool.model.NotificationType;
+import com.starfireaviation.groundschool.model.User;
 import com.starfireaviation.groundschool.service.EventService;
+import com.starfireaviation.groundschool.service.UserService;
 
 import java.util.List;
 
@@ -38,6 +41,12 @@ public class EventController {
      */
     @Autowired
     private EventService eventService;
+
+    /**
+     * UserService
+     */
+    @Autowired
+    private UserService userService;
 
     /**
      * Initializes an instance of <code>EventController</code> with the default data.
@@ -117,5 +126,28 @@ public class EventController {
     @GetMapping
     public List<Event> list() {
         return eventService.findAllEvents();
+    }
+
+    /**
+     * Verifies a user's notification settings for a given NotificationType
+     *
+     * @param eventId event ID
+     * @param userId user ID
+     * @param confirm confirm or decline
+     * @param type NotificationType
+     */
+    @GetMapping(path = {
+            "/rsvp/{eventId}/{userId}/{confirm}/{type}"
+    })
+    public void rsvp(
+            @PathVariable("eventId") long eventId,
+            @PathVariable("userId") long userId,
+            @PathVariable("confirm") boolean confirm,
+            @PathVariable("type") NotificationType type) {
+        Event event = eventService.findById(eventId);
+        User user = userService.findById(userId);
+        if (event != null && user != null) {
+            eventService.rsvp(event, user, confirm);
+        }
     }
 }

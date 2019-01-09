@@ -20,6 +20,7 @@ public interface SMSService {
      *
      * @param userId user ID
      * @param eventId event ID
+     * @param quizId quiz ID
      * @param questionId question ID
      * @param type NotificationEventType
      * @param fromAddress from address
@@ -29,6 +30,7 @@ public interface SMSService {
     public void send(
             Long userId,
             Long eventId,
+            Long quizId,
             Long questionId,
             NotificationEventType type,
             String fromAddress,

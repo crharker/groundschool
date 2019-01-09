@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.starfireaviation.groundschool.model.Event;
+import com.starfireaviation.groundschool.model.User;
 import com.starfireaviation.groundschool.model.sql.EventEntity;
 import com.starfireaviation.groundschool.repository.EventRepository;
 import com.starfireaviation.groundschool.service.EventService;
@@ -98,6 +99,14 @@ public class EventServiceImpl implements EventService {
     @Override
     public Event findById(long id) {
         return mapper.map(eventRepository.findById(id), Event.class);
+    }
+
+    /**
+     * {@inheritDoc} Required implementation.
+     */
+    @Override
+    public void rsvp(Event event, User user, boolean confirm) {
+        // TODO Auto-generated method stub
     }
 
 }

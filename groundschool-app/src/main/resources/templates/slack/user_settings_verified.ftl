@@ -1,5 +1,3 @@
-<html>
-    <body>
-        <h3>Hi ${user}, welcome to the application!</h3>
-    </body>
-</html>
+Hi ${firstName} ${lastName}, thank you for verifying your user settings!
+
+Reply with STOP to no longer receive these messages.

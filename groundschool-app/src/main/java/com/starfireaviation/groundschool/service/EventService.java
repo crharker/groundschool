@@ -8,6 +8,7 @@ package com.starfireaviation.groundschool.service;
 import java.util.List;
 
 import com.starfireaviation.groundschool.model.Event;
+import com.starfireaviation.groundschool.model.User;
 
 /**
  * EventService
@@ -47,4 +48,12 @@ public interface EventService {
      */
     public Event findById(long id);
 
+    /**
+     * RSVP's a user for an event
+     *
+     * @param event Event
+     * @param user User
+     * @param confirm confirm or decline
+     */
+    public void rsvp(Event event, User user, boolean confirm);
 }
