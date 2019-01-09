@@ -5,6 +5,8 @@
  */
 package com.starfireaviation.groundschool.service.impl;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -22,12 +24,15 @@ import org.springframework.util.CollectionUtils;
 
 import com.starfireaviation.groundschool.model.NotificationEventType;
 import com.starfireaviation.groundschool.model.SMSMessage;
+import com.starfireaviation.groundschool.model.Statistic;
+import com.starfireaviation.groundschool.model.StatisticType;
 import com.starfireaviation.groundschool.model.User;
 import com.starfireaviation.groundschool.model.sql.SMSMessageEntity;
 import com.starfireaviation.groundschool.properties.SMSProperties;
 import com.starfireaviation.groundschool.repository.SMSMessageRepository;
 import com.starfireaviation.groundschool.service.NotificationService;
 import com.starfireaviation.groundschool.service.SMSService;
+import com.starfireaviation.groundschool.service.StatisticService;
 import com.starfireaviation.groundschool.service.UserService;
 import com.starfireaviation.groundschool.util.SMSResponseParser;
 import com.twilio.Twilio;
@@ -77,6 +82,12 @@ public class SMSServiceImpl implements SMSService {
     private NotificationService notificationService;
 
     /**
+     * StatisticService
+     */
+    @Autowired
+    private StatisticService statisticService;
+
+    /**
      * {@inheritDoc} Required implementation.
      */
     @Override
@@ -86,6 +97,7 @@ public class SMSServiceImpl implements SMSService {
             String fromAddress,
             String toAddress,
             String body) {
+        Instant start = Instant.now();
         LOGGER.info(
                 String.format(
                         "Sending... fromAddress [%s]; toAddress [%s]; body [%s]",
@@ -96,6 +108,16 @@ public class SMSServiceImpl implements SMSService {
         Message message = Message.creator(new PhoneNumber(toAddress), new PhoneNumber(fromAddress), body).create();
         LOGGER.info(String.format("Status [%s]", message.getStatus()));
         smsMessageRepository.save(new SMSMessageEntity(userId, toAddress, new Date(), body, type));
+        Statistic statistic = new Statistic(
+                StatisticType.SMS_MESSAGE_SENT,
+                String.format(
+                        "Duration [%s]; Destination [%s]; Type [%s]; Message [%s]",
+                        Duration.between(start, Instant.now()),
+                        toAddress,
+                        type,
+                        body));
+        statistic.setUserId(userId);
+        statisticService.store(statistic);
     }
 
     /**
@@ -103,7 +125,9 @@ public class SMSServiceImpl implements SMSService {
      */
     @Override
     public String receiveMessage(SMSMessage message) {
+        Instant start = Instant.now();
         LOGGER.info(String.format("receiveMessage() message received was [%s]", message));
+        Long userId = null;
         String response = replyWithNoOpenMessagesMsg();
         final List<SMSMessageEntity> smsMessageEntities = smsMessageRepository.findByTo(
                 stripCountryCode(message.getFrom()));
@@ -111,22 +135,32 @@ public class SMSServiceImpl implements SMSService {
             List<SMSMessageEntity> sortedSMSMessages = sortByTime(smsMessageEntities);
             SMSMessageEntity smsMessageEntity = sortedSMSMessages.get(0);
             if (smsMessageEntity.isOpen()) {
-                closeAllMessages(smsMessageEntity.getUserId());
+                userId = smsMessageEntity.getUserId();
+                closeAllMessages(userId);
                 switch (smsMessageEntity.getNotificationEventType()) {
                     case USER_SETTINGS:
-                        response = processUserSettingsResponse(smsMessageEntity.getUserId(), message);
+                        response = processUserSettingsResponse(userId, message);
                         break;
                     case USER_VERIFIED:
-                        response = processUserVerifiedResponse(smsMessageEntity.getUserId(), message);
+                        response = processUserVerifiedResponse(userId, message);
                         break;
                     case USER_DELETE:
-                        response = processUserDeletedResponse(smsMessageEntity.getUserId(), message);
+                        response = processUserDeletedResponse(userId, message);
                         break;
                     default:
                         break;
                 }
             }
         }
+        Statistic statistic = new Statistic(
+                StatisticType.SMS_MESSAGE_RECEIVED,
+                String.format(
+                        "Duration [%s]; Source [%s]; Message [%s]",
+                        Duration.between(start, Instant.now()),
+                        message.getFrom(),
+                        message.getBody()));
+        statistic.setUserId(userId);
+        statisticService.store(statistic);
         return response;
     }
 
@@ -135,6 +169,7 @@ public class SMSServiceImpl implements SMSService {
      */
     @Override
     public void closeAllMessages(Long userId) {
+        Instant start = Instant.now();
         List<SMSMessageEntity> smsMessageEntities = smsMessageRepository.findByUserId(userId);
         for (SMSMessageEntity smsMessageEntity : smsMessageEntities) {
             if (smsMessageEntity.isOpen()) {
@@ -142,6 +177,13 @@ public class SMSServiceImpl implements SMSService {
                 smsMessageRepository.save(smsMessageEntity);
             }
         }
+        Statistic statistic = new Statistic(
+                StatisticType.SMS_ALL_MESSAGES_CLOSED,
+                String.format(
+                        "Duration [%s];",
+                        Duration.between(start, Instant.now())));
+        statistic.setUserId(userId);
+        statisticService.store(statistic);
     }
 
     /**

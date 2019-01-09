@@ -15,6 +15,7 @@ public interface EmailService {
     /**
      * Sends an email
      *
+     * @param userId user ID
      * @param fromAddress from address
      * @param toAddress to address
      * @param ccAddress cc address
@@ -24,6 +25,7 @@ public interface EmailService {
      * @param html message body contains HTML?
      */
     public void send(
+            Long userId,
             String fromAddress,
             String toAddress,
             String ccAddress,

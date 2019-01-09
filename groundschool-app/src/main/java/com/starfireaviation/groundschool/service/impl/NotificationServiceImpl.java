@@ -129,6 +129,7 @@ public class NotificationServiceImpl implements NotificationService {
             try {
                 freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates/email");
                 emailService.send(
+                        user.getId(),
                         emailProperties.getFromAddress(),
                         user.getEmail(),
                         null,
@@ -163,6 +164,7 @@ public class NotificationServiceImpl implements NotificationService {
             try {
                 freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates/slack");
                 slackService.send(
+                        user.getId(),
                         slackProperties.getFromAddress(),
                         user.getSms(),
                         FreeMarkerTemplateUtils.processTemplateIntoString(
@@ -189,6 +191,7 @@ public class NotificationServiceImpl implements NotificationService {
             try {
                 freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates/email");
                 emailService.send(
+                        user.getId(),
                         emailProperties.getFromAddress(),
                         user.getEmail(),
                         null,
@@ -223,6 +226,7 @@ public class NotificationServiceImpl implements NotificationService {
             try {
                 freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates/slack");
                 slackService.send(
+                        user.getId(),
                         slackProperties.getFromAddress(),
                         user.getSms(),
                         FreeMarkerTemplateUtils.processTemplateIntoString(
@@ -250,6 +254,7 @@ public class NotificationServiceImpl implements NotificationService {
             try {
                 freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates/email");
                 emailService.send(
+                        user.getId(),
                         emailProperties.getFromAddress(),
                         user.getEmail(),
                         null,
@@ -286,6 +291,7 @@ public class NotificationServiceImpl implements NotificationService {
             try {
                 freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates/slack");
                 slackService.send(
+                        user.getId(),
                         slackProperties.getFromAddress(),
                         user.getSms(),
                         FreeMarkerTemplateUtils.processTemplateIntoString(
