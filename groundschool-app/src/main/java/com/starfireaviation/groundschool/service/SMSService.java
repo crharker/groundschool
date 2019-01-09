@@ -5,6 +5,7 @@
  */
 package com.starfireaviation.groundschool.service;
 
+import com.starfireaviation.groundschool.model.NotificationEventType;
 import com.starfireaviation.groundschool.model.SMSMessage;
 
 /**
@@ -17,11 +18,15 @@ public interface SMSService {
     /**
      * Sends an SMS
      *
+     * @param userId user ID
+     * @param type NotificationEventType
      * @param fromAddress from address
      * @param toAddress to address
      * @param body body
      */
     public void send(
+            Long userId,
+            NotificationEventType type,
             String fromAddress,
             String toAddress,
             String body);
@@ -33,4 +38,11 @@ public interface SMSService {
      * @return response
      */
     public String receiveMessage(SMSMessage message);
+
+    /**
+     * Closes all open SMS messages
+     *
+     * @param userId user ID
+     */
+    public void closeAllMessages(Long userId);
 }

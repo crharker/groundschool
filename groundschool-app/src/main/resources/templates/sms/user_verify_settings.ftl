@@ -1,1 +1,1 @@
-Hi ${firstName} ${lastName}, please verify your user settings by going to ${host}/users/verify/${userId}/SMS
+Hi ${firstName} ${lastName}, please verify your phone number by responding with CONFIRM, DECLINE, or STOP to stop receiving messages.

@@ -111,7 +111,6 @@ public class NotificationServiceImpl implements NotificationService {
                 userDelete(userId);
                 break;
             default:
-                break;
         }
     }
 
@@ -149,6 +148,8 @@ public class NotificationServiceImpl implements NotificationService {
             try {
                 freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates/sms");
                 smsService.send(
+                        user.getId(),
+                        NotificationEventType.USER_DELETE,
                         smsProperties.getFromAddress(),
                         user.getSms(),
                         FreeMarkerTemplateUtils.processTemplateIntoString(
@@ -207,6 +208,8 @@ public class NotificationServiceImpl implements NotificationService {
             try {
                 freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates/sms");
                 smsService.send(
+                        user.getId(),
+                        NotificationEventType.USER_VERIFIED,
                         smsProperties.getFromAddress(),
                         user.getSms(),
                         FreeMarkerTemplateUtils.processTemplateIntoString(
@@ -267,6 +270,8 @@ public class NotificationServiceImpl implements NotificationService {
             try {
                 freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates/sms");
                 smsService.send(
+                        user.getId(),
+                        NotificationEventType.USER_SETTINGS,
                         smsProperties.getFromAddress(),
                         user.getSms(),
                         FreeMarkerTemplateUtils.processTemplateIntoString(

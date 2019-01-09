@@ -142,14 +142,10 @@ public class UserController {
                 case EMAIL:
                     user.setEmailVerified(true);
                     break;
-                case SMS:
-                    user.setSmsVerified(true);
-                    break;
                 case SLACK:
                     user.setSlackVerified(true);
                     break;
                 default:
-                    break;
             }
             userService.store(user);
             notificationService.send(userId, NotificationEventType.USER_VERIFIED);

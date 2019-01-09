@@ -5,14 +5,31 @@
  */
 package com.starfireaviation.groundschool.service.impl;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
+import com.starfireaviation.groundschool.model.NotificationEventType;
 import com.starfireaviation.groundschool.model.SMSMessage;
+import com.starfireaviation.groundschool.model.User;
+import com.starfireaviation.groundschool.model.sql.SMSMessageEntity;
 import com.starfireaviation.groundschool.properties.SMSProperties;
+import com.starfireaviation.groundschool.repository.SMSMessageRepository;
+import com.starfireaviation.groundschool.service.NotificationService;
 import com.starfireaviation.groundschool.service.SMSService;
+import com.starfireaviation.groundschool.service.UserService;
+import com.starfireaviation.groundschool.util.SMSResponseParser;
 import com.twilio.Twilio;
 import com.twilio.rest.api.v2010.account.Message;
 import com.twilio.type.PhoneNumber;
@@ -26,9 +43,20 @@ import com.twilio.type.PhoneNumber;
 public class SMSServiceImpl implements SMSService {
 
     /**
+     * TN_PATTERN
+     */
+    private static final Pattern TN_PATTERN = Pattern.compile("\\+1(.+){10}");
+
+    /**
      * Logger
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(SMSServiceImpl.class);
+
+    /**
+     * SMSMessageRepository
+     */
+    @Autowired
+    private SMSMessageRepository smsMessageRepository;
 
     /**
      * SMSProperties
@@ -37,10 +65,24 @@ public class SMSServiceImpl implements SMSService {
     private SMSProperties smsProperties;
 
     /**
+     * UserService
+     */
+    @Autowired
+    private UserService userService;
+
+    /**
+     * NotificationService
+     */
+    @Autowired
+    private NotificationService notificationService;
+
+    /**
      * {@inheritDoc} Required implementation.
      */
     @Override
     public void send(
+            Long userId,
+            NotificationEventType type,
             String fromAddress,
             String toAddress,
             String body) {
@@ -53,6 +95,7 @@ public class SMSServiceImpl implements SMSService {
         Twilio.init(smsProperties.getAccountSid(), smsProperties.getAuthId());
         Message message = Message.creator(new PhoneNumber(toAddress), new PhoneNumber(fromAddress), body).create();
         LOGGER.info(String.format("Status [%s]", message.getStatus()));
+        smsMessageRepository.save(new SMSMessageEntity(userId, toAddress, new Date(), body, type));
     }
 
     /**
@@ -61,17 +104,154 @@ public class SMSServiceImpl implements SMSService {
     @Override
     public String receiveMessage(SMSMessage message) {
         LOGGER.info(String.format("receiveMessage() message received was [%s]", message));
-        //com.twilio.twiml.messaging.Body body = new com.twilio.twiml.messaging.Body.Builder(
-        //        "The Robots are coming! Head for the hills!")
-        //                .build();
-        //com.twilio.twiml.messaging.Message sms = new com.twilio.twiml.messaging.Message.Builder()
-        //        .body(body)
-        //        .build();
-        //MessagingResponse twiml = new MessagingResponse.Builder()
-        //        .message(sms)
-        //        .build();
-        //return twiml.toXml();
-        return "The Robots are coming! Head for the hills!";
+        String response = replyWithNoOpenMessagesMsg();
+        final List<SMSMessageEntity> smsMessageEntities = smsMessageRepository.findByTo(
+                stripCountryCode(message.getFrom()));
+        if (!CollectionUtils.isEmpty(smsMessageEntities)) {
+            List<SMSMessageEntity> sortedSMSMessages = sortByTime(smsMessageEntities);
+            SMSMessageEntity smsMessageEntity = sortedSMSMessages.get(0);
+            if (smsMessageEntity.isOpen()) {
+                closeAllMessages(smsMessageEntity.getUserId());
+                switch (smsMessageEntity.getNotificationEventType()) {
+                    case USER_SETTINGS:
+                        response = processUserSettingsResponse(smsMessageEntity.getUserId(), message);
+                        break;
+                    case USER_VERIFIED:
+                        response = processUserVerifiedResponse(smsMessageEntity.getUserId(), message);
+                        break;
+                    case USER_DELETE:
+                        response = processUserDeletedResponse(smsMessageEntity.getUserId(), message);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+        return response;
+    }
+
+    /**
+     * {@inheritDoc} Required implementation.
+     */
+    @Override
+    public void closeAllMessages(Long userId) {
+        List<SMSMessageEntity> smsMessageEntities = smsMessageRepository.findByUserId(userId);
+        for (SMSMessageEntity smsMessageEntity : smsMessageEntities) {
+            if (smsMessageEntity.isOpen()) {
+                smsMessageEntity.setOpen(false);
+                smsMessageRepository.save(smsMessageEntity);
+            }
+        }
+    }
+
+    /**
+     * Sorts SMSMessageEntity by time in reverse order (latest message first)
+     *
+     * @param smsMessageEntities list of SMSMessageEntity
+     * @return sorted list
+     */
+    private static List<SMSMessageEntity> sortByTime(List<SMSMessageEntity> smsMessageEntities) {
+        Map<Date, SMSMessageEntity> map = new TreeMap<>(Collections.reverseOrder());
+        for (SMSMessageEntity smsMessageEntity : smsMessageEntities) {
+            map.put(smsMessageEntity.getTime(), smsMessageEntity);
+        }
+        List<SMSMessageEntity> response = new ArrayList<>();
+        for (Date time : map.keySet()) {
+            response.add(map.get(time));
+        }
+        return response;
+    }
+
+    /**
+     * Strips the country code from a phone number
+     *
+     * @param from number
+     * @return phone number minus country code
+     */
+    private static String stripCountryCode(String from) {
+        LOGGER.info(String.format("stripCountryCode() called with [%s]", from));
+        if (from == null || from.length() == 10) {
+            return from;
+        }
+        String response = from;
+        Matcher matcher = TN_PATTERN.matcher(from);
+        if (matcher.find()) {
+            response = matcher.group(1);
+        }
+        LOGGER.info(String.format("stripCountryCode() returning [%s]", response));
+        return response;
+    }
+
+    /**
+     * @return no open messages message
+     */
+    private static String replyWithNoOpenMessagesMsg() {
+        // Do nothing
+        return null;
+    }
+
+    /**
+     * Process user verified response
+     *
+     * @param userId user ID
+     * @param message to be processed
+     * @return message
+     */
+    private static String processUserVerifiedResponse(Long userId, SMSMessage message) {
+        // Do nothing
+        return null;
+    }
+
+    /**
+     * Process user settings response
+     *
+     * @param userId user ID
+     * @param message to be processed
+     * @return message
+     */
+    private String processUserSettingsResponse(Long userId, SMSMessage message) {
+        // STOP, CONFIRM, DECLINE, other
+        final String body = message.getBody();
+        if (body != null) {
+            switch (SMSResponseParser.determineResponse(body)) {
+                case STOP:
+                    handleStop(userId);
+                    break;
+                case CONFIRM:
+                    User user = userService.findById(userId);
+                    user.setSmsVerified(true);
+                    userService.store(user);
+                    notificationService.send(userId, NotificationEventType.USER_VERIFIED);
+                    break;
+                case DECLINE:
+                default:
+                    // Do nothing
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Handles STOP SMSResponseOption
+     *
+     * @param userId user ID
+     */
+    private void handleStop(Long userId) {
+        User user = userService.findById(userId);
+        user.setSmsEnabled(false);
+        userService.store(user);
+    }
+
+    /**
+     * Process user deleted response
+     *
+     * @param userId user ID
+     * @param message to be processed
+     * @return message
+     */
+    private static String processUserDeletedResponse(Long userId, SMSMessage message) {
+        // Do nothing
+        return null;
     }
 
 }
