@@ -17,10 +17,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.starfireaviation.groundschool.model.Event;
+import com.starfireaviation.groundschool.model.NotificationEventType;
 import com.starfireaviation.groundschool.model.NotificationType;
-import com.starfireaviation.groundschool.model.User;
 import com.starfireaviation.groundschool.service.EventService;
-import com.starfireaviation.groundschool.service.UserService;
+import com.starfireaviation.groundschool.service.NotificationService;
 
 import java.util.List;
 
@@ -43,10 +43,10 @@ public class EventController {
     private EventService eventService;
 
     /**
-     * UserService
+     * NotificationService
      */
     @Autowired
-    private UserService userService;
+    private NotificationService notificationService;
 
     /**
      * Initializes an instance of <code>EventController</code> with the default data.
@@ -129,7 +129,7 @@ public class EventController {
     }
 
     /**
-     * Verifies a user's notification settings for a given NotificationType
+     * RSVP's a user for an event
      *
      * @param eventId event ID
      * @param userId user ID
@@ -144,10 +144,38 @@ public class EventController {
             @PathVariable("userId") long userId,
             @PathVariable("confirm") boolean confirm,
             @PathVariable("type") NotificationType type) {
-        Event event = eventService.findById(eventId);
-        User user = userService.findById(userId);
-        if (event != null && user != null) {
-            eventService.rsvp(event, user, confirm);
-        }
+        eventService.rsvp(eventId, userId, confirm);
+    }
+
+    /**
+     * Registers a user for an event
+     *
+     * @param eventId event ID
+     * @param userId user ID
+     */
+    @GetMapping(path = {
+            "/register/{eventId}/{userId}"
+    })
+    public void register(
+            @PathVariable("eventId") long eventId,
+            @PathVariable("userId") long userId) {
+        eventService.register(eventId, userId);
+        notificationService.send(userId, NotificationType.ALL, NotificationEventType.EVENT_REGISTER);
+    }
+
+    /**
+     * Unregisters a user from an event
+     *
+     * @param eventId event ID
+     * @param userId user ID
+     */
+    @GetMapping(path = {
+            "/unregister/{eventId}/{userId}"
+    })
+    public void unregister(
+            @PathVariable("eventId") long eventId,
+            @PathVariable("userId") long userId) {
+        eventService.unregister(eventId, userId);
+        notificationService.send(userId, NotificationType.ALL, NotificationEventType.EVENT_UNREGISTER);
     }
 }

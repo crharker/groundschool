@@ -27,5 +27,13 @@ public enum NotificationEventType {
     /**
      * EVENT_RSVP
      */
-    EVENT_RSVP;
+    EVENT_RSVP,
+    /**
+     * EVENT_REGISTER
+     */
+    EVENT_REGISTER,
+    /**
+     * EVENT_UNREGISTER
+     */
+    EVENT_UNREGISTER;
 }

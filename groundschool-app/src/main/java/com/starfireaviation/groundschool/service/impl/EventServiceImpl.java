@@ -5,6 +5,7 @@
  */
 package com.starfireaviation.groundschool.service.impl;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,9 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.starfireaviation.groundschool.model.Event;
-import com.starfireaviation.groundschool.model.User;
 import com.starfireaviation.groundschool.model.sql.EventEntity;
+import com.starfireaviation.groundschool.model.sql.EventUserEntity;
 import com.starfireaviation.groundschool.repository.EventRepository;
+import com.starfireaviation.groundschool.repository.EventUserRepository;
 import com.starfireaviation.groundschool.service.EventService;
 
 import ma.glasnost.orika.MapperFacade;
@@ -32,6 +34,12 @@ public class EventServiceImpl implements EventService {
      */
     @Autowired
     private EventRepository eventRepository;
+
+    /**
+     * EventUserRepository
+     */
+    @Autowired
+    private EventUserRepository eventUserRepository;
 
     /**
      * MapperFacade
@@ -105,8 +113,57 @@ public class EventServiceImpl implements EventService {
      * {@inheritDoc} Required implementation.
      */
     @Override
-    public void rsvp(Event event, User user, boolean confirm) {
-        // TODO Auto-generated method stub
+    public void rsvp(Long eventId, Long userId, boolean confirm) {
+        if (eventId == null || userId == null) {
+            return;
+        }
+        List<EventUserEntity> eventUserEntities = eventUserRepository.findByEventId(eventId);
+        for (EventUserEntity eventUserEntity : eventUserEntities) {
+            if (userId == eventUserEntity.getUserId()) {
+                if (confirm) {
+                    eventUserEntity.setConfirmed(true);
+                    eventUserEntity.setDeclined(false);
+                    eventUserEntity.setTime(LocalDateTime.now());
+                } else {
+                    eventUserEntity.setConfirmed(false);
+                    eventUserEntity.setDeclined(true);
+                    eventUserEntity.setTime(LocalDateTime.now());
+                }
+                eventUserRepository.save(eventUserEntity);
+            }
+            break;
+        }
+    }
+
+    /**
+     * {@inheritDoc} Required implementation.
+     */
+    @Override
+    public void register(Long eventId, Long userId) {
+        if (eventId == null || userId == null) {
+            return;
+        }
+        EventUserEntity eventUserEntity = new EventUserEntity();
+        eventUserEntity.setEventId(eventId);
+        eventUserEntity.setUserId(userId);
+        eventUserRepository.save(eventUserEntity);
+    }
+
+    /**
+     * {@inheritDoc} Required implementation.
+     */
+    @Override
+    public void unregister(Long eventId, Long userId) {
+        if (eventId == null || userId == null) {
+            return;
+        }
+        List<EventUserEntity> eventUserEntities = eventUserRepository.findByEventId(eventId);
+        for (EventUserEntity eventUserEntity : eventUserEntities) {
+            if (userId == eventUserEntity.getUserId()) {
+                eventUserRepository.delete(eventUserEntity);
+                break;
+            }
+        }
     }
 
 }

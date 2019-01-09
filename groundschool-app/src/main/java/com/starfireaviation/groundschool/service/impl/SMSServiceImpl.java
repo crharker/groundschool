@@ -22,7 +22,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import com.starfireaviation.groundschool.model.Event;
 import com.starfireaviation.groundschool.model.NotificationEventType;
 import com.starfireaviation.groundschool.model.NotificationType;
 import com.starfireaviation.groundschool.model.SMSMessage;
@@ -351,8 +350,6 @@ public class SMSServiceImpl implements SMSService {
      */
     private boolean processEventRSVPResponse(Long eventId, Long userId, SMSMessage message) {
         boolean success = true;
-        Event event = null;
-        User user = null;
         // STOP, CONFIRM, DECLINE, other
         final String body = message.getBody();
         if (body != null) {
@@ -361,14 +358,10 @@ public class SMSServiceImpl implements SMSService {
                     handleStop(userId);
                     break;
                 case CONFIRM:
-                    event = eventService.findById(eventId);
-                    user = userService.findById(userId);
-                    eventService.rsvp(event, user, true);
+                    eventService.rsvp(eventId, userId, true);
                     break;
                 case DECLINE:
-                    event = eventService.findById(eventId);
-                    user = userService.findById(userId);
-                    eventService.rsvp(event, user, false);
+                    eventService.rsvp(eventId, userId, false);
                     break;
                 default:
                     success = false;

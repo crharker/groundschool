@@ -114,6 +114,12 @@ public class NotificationServiceImpl implements NotificationService {
             case EVENT_RSVP:
                 eventRSVP(userId, notificationType);
                 break;
+            case EVENT_REGISTER:
+                eventRegister(userId, notificationType);
+                break;
+            case EVENT_UNREGISTER:
+                eventUnregister(userId, notificationType);
+                break;
             default:
         }
     }
@@ -257,7 +263,7 @@ public class NotificationServiceImpl implements NotificationService {
     private void eventRSVP(Long userId, NotificationType notificationType) {
         final User user = userService.findById(userId);
         if (user == null) {
-            LOGGER.warn("userDelete() returning as no user was found");
+            LOGGER.warn("eventRSVP() returning as no user was found");
             return;
         }
         if (user.getEmail() != null
@@ -287,6 +293,82 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     /**
+     * Sends notification of registration for an event
+     *
+     * @param userId Long
+     * @param notificationType NotificationType
+     */
+    private void eventRegister(Long userId, NotificationType notificationType) {
+        final User user = userService.findById(userId);
+        if (user == null) {
+            LOGGER.warn("eventRegister() returning as no user was found");
+            return;
+        }
+        if (user.getEmail() != null
+                && user.isEmailVerified()
+                && user.isEmailEnabled()
+                && (notificationType == null
+                        || notificationType == NotificationType.ALL
+                        || notificationType == NotificationType.EMAIL)) {
+            sendEventRegisterEmail(user);
+        }
+        if (user.getSms() != null
+                && user.isSmsVerified()
+                && user.isSmsEnabled()
+                && (notificationType == null
+                        || notificationType == NotificationType.ALL
+                        || notificationType == NotificationType.SMS)) {
+            sendEventRegisterSMS(user);
+        }
+        if (user.getSlack() != null
+                && user.isSlackVerified()
+                && user.isSlackEnabled()
+                && (notificationType == null
+                        || notificationType == NotificationType.ALL
+                        || notificationType == NotificationType.SLACK)) {
+            sendEventRegisterSlackMessage(user);
+        }
+    }
+
+    /**
+     * Sends notification of de-registration from an event
+     *
+     * @param userId Long
+     * @param notificationType NotificationType
+     */
+    private void eventUnregister(Long userId, NotificationType notificationType) {
+        final User user = userService.findById(userId);
+        if (user == null) {
+            LOGGER.warn("eventUnregister() returning as no user was found");
+            return;
+        }
+        if (user.getEmail() != null
+                && user.isEmailVerified()
+                && user.isEmailEnabled()
+                && (notificationType == null
+                        || notificationType == NotificationType.ALL
+                        || notificationType == NotificationType.EMAIL)) {
+            sendEventUnregisterEmail(user);
+        }
+        if (user.getSms() != null
+                && user.isSmsVerified()
+                && user.isSmsEnabled()
+                && (notificationType == null
+                        || notificationType == NotificationType.ALL
+                        || notificationType == NotificationType.SMS)) {
+            sendEventUnregisterSMS(user);
+        }
+        if (user.getSlack() != null
+                && user.isSlackVerified()
+                && user.isSlackEnabled()
+                && (notificationType == null
+                        || notificationType == NotificationType.ALL
+                        || notificationType == NotificationType.SLACK)) {
+            sendEventUnregisterSlackMessage(user);
+        }
+    }
+
+    /**
      * Sends a slack message to RSVP for an upcoming event
      *
      * @param user User
@@ -300,6 +382,46 @@ public class NotificationServiceImpl implements NotificationService {
                     user.getSlack(),
                     FreeMarkerTemplateUtils.processTemplateIntoString(
                             freemarkerConfig.getTemplate("event_rsvp.ftl"),
+                            getModelForUser(user)));
+        } catch (IOException | TemplateException e) {
+            LOGGER.warn(e.getMessage());
+        }
+    }
+
+    /**
+     * Sends a slack message for registering for an upcoming event
+     *
+     * @param user User
+     */
+    private void sendEventRegisterSlackMessage(final User user) {
+        try {
+            freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates/slack");
+            slackService.send(
+                    user.getId(),
+                    slackProperties.getFromAddress(),
+                    user.getSlack(),
+                    FreeMarkerTemplateUtils.processTemplateIntoString(
+                            freemarkerConfig.getTemplate("event_register.ftl"),
+                            getModelForUser(user)));
+        } catch (IOException | TemplateException e) {
+            LOGGER.warn(e.getMessage());
+        }
+    }
+
+    /**
+     * Sends a slack message for unregistering from an upcoming event
+     *
+     * @param user User
+     */
+    private void sendEventUnregisterSlackMessage(final User user) {
+        try {
+            freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates/slack");
+            slackService.send(
+                    user.getId(),
+                    slackProperties.getFromAddress(),
+                    user.getSlack(),
+                    FreeMarkerTemplateUtils.processTemplateIntoString(
+                            freemarkerConfig.getTemplate("event_unregister.ftl"),
                             getModelForUser(user)));
         } catch (IOException | TemplateException e) {
             LOGGER.warn(e.getMessage());
@@ -375,6 +497,54 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     /**
+     * Sends an SMS message for registering for an upcoming event
+     *
+     * @param user User
+     */
+    private void sendEventRegisterSMS(final User user) {
+        try {
+            freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates/sms");
+            smsService.send(
+                    user.getId(),
+                    null,
+                    null,
+                    null,
+                    NotificationEventType.EVENT_REGISTER,
+                    smsProperties.getFromAddress(),
+                    user.getSms(),
+                    FreeMarkerTemplateUtils.processTemplateIntoString(
+                            freemarkerConfig.getTemplate("event_register.ftl"),
+                            getModelForUser(user)));
+        } catch (IOException | TemplateException e) {
+            LOGGER.warn(e.getMessage());
+        }
+    }
+
+    /**
+     * Sends an SMS message for unregistering from an upcoming event
+     *
+     * @param user User
+     */
+    private void sendEventUnregisterSMS(final User user) {
+        try {
+            freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates/sms");
+            smsService.send(
+                    user.getId(),
+                    null,
+                    null,
+                    null,
+                    NotificationEventType.EVENT_UNREGISTER,
+                    smsProperties.getFromAddress(),
+                    user.getSms(),
+                    FreeMarkerTemplateUtils.processTemplateIntoString(
+                            freemarkerConfig.getTemplate("event_unregister.ftl"),
+                            getModelForUser(user)));
+        } catch (IOException | TemplateException e) {
+            LOGGER.warn(e.getMessage());
+        }
+    }
+
+    /**
      * Sends an email for user deletion
      *
      * @param user User
@@ -419,6 +589,58 @@ public class NotificationServiceImpl implements NotificationService {
                             getModelForUser(user)),
                     FreeMarkerTemplateUtils.processTemplateIntoString(
                             freemarkerConfig.getTemplate("event_rsvp_body.ftl"),
+                            getModelForUser(user)),
+                    true);
+        } catch (IOException | TemplateException e) {
+            LOGGER.warn(e.getMessage());
+        }
+    }
+
+    /**
+     * Sends an email for registering for an upcoming event
+     *
+     * @param user User
+     */
+    private void sendEventRegisterEmail(final User user) {
+        try {
+            freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates/email");
+            emailService.send(
+                    user.getId(),
+                    emailProperties.getFromAddress(),
+                    user.getEmail(),
+                    null,
+                    null,
+                    FreeMarkerTemplateUtils.processTemplateIntoString(
+                            freemarkerConfig.getTemplate("event_register_subject.ftl"),
+                            getModelForUser(user)),
+                    FreeMarkerTemplateUtils.processTemplateIntoString(
+                            freemarkerConfig.getTemplate("event_register_body.ftl"),
+                            getModelForUser(user)),
+                    true);
+        } catch (IOException | TemplateException e) {
+            LOGGER.warn(e.getMessage());
+        }
+    }
+
+    /**
+     * Sends an email for unregistering from an upcoming event
+     *
+     * @param user User
+     */
+    private void sendEventUnregisterEmail(final User user) {
+        try {
+            freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates/email");
+            emailService.send(
+                    user.getId(),
+                    emailProperties.getFromAddress(),
+                    user.getEmail(),
+                    null,
+                    null,
+                    FreeMarkerTemplateUtils.processTemplateIntoString(
+                            freemarkerConfig.getTemplate("event_unregister_subject.ftl"),
+                            getModelForUser(user)),
+                    FreeMarkerTemplateUtils.processTemplateIntoString(
+                            freemarkerConfig.getTemplate("event_unregister_body.ftl"),
                             getModelForUser(user)),
                     true);
         } catch (IOException | TemplateException e) {
