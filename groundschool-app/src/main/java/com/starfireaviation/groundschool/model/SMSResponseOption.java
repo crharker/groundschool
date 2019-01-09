@@ -17,6 +17,22 @@ public enum SMSResponseOption {
      */
     UNKNOWN,
     /**
+     * A
+     */
+    A,
+    /**
+     * B
+     */
+    B,
+    /**
+     * C
+     */
+    C,
+    /**
+     * D
+     */
+    D,
+    /**
      * STOP
      */
     STOP,

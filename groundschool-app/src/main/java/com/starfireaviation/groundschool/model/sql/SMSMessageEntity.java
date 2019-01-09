@@ -61,6 +61,18 @@ public class SMSMessageEntity extends BaseEntity {
     private Long userId;
 
     /**
+     * EventID
+     */
+    @Column(name = "event_id")
+    private Long eventId;
+
+    /**
+     * QuestionID
+     */
+    @Column(name = "question_id")
+    private Long questionId;
+
+    /**
      * NotificationEventType
      */
     @Column(name = "notification_event_type")
@@ -78,13 +90,24 @@ public class SMSMessageEntity extends BaseEntity {
      * Initializes an instance of <code>SMSMessageEntity</code> with the default data.
      *
      * @param userId user ID
+     * @param eventId event ID
+     * @param questionId question ID
      * @param to phone number
      * @param time message was sent
      * @param message text
      * @param type NotificationEventType
      */
-    public SMSMessageEntity(Long userId, String to, Date time, String message, NotificationEventType type) {
+    public SMSMessageEntity(
+            Long userId,
+            Long eventId,
+            Long questionId,
+            String to,
+            Date time,
+            String message,
+            NotificationEventType type) {
         this.userId = userId;
+        this.eventId = eventId;
+        this.questionId = questionId;
         this.to = to;
         this.time = time;
         this.message = message;
@@ -216,5 +239,41 @@ public class SMSMessageEntity extends BaseEntity {
      */
     public void setNotificationEventType(NotificationEventType notificationEventType) {
         this.notificationEventType = notificationEventType;
+    }
+
+    /**
+     * Retrieves the value for {@link #eventId}.
+     *
+     * @return the current value
+     */
+    public Long getEventId() {
+        return eventId;
+    }
+
+    /**
+     * Provides a value for {@link #eventId}.
+     *
+     * @param eventId the new value to set
+     */
+    public void setEventId(Long eventId) {
+        this.eventId = eventId;
+    }
+
+    /**
+     * Retrieves the value for {@link #questionId}.
+     *
+     * @return the current value
+     */
+    public Long getQuestionId() {
+        return questionId;
+    }
+
+    /**
+     * Provides a value for {@link #questionId}.
+     *
+     * @param questionId the new value to set
+     */
+    public void setQuestionId(Long questionId) {
+        this.questionId = questionId;
     }
 }

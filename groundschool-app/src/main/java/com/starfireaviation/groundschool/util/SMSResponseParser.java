@@ -18,6 +18,26 @@ import com.starfireaviation.groundschool.model.SMSResponseOption;
 public class SMSResponseParser {
 
     /**
+     * A_PATTERN
+     */
+    public static final Pattern A_PATTERN = Pattern.compile("A", Pattern.CASE_INSENSITIVE);
+
+    /**
+     * B_PATTERN
+     */
+    public static final Pattern B_PATTERN = Pattern.compile("B", Pattern.CASE_INSENSITIVE);
+
+    /**
+     * C_PATTERN
+     */
+    public static final Pattern C_PATTERN = Pattern.compile("C", Pattern.CASE_INSENSITIVE);
+
+    /**
+     * D_PATTERN
+     */
+    public static final Pattern D_PATTERN = Pattern.compile("D", Pattern.CASE_INSENSITIVE);
+
+    /**
      * STOP_PATTERN
      */
     public static final Pattern STOP_PATTERN = Pattern.compile(".*?(STOP).*?", Pattern.CASE_INSENSITIVE);
@@ -46,6 +66,14 @@ public class SMSResponseParser {
             smsResponseOption = SMSResponseOption.DECLINE;
         } else if (isConfirmResponse(message)) {
             smsResponseOption = SMSResponseOption.CONFIRM;
+        } else if (isAResponse(message)) {
+            smsResponseOption = SMSResponseOption.A;
+        } else if (isBResponse(message)) {
+            smsResponseOption = SMSResponseOption.B;
+        } else if (isCResponse(message)) {
+            smsResponseOption = SMSResponseOption.C;
+        } else if (isDResponse(message)) {
+            smsResponseOption = SMSResponseOption.D;
         }
         return smsResponseOption;
     }
@@ -93,6 +121,66 @@ public class SMSResponseParser {
             isDecline = true;
         }
         return isDecline;
+    }
+
+    /**
+     * Evaluates user's message to see if it is a A message
+     *
+     * @param message to be evaluated
+     * @return if a A message
+     */
+    private static boolean isAResponse(String message) {
+        boolean isA = false;
+        Matcher matcher = A_PATTERN.matcher(message);
+        if (matcher.find()) {
+            isA = true;
+        }
+        return isA;
+    }
+
+    /**
+     * Evaluates user's message to see if it is a B message
+     *
+     * @param message to be evaluated
+     * @return if a B message
+     */
+    private static boolean isBResponse(String message) {
+        boolean isB = false;
+        Matcher matcher = B_PATTERN.matcher(message);
+        if (matcher.find()) {
+            isB = true;
+        }
+        return isB;
+    }
+
+    /**
+     * Evaluates user's message to see if it is a C message
+     *
+     * @param message to be evaluated
+     * @return if a C message
+     */
+    private static boolean isCResponse(String message) {
+        boolean isC = false;
+        Matcher matcher = C_PATTERN.matcher(message);
+        if (matcher.find()) {
+            isC = true;
+        }
+        return isC;
+    }
+
+    /**
+     * Evaluates user's message to see if it is a D message
+     *
+     * @param message to be evaluated
+     * @return if a D message
+     */
+    private static boolean isDResponse(String message) {
+        boolean isD = false;
+        Matcher matcher = D_PATTERN.matcher(message);
+        if (matcher.find()) {
+            isD = true;
+        }
+        return isD;
     }
 
 }

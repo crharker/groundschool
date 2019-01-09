@@ -94,6 +94,8 @@ public class SMSServiceImpl implements SMSService {
     @Override
     public void send(
             Long userId,
+            Long eventId,
+            Long questionId,
             NotificationEventType type,
             String fromAddress,
             String toAddress,
@@ -108,7 +110,7 @@ public class SMSServiceImpl implements SMSService {
         Twilio.init(smsProperties.getAccountSid(), smsProperties.getAuthId());
         Message message = Message.creator(new PhoneNumber(toAddress), new PhoneNumber(fromAddress), body).create();
         LOGGER.info(String.format("Status [%s]", message.getStatus()));
-        smsMessageRepository.save(new SMSMessageEntity(userId, toAddress, new Date(), body, type));
+        smsMessageRepository.save(new SMSMessageEntity(userId, eventId, questionId, toAddress, new Date(), body, type));
         Statistic statistic = new Statistic(
                 StatisticType.SMS_MESSAGE_SENT,
                 String.format(
