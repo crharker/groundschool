@@ -55,6 +55,8 @@ fabric.properties
 
 .metadata
 bin/
+compile.sh
+run.sh
 tmp/
 *.tmp
 *.bak
