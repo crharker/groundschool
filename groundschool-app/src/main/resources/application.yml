@@ -56,3 +56,16 @@ groundschool:
     auth-id: <<HIDDEN>>
   slack:
     from-address: brianmichael
+
+google:
+  client:
+    client-id: <<HIDDEN>>
+    client-secret: <<HIDDEN>>
+    access-token-uri: https://www.googleapis.com/oauth2/v3/token
+    user-authorization-uri: https://accounts.google.com/o/oauth2/auth?access_type=offline&prompt=consent
+    client-authentication-scheme: query
+    scope: profile,email,https://www.googleapis.com/auth/calendar
+    redirectUri: http://localhost:8080
+  resource: 
+    user-info-uri: https://www.googleapis.com/oauth2/v2/userinfo
+    prefer-token-info: true
