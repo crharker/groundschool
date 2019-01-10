@@ -22,6 +22,7 @@ import com.starfireaviation.groundschool.model.NotificationEventType;
 import com.starfireaviation.groundschool.model.NotificationType;
 import com.starfireaviation.groundschool.service.AddressService;
 import com.starfireaviation.groundschool.service.EventService;
+import com.starfireaviation.groundschool.service.LessonPlanService;
 import com.starfireaviation.groundschool.service.NotificationService;
 
 import java.util.List;
@@ -49,6 +50,12 @@ public class EventController {
      */
     @Autowired
     private AddressService addressService;
+
+    /**
+     * LessonPlanService
+     */
+    @Autowired
+    private LessonPlanService lessonPlanService;
 
     /**
      * NotificationService
@@ -202,4 +209,37 @@ public class EventController {
         eventService.unregister(eventId, userId);
         notificationService.send(userId, NotificationType.ALL, NotificationEventType.EVENT_UNREGISTER);
     }
+
+    /**
+     * Assigns a lesson plan to an event
+     *
+     * @param eventId Event ID
+     * @param lessonPlanId LessonPlan ID
+     */
+    @PostMapping(path = {
+            "{eventId}/assign/lessonplan/{lessonPlanId}"
+    })
+    public void assignLessonPlan(
+            @PathVariable("eventId") long eventId,
+            @PathVariable("lessonPlanId") long lessonPlanId) {
+        //final LessonPlan lessonPlan =
+        lessonPlanService.findById(lessonPlanId);
+    }
+
+    /**
+     * Unassigns a lesson plan from an event
+     *
+     * @param eventId Event ID
+     * @param lessonPlanId LessonPlan ID
+     */
+    @PostMapping(path = {
+            "{eventId}/unassign/lessonplan/{lessonPlanId}"
+    })
+    public void unassignLessonPlan(
+            @PathVariable("eventId") long eventId,
+            @PathVariable("lessonPlanId") long lessonPlanId) {
+        //final LessonPlan lessonPlan =
+        lessonPlanService.findById(lessonPlanId);
+    }
+
 }
