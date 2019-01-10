@@ -35,11 +35,6 @@ public class Event extends Base {
     private Address address;
 
     /**
-     * LessonPlan
-     */
-    private LessonPlan lessonPlan;
-
-    /**
      * Retrieves the value for {@link #title}.
      *
      * @return the current value
@@ -91,24 +86,6 @@ public class Event extends Base {
      */
     public void setAddress(Address address) {
         this.address = address;
-    }
-
-    /**
-     * Retrieves the value for {@link #lessonPlan}.
-     *
-     * @return the current value
-     */
-    public LessonPlan getLessonPlan() {
-        return lessonPlan;
-    }
-
-    /**
-     * Provides a value for {@link #lessonPlan}.
-     *
-     * @param lessonPlan the new value to set
-     */
-    public void setLessonPlan(LessonPlan lessonPlan) {
-        this.lessonPlan = lessonPlan;
     }
 
 }

@@ -16,9 +16,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.starfireaviation.groundschool.model.Address;
 import com.starfireaviation.groundschool.model.Event;
 import com.starfireaviation.groundschool.model.NotificationEventType;
 import com.starfireaviation.groundschool.model.NotificationType;
+import com.starfireaviation.groundschool.service.AddressService;
 import com.starfireaviation.groundschool.service.EventService;
 import com.starfireaviation.groundschool.service.NotificationService;
 
@@ -41,6 +43,12 @@ public class EventController {
      */
     @Autowired
     private EventService eventService;
+
+    /**
+     * AddressService
+     */
+    @Autowired
+    private AddressService addressService;
 
     /**
      * NotificationService
@@ -75,7 +83,12 @@ public class EventController {
         if (event == null) {
             return event;
         }
-        return eventService.store(event);
+        Event response = eventService.store(event);
+        Address address = event.getAddress();
+        if (address != null) {
+            response.setAddress(addressService.store(response.getId(), address));
+        }
+        return response;
     }
 
     /**
@@ -88,7 +101,9 @@ public class EventController {
             "/{id}"
     })
     public Event get(@PathVariable("id") long id) {
-        return eventService.findById(id);
+        Event event = eventService.findById(id);
+        event.setAddress(addressService.findByEventId(event.getId()));
+        return event;
     }
 
     /**
@@ -102,7 +117,12 @@ public class EventController {
         if (event == null) {
             return event;
         }
-        return eventService.store(event);
+        Event response = eventService.store(event);
+        Address address = event.getAddress();
+        if (address != null) {
+            response.setAddress(addressService.store(response.getId(), address));
+        }
+        return response;
     }
 
     /**
@@ -125,7 +145,11 @@ public class EventController {
      */
     @GetMapping
     public List<Event> list() {
-        return eventService.findAllEvents();
+        List<Event> events = eventService.findAllEvents();
+        for (Event event : events) {
+            event.setAddress(addressService.findByEventId(event.getId()));
+        }
+        return events;
     }
 
     /**
