@@ -5,6 +5,8 @@
  */
 package com.starfireaviation.groundschool.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,6 +28,11 @@ import com.starfireaviation.groundschool.service.SMSService;
 public class NotificationController {
 
     /**
+     * Logger
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(NotificationController.class);
+
+    /**
      * SMSService
      */
     @Autowired
@@ -41,6 +48,7 @@ public class NotificationController {
             "/sms"
     })
     public String sms(@RequestBody String message) {
+        LOGGER.info(String.format("sms() called with [%s]", message));
         return smsService.receiveMessage(new SMSMessage(message));
     }
 

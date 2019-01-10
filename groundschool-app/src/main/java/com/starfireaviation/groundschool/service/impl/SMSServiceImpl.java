@@ -53,7 +53,7 @@ public class SMSServiceImpl implements SMSService {
     /**
      * TN_PATTERN
      */
-    private static final Pattern TN_PATTERN = Pattern.compile("\\+1(.+){10}");
+    private static final Pattern TN_PATTERN = Pattern.compile(".*\\+1(\\d{10}).*");
 
     /**
      * Logger
@@ -243,6 +243,7 @@ public class SMSServiceImpl implements SMSService {
      * @return phone number minus country code
      */
     private static String stripCountryCode(String from) {
+        // TODO not quite working right
         LOGGER.info(String.format("stripCountryCode() called with [%s]", from));
         if (from == null || from.length() == 10) {
             return from;

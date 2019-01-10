@@ -30,6 +30,16 @@ public class Event extends Base {
     private LocalDateTime startTime;
 
     /**
+     * Address
+     */
+    private Address address;
+
+    /**
+     * LessonPlan
+     */
+    private LessonPlan lessonPlan;
+
+    /**
      * Retrieves the value for {@link #title}.
      *
      * @return the current value
@@ -63,6 +73,42 @@ public class Event extends Base {
      */
     public void setStartTime(LocalDateTime startTime) {
         this.startTime = startTime;
+    }
+
+    /**
+     * Retrieves the value for {@link #address}.
+     *
+     * @return the current value
+     */
+    public Address getAddress() {
+        return address;
+    }
+
+    /**
+     * Provides a value for {@link #address}.
+     *
+     * @param address the new value to set
+     */
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
+    /**
+     * Retrieves the value for {@link #lessonPlan}.
+     *
+     * @return the current value
+     */
+    public LessonPlan getLessonPlan() {
+        return lessonPlan;
+    }
+
+    /**
+     * Provides a value for {@link #lessonPlan}.
+     *
+     * @param lessonPlan the new value to set
+     */
+    public void setLessonPlan(LessonPlan lessonPlan) {
+        this.lessonPlan = lessonPlan;
     }
 
 }

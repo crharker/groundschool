@@ -1,0 +1,1364 @@
+{
+	"info": {
+		"_postman_id": "5fb0a557-b713-4ca8-a436-1dd1059a96fa",
+		"name": "GroundSchool",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "event",
+			"item": [
+				{
+					"name": "event",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"title\": \"Testing\",\n\t\"startTime\": \"2019-01-11T14:00:00.0\"\n}"
+						},
+						"url": {
+							"raw": "localhost:8080/events",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"events"
+							]
+						},
+						"description": "localhost:8080/events"
+					},
+					"response": []
+				},
+				{
+					"name": "event",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "localhost:8080/events/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"events",
+								"1"
+							]
+						},
+						"description": "localhost:8080/events/1"
+					},
+					"response": []
+				},
+				{
+					"name": "event",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": 1,\n    \"title\": \"Testing\",\n    \"startTime\": \"2019-01-11T13:00:00\"\n}"
+						},
+						"url": {
+							"raw": "localhost:8080/events",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"events"
+							]
+						},
+						"description": "localhost:8080/events"
+					},
+					"response": []
+				},
+				{
+					"name": "event",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "localhost:8080/events/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"events",
+								"1"
+							]
+						},
+						"description": "localhost:8080/events/1"
+					},
+					"response": []
+				},
+				{
+					"name": "events",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "localhost:8080/events",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"events"
+							]
+						},
+						"description": "localhost:8080/events"
+					},
+					"response": []
+				},
+				{
+					"name": "register",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "localhost:8080/events/register/1/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"events",
+								"register",
+								"1",
+								"1"
+							]
+						},
+						"description": "localhost:8080/events/register/1/1"
+					},
+					"response": []
+				},
+				{
+					"name": "rsvp",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "localhost:8080/events/rsvp/1/1/true/EMAIL",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"events",
+								"rsvp",
+								"1",
+								"1",
+								"true",
+								"EMAIL"
+							]
+						},
+						"description": "localhost:8080/events/rsvp/1/1/true/EMAIL"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "lessonplan",
+			"item": [
+				{
+					"name": "lessonplan",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"title\": \"Test plan\",\n\t\"attention\": \"something\",\n\t\"attentionTime\": 1,\n\t\"motivation\": \"something\",\n\t\"motivationTime\": 1,\n\t\"overview\": \"something\",\n\t\"overviewTime\": 1,\n\t\"explanationDemonstration\": \"something\",\n\t\"explanationDemonstrationTime\": 1,\n\t\"performanceSupervision\": \"something\",\n\t\"performanceSupervisionTime\": 1,\n\t\"evaluation\": \"something\",\n\t\"evaluationTime\": 1,\n\t\"summary\": \"something\",\n\t\"summaryTime\": 1,\n\t\"remotivation\": \"something\",\n\t\"remotivationTime\": 1,\n\t\"closure\": \"something\",\n\t\"closureTime\": 1\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/lessonplans",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"lessonplans"
+							]
+						},
+						"description": "http://localhost:8080/lessonplans"
+					},
+					"response": []
+				},
+				{
+					"name": "lessonplan",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8080/lessonplans/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"lessonplans",
+								"1"
+							]
+						},
+						"description": "http://localhost:8080/lessonplans/1"
+					},
+					"response": []
+				},
+				{
+					"name": "lessonplan",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8080/lessonplans/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"lessonplans",
+								"1"
+							]
+						},
+						"description": "http://localhost:8080/lessonplans/1"
+					},
+					"response": []
+				},
+				{
+					"name": "lessonplans",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8080/lessonplans",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"lessonplans"
+							]
+						},
+						"description": "http://localhost:8080/lessonplans"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "memberdetails",
+			"item": [
+				{
+					"name": "memberdetails",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8080/memberdetails/73",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"memberdetails",
+								"73"
+							]
+						},
+						"description": "http://localhost:8080/memberdetails/1"
+					},
+					"response": []
+				},
+				{
+					"name": "memberdetails",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"localId\": 1,\n\t\"userId\": 1,\n\t\"firstName\": \"Brian\",\n\t\"lastName\": \"Michael\",\n\t\"addressLine1\": \"123 Main St.\",\n\t\"city\": \"Anytown\",\n\t\"state\": \"GA\",\n\t\"zipCode\": \"30338\",\n\t\"homePhone\": \"4047355660\",\n\t\"cellPhone\": \"4047355660\",\n\t\"email\": \"brian.michael@yahoo.com\",\n\t\"spouseName\": \"Aimee\",\n\t\"eaaNumber\": \"12345\",\n\t\"eaaPaid\": true,\n\t\"eaaYouthProtection\": true,\n\t\"eaaYouthProtectionExpiryDate\": \"\",\n\t\"eaaMemberExpiryDate\": \"\",\n\t\"tailNumber\": \"\",\n\t\"chapterMember\": true,\n\t\"chapterPaid\": true,\n\t\"chapterDatePaid\": \"\",\n\t\"chapterMembershipType\": \"FAMILY\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/memberdetails",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"memberdetails"
+							]
+						},
+						"description": "http://localhost:8080/memberdetails"
+					},
+					"response": []
+				},
+				{
+					"name": "memberdetails",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"localId\": 1,\n\t\"userId\": 1,\n\t\"firstName\": \"Brian\",\n\t\"lastName\": \"Michael\",\n\t\"addressLine1\": \"123 Main St.\",\n\t\"city\": \"Anytown\",\n\t\"state\": \"GA\",\n\t\"zipCode\": \"30338\",\n\t\"homePhone\": \"4047355660\",\n\t\"cellPhone\": \"4047355660\",\n\t\"email\": \"brian.michael@yahoo.com\",\n\t\"spouseName\": \"Aimee\",\n\t\"eaaNumber\": \"12345\",\n\t\"eaaPaid\": true,\n\t\"eaaYouthProtection\": true,\n\t\"eaaYouthProtectionExpiryDate\": \"\",\n\t\"eaaMemberExpiryDate\": \"\",\n\t\"tailNumber\": \"\",\n\t\"chapterMember\": true,\n\t\"chapterPaid\": true,\n\t\"chapterDatePaid\": \"\",\n\t\"chapterMembershipType\": \"FAMILY\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/memberdetails/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"memberdetails",
+								"1"
+							]
+						},
+						"description": "http://localhost:8080/memberdetails/1"
+					},
+					"response": []
+				},
+				{
+					"name": "rebuild memberdetails",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8080/memberdetails/rebuild",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"memberdetails",
+								"rebuild"
+							]
+						},
+						"description": "http://localhost:8080/memberdetails/rebuild"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "notifications",
+			"item": [
+				{
+					"name": "sms",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "ToCountry=US&ToState=GA&SmsMessageSid=SMa0652fcce9dd2db0bf6596f6885019d9&NumMedia=0&ToCity=ATLANTA&FromZip=30319&SmsSid=SMa0652fcce9dd2db0bf6596f6885019d9&FromState=GA&SmsStatus=received&FromCity=ATLANTA&Body=Hello&FromCountry=US&To=%2B14704227400&ToZip=&NumSegments=1&MessageSid=SMa0652fcce9dd2db0bf6596f6885019d9&AccountSid=ACfd7999f66d142ea0147b95f7e8dc12a5&From=%2B14047355660&ApiVersion=2010-04-01"
+						},
+						"url": {
+							"raw": "localhost:8080/notifications/sms",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"notifications",
+								"sms"
+							]
+						},
+						"description": "localhost:8080/notifications/sms"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "question",
+			"item": [
+				{
+					"name": "question",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"text\": \"This is a test?\",\n\t\"unit\": \"1\", \n\t\"subUnit\": \"1\",\n\t\"discussion\": \"Something should go here\",\n\t\"learningStatementCode\": \"PLT0001\",\n\t\"answers\": [\n\t\t{\n\t\t\t\"correct\": false,\n\t\t\t\"text\": \"This is the answer text\",\n\t\t\t\"discussion\": \"Say something\"\n\t\t},\n\t\t{\n\t\t\t\"correct\": true,\n\t\t\t\"text\": \"This is another answer text\",\n\t\t\t\"discussion\": \"Say something else\"\n\t\t}\n\t]\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/questions",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"questions"
+							]
+						},
+						"description": "http://localhost:8080/questions"
+					},
+					"response": []
+				},
+				{
+					"name": "questions",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8080/questions",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"questions"
+							]
+						},
+						"description": "http://localhost:8080/questions"
+					},
+					"response": []
+				},
+				{
+					"name": "question",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8080/questions/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"questions",
+								"2"
+							]
+						},
+						"description": "http://localhost:8080/questions/2"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "quiz",
+			"item": [
+				{
+					"name": "quiz",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"title\": \"Test quiz\",\n\t\"questions\": [\n\t]\n}"
+						},
+						"url": {
+							"raw": "localhost:8080/quizzes",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"quizzes"
+							]
+						},
+						"description": "localhost:8080/quizzes"
+					},
+					"response": []
+				},
+				{
+					"name": "quiz",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"id\": 1,\n\t\"title\": \"Test quiz\",\n\t\"questions\": [\n\t]\n}"
+						},
+						"url": {
+							"raw": "localhost:8080/quizzes",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"quizzes"
+							]
+						},
+						"description": "localhost:8080/quizzes"
+					},
+					"response": []
+				},
+				{
+					"name": "quizzes",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "localhost:8080/quizzes",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"quizzes"
+							]
+						},
+						"description": "localhost:8080/quizzes"
+					},
+					"response": []
+				},
+				{
+					"name": "quiz",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "localhost:8080/quizzes/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"quizzes",
+								"1"
+							]
+						},
+						"description": "localhost:8080/quizzes/1"
+					},
+					"response": []
+				},
+				{
+					"name": "quiz",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "localhost:8080/quizzes/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"quizzes",
+								"1"
+							]
+						},
+						"description": "localhost:8080/quizzes/1"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "referencematerial",
+			"item": [
+				{
+					"name": "referencematerial",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"title\": \"Reference material\",\n\t\"resourceLocation\": \"http://somewhere.com\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/referencematerials",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"referencematerials"
+							]
+						},
+						"description": "http://localhost:8080/referencematerials"
+					},
+					"response": []
+				},
+				{
+					"name": "referencematerial",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8080/referencematerials/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"referencematerials",
+								"1"
+							]
+						},
+						"description": "http://localhost:8080/referencematerials/1"
+					},
+					"response": []
+				},
+				{
+					"name": "referencematerial",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8080/referencematerials/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"referencematerials",
+								"1"
+							]
+						},
+						"description": "http://localhost:8080/referencematerials/1"
+					},
+					"response": []
+				},
+				{
+					"name": "referencematerials",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8080/referencematerials",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"referencematerials"
+							]
+						},
+						"description": "http://localhost:8080/referencematerials"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "statistic",
+			"item": [
+				{
+					"name": "statistic",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"userId\": 1,\n\t\"statisticType\": \"USER_SAVED\",\n\t\"date\": \"\",\n\t\"description\": \"\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/statistics",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"statistics"
+							]
+						},
+						"description": "http://localhost:8080/statistics"
+					},
+					"response": []
+				},
+				{
+					"name": "statistic",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8080/statistics/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"statistics",
+								"1"
+							]
+						},
+						"description": "http://localhost:8080/statistics/1"
+					},
+					"response": []
+				},
+				{
+					"name": "statistic",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8080/statistics/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"statistics",
+								"1"
+							]
+						},
+						"description": "http://localhost:8080/statistics/1"
+					},
+					"response": []
+				},
+				{
+					"name": "statistics",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8080/statistics",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"statistics"
+							]
+						},
+						"description": "http://localhost:8080/statistics"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "user",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8080/users/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users",
+								"1"
+							]
+						},
+						"description": "http://localhost:8080/users/1"
+					},
+					"response": []
+				},
+				{
+					"name": "user",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": 1,\n    \"email\": \"brian.michael@yahoo.com\",\n    \"firstName\": \"Brian\",\n    \"lastName\": \"Michael\",\n    \"username\": \"bsmichael\",\n    \"password\": \"password\",\n    \"role\": \"ADMIN\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users"
+							]
+						},
+						"description": "http://localhost:8080/users"
+					},
+					"response": []
+				},
+				{
+					"name": "user",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"brian.michael@yahoo.com\",\n    \"emailEnabled\": false,\n    \"sms\": \"4047355660\",\n    \"smsEnabled\": true,\n    \"slack\": \"brianmichael\",\n    \"slackEnabled\": false,\n    \"firstName\": \"Brian\",\n    \"lastName\": \"Michael\",\n    \"username\": \"bsmichael\",\n    \"password\": \"password\",\n    \"role\": \"ADMIN\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users"
+							]
+						},
+						"description": "http://localhost:8080/users"
+					},
+					"response": []
+				},
+				{
+					"name": "user",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8080/users/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users",
+								"1"
+							]
+						},
+						"description": "http://localhost:8080/users/1"
+					},
+					"response": []
+				},
+				{
+					"name": "users",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8080/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users"
+							]
+						},
+						"description": "http://localhost:8080/users"
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
