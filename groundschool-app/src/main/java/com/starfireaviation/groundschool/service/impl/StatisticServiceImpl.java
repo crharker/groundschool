@@ -5,15 +5,20 @@
  */
 package com.starfireaviation.groundschool.service.impl;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.starfireaviation.groundschool.model.Statistic;
 import com.starfireaviation.groundschool.model.sql.StatisticEntity;
+import com.starfireaviation.groundschool.model.sql.UserQuestionEntity;
 import com.starfireaviation.groundschool.repository.StatisticRepository;
+import com.starfireaviation.groundschool.repository.UserQuestionRepository;
 import com.starfireaviation.groundschool.service.StatisticService;
 
 import ma.glasnost.orika.MapperFacade;
@@ -27,10 +32,22 @@ import ma.glasnost.orika.MapperFacade;
 public class StatisticServiceImpl implements StatisticService {
 
     /**
+     * QUESTION_ANSWERED_PATTERN
+     */
+    private static final Pattern QUESTION_ANSWERED_PATTERN = Pattern.compile(
+            "Duration [(.*?)]; Question ID [(.*?)]; Event ID [(.*?)]; Quiz ID [(.*?)]; Answer Given [(.*?)]; Answered Correctly [(.*?)]");
+
+    /**
      * StatisticRepository
      */
     @Autowired
     private StatisticRepository statisticRepository;
+
+    /**
+     * UserQuestionRepository
+     */
+    @Autowired
+    private UserQuestionRepository userQuestionRepository;
 
     /**
      * MapperFacade
@@ -61,8 +78,19 @@ public class StatisticServiceImpl implements StatisticService {
      */
     @Override
     public Statistic store(Statistic statistic) {
+        Statistic response = null;
         if (statistic == null) {
-            return statistic;
+            return response;
+        }
+        switch (statistic.getStatisticType()) {
+            case QUESTION_ANSWERED:
+                UserQuestionEntity userQuestionEntity = mapStatisticToUserQuestionEntity(statistic);
+                if (userQuestionEntity != null) {
+                    userQuestionEntity = userQuestionRepository.save(userQuestionEntity);
+                }
+                break;
+            default:
+                // Do nothing
         }
         return mapper.map(statisticRepository.save(mapper.map(statistic, StatisticEntity.class)), Statistic.class);
     }
@@ -100,4 +128,25 @@ public class StatisticServiceImpl implements StatisticService {
         return mapper.map(statisticRepository.findById(id), Statistic.class);
     }
 
+    /**
+     * Maps a Statistic to a UserQuestionEntity
+     *
+     * @param statistic Statistic
+     * @return UserQuestionEntity
+     */
+    private static UserQuestionEntity mapStatisticToUserQuestionEntity(Statistic statistic) {
+        Matcher matcher = QUESTION_ANSWERED_PATTERN.matcher(statistic.getDescription());
+        if (matcher.find()) {
+            UserQuestionEntity userQuestionEntity = new UserQuestionEntity();
+            userQuestionEntity.setTime(LocalDateTime.now());
+            userQuestionEntity.setUserId(statistic.getUserId());
+            userQuestionEntity.setQuestionId(Long.parseLong(matcher.group(2)));
+            userQuestionEntity.setEventId(Long.parseLong(matcher.group(3)));
+            userQuestionEntity.setQuizId(Long.parseLong(matcher.group(4)));
+            userQuestionEntity.setAnswerGiven(matcher.group(5));
+            userQuestionEntity.setAnsweredCorrectly(Boolean.parseBoolean(matcher.group(6)));
+            return userQuestionEntity;
+        }
+        return null;
+    }
 }

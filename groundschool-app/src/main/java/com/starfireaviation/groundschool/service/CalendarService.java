@@ -13,6 +13,14 @@ package com.starfireaviation.groundschool.service;
 public interface CalendarService {
 
     /**
+     * Adds event details to a Google calendar
+     *
+     * @param eventId Event ID
+     * @return calendar URL for event
+     */
+    public String add(Long eventId);
+
+    /**
      * Checks if the calendar has an entry for the event provided
      *
      * @param eventId Event ID

@@ -25,9 +25,34 @@ public class Event extends Base {
     private String title;
 
     /**
+     * Event started?
+     */
+    private boolean started = false;
+
+    /**
      * LocalDateTime - startTime
      */
     private LocalDateTime startTime;
+
+    /**
+     * Event completed?
+     */
+    private boolean completed = false;
+
+    /**
+     * LocalDateTime - completedTime
+     */
+    private LocalDateTime completedTime;
+
+    /**
+     * Google calendar URL
+     */
+    private String calendarUrl;
+
+    /**
+     * Checkin code
+     */
+    private String checkinCode;
 
     /**
      * Address
@@ -35,9 +60,9 @@ public class Event extends Base {
     private Address address;
 
     /**
-     * LessonPlan
+     * LessonPlan ID
      */
-    private LessonPlan lessonPlan;
+    private Long lessonPlanId;
 
     /**
      * Retrieves the value for {@link #title}.
@@ -94,21 +119,111 @@ public class Event extends Base {
     }
 
     /**
-     * Retrieves the value for {@link #lessonPlan}.
+     * Retrieves the value for {@link #lessonPlanId}.
      *
      * @return the current value
      */
-    public LessonPlan getLessonPlan() {
-        return lessonPlan;
+    public Long getLessonPlanId() {
+        return lessonPlanId;
     }
 
     /**
-     * Provides a value for {@link #lessonPlan}.
+     * Provides a value for {@link #lessonPlanId}.
      *
-     * @param lessonPlan the new value to set
+     * @param lessonPlanId the new value to set
      */
-    public void setLessonPlan(LessonPlan lessonPlan) {
-        this.lessonPlan = lessonPlan;
+    public void setLessonPlan(Long lessonPlanId) {
+        this.lessonPlanId = lessonPlanId;
+    }
+
+    /**
+     * Retrieves the value for {@link #calendarUrl}.
+     *
+     * @return the current value
+     */
+    public String getCalendarUrl() {
+        return calendarUrl;
+    }
+
+    /**
+     * Provides a value for {@link #calendarUrl}.
+     *
+     * @param calendarUrl the new value to set
+     */
+    public void setCalendarUrl(String calendarUrl) {
+        this.calendarUrl = calendarUrl;
+    }
+
+    /**
+     * Retrieves the value for {@link #checkinCode}.
+     *
+     * @return the current value
+     */
+    public String getCheckinCode() {
+        return checkinCode;
+    }
+
+    /**
+     * Provides a value for {@link #checkinCode}.
+     *
+     * @param checkinCode the new value to set
+     */
+    public void setCheckinCode(String checkinCode) {
+        this.checkinCode = checkinCode;
+    }
+
+    /**
+     * Retrieves the value for {@link #started}.
+     *
+     * @return the current value
+     */
+    public boolean isStarted() {
+        return started;
+    }
+
+    /**
+     * Provides a value for {@link #started}.
+     *
+     * @param started the new value to set
+     */
+    public void setStarted(boolean started) {
+        this.started = started;
+    }
+
+    /**
+     * Retrieves the value for {@link #completed}.
+     *
+     * @return the current value
+     */
+    public boolean isCompleted() {
+        return completed;
+    }
+
+    /**
+     * Provides a value for {@link #completed}.
+     *
+     * @param completed the new value to set
+     */
+    public void setCompleted(boolean completed) {
+        this.completed = completed;
+    }
+
+    /**
+     * Retrieves the value for {@link #completedTime}.
+     *
+     * @return the current value
+     */
+    public LocalDateTime getCompletedTime() {
+        return completedTime;
+    }
+
+    /**
+     * Provides a value for {@link #completedTime}.
+     *
+     * @param completedTime the new value to set
+     */
+    public void setCompletedTime(LocalDateTime completedTime) {
+        this.completedTime = completedTime;
     }
 
 }

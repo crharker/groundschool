@@ -47,4 +47,13 @@ public interface QuestionService {
      */
     public Question findQuestionById(long id);
 
+    /**
+     * Answers a question for a user
+     *
+     * @param questionId Long
+     * @param userId Long
+     * @param selection Long
+     * @return completed quiz
+     */
+    public Question answer(long questionId, long userId, String selection);
 }

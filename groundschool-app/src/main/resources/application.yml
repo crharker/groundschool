@@ -39,6 +39,9 @@ EAA690:
     header-string: Authorization
 
 groundschool:
+  admin:
+    # for testing, password is "password"
+    password: "$2a$04$nUo76pGPgQna4oj.1CsfVuSJk9CUZZjpsbe6E/Ai39dPr4RQiiKHi"
   timeout:
     read: 10000
     connect: 1000
@@ -56,16 +59,3 @@ groundschool:
     auth-id: <<HIDDEN>>
   slack:
     from-address: brianmichael
-
-google:
-  client:
-    client-id: <<HIDDEN>>
-    client-secret: <<HIDDEN>>
-    access-token-uri: https://www.googleapis.com/oauth2/v3/token
-    user-authorization-uri: https://accounts.google.com/o/oauth2/auth?access_type=offline&prompt=consent
-    client-authentication-scheme: query
-    scope: profile,email,https://www.googleapis.com/auth/calendar
-    redirectUri: http://localhost:8080
-  resource: 
-    user-info-uri: https://www.googleapis.com/oauth2/v2/userinfo
-    prefer-token-info: true

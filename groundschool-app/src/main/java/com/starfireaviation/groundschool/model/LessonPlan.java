@@ -5,6 +5,8 @@
  */
 package com.starfireaviation.groundschool.model;
 
+import java.util.List;
+
 /**
  * User
  *
@@ -111,6 +113,11 @@ public class LessonPlan extends Base {
      * ClosureTime (in minutes)
      */
     private Integer closureTime;
+
+    /**
+     * Quiz IDs
+     */
+    private List<Long> quizIds;
 
     /**
      * Retrieves the value for {@link #title}.
@@ -452,6 +459,24 @@ public class LessonPlan extends Base {
      */
     public void setClosureTime(Integer closureTime) {
         this.closureTime = closureTime;
+    }
+
+    /**
+     * Retrieves the value for {@link #quizIds}.
+     *
+     * @return the current value
+     */
+    public List<Long> getQuizIds() {
+        return quizIds;
+    }
+
+    /**
+     * Provides a value for {@link #quizIds}.
+     *
+     * @param quizIds the new value to set
+     */
+    public void setQuizIds(List<Long> quizIds) {
+        this.quizIds = quizIds;
     }
 
 }

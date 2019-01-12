@@ -22,6 +22,11 @@ public class ObjectCreator {
     public static final Long ID = 1L;
 
     /**
+     * ENCRYPTED_PASSWORD
+     */
+    public static final String ENCRYPTED_PASSWORD = "$2a$04$nUo76pGPgQna4oj.1CsfVuSJk9CUZZjpsbe6E/Ai39dPr4RQiiKHi";
+
+    /**
      * ACCESS_TOKEN_VALIDITY
      */
     public static final Long ACCESS_TOKEN_VALIDITY = 18000000L;

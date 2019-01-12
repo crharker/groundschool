@@ -7,6 +7,7 @@ package com.starfireaviation.groundschool.repository;
 
 import java.util.List;
 
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 
 import com.starfireaviation.groundschool.model.sql.EventUserEntity;
@@ -55,6 +56,16 @@ public interface EventUserRepository extends Repository<EventUserEntity, Long> {
      * @return list of EventUser
      */
     List<EventUserEntity> findByUserId(long userId);
+
+    /**
+     * Finds all EventUser by eventId and userId
+     *
+     * @param eventId Event ID
+     * @param userId user ID
+     * @return list of EventUser
+     */
+    @Query(value = "SELECT * FROM event_user WHERE event_id = ?1 AND user_id = ?2 LIMIT 1", nativeQuery = true)
+    EventUserEntity findByEventAndUserId(long eventId, long userId);
 
     /**
      * Saves a eventUser

@@ -46,7 +46,7 @@ public class StatisticEntity extends BaseEntity {
     /**
      * Description
      */
-    @Column(name = "description", nullable = true, length = 255)
+    @Column(name = "description", nullable = true, length = 2000)
     private String description;
 
     /**

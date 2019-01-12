@@ -27,10 +27,46 @@ public class EventEntity extends BaseEntity {
     private String title;
 
     /**
+     * LessonPlan ID
+     */
+    @Column(name = "lessin_plan_id", nullable = false)
+    private Long lessonPlanId;
+
+    /**
+     * Event started?
+     */
+    @Column(name = "started", nullable = false)
+    private boolean started;
+
+    /**
      * LocalDateTime - startTime
      */
     @Column(name = "start_time")
     private LocalDateTime startTime;
+
+    /**
+     * Event completed?
+     */
+    @Column(name = "completed", nullable = false)
+    private boolean completed;
+
+    /**
+     * LocalDateTime - completedTime
+     */
+    @Column(name = "completed_time")
+    private LocalDateTime completedTime;
+
+    /**
+     * Google calendar URL
+     */
+    @Column(name = "calendar_url", nullable = true, length = 255)
+    private String calendarUrl;
+
+    /**
+     * Checkin code
+     */
+    @Column(name = "checkin_code", nullable = true, length = 4)
+    private String checkinCode;
 
     /**
      * Retrieves the value for {@link #title}.
@@ -66,6 +102,114 @@ public class EventEntity extends BaseEntity {
      */
     public void setStartTime(LocalDateTime startTime) {
         this.startTime = startTime;
+    }
+
+    /**
+     * Retrieves the value for {@link #calendarUrl}.
+     *
+     * @return the current value
+     */
+    public String getCalendarUrl() {
+        return calendarUrl;
+    }
+
+    /**
+     * Provides a value for {@link #calendarUrl}.
+     *
+     * @param calendarUrl the new value to set
+     */
+    public void setCalendarUrl(String calendarUrl) {
+        this.calendarUrl = calendarUrl;
+    }
+
+    /**
+     * Retrieves the value for {@link #checkinCode}.
+     *
+     * @return the current value
+     */
+    public String getCheckinCode() {
+        return checkinCode;
+    }
+
+    /**
+     * Provides a value for {@link #checkinCode}.
+     *
+     * @param checkinCode the new value to set
+     */
+    public void setCheckinCode(String checkinCode) {
+        this.checkinCode = checkinCode;
+    }
+
+    /**
+     * Retrieves the value for {@link #started}.
+     *
+     * @return the current value
+     */
+    public boolean isStarted() {
+        return started;
+    }
+
+    /**
+     * Provides a value for {@link #started}.
+     *
+     * @param started the new value to set
+     */
+    public void setStarted(boolean started) {
+        this.started = started;
+    }
+
+    /**
+     * Retrieves the value for {@link #completed}.
+     *
+     * @return the current value
+     */
+    public boolean isCompleted() {
+        return completed;
+    }
+
+    /**
+     * Provides a value for {@link #completed}.
+     *
+     * @param completed the new value to set
+     */
+    public void setCompleted(boolean completed) {
+        this.completed = completed;
+    }
+
+    /**
+     * Retrieves the value for {@link #completedTime}.
+     *
+     * @return the current value
+     */
+    public LocalDateTime getCompletedTime() {
+        return completedTime;
+    }
+
+    /**
+     * Provides a value for {@link #completedTime}.
+     *
+     * @param completedTime the new value to set
+     */
+    public void setCompletedTime(LocalDateTime completedTime) {
+        this.completedTime = completedTime;
+    }
+
+    /**
+     * Retrieves the value for {@link #lessonPlanId}.
+     *
+     * @return the current value
+     */
+    public Long getLessonPlanId() {
+        return lessonPlanId;
+    }
+
+    /**
+     * Provides a value for {@link #lessonPlanId}.
+     *
+     * @param lessonPlanId the new value to set
+     */
+    public void setLessonPlanId(Long lessonPlanId) {
+        this.lessonPlanId = lessonPlanId;
     }
 
 }

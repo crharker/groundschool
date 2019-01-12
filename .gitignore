@@ -57,6 +57,8 @@ fabric.properties
 bin/
 compile.sh
 run.sh
+run_test.sh
+
 tmp/
 *.tmp
 *.bak

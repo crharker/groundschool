@@ -75,13 +75,13 @@ public class UserEntity extends BaseEntity {
     /**
      * Username
      */
-    @Column(name = "username")
+    @Column(name = "username", nullable = false)
     private String username;
 
     /**
      * Password
      */
-    @Column(name = "password")
+    @Column(name = "password", nullable = false)
     private String password;
 
     /**
@@ -99,7 +99,7 @@ public class UserEntity extends BaseEntity {
     /**
      * Role
      */
-    @Column(name = "role")
+    @Column(name = "role", nullable = false)
     private String role;
 
     /**

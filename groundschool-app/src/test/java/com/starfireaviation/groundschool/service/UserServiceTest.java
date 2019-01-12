@@ -14,6 +14,8 @@ import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 import com.starfireaviation.groundschool.model.User;
 import com.starfireaviation.groundschool.model.sql.UserEntity;
 import com.starfireaviation.groundschool.repository.UserRepository;
@@ -47,6 +49,12 @@ public class UserServiceTest {
     private UserRepository userRepository;
 
     /**
+     * BCryptPasswordEncoder
+     */
+    @Mock
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    /**
      * Initializes tests
      */
     @Before
@@ -58,6 +66,11 @@ public class UserServiceTest {
         List<UserEntity> users = new ArrayList<>();
         users.add(user);
 
+        Mockito.doReturn(ObjectCreator.getUserEntity()).when(userRepository).findByUsername(
+                ArgumentMatchers.anyString());
+        Mockito.doReturn(true).when(bCryptPasswordEncoder).matches(ArgumentMatchers.any(), ArgumentMatchers.any());
+        Mockito.doReturn(ObjectCreator.ENCRYPTED_PASSWORD).when(bCryptPasswordEncoder).encode(
+                ArgumentMatchers.anyString());
         Mockito.doReturn(user).when(userRepository).findById(ArgumentMatchers.anyLong());
         Mockito.doNothing().when(userRepository).delete(ArgumentMatchers.any());
         Mockito.doReturn(users).when(userRepository).findAll();
@@ -69,7 +82,7 @@ public class UserServiceTest {
                 ArgumentMatchers.any(),
                 ArgumentMatchers.eq(UserEntity.class));
 
-        userService = new UserServiceImpl(userRepository, mapperFacade);
+        userService = new UserServiceImpl(userRepository, mapperFacade, bCryptPasswordEncoder);
     }
 
     /**
@@ -82,7 +95,11 @@ public class UserServiceTest {
         User user = userService.store(mockUser);
 
         Assert.assertNotNull(user);
-        Assert.assertSame(mockUser.getId(), user.getId());
+        Assert.assertSame(mockUser.getUsername(), user.getUsername());
+        Assert.assertSame(mockUser.getFirstName(), user.getFirstName());
+        Assert.assertSame(mockUser.getLastName(), user.getLastName());
+        Assert.assertSame(mockUser.getEmail(), user.getEmail());
+        Mockito.verify(userRepository, Mockito.times(1));
     }
 
     /**

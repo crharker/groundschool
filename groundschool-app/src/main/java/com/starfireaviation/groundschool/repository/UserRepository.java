@@ -41,6 +41,14 @@ public interface UserRepository extends Repository<UserEntity, Long> {
     UserEntity findById(long id);
 
     /**
+     * Gets a user
+     *
+     * @param username String
+     * @return User
+     */
+    UserEntity findByUsername(String username);
+
+    /**
      * Saves a user
      *
      * @param user User

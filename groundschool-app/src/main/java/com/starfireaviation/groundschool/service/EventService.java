@@ -71,4 +71,31 @@ public interface EventService {
      * @param confirm confirm or decline
      */
     public void rsvp(Long eventId, Long userId, boolean confirm);
+
+    /**
+     * Checks in a user for an event
+     *
+     * @param eventId Event ID
+     * @param userId User ID
+     * @param code checkin code
+     * @return checkin success
+     */
+    public boolean checkin(Long eventId, Long userId, String code);
+
+    /**
+     * Did the user check in to an event?
+     *
+     * @param eventId Event ID
+     * @param userId User ID
+     * @return checked in?
+     */
+    public boolean didCheckIn(Long eventId, Long userId);
+
+    /**
+     * Is the user checked in to an event?
+     *
+     * @param userId User ID
+     * @return Event ID for the event in which user is checked in
+     */
+    public Long isCheckedIn(Long userId);
 }

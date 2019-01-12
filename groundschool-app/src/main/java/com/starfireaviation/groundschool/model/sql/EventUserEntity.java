@@ -45,10 +45,22 @@ public class EventUserEntity extends BaseEntity {
     private Boolean declined;
 
     /**
-     * LocalDateTime - time
+     * LocalDateTime - confirmation time
      */
-    @Column(name = "time")
-    private LocalDateTime time;
+    @Column(name = "confirmation_time", nullable = true)
+    private LocalDateTime confirmationTime;
+
+    /**
+     * Checked in
+     */
+    @Column(name = "checked_in", nullable = true)
+    private Boolean checkedIn;
+
+    /**
+     * LocalDateTime - checkin time
+     */
+    @Column(name = "checkin_time", nullable = true)
+    private LocalDateTime checkinTime;
 
     /**
      * Retrieves the value for {@link #eventId}.
@@ -123,21 +135,93 @@ public class EventUserEntity extends BaseEntity {
     }
 
     /**
-     * Retrieves the value for {@link #time}.
+     * Retrieves the value for {@link #confirmed}.
      *
      * @return the current value
      */
-    public LocalDateTime getTime() {
-        return time;
+    public Boolean getConfirmed() {
+        return confirmed;
     }
 
     /**
-     * Provides a value for {@link #time}.
+     * Provides a value for {@link #confirmed}.
      *
-     * @param time the new value to set
+     * @param confirmed the new value to set
      */
-    public void setTime(LocalDateTime time) {
-        this.time = time;
+    public void setConfirmed(Boolean confirmed) {
+        this.confirmed = confirmed;
+    }
+
+    /**
+     * Retrieves the value for {@link #declined}.
+     *
+     * @return the current value
+     */
+    public Boolean getDeclined() {
+        return declined;
+    }
+
+    /**
+     * Provides a value for {@link #declined}.
+     *
+     * @param declined the new value to set
+     */
+    public void setDeclined(Boolean declined) {
+        this.declined = declined;
+    }
+
+    /**
+     * Retrieves the value for {@link #confirmationTime}.
+     *
+     * @return the current value
+     */
+    public LocalDateTime getConfirmationTime() {
+        return confirmationTime;
+    }
+
+    /**
+     * Provides a value for {@link #confirmationTime}.
+     *
+     * @param confirmationTime the new value to set
+     */
+    public void setConfirmationTime(LocalDateTime confirmationTime) {
+        this.confirmationTime = confirmationTime;
+    }
+
+    /**
+     * Retrieves the value for {@link #checkedIn}.
+     *
+     * @return the current value
+     */
+    public Boolean getCheckedIn() {
+        return checkedIn;
+    }
+
+    /**
+     * Provides a value for {@link #checkedIn}.
+     *
+     * @param checkedIn the new value to set
+     */
+    public void setCheckedIn(Boolean checkedIn) {
+        this.checkedIn = checkedIn;
+    }
+
+    /**
+     * Retrieves the value for {@link #checkinTime}.
+     *
+     * @return the current value
+     */
+    public LocalDateTime getCheckinTime() {
+        return checkinTime;
+    }
+
+    /**
+     * Provides a value for {@link #checkinTime}.
+     *
+     * @param checkinTime the new value to set
+     */
+    public void setCheckinTime(LocalDateTime checkinTime) {
+        this.checkinTime = checkinTime;
     }
 
 }

@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -118,20 +119,28 @@ public class EventServiceImpl implements EventService {
             return;
         }
         List<EventUserEntity> eventUserEntities = eventUserRepository.findByEventId(eventId);
-        for (EventUserEntity eventUserEntity : eventUserEntities) {
-            if (userId == eventUserEntity.getUserId()) {
-                if (confirm) {
-                    eventUserEntity.setConfirmed(true);
-                    eventUserEntity.setDeclined(false);
-                    eventUserEntity.setTime(LocalDateTime.now());
-                } else {
-                    eventUserEntity.setConfirmed(false);
-                    eventUserEntity.setDeclined(true);
-                    eventUserEntity.setTime(LocalDateTime.now());
-                }
-                eventUserRepository.save(eventUserEntity);
+        if (CollectionUtils.isEmpty(eventUserEntities)) {
+            if (confirm) {
+                register(eventId, userId);
             }
-            break;
+            eventUserEntities = eventUserRepository.findByEventId(eventId);
+        }
+        if (!CollectionUtils.isEmpty(eventUserEntities)) {
+            for (EventUserEntity eventUserEntity : eventUserEntities) {
+                if (userId == eventUserEntity.getUserId()) {
+                    if (confirm) {
+                        eventUserEntity.setConfirmed(true);
+                        eventUserEntity.setDeclined(false);
+                        eventUserEntity.setConfirmationTime(LocalDateTime.now());
+                    } else {
+                        eventUserEntity.setConfirmed(false);
+                        eventUserEntity.setDeclined(true);
+                        eventUserEntity.setConfirmationTime(LocalDateTime.now());
+                    }
+                    eventUserRepository.save(eventUserEntity);
+                }
+                break;
+            }
         }
     }
 
@@ -164,6 +173,55 @@ public class EventServiceImpl implements EventService {
                 break;
             }
         }
+    }
+
+    /**
+     * {@inheritDoc} Required implementation.
+     */
+    @Override
+    public boolean checkin(Long eventId, Long userId, String code) {
+        boolean success = false;
+        EventUserEntity eventUserEntity = eventUserRepository.findByEventAndUserId(eventId, userId);
+        Event event = findById(eventId);
+        if (eventUserEntity != null
+                && event != null
+                && event.getCheckinCode() != null
+                && event.getCheckinCode().equalsIgnoreCase(code)) {
+            eventUserEntity.setCheckedIn(true);
+            eventUserEntity.setCheckinTime(LocalDateTime.now());
+            eventUserRepository.save(eventUserEntity);
+            success = true;
+        }
+        return success;
+    }
+
+    /**
+     * {@inheritDoc} Required implementation.
+     */
+    @Override
+    public boolean didCheckIn(Long eventId, Long userId) {
+        EventUserEntity eventUserEntity = eventUserRepository.findByEventAndUserId(eventId, userId);
+        if (eventUserEntity != null && eventUserEntity.getCheckedIn() != null) {
+            return eventUserEntity.getCheckedIn().booleanValue();
+        }
+        return false;
+    }
+
+    /**
+     * {@inheritDoc} Required implementation.
+     */
+    @Override
+    public Long isCheckedIn(Long userId) {
+        Long eventId = null;
+        List<Event> events = findAllEvents();
+        for (Event event : events) {
+            if (event.isStarted() && !event.isCompleted()) {
+                if (didCheckIn(event.getId(), userId)) {
+                    eventId = event.getId();
+                }
+            }
+        }
+        return eventId;
     }
 
 }

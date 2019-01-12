@@ -12,9 +12,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.starfireaviation.groundschool.model.LessonPlan;
+import com.starfireaviation.groundschool.model.Quiz;
 import com.starfireaviation.groundschool.model.sql.LessonPlanEntity;
 import com.starfireaviation.groundschool.repository.LessonPlanRepository;
 import com.starfireaviation.groundschool.service.LessonPlanService;
+import com.starfireaviation.groundschool.service.QuizService;
+
 import ma.glasnost.orika.MapperFacade;
 
 /**
@@ -30,6 +33,12 @@ public class LessonPlanServiceImpl implements LessonPlanService {
      */
     @Autowired
     private LessonPlanRepository lessonPlanRepository;
+
+    /**
+     * QuizService
+     */
+    @Autowired
+    private QuizService quizService;
 
     /**
      * MapperFacade
@@ -96,7 +105,14 @@ public class LessonPlanServiceImpl implements LessonPlanService {
      */
     @Override
     public LessonPlan findById(long id) {
-        return mapper.map(lessonPlanRepository.findById(id), LessonPlan.class);
+        final LessonPlan lessonPlan = mapper.map(lessonPlanRepository.findById(id), LessonPlan.class);
+        final List<Quiz> quizzes = quizService.findQuizzesByLessonPlanId(id);
+        List<Long> quizIds = new ArrayList<>();
+        for (Quiz quiz : quizzes) {
+            quizIds.add(quiz.getId());
+        }
+        lessonPlan.setQuizIds(quizIds);
+        return lessonPlan;
     }
 
 }

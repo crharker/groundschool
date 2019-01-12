@@ -47,7 +47,7 @@ public class AddressEntity extends BaseEntity {
     /**
      * State
      */
-    @Column(name = "state", length = 50)
+    @Column(name = "state", length = 2)
     private String state;
 
     /**

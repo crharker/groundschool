@@ -165,6 +165,8 @@ public class NotificationServiceImpl implements NotificationService {
                 && (notificationType == null
                         || notificationType == NotificationType.ALL
                         || notificationType == NotificationType.SMS)) {
+            user.setSmsVerified(true);
+            userService.store(user);
             sendUserSettingsVerifiedSMS(user);
         }
         if (user.getSlack() != null

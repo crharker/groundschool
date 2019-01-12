@@ -146,4 +146,23 @@ public class QuestionController {
         }
         return questions;
     }
+
+    /**
+     * Answers a question for a user
+     *
+     * @param questionId Long
+     * @param userId Long
+     * @param selection String
+     * @return Question
+     */
+    @PostMapping(path = {
+            "/answer/{questionId}/{userId}/{selection}"
+    })
+    public Question answer(
+            @PathVariable("questionId") long questionId,
+            @PathVariable("userId") long userId,
+            @PathVariable("selection") String selection) {
+        return questionService.answer(questionId, userId, selection);
+    }
+
 }

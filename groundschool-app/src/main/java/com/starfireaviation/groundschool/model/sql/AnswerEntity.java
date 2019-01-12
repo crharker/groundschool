@@ -29,8 +29,14 @@ public class AnswerEntity extends BaseEntity {
     /**
      * Text
      */
-    @Column(name = "text", length = 2000)
+    @Column(name = "text", nullable = false, length = 2000)
     private String text;
+
+    /**
+     * Coice
+     */
+    @Column(name = "choice", nullable = false, length = 5)
+    private String choice;
 
     /**
      * Correct
@@ -123,6 +129,24 @@ public class AnswerEntity extends BaseEntity {
      */
     public void setQuestion(QuestionEntity question) {
         this.question = question;
+    }
+
+    /**
+     * Retrieves the value for {@link #choice}.
+     *
+     * @return the current value
+     */
+    public String getChoice() {
+        return choice;
+    }
+
+    /**
+     * Provides a value for {@link #choice}.
+     *
+     * @param choice the new value to set
+     */
+    public void setChoice(String choice) {
+        this.choice = choice;
     }
 
 }

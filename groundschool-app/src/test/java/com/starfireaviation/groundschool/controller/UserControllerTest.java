@@ -7,6 +7,8 @@ package com.starfireaviation.groundschool.controller;
 
 import java.util.List;
 
+import javax.management.remote.JMXPrincipal;
+
 import static org.mockito.Mockito.times;
 
 import java.util.ArrayList;
@@ -105,7 +107,7 @@ public class UserControllerTest {
     public void testPut() {
         Mockito.doReturn(mockUser).when(userService).store(ArgumentMatchers.any());
 
-        User user = userController.put(mockUser);
+        User user = userController.put(mockUser, new JMXPrincipal("admin"));
 
         Assert.assertNotNull(user);
         Assert.assertNotNull(user.getId());
@@ -132,7 +134,7 @@ public class UserControllerTest {
     public void testGet() {
         Mockito.doReturn(mockUser).when(userService).findById(ArgumentMatchers.anyLong());
 
-        User user = userController.get(ObjectCreator.ID);
+        User user = userController.get(ObjectCreator.ID, new JMXPrincipal("admin"));
 
         Assert.assertNotNull(user);
         Assert.assertNotNull(user.getId());
@@ -154,7 +156,7 @@ public class UserControllerTest {
     public void testDelete() {
         Mockito.doReturn(mockUser).when(userService).delete(ArgumentMatchers.anyLong());
 
-        User user = userController.delete(ObjectCreator.ID);
+        User user = userController.delete(ObjectCreator.ID, new JMXPrincipal("admin"));
 
         Assert.assertNotNull(user);
         Assert.assertNotNull(user.getId());
@@ -183,7 +185,7 @@ public class UserControllerTest {
         mockUsers.add(mockUser);
         Mockito.doReturn(mockUsers).when(userService).findAllUsers();
 
-        List<User> users = userController.list();
+        List<User> users = userController.list(new JMXPrincipal("admin"));
 
         Assert.assertNotNull(users);
         Assert.assertTrue("No users found in list", users.size() > 0);

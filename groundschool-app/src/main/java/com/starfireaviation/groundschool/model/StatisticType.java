@@ -121,6 +121,10 @@ public enum StatisticType {
      */
     CALENDAR_RETRIEVE_ALL_EVENTS,
     /**
+     * CALENDAR_ADD_EVENT
+     */
+    CALENDAR_ADD_EVENT,
+    /**
      * ANSWER_CREATED
      */
     ANSWER_CREATED,

@@ -51,6 +51,11 @@ public class Question extends Base {
     private List<Answer> answers;
 
     /**
+     * Duration in seconds
+     */
+    private Integer duration;
+
+    /**
      * Retrieves the value for {@link #text}.
      *
      * @return the current value
@@ -168,5 +173,23 @@ public class Question extends Base {
             answers = new ArrayList<>();
         }
         answers.add(answer);
+    }
+
+    /**
+     * Retrieves the value for {@link #duration}.
+     *
+     * @return the current value
+     */
+    public Integer getDuration() {
+        return duration;
+    }
+
+    /**
+     * Provides a value for {@link #duration}.
+     *
+     * @param duration the new value to set
+     */
+    public void setDuration(Integer duration) {
+        this.duration = duration;
     }
 }

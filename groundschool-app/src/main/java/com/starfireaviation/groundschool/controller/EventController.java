@@ -24,7 +24,9 @@ import com.starfireaviation.groundschool.service.AddressService;
 import com.starfireaviation.groundschool.service.EventService;
 import com.starfireaviation.groundschool.service.LessonPlanService;
 import com.starfireaviation.groundschool.service.NotificationService;
+import com.starfireaviation.groundschool.util.CodeGenerator;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -217,7 +219,7 @@ public class EventController {
      * @param lessonPlanId LessonPlan ID
      */
     @PostMapping(path = {
-            "{eventId}/assign/lessonplan/{lessonPlanId}"
+            "/assign/{eventId}/lessonplan/{lessonPlanId}"
     })
     public void assignLessonPlan(
             @PathVariable("eventId") long eventId,
@@ -233,13 +235,71 @@ public class EventController {
      * @param lessonPlanId LessonPlan ID
      */
     @PostMapping(path = {
-            "{eventId}/unassign/lessonplan/{lessonPlanId}"
+            "/unassign/{eventId}/lessonplan/{lessonPlanId}"
     })
     public void unassignLessonPlan(
             @PathVariable("eventId") long eventId,
             @PathVariable("lessonPlanId") long lessonPlanId) {
         //final LessonPlan lessonPlan =
         lessonPlanService.findById(lessonPlanId);
+    }
+
+    /**
+     * Starts an event
+     *
+     * @param id Long
+     * @return Event's checkin code
+     */
+    @GetMapping(path = {
+            "/checkincode/{id}"
+    })
+    public String getCheckinCode(@PathVariable("id") long id) {
+        String code = null;
+        Event event = eventService.findById(id);
+        if (event != null) {
+            code = event.getCheckinCode();
+        }
+        return code;
+    }
+
+    /**
+     * Starts an event
+     *
+     * @param id Long
+     * @return started event
+     */
+    @PostMapping(path = {
+            "/start/{id}"
+    })
+    public Event start(@PathVariable("id") long id) {
+        Event event = eventService.findById(id);
+        if (event != null && !event.isStarted()) {
+            event.setStarted(true);
+            event.setStartTime(LocalDateTime.now());
+            event.setCheckinCode(CodeGenerator.generateCode(4));
+            event = eventService.store(event);
+        }
+        return event;
+    }
+
+    /**
+     * Complete's an event
+     *
+     * @param id Long
+     * @return completed event
+     */
+    @PostMapping(path = {
+            "/complete/{id}"
+    })
+    public Event complete(@PathVariable("id") long id) {
+        Event event = eventService.findById(id);
+        if (event != null && event.isStarted()) {
+            event.setCompleted(true);
+            event.setCompletedTime(LocalDateTime.now());
+            event.setCheckinCode(null);
+            event = eventService.store(event);
+        }
+        return event;
     }
 
 }

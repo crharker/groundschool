@@ -16,9 +16,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.starfireaviation.groundschool.model.Question;
 import com.starfireaviation.groundschool.model.Quiz;
 import com.starfireaviation.groundschool.service.QuizService;
-
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -118,4 +119,83 @@ public class QuizController {
     public List<Quiz> list() {
         return quizService.findAllQuizzes();
     }
+
+    /**
+     * Starts a quiz
+     *
+     * @param quizId Long
+     * @return started quiz
+     */
+    @PostMapping(path = {
+            "/start/{quizId}"
+    })
+    public Quiz start(@PathVariable("quizId") long quizId) {
+        return quizService.start(quizId);
+    }
+
+    /**
+     * Starts the next quiz question
+     *
+     * @param quizId Long
+     * @return started quiz
+     */
+    @PostMapping(path = {
+            "/start/{quizId}/question"
+    })
+    public Quiz startQuestion(@PathVariable("quizId") long quizId) {
+        return quizService.startQuestion(quizId);
+    }
+
+    /**
+     * Complete's a quiz
+     *
+     * @param quizId Long
+     * @return completed quiz
+     */
+    @PostMapping(path = {
+            "/complete/{quizId}"
+    })
+    public Quiz complete(@PathVariable("quizId") long quizId) {
+        return quizService.complete(quizId);
+    }
+
+    /**
+     * Complete's a quiz question
+     *
+     * @param quizId Long
+     * @return completed quiz
+     */
+    @PostMapping(path = {
+            "/complete/{quizId}/question"
+    })
+    public Quiz completeQuestion(@PathVariable("quizId") long quizId) {
+        return quizService.completeQuestion(quizId);
+    }
+
+    /**
+     * Gets the current question for a quiz
+     *
+     * @param quizId Long
+     * @return Question
+     */
+    @GetMapping(path = {
+            "/{quizId}/current"
+    })
+    public Question getCurrentQuestion(@PathVariable("quizId") long quizId) {
+        return quizService.getCurrentQuestion(quizId);
+    }
+
+    /**
+     * Gets the current question start time for a quiz
+     *
+     * @param quizId Long
+     * @return Question start time
+     */
+    @GetMapping(path = {
+            "/{quizId}/current/start"
+    })
+    public LocalDateTime getCurrentQuestionStart(@PathVariable("quizId") long quizId) {
+        return quizService.getCurrentQuestionStart(quizId);
+    }
+
 }

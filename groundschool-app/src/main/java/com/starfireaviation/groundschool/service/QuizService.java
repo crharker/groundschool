@@ -5,8 +5,10 @@
  */
 package com.starfireaviation.groundschool.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
+import com.starfireaviation.groundschool.model.Question;
 import com.starfireaviation.groundschool.model.Quiz;
 
 /**
@@ -40,6 +42,14 @@ public interface QuizService {
     public List<Quiz> findAllQuizzes();
 
     /**
+     * Gets all quizzes for a given lesson plan
+     *
+     * @param lessonPlanId Long
+     * @return list of Quiz
+     */
+    public List<Quiz> findQuizzesByLessonPlanId(Long lessonPlanId);
+
+    /**
      * Gets a quiz
      *
      * @param id Long
@@ -47,4 +57,51 @@ public interface QuizService {
      */
     public Quiz findById(long id);
 
+    /**
+     * Starts a quiz
+     *
+     * @param quizId Long
+     * @return started quiz
+     */
+    public Quiz start(long quizId);
+
+    /**
+     * Starts the next quiz question
+     *
+     * @param quizId Long
+     * @return started quiz
+     */
+    public Quiz startQuestion(long quizId);
+
+    /**
+     * Complete's a quiz
+     *
+     * @param quizId Long
+     * @return completed quiz
+     */
+    public Quiz complete(long quizId);
+
+    /**
+     * Complete's a quiz question
+     *
+     * @param quizId Long
+     * @return completed quiz
+     */
+    public Quiz completeQuestion(long quizId);
+
+    /**
+     * Gets the current question for a quiz
+     *
+     * @param quizId Long
+     * @return Question
+     */
+    public Question getCurrentQuestion(long quizId);
+
+    /**
+     * Gets the current question start time for a quiz
+     *
+     * @param quizId Long
+     * @return Question start time
+     */
+    public LocalDateTime getCurrentQuestionStart(long quizId);
 }

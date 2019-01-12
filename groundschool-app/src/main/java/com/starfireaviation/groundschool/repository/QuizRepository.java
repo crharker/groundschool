@@ -41,6 +41,14 @@ public interface QuizRepository extends Repository<QuizEntity, Long> {
     QuizEntity findById(long id);
 
     /**
+     * Gets all quizzes for a given lesson plan
+     *
+     * @param id Long
+     * @return Quiz
+     */
+    List<QuizEntity> findByLessonPlanId(long id);
+
+    /**
      * Saves a quiz
      *
      * @param quiz Quiz

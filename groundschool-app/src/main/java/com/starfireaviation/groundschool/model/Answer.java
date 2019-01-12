@@ -23,6 +23,11 @@ public class Answer extends Base {
     private String text;
 
     /**
+     * Choice
+     */
+    private String choice;
+
+    /**
      * Correct
      */
     private boolean correct;
@@ -84,6 +89,24 @@ public class Answer extends Base {
      */
     public void setDiscussion(String discussion) {
         this.discussion = discussion;
+    }
+
+    /**
+     * Retrieves the value for {@link #choice}.
+     *
+     * @return the current value
+     */
+    public String getChoice() {
+        return choice;
+    }
+
+    /**
+     * Provides a value for {@link #choice}.
+     *
+     * @param choice the new value to set
+     */
+    public void setChoice(String choice) {
+        this.choice = choice;
     }
 
 }

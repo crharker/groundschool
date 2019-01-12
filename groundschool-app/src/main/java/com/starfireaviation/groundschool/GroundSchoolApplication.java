@@ -19,6 +19,11 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 public class GroundSchoolApplication {
 
     /**
+     * APPLICATION_NAME
+     */
+    public static final String APPLICATION_NAME = "Ground School";
+
+    /**
      * Main method
      *
      * @param args arguments

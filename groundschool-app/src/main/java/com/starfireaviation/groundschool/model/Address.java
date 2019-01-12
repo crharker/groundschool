@@ -131,4 +131,17 @@ public class Address extends Base {
     public void setZipCode(String zipCode) {
         this.zipCode = zipCode;
     }
+
+    /**
+     * {@inheritDoc} Required implementation.
+     */
+    @Override
+    public String toString() {
+        return (addressLine1 != null ? addressLine1 + ", " : "")
+                + (addressLine2 != null ? addressLine2 + ", " : "")
+                + (city != null ? city + ", " : "")
+                + (state != null ? state + " " : "")
+                + (zipCode != null ? zipCode : "");
+    }
+
 }
