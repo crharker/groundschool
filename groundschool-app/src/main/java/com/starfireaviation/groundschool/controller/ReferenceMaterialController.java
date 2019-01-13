@@ -5,6 +5,8 @@
  */
 package com.starfireaviation.groundschool.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.starfireaviation.groundschool.model.ReferenceMaterial;
 import com.starfireaviation.groundschool.service.ReferenceMaterialService;
 
+import java.security.Principal;
 import java.util.List;
 
 /**
@@ -32,6 +35,11 @@ import java.util.List;
         "/referencematerials"
 })
 public class ReferenceMaterialController {
+
+    /**
+     * Logger
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(ReferenceMaterialController.class);
 
     /**
      * ReferenceMaterialService
@@ -59,10 +67,12 @@ public class ReferenceMaterialController {
      * Creates a reference material
      *
      * @param referenceMaterial ReferenceMaterial
+     * @param principal Principal
      * @return ReferenceMaaterial
      */
     @PostMapping
-    public ReferenceMaterial post(@RequestBody ReferenceMaterial referenceMaterial) {
+    public ReferenceMaterial post(@RequestBody ReferenceMaterial referenceMaterial, Principal principal) {
+        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         if (referenceMaterial == null) {
             return referenceMaterial;
         }
@@ -72,24 +82,28 @@ public class ReferenceMaterialController {
     /**
      * Gets a referenceMaterial
      *
-     * @param id Long
+     * @param referenceMaterialId Long
+     * @param principal Principal
      * @return ReferenceMaterial
      */
     @GetMapping(path = {
-            "/{id}"
+            "/{referenceMaterialId}"
     })
-    public ReferenceMaterial get(@PathVariable("id") long id) {
-        return referenceMaterialService.findReferenceMaterialById(id);
+    public ReferenceMaterial get(@PathVariable("referenceMaterialId") long referenceMaterialId, Principal principal) {
+        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
+        return referenceMaterialService.findReferenceMaterialById(referenceMaterialId);
     }
 
     /**
      * Updates a referenceMaterial
      *
      * @param referenceMaterial ReferenceMaterial
+     * @param principal Principal
      * @return ReferenceMaterial
      */
     @PutMapping
-    public ReferenceMaterial put(@RequestBody ReferenceMaterial referenceMaterial) {
+    public ReferenceMaterial put(@RequestBody ReferenceMaterial referenceMaterial, Principal principal) {
+        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         if (referenceMaterial == null) {
             return referenceMaterial;
         }
@@ -99,23 +113,29 @@ public class ReferenceMaterialController {
     /**
      * Deletes a referenceMaterial
      *
-     * @param id Long
+     * @param referenceMaterialId Long
+     * @param principal Principal
      * @return ReferenceMaterial
      */
     @DeleteMapping(path = {
-            "/{id}"
+            "/{referenceMaterialId}"
     })
-    public ReferenceMaterial delete(@PathVariable("id") long id) {
-        return referenceMaterialService.delete(id);
+    public ReferenceMaterial delete(
+            @PathVariable("referenceMaterialId") long referenceMaterialId,
+            Principal principal) {
+        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
+        return referenceMaterialService.delete(referenceMaterialId);
     }
 
     /**
      * Get all referenceMaterial
      *
+     * @param principal Principal
      * @return list of ReferenceMaterial
      */
     @GetMapping
-    public List<ReferenceMaterial> list() {
+    public List<ReferenceMaterial> list(Principal principal) {
+        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         return referenceMaterialService.findAllReferenceMaterials();
     }
 }

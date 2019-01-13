@@ -39,4 +39,12 @@ public interface NotificationService {
             NotificationEventType notificationEventType,
             String response,
             String originalMessage);
+
+    /**
+     * Invite
+     *
+     * @param userId Long
+     * @param email Email address of user being invited
+     */
+    public void invite(Long userId, String email);
 }

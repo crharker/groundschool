@@ -5,6 +5,18 @@ Background:
   Given I am a admin user
 
   @acceptance
+  Scenario: Admin invites a new user
+    Given a user does not exist
+    When I invite a new user
+    Then An email is sent to the user
+
+  @acceptance
+  Scenario: Admin invites an existing user
+    Given a user does exist
+    When I invite a new user
+    Then An email is not sent to the user
+
+  @acceptance
   Scenario: Admin lists all users
     Given a user exists
     When I list all users

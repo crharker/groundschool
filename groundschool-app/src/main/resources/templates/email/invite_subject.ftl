@@ -1,0 +1,1 @@
+You have been invited to EAA 690's Ground School

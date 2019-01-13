@@ -5,6 +5,8 @@
  */
 package com.starfireaviation.groundschool.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -21,6 +23,8 @@ import com.starfireaviation.groundschool.model.Answer;
 import com.starfireaviation.groundschool.model.Question;
 import com.starfireaviation.groundschool.service.AnswerService;
 import com.starfireaviation.groundschool.service.QuestionService;
+
+import java.security.Principal;
 import java.util.List;
 
 /**
@@ -34,6 +38,11 @@ import java.util.List;
         "/questions"
 })
 public class QuestionController {
+
+    /**
+     * Logger
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(QuestionController.class);
 
     /**
      * QuestionService
@@ -67,10 +76,12 @@ public class QuestionController {
      * Creates a question
      *
      * @param question Question
+     * @param principal Principal
      * @return Question
      */
     @PostMapping
-    public Question post(@RequestBody Question question) {
+    public Question post(@RequestBody Question question, Principal principal) {
+        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         if (question == null) {
             return question;
         }
@@ -87,14 +98,16 @@ public class QuestionController {
     /**
      * Gets a question
      *
-     * @param id Long
+     * @param questionId Long
+     * @param principal Principal
      * @return Question
      */
     @GetMapping(path = {
-            "/{id}"
+            "/{questionId}"
     })
-    public Question get(@PathVariable("id") long id) {
-        Question question = questionService.findQuestionById(id);
+    public Question get(@PathVariable("questionId") long questionId, Principal principal) {
+        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
+        Question question = questionService.findQuestionById(questionId);
         question.setAnswers(answerService.findByQuestionId(question.getId()));
         return question;
     }
@@ -103,10 +116,12 @@ public class QuestionController {
      * Updates a question
      *
      * @param question Question
+     * @param principal Principal
      * @return Question
      */
     @PutMapping
-    public Question put(@RequestBody Question question) {
+    public Question put(@RequestBody Question question, Principal principal) {
+        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         if (question == null) {
             return question;
         }
@@ -123,23 +138,27 @@ public class QuestionController {
     /**
      * Deletes a question
      *
-     * @param id Long
+     * @param questionId Long
+     * @param principal Principal
      * @return Question
      */
     @DeleteMapping(path = {
-            "/{id}"
+            "/{questionId}"
     })
-    public Question delete(@PathVariable("id") long id) {
-        return questionService.delete(id);
+    public Question delete(@PathVariable("questionId") long questionId, Principal principal) {
+        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
+        return questionService.delete(questionId);
     }
 
     /**
      * Get all questions
      *
+     * @param principal Principal
      * @return list of Question
      */
     @GetMapping
-    public List<Question> list() {
+    public List<Question> list(Principal principal) {
+        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         List<Question> questions = questionService.findAllQuestions();
         for (Question question : questions) {
             question.setAnswers(answerService.findByQuestionId(question.getId()));
@@ -153,15 +172,18 @@ public class QuestionController {
      * @param questionId Long
      * @param userId Long
      * @param selection String
+     * @param principal Principal
      * @return Question
      */
     @PostMapping(path = {
-            "/answer/{questionId}/{userId}/{selection}"
+            "/{questionId}/answer/{userId}/{selection}"
     })
     public Question answer(
             @PathVariable("questionId") long questionId,
             @PathVariable("userId") long userId,
-            @PathVariable("selection") String selection) {
+            @PathVariable("selection") String selection,
+            Principal principal) {
+        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         return questionService.answer(questionId, userId, selection);
     }
 

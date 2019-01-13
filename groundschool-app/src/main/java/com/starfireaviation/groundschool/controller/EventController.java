@@ -5,6 +5,8 @@
  */
 package com.starfireaviation.groundschool.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -26,6 +28,7 @@ import com.starfireaviation.groundschool.service.LessonPlanService;
 import com.starfireaviation.groundschool.service.NotificationService;
 import com.starfireaviation.groundschool.util.CodeGenerator;
 
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -40,6 +43,11 @@ import java.util.List;
         "/events"
 })
 public class EventController {
+
+    /**
+     * Logger
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(EventController.class);
 
     /**
      * EventService
@@ -85,10 +93,12 @@ public class EventController {
      * Creates a event
      *
      * @param event Event
+     * @param principal Principal
      * @return Event
      */
     @PostMapping
-    public Event post(@RequestBody Event event) {
+    public Event post(@RequestBody Event event, Principal principal) {
+        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         if (event == null) {
             return event;
         }
@@ -103,14 +113,16 @@ public class EventController {
     /**
      * Gets a event
      *
-     * @param id Long
+     * @param eventId Long
+     * @param principal Principal
      * @return Event
      */
     @GetMapping(path = {
-            "/{id}"
+            "/{eventId}"
     })
-    public Event get(@PathVariable("id") long id) {
-        Event event = eventService.findById(id);
+    public Event get(@PathVariable("eventId") long eventId, Principal principal) {
+        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
+        Event event = eventService.findById(eventId);
         event.setAddress(addressService.findByEventId(event.getId()));
         return event;
     }
@@ -119,10 +131,12 @@ public class EventController {
      * Updates a user
      *
      * @param event Event
+     * @param principal Principal
      * @return Event
      */
     @PutMapping
-    public Event put(@RequestBody Event event) {
+    public Event put(@RequestBody Event event, Principal principal) {
+        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         if (event == null) {
             return event;
         }
@@ -137,23 +151,28 @@ public class EventController {
     /**
      * Deletes a event
      *
-     * @param id Long
+     * @param eventId Long
+     * @param principal Principal
      * @return Event
      */
     @DeleteMapping(path = {
-            "/{id}"
+            "/{eventId}"
     })
-    public Event delete(@PathVariable("id") long id) {
-        return eventService.delete(id);
+    public Event delete(@PathVariable("eventId") long eventId, Principal principal) {
+        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
+        return eventService.delete(eventId);
     }
 
     /**
      * Get all events
+     * 
+     * @param principal Principal
      *
      * @return list of Event
      */
     @GetMapping
-    public List<Event> list() {
+    public List<Event> list(Principal principal) {
+        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         List<Event> events = eventService.findAllEvents();
         for (Event event : events) {
             event.setAddress(addressService.findByEventId(event.getId()));
@@ -170,7 +189,7 @@ public class EventController {
      * @param type NotificationType
      */
     @GetMapping(path = {
-            "/rsvp/{eventId}/{userId}/{confirm}/{type}"
+            "/{eventId}/rsvp/{userId}/{confirm}/{type}"
     })
     public void rsvp(
             @PathVariable("eventId") long eventId,
@@ -187,7 +206,7 @@ public class EventController {
      * @param userId user ID
      */
     @GetMapping(path = {
-            "/register/{eventId}/{userId}"
+            "/{eventId}/register/{userId}"
     })
     public void register(
             @PathVariable("eventId") long eventId,
@@ -203,7 +222,7 @@ public class EventController {
      * @param userId user ID
      */
     @GetMapping(path = {
-            "/unregister/{eventId}/{userId}"
+            "/{eventId}/unregister/{userId}"
     })
     public void unregister(
             @PathVariable("eventId") long eventId,
@@ -217,13 +236,16 @@ public class EventController {
      *
      * @param eventId Event ID
      * @param lessonPlanId LessonPlan ID
+     * @param principal Principal
      */
     @PostMapping(path = {
-            "/assign/{eventId}/lessonplan/{lessonPlanId}"
+            "/{eventId}/assign/lessonplan/{lessonPlanId}"
     })
     public void assignLessonPlan(
             @PathVariable("eventId") long eventId,
-            @PathVariable("lessonPlanId") long lessonPlanId) {
+            @PathVariable("lessonPlanId") long lessonPlanId,
+            Principal principal) {
+        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         //final LessonPlan lessonPlan =
         lessonPlanService.findById(lessonPlanId);
     }
@@ -233,29 +255,34 @@ public class EventController {
      *
      * @param eventId Event ID
      * @param lessonPlanId LessonPlan ID
+     * @param principal Principal
      */
     @PostMapping(path = {
-            "/unassign/{eventId}/lessonplan/{lessonPlanId}"
+            "/{eventId}/unassign/lessonplan/{lessonPlanId}"
     })
     public void unassignLessonPlan(
             @PathVariable("eventId") long eventId,
-            @PathVariable("lessonPlanId") long lessonPlanId) {
+            @PathVariable("lessonPlanId") long lessonPlanId,
+            Principal principal) {
+        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         //final LessonPlan lessonPlan =
         lessonPlanService.findById(lessonPlanId);
     }
 
     /**
-     * Starts an event
+     * Gets an event's checkin code, if assigned
      *
-     * @param id Long
+     * @param eventId Long
+     * @param principal Principal
      * @return Event's checkin code
      */
     @GetMapping(path = {
-            "/checkincode/{id}"
+            "/{eventId}/checkincode"
     })
-    public String getCheckinCode(@PathVariable("id") long id) {
+    public String getCheckinCode(@PathVariable("eventId") long eventId, Principal principal) {
+        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         String code = null;
-        Event event = eventService.findById(id);
+        Event event = eventService.findById(eventId);
         if (event != null) {
             code = event.getCheckinCode();
         }
@@ -265,14 +292,16 @@ public class EventController {
     /**
      * Starts an event
      *
-     * @param id Long
+     * @param eventId Long
+     * @param principal Principal
      * @return started event
      */
     @PostMapping(path = {
-            "/start/{id}"
+            "/{eventId}/start"
     })
-    public Event start(@PathVariable("id") long id) {
-        Event event = eventService.findById(id);
+    public Event start(@PathVariable("eventId") long eventId, Principal principal) {
+        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
+        Event event = eventService.findById(eventId);
         if (event != null && !event.isStarted()) {
             event.setStarted(true);
             event.setStartTime(LocalDateTime.now());
@@ -285,14 +314,16 @@ public class EventController {
     /**
      * Complete's an event
      *
-     * @param id Long
+     * @param eventId Long
+     * @param principal Principal
      * @return completed event
      */
     @PostMapping(path = {
-            "/complete/{id}"
+            "/{eventId}/complete"
     })
-    public Event complete(@PathVariable("id") long id) {
-        Event event = eventService.findById(id);
+    public Event complete(@PathVariable("eventId") long eventId, Principal principal) {
+        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
+        Event event = eventService.findById(eventId);
         if (event != null && event.isStarted()) {
             event.setCompleted(true);
             event.setCompletedTime(LocalDateTime.now());

@@ -114,31 +114,31 @@ public class UserController {
     /**
      * Gets a user
      *
-     * @param id Long
+     * @param userId Long
      * @param principal Principal
      * @return User
      */
     @GetMapping(path = {
-            "/{id}"
+            "/{userId}"
     })
-    public User get(@PathVariable("id") long id, Principal principal) {
+    public User get(@PathVariable("userId") long userId, Principal principal) {
         LOGGER.info(String.format("User is logged in as %s", principal.getName()));
-        return userService.findById(id);
+        return userService.findById(userId);
     }
 
     /**
      * Deletes a user
      *
-     * @param id Long
+     * @param userId Long
      * @param principal Principal
      * @return User
      */
     @DeleteMapping(path = {
-            "/{id}"
+            "/{userId}"
     })
-    public User delete(@PathVariable("id") long id, Principal principal) {
+    public User delete(@PathVariable("userId") long userId, Principal principal) {
         LOGGER.info(String.format("User is logged in as %s", principal.getName()));
-        final User response = userService.delete(id);
+        final User response = userService.delete(userId);
         notificationService.send(response.getId(), NotificationType.ALL, NotificationEventType.USER_DELETE);
         return response;
     }
@@ -162,7 +162,7 @@ public class UserController {
      * @param type NotificationType
      */
     @GetMapping(path = {
-            "/verify/{userId}/{type}"
+            "/{userId}/verify/{type}"
     })
     public void verify(@PathVariable("userId") long userId, @PathVariable("type") NotificationType type) {
         final User user = userService.findById(userId);
@@ -187,7 +187,9 @@ public class UserController {
      * @param request HttpServletRequest
      * @param response HttpServletResponse
      */
-    @PostMapping(path = "/logout")
+    @PostMapping(path = {
+            "/logout"
+    })
     public void logout(HttpServletRequest request, HttpServletResponse response) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null) {
@@ -204,13 +206,30 @@ public class UserController {
      * @param principal Principal
      * @return checkin success
      */
-    @PostMapping(path = "/{userId}/checkin/{eventId}/{code}")
+    @PostMapping(path = {
+            "/{userId}/checkin/{eventId}/{code}"
+    })
     public boolean checkin(
             @PathVariable("userId") long userId,
             @PathVariable("eventId") long eventId,
             @PathVariable("code") String code,
             Principal principal) {
+        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         return eventService.checkin(eventId, userId, code);
+    }
+
+    /**
+     * Invite
+     *
+     * @param email Email address of user being invited
+     * @param principal Principal
+     */
+    @PostMapping(path = {
+            "/invite"
+    })
+    public void invite(@RequestBody String email, Principal principal) {
+        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
+        notificationService.invite(null, email);
     }
 
     /**

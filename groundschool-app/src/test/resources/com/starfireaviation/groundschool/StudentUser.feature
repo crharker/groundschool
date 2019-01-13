@@ -5,6 +5,18 @@ Background:
   Given I am a student user
 
   @acceptance
+  Scenario: Student invites a new user
+    Given a user does not exist
+    When I invite a new user
+    Then An email is sent to the user
+
+  @acceptance
+  Scenario: Student invites an existing user
+    Given a user does exist
+    When I invite a new user
+    Then An email is not sent to the user
+
+  @acceptance
   Scenario: Student lists all users
     When I list all users
     Then I should receive a operation not permitted error

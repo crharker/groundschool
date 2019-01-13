@@ -5,6 +5,8 @@
  */
 package com.starfireaviation.groundschool.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,6 +22,7 @@ import com.starfireaviation.groundschool.model.MemberDetails;
 import com.starfireaviation.groundschool.service.ExternalDataRetrievalService;
 import com.starfireaviation.groundschool.service.MemberDetailsService;
 
+import java.security.Principal;
 import java.util.List;
 
 /**
@@ -33,6 +36,11 @@ import java.util.List;
         "/memberdetails"
 })
 public class MemberDetailsController {
+
+    /**
+     * Logger
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(MemberDetailsController.class);
 
     /**
      * MemberDetailsService
@@ -66,10 +74,12 @@ public class MemberDetailsController {
      * Creates a member detail
      *
      * @param memberDetails MemberDetails
+     * @param principal Principal
      * @return MemberDetails
      */
     @PostMapping
-    public MemberDetails post(@RequestBody MemberDetails memberDetails) {
+    public MemberDetails post(@RequestBody MemberDetails memberDetails, Principal principal) {
+        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         if (memberDetails == null) {
             return memberDetails;
         }
@@ -79,24 +89,28 @@ public class MemberDetailsController {
     /**
      * Gets a member details
      *
-     * @param id Long
+     * @param memberDetailsId Long
+     * @param principal Principal
      * @return MemberDetails
      */
     @GetMapping(path = {
-            "/{id}"
+            "/{memberDetailsId}"
     })
-    public MemberDetails get(@PathVariable("id") long id) {
-        return memberDetailsService.findById(id);
+    public MemberDetails get(@PathVariable("memberDetailsId") long memberDetailsId, Principal principal) {
+        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
+        return memberDetailsService.findById(memberDetailsId);
     }
 
     /**
      * Updates a member details
      *
      * @param memberDetails MemberDetails
+     * @param principal Principal
      * @return MemberDetails
      */
     @PutMapping
-    public MemberDetails put(@RequestBody MemberDetails memberDetails) {
+    public MemberDetails put(@RequestBody MemberDetails memberDetails, Principal principal) {
+        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         if (memberDetails == null) {
             return memberDetails;
         }
@@ -106,43 +120,53 @@ public class MemberDetailsController {
     /**
      * Deletes a member details
      *
-     * @param id Long
+     * @param memberDetailsId Long
+     * @param principal Principal
      * @return MemberDetails
      */
     @DeleteMapping(path = {
-            "/{id}"
+            "/{memberDetailsId}"
     })
-    public MemberDetails delete(@PathVariable("id") long id) {
-        return memberDetailsService.delete(id);
+    public MemberDetails delete(@PathVariable("memberDetailsId") long memberDetailsId, Principal principal) {
+        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
+        return memberDetailsService.delete(memberDetailsId);
     }
 
     /**
      * Get all memberDetails
      *
+     * @param principal Principal
      * @return list of MemberDetails
      */
     @GetMapping
-    public List<MemberDetails> list() {
+    public List<MemberDetails> list(Principal principal) {
+        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         return memberDetailsService.findAllMemberDetails();
     }
 
     /**
      * Rebuilds member details from EAA690.net
+     *
+     * @param principal Principal
      */
     @PostMapping(path = {
             "/rebuild"
     })
-    public void rebuild() {
+    public void rebuild(Principal principal) {
+        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         externalDataRetrievalService.rebuildMemberDetails(false);
     }
 
     /**
      * Rebuilds member details from EAA690.net
+     *
+     * @param principal Principal
      */
     @PostMapping(path = {
             "/rebuild/init"
     })
-    public void rebuildInitialize() {
+    public void rebuildInitialize(Principal principal) {
+        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         externalDataRetrievalService.rebuildMemberDetails(true);
     }
 

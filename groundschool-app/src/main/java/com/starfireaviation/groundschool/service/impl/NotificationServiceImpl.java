@@ -140,6 +140,35 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     /**
+     * {@inheritDoc} Required implementation.
+     */
+    @Override
+    public void invite(Long userId, String email) {
+        if (userId == null) {
+            return;
+        }
+        try {
+            final User user = userService.findById(userId);
+            freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates/email");
+            emailService.send(
+                    userId,
+                    emailProperties.getFromAddress(),
+                    email,
+                    null,
+                    null,
+                    FreeMarkerTemplateUtils.processTemplateIntoString(
+                            freemarkerConfig.getTemplate("invite_subject.ftl"),
+                            getModelForUser(user)),
+                    FreeMarkerTemplateUtils.processTemplateIntoString(
+                            freemarkerConfig.getTemplate("invite_body.ftl"),
+                            getModelForUser(user)),
+                    true);
+        } catch (IOException | TemplateException e) {
+            LOGGER.warn(e.getMessage());
+        }
+    }
+
+    /**
      * Sends notification for user settings verification
      *
      * @param userId Long

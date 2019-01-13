@@ -5,10 +5,16 @@ Background:
   Given I am a instructor user
 
   @acceptance
-  Scenario: Instructor lists all users
-    Given a user exists
-    When I list all users
-    Then I should receive a list of users
+  Scenario: Instructor invites a new user
+    Given a user does not exist
+    When I invite a new user
+    Then An email is sent to the user
+
+  @acceptance
+  Scenario: Instructor invites an existing user
+    Given a user does exist
+    When I invite a new user
+    Then An email is not sent to the user
 
   @acceptance
   Scenario: Instructor lists all members

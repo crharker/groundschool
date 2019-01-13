@@ -5,6 +5,8 @@
  */
 package com.starfireaviation.groundschool.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,6 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.starfireaviation.groundschool.model.LessonPlan;
 import com.starfireaviation.groundschool.service.LessonPlanService;
+
+import java.security.Principal;
 import java.util.List;
 
 /**
@@ -31,6 +35,11 @@ import java.util.List;
         "/lessonplans"
 })
 public class LessonPlanController {
+
+    /**
+     * Logger
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(LessonPlanController.class);
 
     /**
      * LessonPlanService
@@ -58,10 +67,12 @@ public class LessonPlanController {
      * Creates a lessonPlan
      *
      * @param lessonPlan LessonPlan
+     * @param principal Principal
      * @return LessonPlan
      */
     @PostMapping
-    public LessonPlan post(@RequestBody LessonPlan lessonPlan) {
+    public LessonPlan post(@RequestBody LessonPlan lessonPlan, Principal principal) {
+        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         if (lessonPlan == null) {
             return lessonPlan;
         }
@@ -71,24 +82,28 @@ public class LessonPlanController {
     /**
      * Gets a lessonPlan
      *
-     * @param id Long
+     * @param lessonPlanId Long
+     * @param principal Principal
      * @return LessonPlan
      */
     @GetMapping(path = {
-            "/{id}"
+            "/{lessonPlanId}"
     })
-    public LessonPlan get(@PathVariable("id") long id) {
-        return lessonPlanService.findById(id);
+    public LessonPlan get(@PathVariable("lessonPlanId") long lessonPlanId, Principal principal) {
+        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
+        return lessonPlanService.findById(lessonPlanId);
     }
 
     /**
      * Updates a lessonPlan
      *
      * @param lessonPlan LessonPlan
+     * @param principal Principal
      * @return LessonPlan
      */
     @PutMapping
-    public LessonPlan put(@RequestBody LessonPlan lessonPlan) {
+    public LessonPlan put(@RequestBody LessonPlan lessonPlan, Principal principal) {
+        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         if (lessonPlan == null) {
             return lessonPlan;
         }
@@ -98,23 +113,27 @@ public class LessonPlanController {
     /**
      * Deletes a lessonPlan
      *
-     * @param id Long
+     * @param lessonPlanId Long
+     * @param principal Principal
      * @return LessonPlan
      */
     @DeleteMapping(path = {
-            "/{id}"
+            "/{lessonPlanId}"
     })
-    public LessonPlan delete(@PathVariable("id") long id) {
-        return lessonPlanService.delete(id);
+    public LessonPlan delete(@PathVariable("lessonPlanId") long lessonPlanId, Principal principal) {
+        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
+        return lessonPlanService.delete(lessonPlanId);
     }
 
     /**
      * Get all lessonPlans
      *
+     * @param principal Principal
      * @return list of LessonPlans
      */
     @GetMapping
-    public List<LessonPlan> list() {
+    public List<LessonPlan> list(Principal principal) {
+        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         return lessonPlanService.findAllLessonPlans();
     }
 }
