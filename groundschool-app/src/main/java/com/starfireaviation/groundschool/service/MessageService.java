@@ -5,7 +5,7 @@
  */
 package com.starfireaviation.groundschool.service;
 
-import com.starfireaviation.groundschool.model.SMSMessage;
+import com.starfireaviation.groundschool.model.Message;
 import com.starfireaviation.groundschool.model.User;
 
 /**
@@ -13,66 +13,74 @@ import com.starfireaviation.groundschool.model.User;
  *
  * @author brianmichael
  */
-public interface SMSService {
+public interface MessageService {
 
     /**
-     * Sends an SMS message for user deletion
+     * Sends a message for user deletion
      *
      * @param user User
      */
     public void sendUserDeleteMsg(final User user);
 
     /**
-     * Sends an SMS message to RSVP for an upcoming event
+     * Sends a message to RSVP for an upcoming event
      *
      * @param user User
      */
     public void sendEventRSVPMsg(final User user);
 
     /**
-     * Sends an SMS message to RSVP for an upcoming event
+     * Sends a message to RSVP for an upcoming event
      *
      * @param user User
      */
     public void sendEventStartMsg(final User user);
 
     /**
-     * Sends an SMS message that a question has been asked
+     * Sends a message that a question has been asked
      *
      * @param user User
      */
     public void sendQuestionAskedMsg(final User user);
 
     /**
-     * Sends an SMS message for registering for an upcoming event
+     * Sends a message for registering for an upcoming event
      *
      * @param user User
      */
     public void sendEventRegisterMsg(final User user);
 
     /**
-     * Sends an SMS message for unregistering from an upcoming event
+     * Sends a message for unregistering from an upcoming event
      *
      * @param user User
      */
     public void sendEventUnregisterMsg(final User user);
 
     /**
-     * Sends a SMS message for user settings verified
+     * Sends a message for user settings verified
      *
      * @param user User
      */
     public void sendUserSettingsVerifiedMsg(final User user);
 
     /**
-     * Sends a SMS message for user settings changed
+     * Sends a message for user settings changed
      *
      * @param user User
      */
     public void sendUserSettingsChangeMsg(final User user);
 
     /**
-     * Resends a SMS message for user settings changed
+     * Sends an invitation
+     *
+     * @param user User
+     * @param destination address
+     */
+    public void sendInviteMsg(final User user, String destination);
+
+    /**
+     * Resends a message for user settings changed
      *
      * @param user User
      * @param response given by the user
@@ -84,15 +92,15 @@ public interface SMSService {
             String originalMessage);
 
     /**
-     * Receives a SMS message and returns response
+     * Receives a message and returns response
      *
      * @param message received
      * @return response
      */
-    public String receiveMessage(SMSMessage message);
+    public String receiveMessage(Message message);
 
     /**
-     * Closes all open SMS messages
+     * Closes all open messages
      *
      * @param userId user ID
      */

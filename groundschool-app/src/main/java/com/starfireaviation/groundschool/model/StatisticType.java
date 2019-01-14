@@ -177,6 +177,22 @@ public enum StatisticType {
      */
     EMAIL_MESSAGE_SENT,
     /**
+     * FACEBOOK_MESSAGE_RECEIVED
+     */
+    FACEBOOK_MESSAGE_RECEIVED,
+    /**
+     * TWITTER_MESSAGE_RECEIVED
+     */
+    TWITTER_MESSAGE_RECEIVED,
+    /**
+     * INSTAGRAM_MESSAGE_RECEIVED
+     */
+    INSTAGRAM_MESSAGE_RECEIVED,
+    /**
+     * EMAIL_MESSAGE_RECEIVED
+     */
+    EMAIL_MESSAGE_RECEIVED,
+    /**
      * SMS_MESSAGE_SENT
      */
     SMS_MESSAGE_SENT,

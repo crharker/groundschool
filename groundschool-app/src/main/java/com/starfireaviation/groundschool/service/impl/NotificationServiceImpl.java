@@ -8,14 +8,13 @@ package com.starfireaviation.groundschool.service.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import com.starfireaviation.groundschool.model.NotificationEventType;
 import com.starfireaviation.groundschool.model.NotificationType;
 import com.starfireaviation.groundschool.model.User;
-import com.starfireaviation.groundschool.service.EmailService;
+import com.starfireaviation.groundschool.service.MessageService;
 import com.starfireaviation.groundschool.service.NotificationService;
-import com.starfireaviation.groundschool.service.SMSService;
-import com.starfireaviation.groundschool.service.SlackService;
 import com.starfireaviation.groundschool.service.UserService;
 
 /**
@@ -41,19 +40,22 @@ public class NotificationServiceImpl implements NotificationService {
      * EmailService
      */
     @Autowired
-    private EmailService emailService;
+    @Qualifier("emailService")
+    private MessageService emailService;
 
     /**
      * SMSService
      */
     @Autowired
-    private SMSService smsService;
+    @Qualifier("smsService")
+    private MessageService smsService;
 
     /**
      * SlackService
      */
     @Autowired
-    private SlackService slackService;
+    @Qualifier("slackService")
+    private MessageService slackService;
 
     /**
      * {@inheritDoc} Required implementation.

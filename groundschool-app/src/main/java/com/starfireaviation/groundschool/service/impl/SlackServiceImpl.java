@@ -17,11 +17,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 
+import com.starfireaviation.groundschool.model.Message;
 import com.starfireaviation.groundschool.model.Statistic;
 import com.starfireaviation.groundschool.model.StatisticType;
 import com.starfireaviation.groundschool.model.User;
 import com.starfireaviation.groundschool.properties.SlackProperties;
-import com.starfireaviation.groundschool.service.SlackService;
+import com.starfireaviation.groundschool.service.MessageService;
 import com.starfireaviation.groundschool.service.StatisticService;
 
 import freemarker.template.Configuration;
@@ -32,8 +33,8 @@ import freemarker.template.TemplateException;
  *
  * @author brianmichael
  */
-@Service
-public class SlackServiceImpl implements SlackService {
+@Service("slackService")
+public class SlackServiceImpl implements MessageService {
 
     /**
      * Logger
@@ -208,6 +209,49 @@ public class SlackServiceImpl implements SlackService {
         } catch (IOException | TemplateException e) {
             LOGGER.warn(e.getMessage());
         }
+    }
+
+    /**
+     * {@inheritDoc} Required implementation.
+     */
+    @Override
+    public void sendInviteMsg(User user, String destination) {
+        // Not implemented
+    }
+
+    /**
+     * {@inheritDoc} Required implementation.
+     */
+    @Override
+    public void resendUserSettingsChangeMsg(User user, String response, String originalMessage) {
+        // Not implemented
+    }
+
+    /**
+     * {@inheritDoc} Required implementation.
+     */
+    @Override
+    public String receiveMessage(Message message) {
+        String response = null;
+        Instant start = Instant.now();
+        LOGGER.info(String.format("receiveMessage() message received was [%s]", message));
+        Statistic statistic = new Statistic(
+                StatisticType.SLACK_MESSAGE_RECEIVED,
+                String.format(
+                        "Duration [%s]; Source [%s]; Message [%s]",
+                        Duration.between(start, Instant.now()),
+                        message.getFrom(),
+                        message.getBody()));
+        statisticService.store(statistic);
+        return response;
+    }
+
+    /**
+     * {@inheritDoc} Required implementation.
+     */
+    @Override
+    public void closeAllMessages(Long userId) {
+        // Not implemented
     }
 
     /**

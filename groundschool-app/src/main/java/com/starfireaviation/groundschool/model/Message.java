@@ -8,11 +8,11 @@ package com.starfireaviation.groundschool.model;
 import java.net.URLDecoder;
 
 /**
- * SMSMessage
+ * Message
  *
  * @author brianmichael
  */
-public class SMSMessage {
+public class Message {
 
     /**
      * UTF-8
@@ -117,7 +117,7 @@ public class SMSMessage {
     /**
      * Initializes an instance of <code>SMSMessage</code> with the default data.
      */
-    public SMSMessage() {
+    public Message() {
         // Default constructor
     }
 
@@ -126,7 +126,7 @@ public class SMSMessage {
      *
      * @param message to be parsed
      */
-    public SMSMessage(String message) {
+    public Message(String message) {
         if (message != null) {
             String[] parts = message.split("&");
             for (String part : parts) {

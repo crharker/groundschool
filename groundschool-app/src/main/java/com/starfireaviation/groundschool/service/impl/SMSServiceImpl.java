@@ -27,7 +27,6 @@ import org.springframework.util.CollectionUtils;
 
 import com.starfireaviation.groundschool.model.NotificationEventType;
 import com.starfireaviation.groundschool.model.NotificationType;
-import com.starfireaviation.groundschool.model.SMSMessage;
 import com.starfireaviation.groundschool.model.SMSResponseOption;
 import com.starfireaviation.groundschool.model.Statistic;
 import com.starfireaviation.groundschool.model.StatisticType;
@@ -36,8 +35,8 @@ import com.starfireaviation.groundschool.model.sql.SMSMessageEntity;
 import com.starfireaviation.groundschool.properties.SMSProperties;
 import com.starfireaviation.groundschool.repository.SMSMessageRepository;
 import com.starfireaviation.groundschool.service.EventService;
+import com.starfireaviation.groundschool.service.MessageService;
 import com.starfireaviation.groundschool.service.NotificationService;
-import com.starfireaviation.groundschool.service.SMSService;
 import com.starfireaviation.groundschool.service.StatisticService;
 import com.starfireaviation.groundschool.service.UserService;
 import com.starfireaviation.groundschool.util.SMSResponseParser;
@@ -53,8 +52,8 @@ import freemarker.template.TemplateException;
  *
  * @author brianmichael
  */
-@Service
-public class SMSServiceImpl implements SMSService {
+@Service("smsService")
+public class SMSServiceImpl implements MessageService {
 
     /**
      * TN_PATTERN
@@ -370,7 +369,7 @@ public class SMSServiceImpl implements SMSService {
      * {@inheritDoc} Required implementation.
      */
     @Override
-    public String receiveMessage(SMSMessage message) {
+    public String receiveMessage(com.starfireaviation.groundschool.model.Message message) {
         Instant start = Instant.now();
         LOGGER.info(String.format("receiveMessage() message received was [%s]", message));
         Long userId = null;
@@ -452,6 +451,14 @@ public class SMSServiceImpl implements SMSService {
     }
 
     /**
+     * {@inheritDoc} Required implementation.
+     */
+    @Override
+    public void sendInviteMsg(User user, String destination) {
+        // Not implemented
+    }
+
+    /**
      * Sorts SMSMessageEntity by time in reverse order (latest message first)
      *
      * @param smsMessageEntities list of SMSMessageEntity
@@ -505,7 +512,7 @@ public class SMSServiceImpl implements SMSService {
      * @param message to be processed
      * @return success
      */
-    private boolean processUserVerifiedResponse(Long userId, SMSMessage message) {
+    private boolean processUserVerifiedResponse(Long userId, com.starfireaviation.groundschool.model.Message message) {
         final String body = message.getBody();
         if (body != null && SMSResponseOption.STOP == SMSResponseParser.determineResponse(body)) {
             handleStop(userId);
@@ -520,7 +527,7 @@ public class SMSServiceImpl implements SMSService {
      * @param message to be processed
      * @return success
      */
-    private boolean processUserSettingsResponse(Long userId, SMSMessage message) {
+    private boolean processUserSettingsResponse(Long userId, com.starfireaviation.groundschool.model.Message message) {
         boolean success = true;
         User user = null;
         // STOP, CONFIRM, DECLINE, other
@@ -566,7 +573,7 @@ public class SMSServiceImpl implements SMSService {
      * @param message to be processed
      * @return success
      */
-    private boolean processUserDeletedResponse(Long userId, SMSMessage message) {
+    private boolean processUserDeletedResponse(Long userId, com.starfireaviation.groundschool.model.Message message) {
         final String body = message.getBody();
         if (body != null && SMSResponseOption.STOP == SMSResponseParser.determineResponse(body)) {
             handleStop(userId);
@@ -582,7 +589,10 @@ public class SMSServiceImpl implements SMSService {
      * @param message to be processed
      * @return success
      */
-    private boolean processEventRSVPResponse(Long eventId, Long userId, SMSMessage message) {
+    private boolean processEventRSVPResponse(
+            Long eventId,
+            Long userId,
+            com.starfireaviation.groundschool.model.Message message) {
         boolean success = true;
         // STOP, CONFIRM, DECLINE, other
         final String body = message.getBody();

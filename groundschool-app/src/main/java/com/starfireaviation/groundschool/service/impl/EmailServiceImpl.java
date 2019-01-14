@@ -23,11 +23,12 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 
+import com.starfireaviation.groundschool.model.Message;
 import com.starfireaviation.groundschool.model.Statistic;
 import com.starfireaviation.groundschool.model.StatisticType;
 import com.starfireaviation.groundschool.model.User;
 import com.starfireaviation.groundschool.properties.EmailProperties;
-import com.starfireaviation.groundschool.service.EmailService;
+import com.starfireaviation.groundschool.service.MessageService;
 import com.starfireaviation.groundschool.service.StatisticService;
 
 import freemarker.template.Configuration;
@@ -38,8 +39,8 @@ import freemarker.template.TemplateException;
  *
  * @author brianmichael
  */
-@Service
-public class EmailServiceImpl implements EmailService {
+@Service("emailService")
+public class EmailServiceImpl implements MessageService {
 
     /**
      * Logger
@@ -274,13 +275,13 @@ public class EmailServiceImpl implements EmailService {
      * {@inheritDoc} Required implementation.
      */
     @Override
-    public void sendInviteMsg(User user, String email) {
+    public void sendInviteMsg(User user, String destination) {
         try {
             freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates/email");
             send(
                     user.getId(),
                     emailProperties.getFromAddress(),
-                    email,
+                    destination,
                     null,
                     null,
                     FreeMarkerTemplateUtils.processTemplateIntoString(
@@ -293,6 +294,41 @@ public class EmailServiceImpl implements EmailService {
         } catch (IOException | TemplateException e) {
             LOGGER.warn(e.getMessage());
         }
+    }
+
+    /**
+     * {@inheritDoc} Required implementation.
+     */
+    @Override
+    public void resendUserSettingsChangeMsg(User user, String response, String originalMessage) {
+        // Not implemented
+    }
+
+    /**
+     * {@inheritDoc} Required implementation.
+     */
+    @Override
+    public String receiveMessage(Message message) {
+        String response = null;
+        Instant start = Instant.now();
+        LOGGER.info(String.format("receiveMessage() message received was [%s]", message));
+        Statistic statistic = new Statistic(
+                StatisticType.EMAIL_MESSAGE_RECEIVED,
+                String.format(
+                        "Duration [%s]; Source [%s]; Message [%s]",
+                        Duration.between(start, Instant.now()),
+                        message.getFrom(),
+                        message.getBody()));
+        statisticService.store(statistic);
+        return response;
+    }
+
+    /**
+     * {@inheritDoc} Required implementation.
+     */
+    @Override
+    public void closeAllMessages(Long userId) {
+        // Not implemented
     }
 
     /**
