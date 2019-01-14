@@ -53,7 +53,7 @@ public interface QuestionService {
      * @param questionId Long
      * @param userId Long
      * @param selection Long
-     * @return completed quiz
+     * @return answered correctly?
      */
-    public Question answer(long questionId, long userId, String selection);
+    public boolean answer(long questionId, long userId, String selection);
 }

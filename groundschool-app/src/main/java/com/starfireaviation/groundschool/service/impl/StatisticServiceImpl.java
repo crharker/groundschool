@@ -100,7 +100,7 @@ public class StatisticServiceImpl implements StatisticService {
      */
     @Override
     public Statistic delete(long id) {
-        Statistic statistic = mapper.map(findById(id), Statistic.class);
+        final Statistic statistic = mapper.map(findById(id), Statistic.class);
         if (statistic != null) {
             statisticRepository.delete(mapper.map(statistic, StatisticEntity.class));
         }
@@ -112,9 +112,9 @@ public class StatisticServiceImpl implements StatisticService {
      */
     @Override
     public List<Statistic> findAllStatistics() {
-        List<Statistic> statistics = new ArrayList<>();
-        List<StatisticEntity> statisticEntities = statisticRepository.findAll();
-        for (StatisticEntity statisticEntity : statisticEntities) {
+        final List<Statistic> statistics = new ArrayList<>();
+        final List<StatisticEntity> statisticEntities = statisticRepository.findAll();
+        for (final StatisticEntity statisticEntity : statisticEntities) {
             statistics.add(mapper.map(statisticEntity, Statistic.class));
         }
         return statistics;
@@ -135,9 +135,9 @@ public class StatisticServiceImpl implements StatisticService {
      * @return UserQuestionEntity
      */
     private static UserQuestionEntity mapStatisticToUserQuestionEntity(Statistic statistic) {
-        Matcher matcher = QUESTION_ANSWERED_PATTERN.matcher(statistic.getDescription());
+        final Matcher matcher = QUESTION_ANSWERED_PATTERN.matcher(statistic.getDescription());
         if (matcher.find()) {
-            UserQuestionEntity userQuestionEntity = new UserQuestionEntity();
+            final UserQuestionEntity userQuestionEntity = new UserQuestionEntity();
             userQuestionEntity.setTime(LocalDateTime.now());
             userQuestionEntity.setUserId(statistic.getUserId());
             userQuestionEntity.setQuestionId(Long.parseLong(matcher.group(2)));

@@ -85,10 +85,10 @@ public class QuestionController {
         if (question == null) {
             return question;
         }
-        Question response = questionService.store(question);
-        List<Answer> answers = question.getAnswers();
+        final Question response = questionService.store(question);
+        final List<Answer> answers = question.getAnswers();
         if (!CollectionUtils.isEmpty(answers)) {
-            for (Answer answer : answers) {
+            for (final Answer answer : answers) {
                 response.addAnswer(answerService.store(response.getId(), answer));
             }
         }
@@ -107,7 +107,7 @@ public class QuestionController {
     })
     public Question get(@PathVariable("questionId") long questionId, Principal principal) {
         LOGGER.info(String.format("User is logged in as %s", principal.getName()));
-        Question question = questionService.findQuestionById(questionId);
+        final Question question = questionService.findQuestionById(questionId);
         question.setAnswers(answerService.findByQuestionId(question.getId()));
         return question;
     }
@@ -125,10 +125,10 @@ public class QuestionController {
         if (question == null) {
             return question;
         }
-        Question response = questionService.store(question);
-        List<Answer> answers = question.getAnswers();
+        final Question response = questionService.store(question);
+        final List<Answer> answers = question.getAnswers();
         if (!CollectionUtils.isEmpty(answers)) {
-            for (Answer answer : answers) {
+            for (final Answer answer : answers) {
                 response.addAnswer(answerService.store(response.getId(), answer));
             }
         }
@@ -159,8 +159,8 @@ public class QuestionController {
     @GetMapping
     public List<Question> list(Principal principal) {
         LOGGER.info(String.format("User is logged in as %s", principal.getName()));
-        List<Question> questions = questionService.findAllQuestions();
-        for (Question question : questions) {
+        final List<Question> questions = questionService.findAllQuestions();
+        for (final Question question : questions) {
             question.setAnswers(answerService.findByQuestionId(question.getId()));
         }
         return questions;
@@ -173,12 +173,12 @@ public class QuestionController {
      * @param userId Long
      * @param selection String
      * @param principal Principal
-     * @return Question
+     * @return answered correctly?
      */
     @PostMapping(path = {
             "/{questionId}/answer/{userId}/{selection}"
     })
-    public Question answer(
+    public boolean answer(
             @PathVariable("questionId") long questionId,
             @PathVariable("userId") long userId,
             @PathVariable("selection") String selection,

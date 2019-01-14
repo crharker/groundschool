@@ -115,7 +115,7 @@ public class QuestionServiceImpl implements QuestionService {
      */
     @Override
     public Question delete(long id) {
-        Question question = mapper.map(findQuestionById(id), Question.class);
+        final Question question = mapper.map(findQuestionById(id), Question.class);
         if (question != null) {
             questionRepository.delete(mapper.map(question, QuestionEntity.class));
         }
@@ -127,8 +127,8 @@ public class QuestionServiceImpl implements QuestionService {
      */
     @Override
     public List<Question> findAllQuestions() {
-        List<Question> questions = new ArrayList<>();
-        List<QuestionEntity> questionEntities = questionRepository.findAll();
+        final List<Question> questions = new ArrayList<>();
+        final List<QuestionEntity> questionEntities = questionRepository.findAll();
         for (QuestionEntity questionEntity : questionEntities) {
             questions.add(mapper.map(questionEntity, Question.class));
         }
@@ -147,15 +147,15 @@ public class QuestionServiceImpl implements QuestionService {
      * {@inheritDoc} Required implementation.
      */
     @Override
-    public Question answer(long questionId, long userId, String selection) {
-        Instant start = Instant.now();
+    public boolean answer(long questionId, long userId, String selection) {
+        final Instant start = Instant.now();
+        boolean answeredCorrectly = false;
         final Question question = findQuestionById(questionId);
         if (question == null) {
-            return null;
+            return answeredCorrectly;
         }
         final List<Answer> answers = answerService.findByQuestionId(questionId);
         question.setAnswers(answers);
-        boolean answeredCorrectly = false;
         for (Answer answer : answers) {
             if (answer.getChoice().equalsIgnoreCase(selection)) {
                 answeredCorrectly = answer.isCorrect();
@@ -166,25 +166,27 @@ public class QuestionServiceImpl implements QuestionService {
         if (eventId != null) {
             final Event event = eventService.findById(eventId);
             final LessonPlan lessonPlan = lessonPlanService.findById(event.getLessonPlanId());
-            for (Long id : lessonPlan.getQuizIds()) {
-                Quiz quiz = quizService.findById(id);
+            for (final Long id : lessonPlan.getQuizIds()) {
+                final Quiz quiz = quizService.findById(id);
                 if (quiz.isStarted() && !quiz.isCompleted()) {
                     quizId = quiz.getId();
                 }
             }
         }
-        statisticService.store(
-                new Statistic(
-                        StatisticType.QUESTION_ANSWERED,
-                        String.format(
-                                "Duration [%s]; Question ID [%s]; Event ID [%s]; Quiz ID [%s]; Answer Given [%s]; Answered Correctly [%s]",
-                                Duration.between(start, Instant.now()),
-                                questionId,
-                                eventId,
-                                quizId,
-                                selection,
-                                answeredCorrectly)));
-        return question;
+        final Statistic statistic = new Statistic(
+                StatisticType.QUESTION_ANSWERED,
+                String.format(
+                        "Duration [%s]; Question ID [%s]; Event ID [%s]; Quiz ID [%s]; Answer Given [%s]; Answered Correctly [%s]",
+                        Duration.between(start, Instant.now()),
+                        questionId,
+                        eventId,
+                        quizId,
+                        selection,
+                        answeredCorrectly));
+        statistic.setUserId(userId);
+        statisticService.store(statistic);
+
+        return answeredCorrectly;
     }
 
 }
