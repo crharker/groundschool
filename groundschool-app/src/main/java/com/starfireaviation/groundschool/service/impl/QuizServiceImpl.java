@@ -5,18 +5,27 @@
  */
 package com.starfireaviation.groundschool.service.impl;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.starfireaviation.groundschool.model.JobType;
+import com.starfireaviation.groundschool.model.NotificationEventType;
+import com.starfireaviation.groundschool.model.NotificationType;
 import com.starfireaviation.groundschool.model.Question;
 import com.starfireaviation.groundschool.model.Quiz;
 import com.starfireaviation.groundschool.model.sql.QuizEntity;
 import com.starfireaviation.groundschool.repository.QuizRepository;
+import com.starfireaviation.groundschool.service.EventService;
+import com.starfireaviation.groundschool.service.NotificationService;
+import com.starfireaviation.groundschool.service.QuestionService;
 import com.starfireaviation.groundschool.service.QuizService;
+import com.starfireaviation.groundschool.service.TimeService;
 
 import ma.glasnost.orika.MapperFacade;
 
@@ -33,6 +42,30 @@ public class QuizServiceImpl implements QuizService {
      */
     @Autowired
     private QuizRepository quizRepository;
+
+    /**
+     * TimeService
+     */
+    @Autowired
+    private TimeService timeService;
+
+    /**
+     * QuestionService
+     */
+    @Autowired
+    private QuestionService questionService;
+
+    /**
+     * EventService
+     */
+    @Autowired
+    private EventService eventService;
+
+    /**
+     * NotificationService
+     */
+    @Autowired
+    private NotificationService notificationService;
 
     /**
      * MapperFacade
@@ -111,7 +144,10 @@ public class QuizServiceImpl implements QuizService {
         if (quiz != null && !quiz.isStarted()) {
             quiz.setStarted(true);
             quiz.setStartTime(LocalDateTime.now());
+            quiz.setCompleted(false);
+            quiz.setCompletedTime(null);
             quiz = store(quiz);
+            startQuestion(quizId);
         }
         return quiz;
     }
@@ -128,6 +164,17 @@ public class QuizServiceImpl implements QuizService {
                 quiz.setCurrentQuestion(nextQuestionId);
                 quiz.setCurrentQuestionStartTime(LocalDateTime.now());
                 quiz = store(quiz);
+                List<Long> userIds = eventService.getAllEventUsers(eventService.getCurrentEvent());
+                for (Long userId : userIds) {
+                    notificationService.send(userId, NotificationType.ALL, NotificationEventType.QUESTION_ASKED);
+                }
+                final Question question = questionService.findQuestionById(nextQuestionId);
+                timeService.add(
+                        quizId,
+                        false,
+                        Date.from(Instant.now().plusSeconds(question.getDuration())),
+                        null,
+                        JobType.COMPLETE_QUESTION);
             } else {
                 complete(quizId);
             }

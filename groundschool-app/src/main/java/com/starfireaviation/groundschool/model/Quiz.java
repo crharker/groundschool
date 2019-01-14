@@ -187,7 +187,7 @@ public class Quiz extends Base {
         Integer duration = 0;
         if (questions != null) {
             for (Question question : questions) {
-                duration = +question.getDuration();
+                duration += question.getDuration();
             }
         }
         return duration;

@@ -211,14 +211,40 @@ public class EventServiceImpl implements EventService {
      * {@inheritDoc} Required implementation.
      */
     @Override
+    public List<Long> getAllEventUsers(Long eventId) {
+        List<Long> userIds = new ArrayList<>();
+        List<EventUserEntity> eventUserEntities = eventUserRepository.findByEventId(eventId);
+        if (eventUserEntities != null) {
+            for (EventUserEntity eventUserEntity : eventUserEntities) {
+                userIds.add(eventUserEntity.getUserId());
+            }
+        }
+        return userIds;
+    }
+
+    /**
+     * {@inheritDoc} Required implementation.
+     */
+    @Override
     public Long isCheckedIn(Long userId) {
+        Long currentEventId = getCurrentEvent();
+        Long eventId = null;
+        if (didCheckIn(currentEventId, userId)) {
+            eventId = currentEventId;
+        }
+        return eventId;
+    }
+
+    /**
+     * {@inheritDoc} Required implementation.
+     */
+    @Override
+    public Long getCurrentEvent() {
         Long eventId = null;
         List<Event> events = findAllEvents();
         for (Event event : events) {
             if (event.isStarted() && !event.isCompleted()) {
-                if (didCheckIn(event.getId(), userId)) {
-                    eventId = event.getId();
-                }
+                eventId = event.getId();
             }
         }
         return eventId;

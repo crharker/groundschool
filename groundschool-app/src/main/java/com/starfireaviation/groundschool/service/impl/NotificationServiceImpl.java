@@ -5,30 +5,18 @@
  */
 package com.starfireaviation.groundschool.service.impl;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
-
 import com.starfireaviation.groundschool.model.NotificationEventType;
 import com.starfireaviation.groundschool.model.NotificationType;
 import com.starfireaviation.groundschool.model.User;
-import com.starfireaviation.groundschool.properties.EmailProperties;
-import com.starfireaviation.groundschool.properties.SMSProperties;
-import com.starfireaviation.groundschool.properties.SlackProperties;
 import com.starfireaviation.groundschool.service.EmailService;
 import com.starfireaviation.groundschool.service.NotificationService;
 import com.starfireaviation.groundschool.service.SMSService;
 import com.starfireaviation.groundschool.service.SlackService;
 import com.starfireaviation.groundschool.service.UserService;
-
-import freemarker.template.Configuration;
-import freemarker.template.TemplateException;
 
 /**
  * NotificationServiceImpl
@@ -68,30 +56,6 @@ public class NotificationServiceImpl implements NotificationService {
     private SlackService slackService;
 
     /**
-     * EmailProperties
-     */
-    @Autowired
-    private EmailProperties emailProperties;
-
-    /**
-     * SMSProperties
-     */
-    @Autowired
-    private SMSProperties smsProperties;
-
-    /**
-     * SlackProperties
-     */
-    @Autowired
-    private SlackProperties slackProperties;
-
-    /**
-     * FreeMarker Configuration
-     */
-    @Autowired
-    private Configuration freemarkerConfig;
-
-    /**
      * {@inheritDoc} Required implementation.
      */
     @Override
@@ -114,11 +78,17 @@ public class NotificationServiceImpl implements NotificationService {
             case EVENT_RSVP:
                 eventRSVP(userId, notificationType);
                 break;
+            case EVENT_START:
+                eventStart(userId, notificationType);
+                break;
             case EVENT_REGISTER:
                 eventRegister(userId, notificationType);
                 break;
             case EVENT_UNREGISTER:
                 eventUnregister(userId, notificationType);
+                break;
+            case QUESTION_ASKED:
+                questionAsked(userId, notificationType);
                 break;
             default:
         }
@@ -135,7 +105,7 @@ public class NotificationServiceImpl implements NotificationService {
             String response,
             String originalMessage) {
         if (NotificationType.SMS == notificationType && NotificationEventType.USER_SETTINGS == notificationEventType) {
-            resendUserSettingsChangeSMS(userService.findById(userId), response, originalMessage);
+            smsService.resendUserSettingsChangeMsg(userService.findById(userId), response, originalMessage);
         }
     }
 
@@ -147,25 +117,7 @@ public class NotificationServiceImpl implements NotificationService {
         if (userId == null) {
             return;
         }
-        try {
-            final User user = userService.findById(userId);
-            freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates/email");
-            emailService.send(
-                    userId,
-                    emailProperties.getFromAddress(),
-                    email,
-                    null,
-                    null,
-                    FreeMarkerTemplateUtils.processTemplateIntoString(
-                            freemarkerConfig.getTemplate("invite_subject.ftl"),
-                            getModelForUser(user)),
-                    FreeMarkerTemplateUtils.processTemplateIntoString(
-                            freemarkerConfig.getTemplate("invite_body.ftl"),
-                            getModelForUser(user)),
-                    true);
-        } catch (IOException | TemplateException e) {
-            LOGGER.warn(e.getMessage());
-        }
+        emailService.sendInviteMsg(userService.findById(userId), email);
     }
 
     /**
@@ -186,7 +138,7 @@ public class NotificationServiceImpl implements NotificationService {
                 && (notificationType == null
                         || notificationType == NotificationType.ALL
                         || notificationType == NotificationType.EMAIL)) {
-            sendUserSettingsVerifiedEmail(user);
+            emailService.sendUserSettingsVerifiedMsg(user);
         }
         if (user.getSms() != null
                 && user.isSmsVerified()
@@ -196,7 +148,7 @@ public class NotificationServiceImpl implements NotificationService {
                         || notificationType == NotificationType.SMS)) {
             user.setSmsVerified(true);
             userService.store(user);
-            sendUserSettingsVerifiedSMS(user);
+            smsService.sendUserSettingsVerifiedMsg(user);
         }
         if (user.getSlack() != null
                 && user.isSlackVerified()
@@ -204,7 +156,7 @@ public class NotificationServiceImpl implements NotificationService {
                 && (notificationType == null
                         || notificationType == NotificationType.ALL
                         || notificationType == NotificationType.SLACK)) {
-            sendUserSettingsVerifiedSlackMessage(user);
+            slackService.sendUserSettingsVerifiedMsg(user);
         }
     }
 
@@ -226,7 +178,7 @@ public class NotificationServiceImpl implements NotificationService {
                 && (notificationType == null
                         || notificationType == NotificationType.ALL
                         || notificationType == NotificationType.EMAIL)) {
-            sendUserSettingsChangeEmail(user);
+            emailService.sendUserSettingsChangeMsg(user);
         }
         if (user.getSms() != null
                 && !user.isSmsVerified()
@@ -234,7 +186,7 @@ public class NotificationServiceImpl implements NotificationService {
                 && (notificationType == null
                         || notificationType == NotificationType.ALL
                         || notificationType == NotificationType.SMS)) {
-            sendUserSettingsChangeSMS(user);
+            smsService.sendUserSettingsChangeMsg(user);
         }
         if (user.getSlack() != null
                 && !user.isSlackVerified()
@@ -242,7 +194,7 @@ public class NotificationServiceImpl implements NotificationService {
                 && (notificationType == null
                         || notificationType == NotificationType.ALL
                         || notificationType == NotificationType.SLACK)) {
-            sendUserSettingsChangeSlackMessage(user);
+            slackService.sendUserSettingsChangeMsg(user);
         }
         LOGGER.info("userSettings() complete");
     }
@@ -265,7 +217,7 @@ public class NotificationServiceImpl implements NotificationService {
                 && (notificationType == null
                         || notificationType == NotificationType.ALL
                         || notificationType == NotificationType.EMAIL)) {
-            sendUserDeleteEmail(user);
+            emailService.sendUserDeleteMsg(user);
         }
         if (user.getSms() != null
                 && user.isSmsVerified()
@@ -273,7 +225,7 @@ public class NotificationServiceImpl implements NotificationService {
                 && (notificationType == null
                         || notificationType == NotificationType.ALL
                         || notificationType == NotificationType.SMS)) {
-            sendUserDeleteSMS(user);
+            smsService.sendUserDeleteMsg(user);
         }
         if (user.getSlack() != null
                 && user.isSlackVerified()
@@ -281,7 +233,89 @@ public class NotificationServiceImpl implements NotificationService {
                 && (notificationType == null
                         || notificationType == NotificationType.ALL
                         || notificationType == NotificationType.SLACK)) {
-            sendUserDeleteSlackMessage(user);
+            slackService.sendUserDeleteMsg(user);
+        }
+    }
+
+    /**
+     * Sends notification that an event has started
+     *
+     * @param userId Long
+     * @param notificationType NotificationType
+     */
+    private void eventStart(Long userId, NotificationType notificationType) {
+        final User user = userService.findById(userId);
+        if (user == null) {
+            LOGGER.warn("eventStart() returning as no user was found");
+            return;
+        }
+        if (user.getEmail() != null
+                && user.isEmailVerified()
+                && user.isEmailEnabled()
+                && user.isQuestionsViaEmail()
+                && (notificationType == null
+                        || notificationType == NotificationType.ALL
+                        || notificationType == NotificationType.EMAIL)) {
+            emailService.sendEventStartMsg(user);
+        }
+        if (user.getSms() != null
+                && user.isSmsVerified()
+                && user.isSmsEnabled()
+                && user.isQuestionsViaSMS()
+                && (notificationType == null
+                        || notificationType == NotificationType.ALL
+                        || notificationType == NotificationType.SMS)) {
+            smsService.sendEventStartMsg(user);
+        }
+        if (user.getSlack() != null
+                && user.isSlackVerified()
+                && user.isSlackEnabled()
+                && user.isQuestionsViaSlack()
+                && (notificationType == null
+                        || notificationType == NotificationType.ALL
+                        || notificationType == NotificationType.SLACK)) {
+            slackService.sendEventStartMsg(user);
+        }
+    }
+
+    /**
+     * Sends notification that a question has been asked
+     *
+     * @param userId Long
+     * @param notificationType NotificationType
+     */
+    private void questionAsked(Long userId, NotificationType notificationType) {
+        final User user = userService.findById(userId);
+        if (user == null) {
+            LOGGER.warn("questionAsked() returning as no user was found");
+            return;
+        }
+        if (user.getEmail() != null
+                && user.isEmailVerified()
+                && user.isEmailEnabled()
+                && user.isQuestionsViaEmail()
+                && (notificationType == null
+                        || notificationType == NotificationType.ALL
+                        || notificationType == NotificationType.EMAIL)) {
+            emailService.sendQuestionAskedMsg(user);
+        }
+        if (user.getSms() != null
+                && user.isSmsVerified()
+                && user.isSmsEnabled()
+                && user.isQuestionsViaSMS()
+                && (notificationType == null
+                        || notificationType == NotificationType.ALL
+                        || notificationType == NotificationType.SMS)) {
+            smsService.sendQuestionAskedMsg(user);
+        }
+        if (user.getSlack() != null
+                && user.isSlackVerified()
+                && user.isSlackEnabled()
+                && user.isQuestionsViaSlack()
+                && (notificationType == null
+                        || notificationType == NotificationType.ALL
+                        || notificationType == NotificationType.SLACK)) {
+            slackService.sendQuestionAskedMsg(user);
         }
     }
 
@@ -303,7 +337,7 @@ public class NotificationServiceImpl implements NotificationService {
                 && (notificationType == null
                         || notificationType == NotificationType.ALL
                         || notificationType == NotificationType.EMAIL)) {
-            sendEventRSVPEmail(user);
+            emailService.sendEventRSVPMsg(user);
         }
         if (user.getSms() != null
                 && user.isSmsVerified()
@@ -311,7 +345,7 @@ public class NotificationServiceImpl implements NotificationService {
                 && (notificationType == null
                         || notificationType == NotificationType.ALL
                         || notificationType == NotificationType.SMS)) {
-            sendEventRSVPSMS(user);
+            smsService.sendEventRSVPMsg(user);
         }
         if (user.getSlack() != null
                 && user.isSlackVerified()
@@ -319,7 +353,7 @@ public class NotificationServiceImpl implements NotificationService {
                 && (notificationType == null
                         || notificationType == NotificationType.ALL
                         || notificationType == NotificationType.SLACK)) {
-            sendEventRSVPSlackMessage(user);
+            slackService.sendEventRSVPMsg(user);
         }
     }
 
@@ -341,7 +375,7 @@ public class NotificationServiceImpl implements NotificationService {
                 && (notificationType == null
                         || notificationType == NotificationType.ALL
                         || notificationType == NotificationType.EMAIL)) {
-            sendEventRegisterEmail(user);
+            emailService.sendEventRegisterMsg(user);
         }
         if (user.getSms() != null
                 && user.isSmsVerified()
@@ -349,7 +383,7 @@ public class NotificationServiceImpl implements NotificationService {
                 && (notificationType == null
                         || notificationType == NotificationType.ALL
                         || notificationType == NotificationType.SMS)) {
-            sendEventRegisterSMS(user);
+            smsService.sendEventRegisterMsg(user);
         }
         if (user.getSlack() != null
                 && user.isSlackVerified()
@@ -357,7 +391,7 @@ public class NotificationServiceImpl implements NotificationService {
                 && (notificationType == null
                         || notificationType == NotificationType.ALL
                         || notificationType == NotificationType.SLACK)) {
-            sendEventRegisterSlackMessage(user);
+            slackService.sendEventRegisterMsg(user);
         }
     }
 
@@ -379,7 +413,7 @@ public class NotificationServiceImpl implements NotificationService {
                 && (notificationType == null
                         || notificationType == NotificationType.ALL
                         || notificationType == NotificationType.EMAIL)) {
-            sendEventUnregisterEmail(user);
+            emailService.sendEventUnregisterMsg(user);
         }
         if (user.getSms() != null
                 && user.isSmsVerified()
@@ -387,7 +421,7 @@ public class NotificationServiceImpl implements NotificationService {
                 && (notificationType == null
                         || notificationType == NotificationType.ALL
                         || notificationType == NotificationType.SMS)) {
-            sendEventUnregisterSMS(user);
+            smsService.sendEventUnregisterMsg(user);
         }
         if (user.getSlack() != null
                 && user.isSlackVerified()
@@ -395,475 +429,8 @@ public class NotificationServiceImpl implements NotificationService {
                 && (notificationType == null
                         || notificationType == NotificationType.ALL
                         || notificationType == NotificationType.SLACK)) {
-            sendEventUnregisterSlackMessage(user);
+            slackService.sendEventUnregisterMsg(user);
         }
-    }
-
-    /**
-     * Sends a slack message to RSVP for an upcoming event
-     *
-     * @param user User
-     */
-    private void sendEventRSVPSlackMessage(final User user) {
-        try {
-            freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates/slack");
-            slackService.send(
-                    user.getId(),
-                    slackProperties.getFromAddress(),
-                    user.getSlack(),
-                    FreeMarkerTemplateUtils.processTemplateIntoString(
-                            freemarkerConfig.getTemplate("event_rsvp.ftl"),
-                            getModelForUser(user)));
-        } catch (IOException | TemplateException e) {
-            LOGGER.warn(e.getMessage());
-        }
-    }
-
-    /**
-     * Sends a slack message for registering for an upcoming event
-     *
-     * @param user User
-     */
-    private void sendEventRegisterSlackMessage(final User user) {
-        try {
-            freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates/slack");
-            slackService.send(
-                    user.getId(),
-                    slackProperties.getFromAddress(),
-                    user.getSlack(),
-                    FreeMarkerTemplateUtils.processTemplateIntoString(
-                            freemarkerConfig.getTemplate("event_register.ftl"),
-                            getModelForUser(user)));
-        } catch (IOException | TemplateException e) {
-            LOGGER.warn(e.getMessage());
-        }
-    }
-
-    /**
-     * Sends a slack message for unregistering from an upcoming event
-     *
-     * @param user User
-     */
-    private void sendEventUnregisterSlackMessage(final User user) {
-        try {
-            freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates/slack");
-            slackService.send(
-                    user.getId(),
-                    slackProperties.getFromAddress(),
-                    user.getSlack(),
-                    FreeMarkerTemplateUtils.processTemplateIntoString(
-                            freemarkerConfig.getTemplate("event_unregister.ftl"),
-                            getModelForUser(user)));
-        } catch (IOException | TemplateException e) {
-            LOGGER.warn(e.getMessage());
-        }
-    }
-
-    /**
-     * Sends a slack message for user deletion
-     *
-     * @param user User
-     */
-    private void sendUserDeleteSlackMessage(final User user) {
-        try {
-            freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates/slack");
-            slackService.send(
-                    user.getId(),
-                    slackProperties.getFromAddress(),
-                    user.getSlack(),
-                    FreeMarkerTemplateUtils.processTemplateIntoString(
-                            freemarkerConfig.getTemplate("user_delete.ftl"),
-                            getModelForUser(user)));
-        } catch (IOException | TemplateException e) {
-            LOGGER.warn(e.getMessage());
-        }
-    }
-
-    /**
-     * Sends an SMS message for user deletion
-     *
-     * @param user User
-     */
-    private void sendUserDeleteSMS(final User user) {
-        try {
-            freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates/sms");
-            smsService.send(
-                    user.getId(),
-                    null,
-                    null,
-                    null,
-                    NotificationEventType.USER_DELETE,
-                    smsProperties.getFromAddress(),
-                    user.getSms(),
-                    FreeMarkerTemplateUtils.processTemplateIntoString(
-                            freemarkerConfig.getTemplate("user_delete.ftl"),
-                            getModelForUser(user)));
-        } catch (IOException | TemplateException e) {
-            LOGGER.warn(e.getMessage());
-        }
-    }
-
-    /**
-     * Sends an SMS message to RSVP for an upcoming event
-     *
-     * @param user User
-     */
-    private void sendEventRSVPSMS(final User user) {
-        try {
-            freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates/sms");
-            smsService.send(
-                    user.getId(),
-                    null,
-                    null,
-                    null,
-                    NotificationEventType.EVENT_RSVP,
-                    smsProperties.getFromAddress(),
-                    user.getSms(),
-                    FreeMarkerTemplateUtils.processTemplateIntoString(
-                            freemarkerConfig.getTemplate("event_rsvp.ftl"),
-                            getModelForUser(user)));
-        } catch (IOException | TemplateException e) {
-            LOGGER.warn(e.getMessage());
-        }
-    }
-
-    /**
-     * Sends an SMS message for registering for an upcoming event
-     *
-     * @param user User
-     */
-    private void sendEventRegisterSMS(final User user) {
-        try {
-            freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates/sms");
-            smsService.send(
-                    user.getId(),
-                    null,
-                    null,
-                    null,
-                    NotificationEventType.EVENT_REGISTER,
-                    smsProperties.getFromAddress(),
-                    user.getSms(),
-                    FreeMarkerTemplateUtils.processTemplateIntoString(
-                            freemarkerConfig.getTemplate("event_register.ftl"),
-                            getModelForUser(user)));
-        } catch (IOException | TemplateException e) {
-            LOGGER.warn(e.getMessage());
-        }
-    }
-
-    /**
-     * Sends an SMS message for unregistering from an upcoming event
-     *
-     * @param user User
-     */
-    private void sendEventUnregisterSMS(final User user) {
-        try {
-            freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates/sms");
-            smsService.send(
-                    user.getId(),
-                    null,
-                    null,
-                    null,
-                    NotificationEventType.EVENT_UNREGISTER,
-                    smsProperties.getFromAddress(),
-                    user.getSms(),
-                    FreeMarkerTemplateUtils.processTemplateIntoString(
-                            freemarkerConfig.getTemplate("event_unregister.ftl"),
-                            getModelForUser(user)));
-        } catch (IOException | TemplateException e) {
-            LOGGER.warn(e.getMessage());
-        }
-    }
-
-    /**
-     * Sends an email for user deletion
-     *
-     * @param user User
-     */
-    private void sendUserDeleteEmail(final User user) {
-        try {
-            freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates/email");
-            emailService.send(
-                    user.getId(),
-                    emailProperties.getFromAddress(),
-                    user.getEmail(),
-                    null,
-                    null,
-                    FreeMarkerTemplateUtils.processTemplateIntoString(
-                            freemarkerConfig.getTemplate("user_delete_subject.ftl"),
-                            getModelForUser(user)),
-                    FreeMarkerTemplateUtils.processTemplateIntoString(
-                            freemarkerConfig.getTemplate("user_delete_body.ftl"),
-                            getModelForUser(user)),
-                    true);
-        } catch (IOException | TemplateException e) {
-            LOGGER.warn(e.getMessage());
-        }
-    }
-
-    /**
-     * Sends an email to RSVP for an upcoming event
-     *
-     * @param user User
-     */
-    private void sendEventRSVPEmail(final User user) {
-        try {
-            freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates/email");
-            emailService.send(
-                    user.getId(),
-                    emailProperties.getFromAddress(),
-                    user.getEmail(),
-                    null,
-                    null,
-                    FreeMarkerTemplateUtils.processTemplateIntoString(
-                            freemarkerConfig.getTemplate("event_rsvp_subject.ftl"),
-                            getModelForUser(user)),
-                    FreeMarkerTemplateUtils.processTemplateIntoString(
-                            freemarkerConfig.getTemplate("event_rsvp_body.ftl"),
-                            getModelForUser(user)),
-                    true);
-        } catch (IOException | TemplateException e) {
-            LOGGER.warn(e.getMessage());
-        }
-    }
-
-    /**
-     * Sends an email for registering for an upcoming event
-     *
-     * @param user User
-     */
-    private void sendEventRegisterEmail(final User user) {
-        try {
-            freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates/email");
-            emailService.send(
-                    user.getId(),
-                    emailProperties.getFromAddress(),
-                    user.getEmail(),
-                    null,
-                    null,
-                    FreeMarkerTemplateUtils.processTemplateIntoString(
-                            freemarkerConfig.getTemplate("event_register_subject.ftl"),
-                            getModelForUser(user)),
-                    FreeMarkerTemplateUtils.processTemplateIntoString(
-                            freemarkerConfig.getTemplate("event_register_body.ftl"),
-                            getModelForUser(user)),
-                    true);
-        } catch (IOException | TemplateException e) {
-            LOGGER.warn(e.getMessage());
-        }
-    }
-
-    /**
-     * Sends an email for unregistering from an upcoming event
-     *
-     * @param user User
-     */
-    private void sendEventUnregisterEmail(final User user) {
-        try {
-            freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates/email");
-            emailService.send(
-                    user.getId(),
-                    emailProperties.getFromAddress(),
-                    user.getEmail(),
-                    null,
-                    null,
-                    FreeMarkerTemplateUtils.processTemplateIntoString(
-                            freemarkerConfig.getTemplate("event_unregister_subject.ftl"),
-                            getModelForUser(user)),
-                    FreeMarkerTemplateUtils.processTemplateIntoString(
-                            freemarkerConfig.getTemplate("event_unregister_body.ftl"),
-                            getModelForUser(user)),
-                    true);
-        } catch (IOException | TemplateException e) {
-            LOGGER.warn(e.getMessage());
-        }
-    }
-
-    /**
-     * Sends a Slack message for user settings verified
-     *
-     * @param user User
-     */
-    private void sendUserSettingsVerifiedSlackMessage(final User user) {
-        try {
-            freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates/slack");
-            slackService.send(
-                    user.getId(),
-                    slackProperties.getFromAddress(),
-                    user.getSlack(),
-                    FreeMarkerTemplateUtils.processTemplateIntoString(
-                            freemarkerConfig.getTemplate("user_settings_verified.ftl"),
-                            getModelForUser(user)));
-        } catch (IOException | TemplateException e) {
-            LOGGER.warn(e.getMessage());
-        }
-    }
-
-    /**
-     * Sends a SMS message for user settings verified
-     *
-     * @param user User
-     */
-    private void sendUserSettingsVerifiedSMS(final User user) {
-        try {
-            freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates/sms");
-            smsService.send(
-                    user.getId(),
-                    null,
-                    null,
-                    null,
-                    NotificationEventType.USER_VERIFIED,
-                    smsProperties.getFromAddress(),
-                    user.getSms(),
-                    FreeMarkerTemplateUtils.processTemplateIntoString(
-                            freemarkerConfig.getTemplate("user_settings_verified.ftl"),
-                            getModelForUser(user)));
-        } catch (IOException | TemplateException e) {
-            LOGGER.warn(e.getMessage());
-        }
-    }
-
-    /**
-     * Sends an email message for user settings verified
-     *
-     * @param user User
-     */
-    private void sendUserSettingsVerifiedEmail(final User user) {
-        try {
-            freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates/email");
-            emailService.send(
-                    user.getId(),
-                    emailProperties.getFromAddress(),
-                    user.getEmail(),
-                    null,
-                    null,
-                    FreeMarkerTemplateUtils.processTemplateIntoString(
-                            freemarkerConfig.getTemplate("user_settings_verified_subject.ftl"),
-                            getModelForUser(user)),
-                    FreeMarkerTemplateUtils.processTemplateIntoString(
-                            freemarkerConfig.getTemplate("user_settings_verified_body.ftl"),
-                            getModelForUser(user)),
-                    true);
-        } catch (IOException | TemplateException e) {
-            LOGGER.warn(e.getMessage());
-        }
-    }
-
-    /**
-     * Sends a Slack message for user settings changed
-     *
-     * @param user User
-     */
-    private void sendUserSettingsChangeSlackMessage(final User user) {
-        try {
-            freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates/slack");
-            slackService.send(
-                    user.getId(),
-                    slackProperties.getFromAddress(),
-                    user.getSlack(),
-                    FreeMarkerTemplateUtils.processTemplateIntoString(
-                            freemarkerConfig.getTemplate("user_verify_settings.ftl"),
-                            getModelForUser(user)));
-        } catch (IOException | TemplateException e) {
-            LOGGER.warn(e.getMessage());
-        }
-    }
-
-    /**
-     * Sends a SMS message for user settings changed
-     *
-     * @param user User
-     */
-    private void sendUserSettingsChangeSMS(final User user) {
-        try {
-            freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates/sms");
-            smsService.send(
-                    user.getId(),
-                    null,
-                    null,
-                    null,
-                    NotificationEventType.USER_SETTINGS,
-                    smsProperties.getFromAddress(),
-                    user.getSms(),
-                    FreeMarkerTemplateUtils.processTemplateIntoString(
-                            freemarkerConfig.getTemplate("user_verify_settings.ftl"),
-                            getModelForUser(user)));
-        } catch (IOException | TemplateException e) {
-            LOGGER.warn(e.getMessage());
-        }
-    }
-
-    /**
-     * Resends a SMS message for user settings changed
-     *
-     * @param user User
-     * @param response given by the user
-     * @param originalMessage sent to the user
-     */
-    private void resendUserSettingsChangeSMS(
-            final User user,
-            String response,
-            String originalMessage) {
-        try {
-            freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates/sms");
-            Map<String, Object> model = getModelForUser(user);
-            model.put("response", response);
-            model.put("original_message", originalMessage);
-            smsService.send(
-                    user.getId(),
-                    null,
-                    null,
-                    null,
-                    NotificationEventType.USER_SETTINGS,
-                    smsProperties.getFromAddress(),
-                    user.getSms(),
-                    FreeMarkerTemplateUtils.processTemplateIntoString(
-                            freemarkerConfig.getTemplate("resend_header.ftl"),
-                            model));
-        } catch (IOException | TemplateException e) {
-            LOGGER.warn(e.getMessage());
-        }
-    }
-
-    /**
-     * Sends an email message for user settings changed
-     *
-     * @param user User
-     */
-    private void sendUserSettingsChangeEmail(final User user) {
-        try {
-            freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates/email");
-            emailService.send(
-                    user.getId(),
-                    emailProperties.getFromAddress(),
-                    user.getEmail(),
-                    null,
-                    null,
-                    FreeMarkerTemplateUtils.processTemplateIntoString(
-                            freemarkerConfig.getTemplate("user_verify_settings_subject.ftl"),
-                            getModelForUser(user)),
-                    FreeMarkerTemplateUtils.processTemplateIntoString(
-                            freemarkerConfig.getTemplate("user_verify_settings_body.ftl"),
-                            getModelForUser(user)),
-                    true);
-        } catch (IOException | TemplateException e) {
-            LOGGER.warn(e.getMessage());
-        }
-    }
-
-    /**
-     * Builds model from User information
-     *
-     * @param user User
-     * @return model
-     */
-    private static Map<String, Object> getModelForUser(final User user) {
-        Map<String, Object> model = new HashMap<>();
-        model.put("firstName", user.getFirstName());
-        model.put("lastName", user.getLastName());
-        model.put("userId", user.getId());
-        model.put("host", "http://localhost:8080");
-        return model;
     }
 
 }

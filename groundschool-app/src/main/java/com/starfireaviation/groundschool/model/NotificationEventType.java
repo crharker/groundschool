@@ -25,6 +25,10 @@ public enum NotificationEventType {
      */
     USER_DELETE,
     /**
+     * EVENT_START
+     */
+    EVENT_START,
+    /**
      * EVENT_RSVP
      */
     EVENT_RSVP,
@@ -35,5 +39,9 @@ public enum NotificationEventType {
     /**
      * EVENT_UNREGISTER
      */
-    EVENT_UNREGISTER;
+    EVENT_UNREGISTER,
+    /**
+     * QUESTION_ASKED
+     */
+    QUESTION_ASKED,
 }

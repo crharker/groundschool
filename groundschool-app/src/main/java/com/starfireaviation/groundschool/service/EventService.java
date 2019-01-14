@@ -92,6 +92,21 @@ public interface EventService {
     public boolean didCheckIn(Long eventId, Long userId);
 
     /**
+     * Retrieves all users for an event
+     *
+     * @param eventId Event ID
+     * @return list of User ID
+     */
+    public List<Long> getAllEventUsers(Long eventId);
+
+    /**
+     * Returns the current (started but not completed) event. If no event is found, null is returned
+     *
+     * @return Event ID
+     */
+    public Long getCurrentEvent();
+
+    /**
      * Is the user checked in to an event?
      *
      * @param userId User ID

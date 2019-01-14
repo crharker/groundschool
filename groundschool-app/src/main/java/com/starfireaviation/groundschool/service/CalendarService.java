@@ -28,4 +28,12 @@ public interface CalendarService {
      */
     public boolean hasEvent(Long eventId);
 
+    /**
+     * Removes event from a Google calendar
+     *
+     * @param eventId Event ID
+     * @return success
+     */
+    public boolean delete(Long eventId);
+
 }

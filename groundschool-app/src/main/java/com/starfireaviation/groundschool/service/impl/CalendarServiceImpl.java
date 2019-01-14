@@ -12,6 +12,7 @@ import java.security.GeneralSecurityException;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 
@@ -39,12 +40,14 @@ import com.google.api.services.calendar.model.EventDateTime;
 import com.starfireaviation.groundschool.GroundSchoolApplication;
 import com.starfireaviation.groundschool.model.Address;
 import com.starfireaviation.groundschool.model.LessonPlan;
+import com.starfireaviation.groundschool.model.Quiz;
 import com.starfireaviation.groundschool.model.Statistic;
 import com.starfireaviation.groundschool.model.StatisticType;
 import com.starfireaviation.groundschool.service.AddressService;
 import com.starfireaviation.groundschool.service.CalendarService;
 import com.starfireaviation.groundschool.service.EventService;
 import com.starfireaviation.groundschool.service.LessonPlanService;
+import com.starfireaviation.groundschool.service.QuizService;
 import com.starfireaviation.groundschool.service.StatisticService;
 
 /**
@@ -105,6 +108,12 @@ public class CalendarServiceImpl implements CalendarService {
     private LessonPlanService lessonPlanService;
 
     /**
+     * QuizService
+     */
+    @Autowired
+    private QuizService quizService;
+
+    /**
      * StatisticService
      */
     @Autowired
@@ -153,17 +162,15 @@ public class CalendarServiceImpl implements CalendarService {
                         .setVisibility("public")
                         .setDescription(lessonPlan.getTitle());
 
-                DateTime startDateTime = new DateTime(sdf.format(groundSchoolEvent.getStartTime()));
                 event.setStart(
                         new EventDateTime()
-                                .setDateTime(startDateTime)
-                                .setTimeZone("America/New_York"));
+                                .setDateTime(new DateTime(sdf.format(groundSchoolEvent.getStartTime())))
+                                .setTimeZone("US/Eastern"));
 
-                DateTime endDateTime = new DateTime("2015-05-28T17:00:00-07:00");
-                EventDateTime end = new EventDateTime()
-                        .setDateTime(endDateTime)
-                        .setTimeZone("America/New_York");
-                event.setEnd(end);
+                event.setEnd(
+                        new EventDateTime()
+                                .setDateTime(computeEventEnd(groundSchoolEvent))
+                                .setTimeZone("US/Eastern"));
 
                 String calendarId = "primary";
                 event = service.events().insert(calendarId, event).execute();
@@ -184,6 +191,15 @@ public class CalendarServiceImpl implements CalendarService {
                         eventUrl));
         statisticService.store(statistic);
         return eventUrl;
+    }
+
+    /**
+     * {@inheritDoc} Required implementation.
+     */
+    @Override
+    public boolean delete(Long eventId) {
+        // TODO Implement this!
+        return false;
     }
 
     /**
@@ -223,4 +239,37 @@ public class CalendarServiceImpl implements CalendarService {
         LocalServerReceiver receiver = new LocalServerReceiver.Builder().setPort(8888).build();
         return new AuthorizationCodeInstalledApp(flow, receiver).authorize("user");
     }
+
+    /**
+     * Computes the DateTime for the provided event to end
+     *
+     * @param event Event
+     * @return DateTime
+     */
+    private DateTime computeEventEnd(com.starfireaviation.groundschool.model.Event event) {
+        if (event.getCompletedTime() != null) {
+            return new DateTime(sdf.format(event.getCompletedTime()));
+        }
+        LessonPlan lessonPlan = lessonPlanService.findById(event.getLessonPlanId());
+        LocalDateTime endTime = event.getStartTime().plusMinutes(lessonPlan.getAttentionTime());
+        endTime = endTime.plusMinutes(lessonPlan.getMotivationTime());
+        endTime = endTime.plusMinutes(lessonPlan.getOverviewTime());
+
+        endTime = endTime.plusMinutes(lessonPlan.getExplanationDemonstrationTime());
+        endTime = endTime.plusMinutes(lessonPlan.getPerformanceSupervisionTime());
+        endTime = endTime.plusMinutes(lessonPlan.getEvaluationTime());
+
+        endTime = endTime.plusMinutes(lessonPlan.getSummaryTime());
+        endTime = endTime.plusMinutes(lessonPlan.getRemotivationTime());
+        endTime = endTime.plusMinutes(lessonPlan.getClosureTime());
+
+        List<Long> quizIds = lessonPlan.getQuizIds();
+        for (Long quizId : quizIds) {
+            Quiz quiz = quizService.findById(quizId);
+            endTime = endTime.plusSeconds(quiz.getDuration());
+        }
+        // TODO set end time to next 30 minute boundary
+        return new DateTime(sdf.format(endTime));
+    }
+
 }

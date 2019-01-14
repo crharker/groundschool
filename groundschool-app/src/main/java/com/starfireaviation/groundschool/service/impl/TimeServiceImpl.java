@@ -25,6 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.starfireaviation.groundschool.Constants;
+import com.starfireaviation.groundschool.job.CompleteQuestionJob;
 import com.starfireaviation.groundschool.job.MemberDetailsRefreshJob;
 import com.starfireaviation.groundschool.job.NoopJob;
 import com.starfireaviation.groundschool.job.RSVPJob;
@@ -109,6 +110,9 @@ public class TimeServiceImpl implements TimeService {
         switch (type) {
             case RSVP:
                 className = RSVPJob.class;
+                break;
+            case COMPLETE_QUESTION:
+                className = CompleteQuestionJob.class;
                 break;
             case MEMBER_DETAILS_REFRESH:
                 className = MemberDetailsRefreshJob.class;

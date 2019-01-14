@@ -5,11 +5,13 @@
  */
 package com.starfireaviation.groundschool.service.impl;
 
+import java.io.IOException;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -20,6 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 import org.springframework.util.CollectionUtils;
 
 import com.starfireaviation.groundschool.model.NotificationEventType;
@@ -41,6 +44,9 @@ import com.starfireaviation.groundschool.util.SMSResponseParser;
 import com.twilio.Twilio;
 import com.twilio.rest.api.v2010.account.Message;
 import com.twilio.type.PhoneNumber;
+
+import freemarker.template.Configuration;
+import freemarker.template.TemplateException;
 
 /**
  * SMSServiceImpl
@@ -97,10 +103,237 @@ public class SMSServiceImpl implements SMSService {
     private StatisticService statisticService;
 
     /**
+     * FreeMarker Configuration
+     */
+    @Autowired
+    private Configuration freemarkerConfig;
+
+    /**
      * {@inheritDoc} Required implementation.
      */
     @Override
-    public void send(
+    public void sendUserDeleteMsg(final User user) {
+        try {
+            freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates/sms");
+            send(
+                    user.getId(),
+                    null,
+                    null,
+                    null,
+                    NotificationEventType.USER_DELETE,
+                    smsProperties.getFromAddress(),
+                    user.getSms(),
+                    FreeMarkerTemplateUtils.processTemplateIntoString(
+                            freemarkerConfig.getTemplate("user_delete.ftl"),
+                            getModelForUser(user)));
+        } catch (IOException | TemplateException e) {
+            LOGGER.warn(e.getMessage());
+        }
+    }
+
+    /**
+     * {@inheritDoc} Required implementation.
+     */
+    @Override
+    public void sendEventRSVPMsg(final User user) {
+        try {
+            freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates/sms");
+            send(
+                    user.getId(),
+                    null,
+                    null,
+                    null,
+                    NotificationEventType.EVENT_RSVP,
+                    smsProperties.getFromAddress(),
+                    user.getSms(),
+                    FreeMarkerTemplateUtils.processTemplateIntoString(
+                            freemarkerConfig.getTemplate("event_rsvp.ftl"),
+                            getModelForUser(user)));
+        } catch (IOException | TemplateException e) {
+            LOGGER.warn(e.getMessage());
+        }
+    }
+
+    /**
+     * {@inheritDoc} Required implementation.
+     */
+    @Override
+    public void sendEventStartMsg(final User user) {
+        try {
+            freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates/sms");
+            send(
+                    user.getId(),
+                    null,
+                    null,
+                    null,
+                    NotificationEventType.EVENT_START,
+                    smsProperties.getFromAddress(),
+                    user.getSms(),
+                    FreeMarkerTemplateUtils.processTemplateIntoString(
+                            freemarkerConfig.getTemplate("event_start.ftl"),
+                            getModelForUser(user)));
+        } catch (IOException | TemplateException e) {
+            LOGGER.warn(e.getMessage());
+        }
+    }
+
+    /**
+     * {@inheritDoc} Required implementation.
+     */
+    @Override
+    public void sendQuestionAskedMsg(final User user) {
+        try {
+            freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates/sms");
+            send(
+                    user.getId(),
+                    null,
+                    null,
+                    null,
+                    NotificationEventType.QUESTION_ASKED,
+                    smsProperties.getFromAddress(),
+                    user.getSms(),
+                    FreeMarkerTemplateUtils.processTemplateIntoString(
+                            freemarkerConfig.getTemplate("question.ftl"),
+                            getModelForUser(user)));
+        } catch (IOException | TemplateException e) {
+            LOGGER.warn(e.getMessage());
+        }
+    }
+
+    /**
+     * {@inheritDoc} Required implementation.
+     */
+    @Override
+    public void sendEventRegisterMsg(final User user) {
+        try {
+            freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates/sms");
+            send(
+                    user.getId(),
+                    null,
+                    null,
+                    null,
+                    NotificationEventType.EVENT_REGISTER,
+                    smsProperties.getFromAddress(),
+                    user.getSms(),
+                    FreeMarkerTemplateUtils.processTemplateIntoString(
+                            freemarkerConfig.getTemplate("event_register.ftl"),
+                            getModelForUser(user)));
+        } catch (IOException | TemplateException e) {
+            LOGGER.warn(e.getMessage());
+        }
+    }
+
+    /**
+     * {@inheritDoc} Required implementation.
+     */
+    @Override
+    public void sendEventUnregisterMsg(final User user) {
+        try {
+            freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates/sms");
+            send(
+                    user.getId(),
+                    null,
+                    null,
+                    null,
+                    NotificationEventType.EVENT_UNREGISTER,
+                    smsProperties.getFromAddress(),
+                    user.getSms(),
+                    FreeMarkerTemplateUtils.processTemplateIntoString(
+                            freemarkerConfig.getTemplate("event_unregister.ftl"),
+                            getModelForUser(user)));
+        } catch (IOException | TemplateException e) {
+            LOGGER.warn(e.getMessage());
+        }
+    }
+
+    /**
+     * {@inheritDoc} Required implementation.
+     */
+    @Override
+    public void sendUserSettingsVerifiedMsg(final User user) {
+        try {
+            freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates/sms");
+            send(
+                    user.getId(),
+                    null,
+                    null,
+                    null,
+                    NotificationEventType.USER_VERIFIED,
+                    smsProperties.getFromAddress(),
+                    user.getSms(),
+                    FreeMarkerTemplateUtils.processTemplateIntoString(
+                            freemarkerConfig.getTemplate("user_settings_verified.ftl"),
+                            getModelForUser(user)));
+        } catch (IOException | TemplateException e) {
+            LOGGER.warn(e.getMessage());
+        }
+    }
+
+    /**
+     * {@inheritDoc} Required implementation.
+     */
+    @Override
+    public void sendUserSettingsChangeMsg(final User user) {
+        try {
+            freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates/sms");
+            send(
+                    user.getId(),
+                    null,
+                    null,
+                    null,
+                    NotificationEventType.USER_SETTINGS,
+                    smsProperties.getFromAddress(),
+                    user.getSms(),
+                    FreeMarkerTemplateUtils.processTemplateIntoString(
+                            freemarkerConfig.getTemplate("user_verify_settings.ftl"),
+                            getModelForUser(user)));
+        } catch (IOException | TemplateException e) {
+            LOGGER.warn(e.getMessage());
+        }
+    }
+
+    /**
+     * {@inheritDoc} Required implementation.
+     */
+    @Override
+    public void resendUserSettingsChangeMsg(
+            final User user,
+            String response,
+            String originalMessage) {
+        try {
+            freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates/sms");
+            Map<String, Object> model = getModelForUser(user);
+            model.put("response", response);
+            model.put("original_message", originalMessage);
+            send(
+                    user.getId(),
+                    null,
+                    null,
+                    null,
+                    NotificationEventType.USER_SETTINGS,
+                    smsProperties.getFromAddress(),
+                    user.getSms(),
+                    FreeMarkerTemplateUtils.processTemplateIntoString(
+                            freemarkerConfig.getTemplate("resend_header.ftl"),
+                            model));
+        } catch (IOException | TemplateException e) {
+            LOGGER.warn(e.getMessage());
+        }
+    }
+
+    /**
+     * Sends an SMS
+     *
+     * @param userId user ID
+     * @param eventId event ID
+     * @param quizId quiz ID
+     * @param questionId question ID
+     * @param type NotificationEventType
+     * @param fromAddress from address
+     * @param toAddress to address
+     * @param body body
+     */
+    private void send(
             Long userId,
             Long eventId,
             Long quizId,
@@ -369,6 +602,21 @@ public class SMSServiceImpl implements SMSService {
             }
         }
         return success;
+    }
+
+    /**
+     * Builds model from User information
+     *
+     * @param user User
+     * @return model
+     */
+    private static Map<String, Object> getModelForUser(final User user) {
+        Map<String, Object> model = new HashMap<>();
+        model.put("firstName", user.getFirstName());
+        model.put("lastName", user.getLastName());
+        model.put("userId", user.getId());
+        model.put("host", "http://localhost:8080");
+        return model;
     }
 
 }

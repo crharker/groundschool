@@ -5,6 +5,8 @@
  */
 package com.starfireaviation.groundschool.service;
 
+import com.starfireaviation.groundschool.model.User;
+
 /**
  * EmailService
  *
@@ -13,25 +15,66 @@ package com.starfireaviation.groundschool.service;
 public interface EmailService {
 
     /**
-     * Sends an email
+     * Sends an email for user deletion
      *
-     * @param userId user ID
-     * @param fromAddress from address
-     * @param toAddress to address
-     * @param ccAddress cc address
-     * @param bccAddress bcc address
-     * @param subject subject
-     * @param body body
-     * @param html message body contains HTML?
+     * @param user User
      */
-    public void send(
-            Long userId,
-            String fromAddress,
-            String toAddress,
-            String ccAddress,
-            String bccAddress,
-            String subject,
-            String body,
-            boolean html);
+    public void sendUserDeleteMsg(final User user);
 
+    /**
+     * Sends an email to RSVP for an upcoming event
+     *
+     * @param user User
+     */
+    public void sendEventRSVPMsg(final User user);
+
+    /**
+     * Sends an email that an event has started
+     *
+     * @param user User
+     */
+    public void sendEventStartMsg(final User user);
+
+    /**
+     * Sends an email that a question has been asked
+     *
+     * @param user User
+     */
+    public void sendQuestionAskedMsg(final User user);
+
+    /**
+     * Sends an email for registering for an upcoming event
+     *
+     * @param user User
+     */
+    public void sendEventRegisterMsg(final User user);
+
+    /**
+     * Sends an email for unregistering from an upcoming event
+     *
+     * @param user User
+     */
+    public void sendEventUnregisterMsg(final User user);
+
+    /**
+     * Sends an email message for user settings verified
+     *
+     * @param user User
+     */
+    public void sendUserSettingsVerifiedMsg(final User user);
+
+    /**
+     * Sends an email message for user settings changed
+     *
+     * @param user User
+     */
+    public void sendUserSettingsChangeMsg(final User user);
+
+    /**
+     * Sends an invitation email
+     *
+     * @param user User
+     * @param email email address
+     */
+    public void sendInviteMsg(final User user, String email);
 }
