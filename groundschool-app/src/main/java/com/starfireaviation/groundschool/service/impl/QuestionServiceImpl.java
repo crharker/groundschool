@@ -12,21 +12,26 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import com.starfireaviation.groundschool.model.Answer;
 import com.starfireaviation.groundschool.model.Event;
 import com.starfireaviation.groundschool.model.LessonPlan;
 import com.starfireaviation.groundschool.model.Question;
 import com.starfireaviation.groundschool.model.Quiz;
+import com.starfireaviation.groundschool.model.ReferenceMaterial;
 import com.starfireaviation.groundschool.model.Statistic;
 import com.starfireaviation.groundschool.model.StatisticType;
 import com.starfireaviation.groundschool.model.sql.QuestionEntity;
+import com.starfireaviation.groundschool.model.sql.QuestionReferenceMaterialEntity;
+import com.starfireaviation.groundschool.repository.QuestionReferenceMaterialRepository;
 import com.starfireaviation.groundschool.repository.QuestionRepository;
 import com.starfireaviation.groundschool.service.AnswerService;
 import com.starfireaviation.groundschool.service.EventService;
 import com.starfireaviation.groundschool.service.LessonPlanService;
 import com.starfireaviation.groundschool.service.QuestionService;
 import com.starfireaviation.groundschool.service.QuizService;
+import com.starfireaviation.groundschool.service.ReferenceMaterialService;
 import com.starfireaviation.groundschool.service.StatisticService;
 
 import ma.glasnost.orika.MapperFacade;
@@ -46,6 +51,12 @@ public class QuestionServiceImpl implements QuestionService {
     private QuestionRepository questionRepository;
 
     /**
+     * QuestionReferenceMaterialRepository
+     */
+    @Autowired
+    private QuestionReferenceMaterialRepository questionReferenceMaterialRepository;
+
+    /**
      * AnswerService
      */
     @Autowired
@@ -62,6 +73,12 @@ public class QuestionServiceImpl implements QuestionService {
      */
     @Autowired
     private LessonPlanService lessonPlanService;
+
+    /**
+     * ReferenceMaterialService
+     */
+    @Autowired
+    private ReferenceMaterialService referenceMaterialService;
 
     /**
      * QuizService
@@ -103,11 +120,36 @@ public class QuestionServiceImpl implements QuestionService {
      * {@inheritDoc} Required implementation.
      */
     @Override
-    public Question store(Question user) {
-        if (user == null) {
-            return user;
+    public Question store(Question question) {
+        if (question == null) {
+            return question;
         }
-        return mapper.map(questionRepository.save(mapper.map(user, QuestionEntity.class)), Question.class);
+        Question response = mapper.map(
+                questionRepository.save(mapper.map(question, QuestionEntity.class)),
+                Question.class);
+        final List<Answer> answers = question.getAnswers();
+        final List<Answer> responseAnswers = new ArrayList<>();
+        if (!CollectionUtils.isEmpty(answers)) {
+            for (final Answer answer : answers) {
+                responseAnswers.add(answerService.store(response.getId(), answer));
+            }
+        }
+        response.setAnswers(responseAnswers);
+        final List<ReferenceMaterial> referenceMaterials = question.getReferenceMaterials();
+        final List<ReferenceMaterial> responseReferenceMaterials = new ArrayList<>();
+        if (!CollectionUtils.isEmpty(referenceMaterials)) {
+            for (final ReferenceMaterial referenceMaterial : referenceMaterials) {
+                final QuestionReferenceMaterialEntity questionReferenceMaterialEntity =
+                        new QuestionReferenceMaterialEntity();
+                questionReferenceMaterialEntity.setQuestionId(response.getId());
+                final ReferenceMaterial responseReferenceMaterial = referenceMaterialService.store(referenceMaterial);
+                responseReferenceMaterials.add(responseReferenceMaterial);
+                questionReferenceMaterialEntity.setReferenceMaterialId(responseReferenceMaterial.getId());
+                questionReferenceMaterialRepository.save(questionReferenceMaterialEntity);
+            }
+        }
+        response.setReferenceMaterials(responseReferenceMaterials);
+        return response;
     }
 
     /**
@@ -117,6 +159,13 @@ public class QuestionServiceImpl implements QuestionService {
     public Question delete(long id) {
         final Question question = mapper.map(findQuestionById(id), Question.class);
         if (question != null) {
+            for (Answer answer : question.getAnswers()) {
+                answerService.delete(answer.getId());
+            }
+            for (QuestionReferenceMaterialEntity questionReferenceMaterial : questionReferenceMaterialRepository
+                    .findByQuestionId(id)) {
+                questionReferenceMaterialRepository.delete(questionReferenceMaterial);
+            }
             questionRepository.delete(mapper.map(question, QuestionEntity.class));
         }
         return question;
@@ -130,7 +179,9 @@ public class QuestionServiceImpl implements QuestionService {
         final List<Question> questions = new ArrayList<>();
         final List<QuestionEntity> questionEntities = questionRepository.findAll();
         for (QuestionEntity questionEntity : questionEntities) {
-            questions.add(mapper.map(questionEntity, Question.class));
+            Question question = mapper.map(questionEntity, Question.class);
+            question.setAnswers(answerService.findByQuestionId(question.getId()));
+            questions.add(question);
         }
         return questions;
     }
@@ -140,7 +191,17 @@ public class QuestionServiceImpl implements QuestionService {
      */
     @Override
     public Question findQuestionById(long id) {
-        return mapper.map(questionRepository.findById(id), Question.class);
+        Question response = mapper.map(questionRepository.findById(id), Question.class);
+        response.setAnswers(answerService.findByQuestionId(id));
+        List<ReferenceMaterial> referenceMaterials = new ArrayList<>();
+        for (QuestionReferenceMaterialEntity questionReferenceMaterial : questionReferenceMaterialRepository
+                .findByQuestionId(id)) {
+            referenceMaterials.add(
+                    referenceMaterialService.findReferenceMaterialById(
+                            questionReferenceMaterial.getReferenceMaterialId()));
+        }
+        response.setReferenceMaterials(referenceMaterials);
+        return response;
     }
 
     /**

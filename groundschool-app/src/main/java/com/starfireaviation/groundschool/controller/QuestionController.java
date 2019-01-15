@@ -8,7 +8,6 @@ package com.starfireaviation.groundschool.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,9 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.starfireaviation.groundschool.model.Answer;
 import com.starfireaviation.groundschool.model.Question;
-import com.starfireaviation.groundschool.service.AnswerService;
 import com.starfireaviation.groundschool.service.QuestionService;
 
 import java.security.Principal;
@@ -49,12 +46,6 @@ public class QuestionController {
      */
     @Autowired
     private QuestionService questionService;
-
-    /**
-     * AnswerService
-     */
-    @Autowired
-    private AnswerService answerService;
 
     /**
      * Initializes an instance of <code>QuestionController</code> with the default data.
@@ -85,14 +76,7 @@ public class QuestionController {
         if (question == null) {
             return question;
         }
-        final Question response = questionService.store(question);
-        final List<Answer> answers = question.getAnswers();
-        if (!CollectionUtils.isEmpty(answers)) {
-            for (final Answer answer : answers) {
-                response.addAnswer(answerService.store(response.getId(), answer));
-            }
-        }
-        return response;
+        return questionService.store(question);
     }
 
     /**
@@ -107,9 +91,7 @@ public class QuestionController {
     })
     public Question get(@PathVariable("questionId") long questionId, Principal principal) {
         LOGGER.info(String.format("User is logged in as %s", principal.getName()));
-        final Question question = questionService.findQuestionById(questionId);
-        question.setAnswers(answerService.findByQuestionId(question.getId()));
-        return question;
+        return questionService.findQuestionById(questionId);
     }
 
     /**
@@ -125,14 +107,7 @@ public class QuestionController {
         if (question == null) {
             return question;
         }
-        final Question response = questionService.store(question);
-        final List<Answer> answers = question.getAnswers();
-        if (!CollectionUtils.isEmpty(answers)) {
-            for (final Answer answer : answers) {
-                response.addAnswer(answerService.store(response.getId(), answer));
-            }
-        }
-        return response;
+        return questionService.store(question);
     }
 
     /**
@@ -159,11 +134,7 @@ public class QuestionController {
     @GetMapping
     public List<Question> list(Principal principal) {
         LOGGER.info(String.format("User is logged in as %s", principal.getName()));
-        final List<Question> questions = questionService.findAllQuestions();
-        for (final Question question : questions) {
-            question.setAnswers(answerService.findByQuestionId(question.getId()));
-        }
-        return questions;
+        return questionService.findAllQuestions();
     }
 
     /**

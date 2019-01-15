@@ -10,36 +10,36 @@ import java.util.List;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 
-import com.starfireaviation.groundschool.model.sql.EventUserEntity;
+import com.starfireaviation.groundschool.model.sql.EventInstructorEntity;
 
 /**
  * EventUserRepository
  *
  * @author brianmichael
  */
-public interface EventUserRepository extends Repository<EventUserEntity, Long> {
+public interface EventInstructorRepository extends Repository<EventInstructorEntity, Long> {
 
     /**
-     * Deletes a event user
+     * Deletes a event instructor
      *
-     * @param eventUser EventUser
+     * @param instructor EventUser
      */
-    void delete(EventUserEntity eventUser);
+    void delete(EventInstructorEntity instructor);
 
     /**
-     * Gets all eventUsers
+     * Gets all instructors
      *
      * @return list of EventUser
      */
-    List<EventUserEntity> findAll();
+    List<EventInstructorEntity> findAll();
 
     /**
-     * Gets a eventUser
+     * Gets a instructor
      *
      * @param id Long
      * @return EventUser
      */
-    EventUserEntity findById(long id);
+    EventInstructorEntity findById(long id);
 
     /**
      * Finds all EventUser by eventId
@@ -47,7 +47,7 @@ public interface EventUserRepository extends Repository<EventUserEntity, Long> {
      * @param eventId event ID
      * @return list of EventUser
      */
-    List<EventUserEntity> findByEventId(long eventId);
+    List<EventInstructorEntity> findByEventId(long eventId);
 
     /**
      * Finds all EventUser by userId
@@ -55,7 +55,7 @@ public interface EventUserRepository extends Repository<EventUserEntity, Long> {
      * @param userId user ID
      * @return list of EventUser
      */
-    List<EventUserEntity> findByUserId(long userId);
+    List<EventInstructorEntity> findByUserId(long userId);
 
     /**
      * Finds all EventUser by eventId and userId
@@ -64,8 +64,8 @@ public interface EventUserRepository extends Repository<EventUserEntity, Long> {
      * @param userId user ID
      * @return list of EventUser
      */
-    @Query(value = "SELECT * FROM event_user WHERE event_id = ?1 AND user_id = ?2 LIMIT 1", nativeQuery = true)
-    EventUserEntity findByEventAndUserId(long eventId, long userId);
+    @Query(value = "SELECT * FROM event_instructor WHERE event_id = ?1 AND user_id = ?2 LIMIT 1", nativeQuery = true)
+    EventInstructorEntity findByEventAndUserId(long eventId, long userId);
 
     /**
      * Saves a eventUser
@@ -73,5 +73,5 @@ public interface EventUserRepository extends Repository<EventUserEntity, Long> {
      * @param eventUser EventUser
      * @return EventUser
      */
-    EventUserEntity save(EventUserEntity eventUser);
+    EventInstructorEntity save(EventInstructorEntity eventUser);
 }

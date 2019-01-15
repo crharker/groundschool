@@ -12,13 +12,13 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 /**
- * EventUserEntity
+ * EventParticipantEntity
  *
  * @author brianmichael
  */
 @Entity
-@Table(name = "EVENT_USER")
-public class EventUserEntity extends BaseEntity {
+@Table(name = "EVENT_PARTICIPANT")
+public class EventParticipantEntity extends BaseEntity {
 
     /**
      * Event ID

@@ -82,7 +82,7 @@ public class Message {
     /**
      * To
      */
-    private String to;
+    private String destination;
 
     /**
      * ToZip
@@ -171,7 +171,7 @@ public class Message {
                             fromCountry = URLDecoder.decode(kvPair[1], UTF8);
                             break;
                         case To:
-                            to = URLDecoder.decode(kvPair[1], UTF8);
+                            destination = URLDecoder.decode(kvPair[1], UTF8);
                             break;
                         case ToZip:
                             toZip = URLDecoder.decode(kvPair[1], UTF8);
@@ -418,21 +418,21 @@ public class Message {
     }
 
     /**
-     * Retrieves the value for {@link #to}.
+     * Retrieves the value for {@link #destination}.
      *
      * @return the current value
      */
-    public String getTo() {
-        return to;
+    public String getDestination() {
+        return destination;
     }
 
     /**
-     * Provides a value for {@link #to}.
+     * Provides a value for {@link #destination}.
      *
-     * @param to the new value to set
+     * @param destination the new value to set
      */
-    public void setTo(String to) {
-        this.to = to;
+    public void setDestination(String destination) {
+        this.destination = destination;
     }
 
     /**
@@ -561,7 +561,7 @@ public class Message {
                 + (fromCity != null ? "fromCity=" + fromCity + ", " : "")
                 + (body != null ? "body=" + body + ", " : "")
                 + (fromCountry != null ? "fromCountry=" + fromCountry + ", " : "")
-                + (to != null ? "to=" + to + ", " : "")
+                + (destination != null ? "to=" + destination + ", " : "")
                 + (toZip != null ? "toZip=" + toZip + ", " : "")
                 + (numSegments != null ? "numSegments=" + numSegments + ", " : "")
                 + (messageSid != null ? "messageSid=" + messageSid + ", " : "")

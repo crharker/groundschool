@@ -25,15 +25,21 @@ public class QuestionEntity extends BaseEntity {
     private String text;
 
     /**
+     * Course
+     */
+    @Column(name = "course", length = 255)
+    private String course;
+
+    /**
      * Unit
      */
-    @Column(name = "unit", length = 100)
+    @Column(name = "unit", length = 255)
     private String unit;
 
     /**
      * SubUnit
      */
-    @Column(name = "sub_unit", length = 100)
+    @Column(name = "sub_unit", length = 255)
     private String subUnit;
 
     /**
@@ -160,6 +166,24 @@ public class QuestionEntity extends BaseEntity {
      */
     public void setDuration(Integer duration) {
         this.duration = duration;
+    }
+
+    /**
+     * Retrieves the value for {@link #course}.
+     *
+     * @return the current value
+     */
+    public String getCourse() {
+        return course;
+    }
+
+    /**
+     * Provides a value for {@link #course}.
+     *
+     * @param course the new value to set
+     */
+    public void setCourse(String course) {
+        this.course = course;
     }
 
 }

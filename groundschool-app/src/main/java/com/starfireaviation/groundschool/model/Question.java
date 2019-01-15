@@ -26,6 +26,11 @@ public class Question extends Base {
     private String text;
 
     /**
+     * Course
+     */
+    private String course;
+
+    /**
      * Unit
      */
     private String unit;
@@ -49,6 +54,11 @@ public class Question extends Base {
      * Answers
      */
     private List<Answer> answers;
+
+    /**
+     * Reference Materials
+     */
+    private List<ReferenceMaterial> referenceMaterials;
 
     /**
      * Duration in seconds
@@ -191,5 +201,41 @@ public class Question extends Base {
      */
     public void setDuration(Integer duration) {
         this.duration = duration;
+    }
+
+    /**
+     * Retrieves the value for {@link #referenceMaterials}.
+     *
+     * @return the current value
+     */
+    public List<ReferenceMaterial> getReferenceMaterials() {
+        return referenceMaterials;
+    }
+
+    /**
+     * Provides a value for {@link #referenceMaterials}.
+     *
+     * @param referenceMaterials the new value to set
+     */
+    public void setReferenceMaterials(List<ReferenceMaterial> referenceMaterials) {
+        this.referenceMaterials = referenceMaterials;
+    }
+
+    /**
+     * Retrieves the value for {@link #course}.
+     *
+     * @return the current value
+     */
+    public String getCourse() {
+        return course;
+    }
+
+    /**
+     * Provides a value for {@link #course}.
+     *
+     * @param course the new value to set
+     */
+    public void setCourse(String course) {
+        this.course = course;
     }
 }

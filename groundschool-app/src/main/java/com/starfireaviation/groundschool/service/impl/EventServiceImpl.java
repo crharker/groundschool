@@ -15,9 +15,9 @@ import org.springframework.stereotype.Service;
 
 import com.starfireaviation.groundschool.model.Event;
 import com.starfireaviation.groundschool.model.sql.EventEntity;
-import com.starfireaviation.groundschool.model.sql.EventUserEntity;
+import com.starfireaviation.groundschool.model.sql.EventParticipantEntity;
 import com.starfireaviation.groundschool.repository.EventRepository;
-import com.starfireaviation.groundschool.repository.EventUserRepository;
+import com.starfireaviation.groundschool.repository.EventParticipantRepository;
 import com.starfireaviation.groundschool.service.EventService;
 
 import ma.glasnost.orika.MapperFacade;
@@ -40,7 +40,7 @@ public class EventServiceImpl implements EventService {
      * EventUserRepository
      */
     @Autowired
-    private EventUserRepository eventUserRepository;
+    private EventParticipantRepository eventUserRepository;
 
     /**
      * MapperFacade
@@ -118,7 +118,7 @@ public class EventServiceImpl implements EventService {
         if (eventId == null || userId == null) {
             return;
         }
-        List<EventUserEntity> eventUserEntities = eventUserRepository.findByEventId(eventId);
+        List<EventParticipantEntity> eventUserEntities = eventUserRepository.findByEventId(eventId);
         if (CollectionUtils.isEmpty(eventUserEntities)) {
             if (confirm) {
                 register(eventId, userId);
@@ -126,7 +126,7 @@ public class EventServiceImpl implements EventService {
             eventUserEntities = eventUserRepository.findByEventId(eventId);
         }
         if (!CollectionUtils.isEmpty(eventUserEntities)) {
-            for (EventUserEntity eventUserEntity : eventUserEntities) {
+            for (EventParticipantEntity eventUserEntity : eventUserEntities) {
                 if (userId == eventUserEntity.getUserId()) {
                     if (confirm) {
                         eventUserEntity.setConfirmed(true);
@@ -152,7 +152,7 @@ public class EventServiceImpl implements EventService {
         if (eventId == null || userId == null) {
             return;
         }
-        EventUserEntity eventUserEntity = new EventUserEntity();
+        EventParticipantEntity eventUserEntity = new EventParticipantEntity();
         eventUserEntity.setEventId(eventId);
         eventUserEntity.setUserId(userId);
         eventUserRepository.save(eventUserEntity);
@@ -166,8 +166,8 @@ public class EventServiceImpl implements EventService {
         if (eventId == null || userId == null) {
             return;
         }
-        List<EventUserEntity> eventUserEntities = eventUserRepository.findByEventId(eventId);
-        for (EventUserEntity eventUserEntity : eventUserEntities) {
+        List<EventParticipantEntity> eventUserEntities = eventUserRepository.findByEventId(eventId);
+        for (EventParticipantEntity eventUserEntity : eventUserEntities) {
             if (userId == eventUserEntity.getUserId()) {
                 eventUserRepository.delete(eventUserEntity);
                 break;
@@ -181,7 +181,7 @@ public class EventServiceImpl implements EventService {
     @Override
     public boolean checkin(Long eventId, Long userId, String code) {
         boolean success = false;
-        EventUserEntity eventUserEntity = eventUserRepository.findByEventAndUserId(eventId, userId);
+        EventParticipantEntity eventUserEntity = eventUserRepository.findByEventAndUserId(eventId, userId);
         Event event = findById(eventId);
         if (eventUserEntity != null
                 && event != null
@@ -200,7 +200,7 @@ public class EventServiceImpl implements EventService {
      */
     @Override
     public boolean didCheckIn(Long eventId, Long userId) {
-        EventUserEntity eventUserEntity = eventUserRepository.findByEventAndUserId(eventId, userId);
+        EventParticipantEntity eventUserEntity = eventUserRepository.findByEventAndUserId(eventId, userId);
         if (eventUserEntity != null && eventUserEntity.getCheckedIn() != null) {
             return eventUserEntity.getCheckedIn().booleanValue();
         }
@@ -213,9 +213,9 @@ public class EventServiceImpl implements EventService {
     @Override
     public List<Long> getAllEventUsers(Long eventId) {
         List<Long> userIds = new ArrayList<>();
-        List<EventUserEntity> eventUserEntities = eventUserRepository.findByEventId(eventId);
+        List<EventParticipantEntity> eventUserEntities = eventUserRepository.findByEventId(eventId);
         if (eventUserEntities != null) {
-            for (EventUserEntity eventUserEntity : eventUserEntities) {
+            for (EventParticipantEntity eventUserEntity : eventUserEntities) {
                 userIds.add(eventUserEntity.getUserId());
             }
         }
