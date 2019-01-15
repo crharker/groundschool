@@ -222,6 +222,18 @@ public class Question extends Base {
     }
 
     /**
+     * Adds a reference material
+     *
+     * @param referenceMaterial ReferenceMaterial
+     */
+    public void addReferenceMaterial(ReferenceMaterial referenceMaterial) {
+        if (referenceMaterials == null) {
+            referenceMaterials = new ArrayList<>();
+        }
+        referenceMaterials.add(referenceMaterial);
+    }
+
+    /**
      * Retrieves the value for {@link #course}.
      *
      * @return the current value

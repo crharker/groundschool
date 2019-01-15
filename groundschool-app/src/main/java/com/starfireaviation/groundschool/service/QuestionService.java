@@ -56,4 +56,22 @@ public interface QuestionService {
      * @return answered correctly?
      */
     public boolean answer(long questionId, long userId, String selection);
+
+    /**
+     * Assigns reference material to a question
+     *
+     * @param questionId Long
+     * @param referenceMaterialId Long
+     * @return assignment successful
+     */
+    public boolean assignReferenceMaterial(long questionId, long referenceMaterialId);
+
+    /**
+     * Unassigns reference material from a question
+     *
+     * @param questionId Long
+     * @param referenceMaterialId Long
+     * @return unassignment successful
+     */
+    public boolean unassignReferenceMaterial(long questionId, long referenceMaterialId);
 }

@@ -200,9 +200,11 @@ public class EventServiceImpl implements EventService {
      */
     @Override
     public boolean didCheckIn(Long eventId, Long userId) {
-        EventParticipantEntity eventUserEntity = eventUserRepository.findByEventAndUserId(eventId, userId);
-        if (eventUserEntity != null && eventUserEntity.getCheckedIn() != null) {
-            return eventUserEntity.getCheckedIn().booleanValue();
+        if (eventId != null && userId != null) {
+            EventParticipantEntity eventUserEntity = eventUserRepository.findByEventAndUserId(eventId, userId);
+            if (eventUserEntity != null && eventUserEntity.getCheckedIn() != null) {
+                return eventUserEntity.getCheckedIn().booleanValue();
+            }
         }
         return false;
     }

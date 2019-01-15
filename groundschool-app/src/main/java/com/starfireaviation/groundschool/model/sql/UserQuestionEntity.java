@@ -21,6 +21,41 @@ import javax.persistence.Table;
 public class UserQuestionEntity extends BaseEntity {
 
     /**
+     * QUESTION_ID
+     */
+    public static final String QUESTION_ID = "QUESTION_ID";
+
+    /**
+     * QUIZ_ID
+     */
+    public static final String QUIZ_ID = "QUIZ_ID";
+
+    /**
+     * EVENT_ID
+     */
+    public static final String EVENT_ID = "EVENT_ID";
+
+    /**
+     * USER_ID
+     */
+    public static final String USER_ID = "USER_ID";
+
+    /**
+     * TIME
+     */
+    public static final String TIME = "TIME";
+
+    /**
+     * ANSWER_GIVEN
+     */
+    public static final String ANSWER_GIVEN = "ANSWER_GIVEN";
+
+    /**
+     * ANSWERED_CORRECTLY
+     */
+    public static final String ANSWERED_CORRECTLY = "ANSWERED_CORRECTLY";
+
+    /**
      * Question ID
      */
     @Column(name = "question_id", nullable = false)

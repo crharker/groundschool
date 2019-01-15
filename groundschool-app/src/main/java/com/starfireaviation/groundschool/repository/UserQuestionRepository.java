@@ -41,6 +41,38 @@ public interface UserQuestionRepository extends Repository<UserQuestionEntity, L
     UserQuestionEntity findById(long id);
 
     /**
+     * Gets all UserQuestions by User ID
+     *
+     * @param id Long
+     * @return UserQuestion
+     */
+    List<UserQuestionEntity> findByUserId(long id);
+
+    /**
+     * Gets all UserQuestions by Event ID
+     *
+     * @param id Long
+     * @return UserQuestion
+     */
+    List<UserQuestionEntity> findByEventId(long id);
+
+    /**
+     * Gets all UserQuestions by Question ID
+     *
+     * @param id Long
+     * @return UserQuestion
+     */
+    List<UserQuestionEntity> findByQuestionId(long id);
+
+    /**
+     * Gets all UserQuestions by Quiz ID
+     *
+     * @param id Long
+     * @return UserQuestion
+     */
+    List<UserQuestionEntity> findByQuizId(long id);
+
+    /**
      * Saves a UserQuestion
      *
      * @param userQuestion UserQuestion

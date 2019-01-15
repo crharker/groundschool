@@ -139,14 +139,11 @@ public class QuestionServiceImpl implements QuestionService {
         final List<ReferenceMaterial> responseReferenceMaterials = new ArrayList<>();
         if (!CollectionUtils.isEmpty(referenceMaterials)) {
             for (final ReferenceMaterial referenceMaterial : referenceMaterials) {
-                final QuestionReferenceMaterialEntity questionReferenceMaterialEntity =
-                        new QuestionReferenceMaterialEntity();
-                questionReferenceMaterialEntity.setQuestionId(response.getId());
-                final ReferenceMaterial responseReferenceMaterial = referenceMaterialService.store(referenceMaterial);
+                ReferenceMaterial responseReferenceMaterial = referenceMaterialService.store(referenceMaterial);
+                assignReferenceMaterial(response.getId(), responseReferenceMaterial.getId());
                 responseReferenceMaterials.add(responseReferenceMaterial);
-                questionReferenceMaterialEntity.setReferenceMaterialId(responseReferenceMaterial.getId());
-                questionReferenceMaterialRepository.save(questionReferenceMaterialEntity);
             }
+            // TODO unassign reference material not found in list
         }
         response.setReferenceMaterials(responseReferenceMaterials);
         return response;
@@ -181,6 +178,15 @@ public class QuestionServiceImpl implements QuestionService {
         for (QuestionEntity questionEntity : questionEntities) {
             Question question = mapper.map(questionEntity, Question.class);
             question.setAnswers(answerService.findByQuestionId(question.getId()));
+            final List<QuestionReferenceMaterialEntity> questionReferenceMaterialEntities =
+                    questionReferenceMaterialRepository.findAll();
+            for (QuestionReferenceMaterialEntity questionReferenceMaterial : questionReferenceMaterialEntities) {
+                if (question.getId() == questionReferenceMaterial.getQuestionId()) {
+                    question.addReferenceMaterial(
+                            referenceMaterialService.findReferenceMaterialById(
+                                    questionReferenceMaterial.getReferenceMaterialId()));
+                }
+            }
             questions.add(question);
         }
         return questions;
@@ -248,6 +254,45 @@ public class QuestionServiceImpl implements QuestionService {
         statisticService.store(statistic);
 
         return answeredCorrectly;
+    }
+
+    /**
+     * {@inheritDoc} Required implementation.
+     */
+    @Override
+    public boolean assignReferenceMaterial(long questionId, long referenceMaterialId) {
+        boolean success = false;
+        Question question = findQuestionById(questionId);
+        ReferenceMaterial referenceMaterial = referenceMaterialService.findReferenceMaterialById(referenceMaterialId);
+        if (question != null
+                && referenceMaterial != null
+                && questionReferenceMaterialRepository.findByQuestionAndReferenceMaterialId(
+                        questionId,
+                        referenceMaterialId) == null) {
+            QuestionReferenceMaterialEntity questionReferenceMaterialEntity = new QuestionReferenceMaterialEntity();
+            questionReferenceMaterialEntity.setQuestionId(questionId);
+            questionReferenceMaterialEntity.setReferenceMaterialId(referenceMaterialId);
+            questionReferenceMaterialRepository.save(questionReferenceMaterialEntity);
+            success = true;
+        }
+        return success;
+    }
+
+    /**
+     * {@inheritDoc} Required implementation.
+     */
+    @Override
+    public boolean unassignReferenceMaterial(long questionId, long referenceMaterialId) {
+        boolean success = false;
+        QuestionReferenceMaterialEntity questionReferenceMaterialEntity = questionReferenceMaterialRepository
+                .findByQuestionAndReferenceMaterialId(
+                        questionId,
+                        referenceMaterialId);
+        if (questionReferenceMaterialEntity != null) {
+            questionReferenceMaterialRepository.delete(questionReferenceMaterialEntity);
+            success = true;
+        }
+        return success;
     }
 
 }

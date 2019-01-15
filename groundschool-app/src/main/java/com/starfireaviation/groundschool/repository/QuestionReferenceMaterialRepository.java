@@ -7,6 +7,7 @@ package com.starfireaviation.groundschool.repository;
 
 import java.util.List;
 
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 
 import com.starfireaviation.groundschool.model.sql.QuestionReferenceMaterialEntity;
@@ -55,6 +56,17 @@ public interface QuestionReferenceMaterialRepository extends Repository<Question
      * @return QuestionReferenceMaterialEntity
      */
     List<QuestionReferenceMaterialEntity> findByReferenceMaterialId(long id);
+
+    /**
+     * Finds the QuestionReferenceMaterialEntity by questionId and referenceMaterialId
+     *
+     * @param questionId Question ID
+     * @param referenceMaterialId ReferenceMaterial ID
+     * @return list of EventUser
+     */
+    @Query(value = "SELECT * FROM question_reference_material WHERE question_id = ?1 AND reference_material_id = ?2 LIMIT 1",
+            nativeQuery = true)
+    QuestionReferenceMaterialEntity findByQuestionAndReferenceMaterialId(long questionId, long referenceMaterialId);
 
     /**
      * Saves a QuestionReferenceMaterialEntity

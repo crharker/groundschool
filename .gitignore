@@ -58,6 +58,7 @@ bin/
 compile.sh
 run.sh
 run_test.sh
+*.questions
 
 tmp/
 *.tmp

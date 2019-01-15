@@ -12,7 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.starfireaviation.groundschool.model.ReferenceMaterial;
+import com.starfireaviation.groundschool.model.sql.QuestionReferenceMaterialEntity;
 import com.starfireaviation.groundschool.model.sql.ReferenceMaterialEntity;
+import com.starfireaviation.groundschool.repository.QuestionReferenceMaterialRepository;
 import com.starfireaviation.groundschool.repository.ReferenceMaterialRepository;
 import com.starfireaviation.groundschool.service.ReferenceMaterialService;
 import ma.glasnost.orika.MapperFacade;
@@ -30,6 +32,12 @@ public class ReferenceMaterialServiceImpl implements ReferenceMaterialService {
      */
     @Autowired
     private ReferenceMaterialRepository referenceMaterialRepository;
+
+    /**
+     * QuestionReferenceMaterialRepository
+     */
+    @Autowired
+    private QuestionReferenceMaterialRepository questionReferenceMaterialRepository;
 
     /**
      * MapperFacade
@@ -78,6 +86,10 @@ public class ReferenceMaterialServiceImpl implements ReferenceMaterialService {
         ReferenceMaterial referenceMaterial = mapper.map(findReferenceMaterialById(id), ReferenceMaterial.class);
         if (referenceMaterial != null) {
             referenceMaterialRepository.delete(mapper.map(referenceMaterial, ReferenceMaterialEntity.class));
+            for (QuestionReferenceMaterialEntity questionReferenceMaterial : questionReferenceMaterialRepository
+                    .findByReferenceMaterialId(id)) {
+                questionReferenceMaterialRepository.delete(questionReferenceMaterial);
+            }
         }
         return referenceMaterial;
     }

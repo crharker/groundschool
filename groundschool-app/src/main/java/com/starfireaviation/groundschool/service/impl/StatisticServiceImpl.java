@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,10 +34,15 @@ import ma.glasnost.orika.MapperFacade;
 public class StatisticServiceImpl implements StatisticService {
 
     /**
+     * Logger
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(StatisticServiceImpl.class);
+
+    /**
      * QUESTION_ANSWERED_PATTERN
      */
     private static final Pattern QUESTION_ANSWERED_PATTERN = Pattern.compile(
-            "Duration [(.*?)]; Question ID [(.*?)]; Event ID [(.*?)]; Quiz ID [(.*?)]; Answer Given [(.*?)]; Answered Correctly [(.*?)]");
+            "Duration \\[(.*?)\\]; Question ID \\[(.*?)\\]; Event ID \\[(.*?)\\]; Quiz ID \\[(.*?)\\]; Answer Given \\[(.*?)\\]; Answered Correctly \\[(.*?)\\]");
 
     /**
      * StatisticRepository
@@ -140,13 +147,30 @@ public class StatisticServiceImpl implements StatisticService {
             final UserQuestionEntity userQuestionEntity = new UserQuestionEntity();
             userQuestionEntity.setTime(LocalDateTime.now());
             userQuestionEntity.setUserId(statistic.getUserId());
-            userQuestionEntity.setQuestionId(Long.parseLong(matcher.group(2)));
-            userQuestionEntity.setEventId(Long.parseLong(matcher.group(3)));
-            userQuestionEntity.setQuizId(Long.parseLong(matcher.group(4)));
+            userQuestionEntity.setQuestionId(getLongValueDefaulted(matcher.group(2), 0L));
+            userQuestionEntity.setEventId(getLongValueDefaulted(matcher.group(3), 0L));
+            userQuestionEntity.setQuizId(getLongValueDefaulted(matcher.group(4), 0L));
             userQuestionEntity.setAnswerGiven(matcher.group(5));
             userQuestionEntity.setAnsweredCorrectly(Boolean.parseBoolean(matcher.group(6)));
             return userQuestionEntity;
         }
         return null;
+    }
+
+    /**
+     * Gets long value from string
+     *
+     * @param toBeParsed string to be parsed
+     * @param defaultValue default value
+     * @return value
+     */
+    private static long getLongValueDefaulted(String toBeParsed, long defaultValue) {
+        long value = defaultValue;
+        try {
+            value = Long.parseLong(toBeParsed);
+        } catch (NumberFormatException nfe) {
+            // Do nothing
+        }
+        return value;
     }
 }

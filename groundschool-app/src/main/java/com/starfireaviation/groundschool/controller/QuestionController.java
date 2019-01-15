@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.starfireaviation.groundschool.model.Question;
 import com.starfireaviation.groundschool.service.QuestionService;
-
 import java.security.Principal;
 import java.util.List;
 
@@ -156,6 +155,42 @@ public class QuestionController {
             Principal principal) {
         LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         return questionService.answer(questionId, userId, selection);
+    }
+
+    /**
+     * Assigns reference material to a question
+     *
+     * @param questionId Event ID
+     * @param referenceMaterialId LessonPlan ID
+     * @param principal Principal
+     */
+    @PostMapping(path = {
+            "/{questionId}/assign/referencematerial/{referenceMaterialId}"
+    })
+    public void assignReferenceMaterial(
+            @PathVariable("questionId") long questionId,
+            @PathVariable("referenceMaterialId") long referenceMaterialId,
+            Principal principal) {
+        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
+        questionService.assignReferenceMaterial(questionId, referenceMaterialId);
+    }
+
+    /**
+     * Unassigns reference material from a question
+     *
+     * @param questionId Event ID
+     * @param referenceMaterialId LessonPlan ID
+     * @param principal Principal
+     */
+    @PostMapping(path = {
+            "/{questionId}/unassign/referencematerial/{referenceMaterialId}"
+    })
+    public void unassignReferenceMaterial(
+            @PathVariable("questionId") long questionId,
+            @PathVariable("referenceMaterialId") long referenceMaterialId,
+            Principal principal) {
+        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
+        questionService.unassignReferenceMaterial(questionId, referenceMaterialId);
     }
 
 }
