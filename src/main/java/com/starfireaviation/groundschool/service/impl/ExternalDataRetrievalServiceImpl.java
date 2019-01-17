@@ -228,26 +228,40 @@ public class ExternalDataRetrievalServiceImpl implements ExternalDataRetrievalSe
      * @param eaaNumber EAA number
      * @return MemberDetails
      */
-    private static MemberDetails getEAAMemberInfo(String lastName, String eaaNumber) {
+    private MemberDetails getEAAMemberInfo(String lastName, String eaaNumber) {
 
-        //final HttpHeaders headers = new HttpHeaders();
-        //headers.add("Content-Type", "application/x-www-form-urlencoded");
-        //headers.add("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8");
-        //headers.add("Accept-Encoding", "gzip, deflate, br");
-        //headers.add("Accept-Language", "en-US,en;q=0.9");
+        final HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/x-www-form-urlencoded");
+        headers.add("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8");
+        headers.add("Accept-Encoding", "gzip, deflate, br");
+        headers.add("Accept-Language", "en-US,en;q=0.9");
 
-        //final HttpEntity<String> entity = new HttpEntity<>(postBody, headers);
+        final String postBody =
+                "__VIEWSTATE=%2BhKOvO7iur7kHOFIfXSm83REoVIN1Gx8trrY5uz8SGQYoNmrH%2BwMZgVG6nPRpSvowb3TarpIyH%2BqiqAflZu4oPaOyu98JpGLIeBtz0QSS6Y6XXG9yor5izpl%2BEXEWU039YC5KVae%2B5uWLDtwG%2FUKfu5JgnCMZnnJAlBAO8%2FL1coV82z0%2BzH0kP10ZMSbO76wvN1RdQAEjVa4EGS90v5GjV2bW4D8H6Zm5I4sgQhkoqE%3D&__VIEWSTATEGENERATOR=5D60DA57&__EVENTVALIDATION=4zdDhlCJo3CfhqwHxLNZnLLQmgYNgInL1cxsFxCmXo0PM%2BrGukxzhbmQ7spZuYRwgqyZPCAvtS7JtQN%2BX7RwWVBjfAv9MQQDXuBWyjNDocFkJdnAzrh9qptPoGHDOwBWgUjKV3kQen45rH5UgllTN3XnXdcQyvSuXM61085l0119UN8K5YbjqMQw5Q7XysJDvD5n4K88R0Hvpa4djT8lF9smjBzzgEXJAcbdoe9B3VpoSBrZFd5Nxg5x%2B9PkuwDTe1kwXY9M7Buc%2F6e7%2B7CJ1Q%3D%3D&ctl00%24ContentPlaceHolder1%24lastname=%s&ctl00%24ContentPlaceHolder1%24membernumber=%s&ctl00%24ContentPlaceHolder1%24lastname2=&ctl00%24ContentPlaceHolder1%24membernumber2=&ctl00%24ContentPlaceHolder1%24%s";
+        final String checkButton = "Button1=Check";
+        final HttpEntity<String> checkEntity = new HttpEntity<>(
+                String.format(postBody, lastName, eaaNumber, checkButton),
+                headers);
 
-        //final ResponseEntity<String> responseEntity =
-        //        restTemplate.exchange(
-        //                "https://www.eaa.org/apps/chapters/chapterpersonlookup.aspx",
-        //                HttpMethod.POST,
-        //                entity,
-        //                String.class);
+        final String uriString = "https://www.eaa.org/apps/chapters/chapterpersonlookup.aspx";
+        final URI builtUri = UriComponentsBuilder
+                .fromHttpUrl(uriString)
+                .build()
+                .encode()
+                .toUri();
+        final ResponseEntity<String> responseEntity =
+                restTemplate.exchange(builtUri, HttpMethod.POST, checkEntity, String.class);
 
-        //String response = responseEntity.getBody();
-        //System.out.println(response);
-        return null;
+        final String response = responseEntity.getBody();
+
+        // Reset form (and ignore response)
+        final String resetButton = "Button2=Reset";
+        final HttpEntity<String> resetEntity = new HttpEntity<>(
+                String.format(postBody, lastName, eaaNumber, resetButton),
+                headers);
+        restTemplate.exchange(builtUri, HttpMethod.POST, resetEntity, String.class);
+
+        return HtmlResponseParser.parseEAAMemberInfo(response);
     }
 
     /**

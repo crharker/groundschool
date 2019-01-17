@@ -8,6 +8,7 @@ package com.starfireaviation.groundschool.util;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.regex.Matcher;
@@ -27,23 +28,42 @@ import com.starfireaviation.groundschool.model.MemberDetails;
 public class HtmlResponseParser {
 
     /**
-     * Page number pattern
+     * PAGE_NUMBER_PATTERN
      */
     private static final Pattern PAGE_NUMBER_PATTERN = Pattern.compile("\\d\\s*of\\s*(\\d*)", Pattern.DOTALL);
 
     /**
-     * Member list pattern
+     * NAME_PATTERN
+     */
+    private static final Pattern NAME_PATTERN = Pattern.compile(
+            "<legend>Details - (.*?) (.*?) .*</legend>",
+            Pattern.DOTALL);
+
+    /**
+     * EAA_MEMBER_PATTERN
+     */
+    private static final Pattern EAA_MEMBER_PATTERN = Pattern.compile(
+            "<span id=\\\"ContentPlaceHolder1_expdate\\\">This member's expiration date is: (.*?)</span>",
+            Pattern.DOTALL);
+
+    /**
+     * MEMBER_LIST_PATTERN
      */
     private static final Pattern MEMBER_LIST_PATTERN = Pattern.compile(
             "<tr>.*?<td>(.*?)</td>.*?<td>.*?<a href=\\\"/Member/Edit/(.*?)\\\">.*?</td>.*?<td>(.*?)</td>.*?<td>.*?<a href=\\\"/Member/Edit/(.*?)\\\">.*?</td>",
             Pattern.DOTALL);
 
     /**
-     * Non-member list pattern
+     * NON_MEMBER_LIST_PATTERN
      */
     private static final Pattern NON_MEMBER_LIST_PATTERN = Pattern.compile(
             "<tr>.*?<td>(.*?)</td>.*?<td>.*?<a href=\\\"/NonMember/Edit/(.*?)\\\">.*?</td>.*?<td>(.*?)</td>.*?<td>.*?<a href=\\\"/NonMember/Edit/(.*?)\\\">.*?</td>",
             Pattern.DOTALL);
+
+    /**
+     * SimpleDateFormat - Date format is: 2/28/2019
+     */
+    private static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
 
     /**
      * Logger
@@ -61,6 +81,53 @@ public class HtmlResponseParser {
     private static final String CLOSE_TABLE_DATA = "</td>";
 
     /**
+     * Parses HTML response from call to https://www.eaa.org/apps/chapters/chapterpersonlookup.aspx
+     *
+     * @param response from call to https://www.eaa.org/apps/chapters/chapterpersonlookup.aspx
+     * @return MemberDetails
+     */
+    public static MemberDetails parseEAAMemberInfo(String response) {
+        MemberDetails memberDetails = new MemberDetails();
+        final Matcher matcher = EAA_MEMBER_PATTERN.matcher(response);
+        if (matcher.find()) {
+            final String dateStr = matcher.group(1);
+            LOGGER.info(String.format("parseEAAMemberInfo() found [%s]", dateStr));
+            try {
+                final Date expirationDate = SIMPLE_DATE_FORMAT.parse(dateStr);
+                memberDetails.setEaaMemberExpiryDate(expirationDate);
+                memberDetails.setEaaPaid(new Date().before(expirationDate));
+            } catch (ParseException e) {
+                LOGGER.warn(
+                        String.format(
+                                "parseEAAMemberInfo() Unable to parse date [%s].  Msg: %s",
+                                dateStr,
+                                e.getMessage()));
+            }
+        }
+        return memberDetails;
+    }
+
+    /**
+     * Parses HTML response from call to https://www.eaa.org/apps/chapters/chapterpersonlookup.aspx
+     *
+     * @param response from call to https://www.eaa.org/apps/chapters/chapterpersonlookup.aspx
+     * @return MemberDetails
+     */
+    public static MemberDetails parseEAAMemberTraining(String response) {
+        //MemberDetails memberDetails = new MemberDetails();
+        //final Matcher matcher = EAA_MEMBER_PATTERN.matcher(response);
+        //if (matcher.find()) {
+        //    try {
+        //        memberDetails.setEaaMemberExpiryDate(sdf.parse(matcher.group(1)));
+        //        memberDetails.setEaaPaid(true);
+        //    } catch (ParseException e) {
+        //        LOGGER.warn(String.format("Unable to parse date [%s].  Msg: %s", matcher.group(1), e.getMessage()));
+        //    }
+        //}
+        return null;
+    }
+
+    /**
      * Parses HTML response from call to http://eaa690.net/Member/Details/<ID>
      *
      * @param response HTML response string
@@ -70,6 +137,11 @@ public class HtmlResponseParser {
         final MemberDetails memberDetails = new MemberDetails();
         if (response == null) {
             return memberDetails;
+        }
+        final Matcher nameMatcher = NAME_PATTERN.matcher(response);
+        if (nameMatcher.find()) {
+            memberDetails.setFirstName(nameMatcher.group(1));
+            memberDetails.setLastName(nameMatcher.group(2));
         }
         final String fieldset = response.substring(
                 response.indexOf("<fieldset>"),
@@ -99,8 +171,7 @@ public class HtmlResponseParser {
             memberDetails.setChapterMember(isCheckBoxSelected(memberPaidDateList.get(0)));
             memberDetails.setChapterPaid(isCheckBoxSelected(memberPaidDateList.get(1)));
             try {
-                final SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
-                memberDetails.setChapterDatePaid(sdf.parse(memberPaidDateList.get(2)));
+                memberDetails.setChapterDatePaid(SIMPLE_DATE_FORMAT.parse(memberPaidDateList.get(2)));
             } catch (ParseException e) {
                 LOGGER.warn("Unable to parse chapter date paid.  " + e.getMessage());
             }
@@ -152,11 +223,13 @@ public class HtmlResponseParser {
      * @return list of MemberDetails
      */
     public static List<MemberDetails> parseEAA690NonMembersResponse(final String response) {
+        //LOGGER.info(String.format("parseEAA690NonMembersResponse() parsing response [%s]", response));
         final List<MemberDetails> memberDetailsList = new ArrayList<>();
         try {
             final String fieldset = response.substring(
                     response.indexOf("<fieldset>"),
                     response.lastIndexOf("</fieldset>") + 11);
+            LOGGER.info(String.format("parseEAA690NonMembersResponse() parsing fieldset [%s]", fieldset));
             int fieldsetIndex = 0;
             while (fieldsetIndex < fieldset.length()) {
                 fieldsetIndex = fieldset.indexOf("<tr>", fieldsetIndex);
@@ -192,11 +265,13 @@ public class HtmlResponseParser {
      * @return list of MemberDetails
      */
     public static List<MemberDetails> parseEAA690MembersResponse(String response) {
+        //LOGGER.info(String.format("parseEAA690MembersResponse() parsing response [%s]", response));
         final List<MemberDetails> memberDetailsList = new ArrayList<>();
         try {
             final String fieldset = response.substring(
                     response.indexOf("<fieldset>"),
                     response.lastIndexOf("</fieldset>") + 11);
+            LOGGER.info(String.format("parseEAA690MembersResponse() parsing fieldset [%s]", fieldset));
             int fieldsetIndex = 0;
             while (fieldsetIndex < fieldset.length()) {
                 fieldsetIndex = fieldset.indexOf("<tr>", fieldsetIndex);
@@ -435,4 +510,5 @@ public class HtmlResponseParser {
         }
         return trList;
     }
+
 }
