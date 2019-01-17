@@ -91,7 +91,7 @@ public class HtmlResponseParser {
         final Matcher matcher = EAA_MEMBER_PATTERN.matcher(response);
         if (matcher.find()) {
             final String dateStr = matcher.group(1);
-            LOGGER.info(String.format("parseEAAMemberInfo() found [%s]", dateStr));
+            //LOGGER.info(String.format("parseEAAMemberInfo() found [%s]", dateStr));
             try {
                 final Date expirationDate = SIMPLE_DATE_FORMAT.parse(dateStr);
                 memberDetails.setEaaMemberExpiryDate(expirationDate);
@@ -229,7 +229,7 @@ public class HtmlResponseParser {
             final String fieldset = response.substring(
                     response.indexOf("<fieldset>"),
                     response.lastIndexOf("</fieldset>") + 11);
-            LOGGER.info(String.format("parseEAA690NonMembersResponse() parsing fieldset [%s]", fieldset));
+            //LOGGER.info(String.format("parseEAA690NonMembersResponse() parsing fieldset [%s]", fieldset));
             int fieldsetIndex = 0;
             while (fieldsetIndex < fieldset.length()) {
                 fieldsetIndex = fieldset.indexOf("<tr>", fieldsetIndex);
@@ -271,7 +271,7 @@ public class HtmlResponseParser {
             final String fieldset = response.substring(
                     response.indexOf("<fieldset>"),
                     response.lastIndexOf("</fieldset>") + 11);
-            LOGGER.info(String.format("parseEAA690MembersResponse() parsing fieldset [%s]", fieldset));
+            //LOGGER.info(String.format("parseEAA690MembersResponse() parsing fieldset [%s]", fieldset));
             int fieldsetIndex = 0;
             while (fieldsetIndex < fieldset.length()) {
                 fieldsetIndex = fieldset.indexOf("<tr>", fieldsetIndex);
