@@ -128,4 +128,5 @@ logs/
 
 # Angular 
 dist
+node
 node_modules
