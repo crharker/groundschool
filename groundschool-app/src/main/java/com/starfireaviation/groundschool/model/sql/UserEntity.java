@@ -115,6 +115,12 @@ public class UserEntity extends BaseEntity {
     private String lastName;
 
     /**
+     * EAA Number
+     */
+    @Column(name = "eaa_number")
+    private String eaaNumber;
+
+    /**
      * Role
      */
     @Column(name = "role", nullable = false)
@@ -424,6 +430,24 @@ public class UserEntity extends BaseEntity {
      */
     public void setQuestionsViaSlack(boolean questionsViaSlack) {
         this.questionsViaSlack = questionsViaSlack;
+    }
+
+    /**
+     * Retrieves the value for {@link #eaaNumber}.
+     *
+     * @return the current value
+     */
+    public String getEaaNumber() {
+        return eaaNumber;
+    }
+
+    /**
+     * Provides a value for {@link #eaaNumber}.
+     *
+     * @param eaaNumber the new value to set
+     */
+    public void setEaaNumber(String eaaNumber) {
+        this.eaaNumber = eaaNumber;
     }
 
 }

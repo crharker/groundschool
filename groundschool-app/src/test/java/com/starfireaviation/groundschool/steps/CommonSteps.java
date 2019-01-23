@@ -26,7 +26,6 @@ public class CommonSteps extends BaseSteps {
         // Reset objects
         event = null;
         lessonPlan = null;
-        memberDetails = null;
         question = null;
         quiz = null;
         referenceMaterial = null;
@@ -36,7 +35,6 @@ public class CommonSteps extends BaseSteps {
         // Reset lists
         events = null;
         lessonPlans = null;
-        memberDetailsList = null;
         questions = null;
         quizzes = null;
         referenceMaterials = null;

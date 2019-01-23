@@ -26,7 +26,6 @@ import org.springframework.stereotype.Service;
 
 import com.starfireaviation.groundschool.Constants;
 import com.starfireaviation.groundschool.job.CompleteQuestionJob;
-import com.starfireaviation.groundschool.job.MemberDetailsRefreshJob;
 import com.starfireaviation.groundschool.job.NoopJob;
 import com.starfireaviation.groundschool.job.RSVPJob;
 import com.starfireaviation.groundschool.model.JobType;
@@ -113,9 +112,6 @@ public class TimeServiceImpl implements TimeService {
                 break;
             case COMPLETE_QUESTION:
                 className = CompleteQuestionJob.class;
-                break;
-            case MEMBER_DETAILS_REFRESH:
-                className = MemberDetailsRefreshJob.class;
                 break;
             default:
                 className = NoopJob.class;

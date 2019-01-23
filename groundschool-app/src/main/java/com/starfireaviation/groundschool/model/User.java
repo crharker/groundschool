@@ -98,6 +98,11 @@ public class User extends Base {
     private String lastName;
 
     /**
+     * EAA Number
+     */
+    private String eaaNumber;
+
+    /**
      * Role
      */
     private Role role;
@@ -406,6 +411,24 @@ public class User extends Base {
      */
     public void setQuestionsViaSlack(boolean questionsViaSlack) {
         this.questionsViaSlack = questionsViaSlack;
+    }
+
+    /**
+     * Retrieves the value for {@link #eaaNumber}.
+     *
+     * @return the current value
+     */
+    public String getEaaNumber() {
+        return eaaNumber;
+    }
+
+    /**
+     * Provides a value for {@link #eaaNumber}.
+     *
+     * @param eaaNumber the new value to set
+     */
+    public void setEaaNumber(String eaaNumber) {
+        this.eaaNumber = eaaNumber;
     }
 
 }

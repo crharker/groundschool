@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "aerie-starfire-aviation",
+  "private_key_id": "3e7cf95e81b80c5caac38f1ccde5034af79b50d9",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDUBH/Frec4I6VT\nO1JQh0hpWFrwWzqGPvPZ7cc/OKhnr4u79I6HQjzSuR+qcUA7Nd/byREyG88y3GxL\nJfLWNX3rWmgzAPgEM6oGP5cB+uv5e++fRqdto7YmGdYLOvWaXmsTymBI28P5GOk4\n7jrMPmSGDqjsN6k2JW6egAPilMGXCjo7d5prReuN+rBf10yyDcouPhTxstNTg+yp\nMMY0eR2wjBvR98bDzzaxP2k46yES0AoZvg3HtNLS8wyu/PiFlLTsfPoCOia7TQpM\nL3dXCZaCVkrySmVJRK+/6sjQBjg5+oHRfQGgVKO7+9SwbT5tk2ThIErIlTpkbOlt\nBsMmSSFHAgMBAAECggEADwdQnU0R7j9MmUVDtPSZ8+mw7Iey8tAkjeaWcItOGKdv\nYr/XmIvf7tnzfivv7yKG/zfV8bTZ75ODU6JZf8ij59ptN2xSqE2XOEEqrZfBQVqB\nJkumU5W+tB2xt/MSdMJLmcgHIjL9xbr30TLF1TN5Aa2pWLErW+y0ViTh4Z5EyLVu\nRJqdQnRFf5fMaURTaUjQJDo98haM1ZWJlDGdrzJwa8i4BJel+kIJO/Xnu39Mp5p5\neeRH3jc2Afx+lGlLqOVrNSo+xS2bLBzaQa4QONibXLYzQRXXvEd+/1tP1E1a9ToL\n4UhXqgvkdPrZjPZBk+aPVQi8MEUxEO3wQZ0a4Fhk7QKBgQD6jiKn89eij/3iO9AD\ny4RjcnRa5JVNmPjWcVJHSEwNPaelt5pRwZ7NG11eJupVnWGPZsggRoqnj/rci7cs\nEE2tfhnLPyHj9tEyk5usvsGODaqjh9LnZnYwftmHVttrVo8lshjeH/smoGPfeon1\nayqGj4Lj5BSUrusUg4z2/XOOywKBgQDYn/mPPhAG7Ru/ZV9WCZmbW8xAjKkyEZeP\nP4u7TX0EpMGzHfAX2uyvrpAy1eEnqII7FdYPwPlxJ3GArpca8pYvRN3o4/kUFGpM\nWnbdlZAhEjDSd2JQHOByXgJWyyD6GWWDOwPemJfz0MTQN2n2+U80CF+yf80I5SWg\nlb+JPBRL9QKBgQCBd0BhGJar4UuGwvFRhK/70wBclxCu8ARkilnBi5IApYMjFiQf\narTrtuAf7mvXoWLv/mQaiVjMDJHLtEYJ9sKsiyQ46X5RlQ+z2qHuOQM6q8Uoit5n\nw4H+vQ0Z6b+nTyrYh5Zh8JSN+QKiT2dJ8P4gWbeAmjIoQdom13LXjU9Q0QKBgD6S\nJtGbSaHWhzdHnrwJVdcsMtlKR+zwa+iyoDff8AaRWGnWce1SDR/JulkUsk50O/m5\nGvW99c8bZ4uV4oukGoFY0QheISoNo46eassiUllbGcMRPNKLJMGkKeTME6BqCYpY\nV4vKY8nHObIy72apKJmM+adjhuPU3IN//a00L2CpAoGBAOUiwK+eb1otCJLxjs+h\nbCPnsnw+P5BZ3mPozTafyWM9V9tdtmrKPGQRtL3vfb394a6QsTQYbqBlH46MSd99\nmOOJiG9b6TgjyAvJ/8krefv8cjQqLIKkrjCqNbS4QiVjVcpZBYM1k+0+5itN/CxB\nn9pWMRFO6MGz9MQoYvCznuWO\n-----END PRIVATE KEY-----\n",
+  "client_email": "groundschool@aerie-starfire-aviation.iam.gserviceaccount.com",
+  "client_id": "115632730639713683677",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/groundschool%40aerie-starfire-aviation.iam.gserviceaccount.com"
+}

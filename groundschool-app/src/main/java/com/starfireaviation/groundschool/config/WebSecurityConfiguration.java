@@ -168,6 +168,16 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     /**
+     * BCryptPasswordEncoder
+     *
+     * @return BCryptPasswordEncoder
+     */
+    @Bean
+    public BCryptPasswordEncoder encoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    /**
      * DataSource
      *
      * @return DataSource
@@ -180,15 +190,5 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         dataSource.setUsername(databaseProperties.getUsername());
         dataSource.setPassword(databaseProperties.getPassword());
         return dataSource;
-    }
-
-    /**
-     * BCryptPasswordEncoder
-     *
-     * @return BCryptPasswordEncoder
-     */
-    @Bean
-    public BCryptPasswordEncoder encoder() {
-        return new BCryptPasswordEncoder();
     }
 }
