@@ -16,7 +16,6 @@ import com.starfireaviation.groundschool.model.Address;
 import com.starfireaviation.groundschool.model.Answer;
 import com.starfireaviation.groundschool.model.Event;
 import com.starfireaviation.groundschool.model.LessonPlan;
-import com.starfireaviation.groundschool.model.MemberDetails;
 import com.starfireaviation.groundschool.model.Question;
 import com.starfireaviation.groundschool.model.Quiz;
 import com.starfireaviation.groundschool.model.ReferenceMaterial;
@@ -26,7 +25,6 @@ import com.starfireaviation.groundschool.model.sql.AddressEntity;
 import com.starfireaviation.groundschool.model.sql.AnswerEntity;
 import com.starfireaviation.groundschool.model.sql.EventEntity;
 import com.starfireaviation.groundschool.model.sql.LessonPlanEntity;
-import com.starfireaviation.groundschool.model.sql.MemberDetailsEntity;
 import com.starfireaviation.groundschool.model.sql.QuestionEntity;
 import com.starfireaviation.groundschool.model.sql.QuizEntity;
 import com.starfireaviation.groundschool.model.sql.ReferenceMaterialEntity;
@@ -81,12 +79,6 @@ public class OrikaMapperFactoryConfigTest {
     private ClassMapBuilder<ReferenceMaterial, ReferenceMaterialEntity> referenceMaterialClassMapBuilder;
 
     /**
-     * ClassMapBuilder memberDetailsClassMapBuilder
-     */
-    @Mock
-    private ClassMapBuilder<MemberDetails, MemberDetailsEntity> memberDetailsClassMapBuilder;
-
-    /**
      * ClassMapBuilder lessonPlanClassMapBuilder
      */
     @Mock
@@ -135,7 +127,6 @@ public class OrikaMapperFactoryConfigTest {
         initQuestionMapper();
         initAnswerMapper();
         initReferenceMaterialMapper();
-        initMemberDetailsMapper();
         initLessonPlanMapper();
         initQuizMapper();
         initStatisticMapper();
@@ -149,7 +140,6 @@ public class OrikaMapperFactoryConfigTest {
         assertQuestionMapper();
         assertAnswerMapper();
         assertReferenceMaterialMapper();
-        assertMemberDetailsMapper();
         assertLessonPlanMapper();
         assertQuizMapper();
         assertStatisticMapper();
@@ -272,33 +262,6 @@ public class OrikaMapperFactoryConfigTest {
                 ReferenceMaterialEntity.class);
         Mockito.verify(referenceMaterialClassMapBuilder, Mockito.times(1)).byDefault();
         Mockito.verify(referenceMaterialClassMapBuilder, Mockito.times(1)).register();
-    }
-
-    /**
-     * MemberDetailsMapper
-     */
-    private void initMemberDetailsMapper() {
-        Mockito.when(mapperFactory.classMap(MemberDetails.class, MemberDetailsEntity.class)).thenReturn(
-                memberDetailsClassMapBuilder);
-        Mockito.when(memberDetailsClassMapBuilder.exclude(ArgumentMatchers.any())).thenReturn(
-                memberDetailsClassMapBuilder);
-        Mockito.when(memberDetailsClassMapBuilder.byDefault()).thenReturn(
-                memberDetailsClassMapBuilder);
-        Mockito
-                .when(
-                        memberDetailsClassMapBuilder.field(
-                                ArgumentMatchers.anyString(),
-                                ArgumentMatchers.anyString()))
-                .thenReturn(memberDetailsClassMapBuilder);
-    }
-
-    /**
-     * MemberDetailsMapper
-     */
-    private void assertMemberDetailsMapper() {
-        Mockito.verify(mapperFactory, Mockito.times(1)).classMap(MemberDetails.class, MemberDetailsEntity.class);
-        Mockito.verify(memberDetailsClassMapBuilder, Mockito.times(1)).byDefault();
-        Mockito.verify(memberDetailsClassMapBuilder, Mockito.times(1)).register();
     }
 
     /**

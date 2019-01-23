@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.starfireaviation.groundschool.controller.EventController;
 import com.starfireaviation.groundschool.model.Event;
 import com.starfireaviation.groundschool.model.LessonPlan;
-import com.starfireaviation.groundschool.model.MemberDetails;
 import com.starfireaviation.groundschool.model.Question;
 import com.starfireaviation.groundschool.model.Quiz;
 import com.starfireaviation.groundschool.model.ReferenceMaterial;
@@ -61,16 +60,6 @@ public class BaseSteps {
      * LessonPlans
      */
     protected List<LessonPlan> lessonPlans;
-
-    /**
-     * MemberDetails
-     */
-    protected MemberDetails memberDetails;
-
-    /**
-     * MemberDetailsList
-     */
-    protected List<MemberDetails> memberDetailsList;
 
     /**
      * Question
