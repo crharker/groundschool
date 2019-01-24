@@ -166,7 +166,7 @@ public class QuizController {
     })
     public Quiz startQuestion(@PathVariable("quizId") long quizId, Principal principal) {
         LOGGER.info(String.format("User is logged in as %s", principal.getName()));
-        return quizService.startQuestion(quizId);
+        return quizService.startQuestion(quizId, false);
     }
 
     /**

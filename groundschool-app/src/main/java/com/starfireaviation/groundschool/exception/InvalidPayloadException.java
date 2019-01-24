@@ -9,12 +9,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
- * ResourceNotFoundException
+ * InvalidPayloadException
  *
  * @author brianmichael
  */
-@ResponseStatus(HttpStatus.NOT_FOUND)
-public class ResourceNotFoundException extends Exception {
+@ResponseStatus(HttpStatus.BAD_REQUEST)
+public class InvalidPayloadException extends Exception {
 
     /**
      * Default SerialVersionUID
@@ -22,28 +22,28 @@ public class ResourceNotFoundException extends Exception {
     private static final long serialVersionUID = 1L;
 
     /**
-     * Initializes an instance of <code>ResourceNotFoundException</code> with the default data.
+     * Initializes an instance of <code>InvalidPayloadException</code> with the default data.
      */
-    public ResourceNotFoundException() {
+    public InvalidPayloadException() {
         super();
     }
 
     /**
-     * Initializes an instance of <code>ResourceNotFoundException</code> with the default data.
+     * Initializes an instance of <code>InvalidPayloadException</code> with the default data.
      *
      * @param message message
      */
-    public ResourceNotFoundException(String message) {
+    public InvalidPayloadException(String message) {
         super(message);
     }
 
     /**
-     * Initializes an instance of <code>ResourceNotFoundException</code> with the default data.
+     * Initializes an instance of <code>InvalidPayloadException</code> with the default data.
      *
      * @param message message
      * @param cause cause
      */
-    public ResourceNotFoundException(String message, Throwable cause) {
+    public InvalidPayloadException(String message, Throwable cause) {
         super(message, cause);
     }
 }

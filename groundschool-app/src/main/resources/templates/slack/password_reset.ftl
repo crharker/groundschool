@@ -1,0 +1,1 @@
+Go to http://groundschool.starfireaviation.com/password/reset and enter {code} to reset your password.  If you did not make this request, you may ignore this message.

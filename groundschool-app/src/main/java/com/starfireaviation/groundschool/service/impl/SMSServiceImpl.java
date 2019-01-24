@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 import org.springframework.util.CollectionUtils;
 
+import com.starfireaviation.groundschool.exception.ResourceNotFoundException;
 import com.starfireaviation.groundschool.model.NotificationEventType;
 import com.starfireaviation.groundschool.model.NotificationType;
 import com.starfireaviation.groundschool.model.SMSResponseOption;
@@ -321,6 +322,31 @@ public class SMSServiceImpl implements MessageService {
     }
 
     /**
+     * {@inheritDoc} Required implementation.
+     */
+    @Override
+    public void sendPasswordResetMsg(User user) {
+        try {
+            freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates/sms");
+            Map<String, Object> model = getModelForUser(user);
+            model.put("code", user.getCode());
+            send(
+                    user.getId(),
+                    null,
+                    null,
+                    null,
+                    NotificationEventType.USER_SETTINGS,
+                    smsProperties.getFromAddress(),
+                    user.getSms(),
+                    FreeMarkerTemplateUtils.processTemplateIntoString(
+                            freemarkerConfig.getTemplate("password_reset.ftl"),
+                            model));
+        } catch (IOException | TemplateException e) {
+            LOGGER.warn(e.getMessage());
+        }
+    }
+
+    /**
      * Sends an SMS
      *
      * @param userId user ID
@@ -375,56 +401,60 @@ public class SMSServiceImpl implements MessageService {
         Long userId = null;
         Long eventId = null;
         String response = replyWithNoOpenMessagesMsg();
-        final List<SMSMessageEntity> smsMessageEntities = smsMessageRepository.findByTo(
-                stripCountryCode(message.getFrom()));
-        if (!CollectionUtils.isEmpty(smsMessageEntities)) {
-            List<SMSMessageEntity> sortedSMSMessages = sortByTime(smsMessageEntities);
-            SMSMessageEntity smsMessageEntity = sortedSMSMessages.get(0);
-            if (smsMessageEntity.isOpen()) {
-                userId = smsMessageEntity.getUserId();
-                eventId = smsMessageEntity.getEventId();
-                closeAllMessages(userId);
-                boolean success = false;
-                switch (smsMessageEntity.getNotificationEventType()) {
-                    case USER_SETTINGS:
-                        success = processUserSettingsResponse(userId, message);
-                        break;
-                    case USER_VERIFIED:
-                        success = processUserVerifiedResponse(userId, message);
-                        break;
-                    case USER_DELETE:
-                        success = processUserDeletedResponse(userId, message);
-                        break;
-                    case EVENT_RSVP:
-                        success = processEventRSVPResponse(eventId, userId, message);
-                        break;
-                    default:
-                        break;
-                }
-                if (!success) {
-                    notificationService.resend(
-                            userId,
-                            NotificationType.SMS,
-                            smsMessageEntity.getNotificationEventType(),
-                            message.getBody(),
-                            smsMessageEntity.getMessage());
-                }
-            } else {
-                final String body = message.getBody();
-                if (body != null && SMSResponseOption.STOP == SMSResponseParser.determineResponse(body)) {
-                    handleStop(userId);
+        try {
+            final List<SMSMessageEntity> smsMessageEntities = smsMessageRepository.findByTo(
+                    stripCountryCode(message.getFrom()));
+            if (!CollectionUtils.isEmpty(smsMessageEntities)) {
+                List<SMSMessageEntity> sortedSMSMessages = sortByTime(smsMessageEntities);
+                SMSMessageEntity smsMessageEntity = sortedSMSMessages.get(0);
+                if (smsMessageEntity.isOpen()) {
+                    userId = smsMessageEntity.getUserId();
+                    eventId = smsMessageEntity.getEventId();
+                    closeAllMessages(userId);
+                    boolean success = false;
+                    switch (smsMessageEntity.getNotificationEventType()) {
+                        case USER_SETTINGS:
+                            success = processUserSettingsResponse(userId, message);
+                            break;
+                        case USER_VERIFIED:
+                            success = processUserVerifiedResponse(userId, message);
+                            break;
+                        case USER_DELETE:
+                            success = processUserDeletedResponse(userId, message);
+                            break;
+                        case EVENT_RSVP:
+                            success = processEventRSVPResponse(eventId, userId, message);
+                            break;
+                        default:
+                            break;
+                    }
+                    if (!success) {
+                        notificationService.resend(
+                                userId,
+                                NotificationType.SMS,
+                                smsMessageEntity.getNotificationEventType(),
+                                message.getBody(),
+                                smsMessageEntity.getMessage());
+                    }
+                } else {
+                    final String body = message.getBody();
+                    if (body != null && SMSResponseOption.STOP == SMSResponseParser.determineResponse(body)) {
+                        handleStop(userId);
+                    }
                 }
             }
+            Statistic statistic = new Statistic(
+                    StatisticType.SMS_MESSAGE_RECEIVED,
+                    String.format(
+                            "Duration [%s]; Source [%s]; Message [%s]",
+                            Duration.between(start, Instant.now()),
+                            message.getFrom(),
+                            message.getBody()));
+            statistic.setUserId(userId);
+            statisticService.store(statistic);
+        } catch (ResourceNotFoundException e) {
+            LOGGER.warn(String.format("No user found for user ID [%s]", userId));
         }
-        Statistic statistic = new Statistic(
-                StatisticType.SMS_MESSAGE_RECEIVED,
-                String.format(
-                        "Duration [%s]; Source [%s]; Message [%s]",
-                        Duration.between(start, Instant.now()),
-                        message.getFrom(),
-                        message.getBody()));
-        statistic.setUserId(userId);
-        statisticService.store(statistic);
         return response;
     }
 
@@ -511,8 +541,10 @@ public class SMSServiceImpl implements MessageService {
      * @param userId user ID
      * @param message to be processed
      * @return success
+     * @throws ResourceNotFoundException when no user is found
      */
-    private boolean processUserVerifiedResponse(Long userId, com.starfireaviation.groundschool.model.Message message) {
+    private boolean processUserVerifiedResponse(Long userId, com.starfireaviation.groundschool.model.Message message)
+            throws ResourceNotFoundException {
         final String body = message.getBody();
         if (body != null && SMSResponseOption.STOP == SMSResponseParser.determineResponse(body)) {
             handleStop(userId);
@@ -526,8 +558,10 @@ public class SMSServiceImpl implements MessageService {
      * @param userId user ID
      * @param message to be processed
      * @return success
+     * @throws ResourceNotFoundException when no user is found
      */
-    private boolean processUserSettingsResponse(Long userId, com.starfireaviation.groundschool.model.Message message) {
+    private boolean processUserSettingsResponse(Long userId, com.starfireaviation.groundschool.model.Message message)
+            throws ResourceNotFoundException {
         boolean success = true;
         User user = null;
         // STOP, CONFIRM, DECLINE, other
@@ -559,8 +593,9 @@ public class SMSServiceImpl implements MessageService {
      * Handles STOP SMSResponseOption
      *
      * @param userId user ID
+     * @throws ResourceNotFoundException when no user is found
      */
-    private void handleStop(Long userId) {
+    private void handleStop(Long userId) throws ResourceNotFoundException {
         User user = userService.findById(userId);
         user.setSmsEnabled(false);
         userService.store(user);
@@ -572,8 +607,10 @@ public class SMSServiceImpl implements MessageService {
      * @param userId user ID
      * @param message to be processed
      * @return success
+     * @throws ResourceNotFoundException when no user is found
      */
-    private boolean processUserDeletedResponse(Long userId, com.starfireaviation.groundschool.model.Message message) {
+    private boolean processUserDeletedResponse(Long userId, com.starfireaviation.groundschool.model.Message message)
+            throws ResourceNotFoundException {
         final String body = message.getBody();
         if (body != null && SMSResponseOption.STOP == SMSResponseParser.determineResponse(body)) {
             handleStop(userId);
@@ -588,11 +625,12 @@ public class SMSServiceImpl implements MessageService {
      * @param userId user ID
      * @param message to be processed
      * @return success
+     * @throws ResourceNotFoundException when no user is found
      */
     private boolean processEventRSVPResponse(
             Long eventId,
             Long userId,
-            com.starfireaviation.groundschool.model.Message message) {
+            com.starfireaviation.groundschool.model.Message message) throws ResourceNotFoundException {
         boolean success = true;
         // STOP, CONFIRM, DECLINE, other
         final String body = message.getBody();

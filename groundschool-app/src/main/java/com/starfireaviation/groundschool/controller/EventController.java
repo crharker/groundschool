@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.starfireaviation.groundschool.exception.ResourceNotFoundException;
 import com.starfireaviation.groundschool.model.Address;
 import com.starfireaviation.groundschool.model.Event;
 import com.starfireaviation.groundschool.model.NotificationEventType;
@@ -165,7 +166,7 @@ public class EventController {
 
     /**
      * Get all events
-     * 
+     *
      * @param principal Principal
      *
      * @return list of Event
@@ -204,13 +205,14 @@ public class EventController {
      *
      * @param eventId event ID
      * @param userId user ID
+     * @throws ResourceNotFoundException when event nor user is found
      */
     @GetMapping(path = {
             "/{eventId}/register/{userId}"
     })
     public void register(
             @PathVariable("eventId") long eventId,
-            @PathVariable("userId") long userId) {
+            @PathVariable("userId") long userId) throws ResourceNotFoundException {
         eventService.register(eventId, userId);
         notificationService.send(userId, NotificationType.ALL, NotificationEventType.EVENT_REGISTER);
     }
@@ -220,13 +222,14 @@ public class EventController {
      *
      * @param eventId event ID
      * @param userId user ID
+     * @throws ResourceNotFoundException when event nor user is found
      */
     @GetMapping(path = {
             "/{eventId}/unregister/{userId}"
     })
     public void unregister(
             @PathVariable("eventId") long eventId,
-            @PathVariable("userId") long userId) {
+            @PathVariable("userId") long userId) throws ResourceNotFoundException {
         eventService.unregister(eventId, userId);
         notificationService.send(userId, NotificationType.ALL, NotificationEventType.EVENT_UNREGISTER);
     }

@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -21,12 +22,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.starfireaviation.groundschool.exception.InvalidPayloadException;
+import com.starfireaviation.groundschool.exception.ResourceNotFoundException;
 import com.starfireaviation.groundschool.model.NotificationEventType;
 import com.starfireaviation.groundschool.model.NotificationType;
 import com.starfireaviation.groundschool.model.User;
 import com.starfireaviation.groundschool.service.EventService;
 import com.starfireaviation.groundschool.service.NotificationService;
 import com.starfireaviation.groundschool.service.UserService;
+import com.starfireaviation.groundschool.util.CodeGenerator;
 
 import java.security.Principal;
 import java.util.List;
@@ -70,6 +74,12 @@ public class UserController {
     private NotificationService notificationService;
 
     /**
+     * BCryptPasswordEncoder
+     */
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    /**
      * Initializes an instance of <code>UserController</code> with the default data.
      */
     public UserController() {
@@ -92,10 +102,24 @@ public class UserController {
      *
      * @param user User
      * @return User
+     * @throws InvalidPayloadException when a username conflict occurs
+     * @throws ResourceNotFoundException when no user is found
      */
     @PostMapping
-    public User post(@RequestBody User user) {
-        return storeUser(user);
+    public User post(@RequestBody User user) throws InvalidPayloadException, ResourceNotFoundException {
+        if (user == null) {
+            return user;
+        }
+        User existingUser = userService.findByUsername(user.getUsername());
+        if (existingUser != null) {
+            String msg = String.format("Another user has already taken username [%s]", user.getUsername());
+            LOGGER.warn(msg);
+            throw new InvalidPayloadException(msg);
+        }
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        final User response = userService.store(user);
+        notificationService.send(response.getId(), NotificationType.ALL, NotificationEventType.USER_SETTINGS);
+        return response;
     }
 
     /**
@@ -104,11 +128,14 @@ public class UserController {
      * @param user User
      * @param principal Principal
      * @return User
+     * @throws ResourceNotFoundException when no user is found
      */
     @PutMapping
-    public User put(@RequestBody User user, Principal principal) {
+    public User put(@RequestBody User user, Principal principal) throws ResourceNotFoundException {
         LOGGER.info(String.format("User is logged in as %s", principal.getName()));
-        return storeUser(user);
+        final User response = userService.store(user);
+        notificationService.send(response.getId(), NotificationType.ALL, NotificationEventType.USER_SETTINGS);
+        return response;
     }
 
     /**
@@ -127,6 +154,19 @@ public class UserController {
     }
 
     /**
+     * Checks to see if a username is available
+     *
+     * @param username to verify
+     * @return success
+     */
+    @GetMapping(path = {
+            "/username/{username}/available"
+    })
+    public boolean checkUsername(@PathVariable("username") String username) {
+        return userService.findByUsername(username) != null ? false : true;
+    }
+
+    /**
      * Deletes a user
      *
      * @param userId Long
@@ -139,7 +179,14 @@ public class UserController {
     public User delete(@PathVariable("userId") long userId, Principal principal) {
         LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         final User response = userService.delete(userId);
-        notificationService.send(response.getId(), NotificationType.ALL, NotificationEventType.USER_DELETE);
+        try {
+            notificationService.send(response.getId(), NotificationType.ALL, NotificationEventType.USER_DELETE);
+        } catch (ResourceNotFoundException e) {
+            LOGGER.warn(
+                    String.format(
+                            "Unable to send notification to [%s].  No user found.",
+                            userId));
+        }
         return response;
     }
 
@@ -160,11 +207,13 @@ public class UserController {
      *
      * @param userId user ID
      * @param type NotificationType
+     * @throws ResourceNotFoundException when no user is found
      */
     @GetMapping(path = {
             "/{userId}/verify/{type}"
     })
-    public void verify(@PathVariable("userId") long userId, @PathVariable("type") NotificationType type) {
+    public void verify(@PathVariable("userId") long userId, @PathVariable("type") NotificationType type)
+            throws ResourceNotFoundException {
         final User user = userService.findById(userId);
         if (user != null) {
             switch (type) {
@@ -179,6 +228,62 @@ public class UserController {
             userService.store(user);
             notificationService.send(userId, NotificationType.ALL, NotificationEventType.USER_VERIFIED);
         }
+    }
+
+    /**
+     * Updates a user's password
+     *
+     * @param userId User ID
+     * @param password new password
+     * @param verificationCode to ensure request is not fraudulent
+     * @return success
+     * @throws ResourceNotFoundException when no user is found
+     *
+     */
+    @PostMapping(path = {
+            "/{userId}/password/{password}/{verificationCode}"
+    })
+    public boolean updatePassword(
+            @PathVariable("userId") long userId,
+            @PathVariable("password") String password,
+            @PathVariable("verificationCode") String verificationCode) throws ResourceNotFoundException {
+        final User user = userService.findById(userId);
+        if (user == null) {
+            final String msg = String.format("No user found for ID [%s]", userId);
+            LOGGER.warn(msg);
+            throw new ResourceNotFoundException(msg);
+        }
+        if (verificationCode != null && verificationCode.equals(user.getCode())) {
+            user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+            user.setCode(null);
+            return userService.store(user) == null ? false : true;
+        }
+        return false;
+    }
+
+    /**
+     * Start the user password reset process
+     *
+     * @param userId User ID
+     * @return success
+     * @throws ResourceNotFoundException when no user is found
+     *
+     */
+    @PostMapping(path = {
+            "/{userId}/password/reset"
+    })
+    public boolean passwordReset(@PathVariable("userId") long userId) throws ResourceNotFoundException {
+        final User user = userService.findById(userId);
+        if (user == null) {
+            final String msg = String.format("No user found for ID [%s]", userId);
+            LOGGER.warn(msg);
+            throw new ResourceNotFoundException(msg);
+        }
+        // TODO do something with verificationCode
+        user.setCode(CodeGenerator.generateCode(4));
+        userService.store(user);
+        notificationService.send(userId, NotificationType.ALL, NotificationEventType.PASSWORD_RESET);
+        return true;
     }
 
     /**
@@ -230,21 +335,6 @@ public class UserController {
     public void invite(@RequestBody String email, Principal principal) {
         LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         notificationService.invite(null, email);
-    }
-
-    /**
-     * Combine POST and PUT operations
-     *
-     * @param user User
-     * @return User
-     */
-    private User storeUser(User user) {
-        if (user == null) {
-            return user;
-        }
-        final User response = userService.store(user);
-        notificationService.send(response.getId(), NotificationType.ALL, NotificationEventType.USER_SETTINGS);
-        return response;
     }
 
 }

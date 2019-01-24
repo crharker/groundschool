@@ -5,6 +5,7 @@
  */
 package com.starfireaviation.groundschool.service;
 
+import com.starfireaviation.groundschool.exception.ResourceNotFoundException;
 import com.starfireaviation.groundschool.model.NotificationEventType;
 import com.starfireaviation.groundschool.model.NotificationType;
 
@@ -21,8 +22,10 @@ public interface NotificationService {
      * @param userId Long
      * @param notificationType NotificationType
      * @param notificationEventType NotificationEventType
+     * @throws ResourceNotFoundException when no user is found
      */
-    public void send(Long userId, NotificationType notificationType, NotificationEventType notificationEventType);
+    public void send(Long userId, NotificationType notificationType, NotificationEventType notificationEventType)
+            throws ResourceNotFoundException;
 
     /**
      * Re-sends a notification

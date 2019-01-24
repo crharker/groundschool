@@ -69,9 +69,10 @@ public interface QuizService {
      * Starts the next quiz question
      *
      * @param quizId Long
+     * @param startTimer start timer to auto kick-off next question?
      * @return started quiz
      */
-    public Quiz startQuestion(long quizId);
+    public Quiz startQuestion(long quizId, boolean startTimer);
 
     /**
      * Complete's a quiz

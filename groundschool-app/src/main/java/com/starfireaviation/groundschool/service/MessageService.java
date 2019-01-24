@@ -16,6 +16,13 @@ import com.starfireaviation.groundschool.model.User;
 public interface MessageService {
 
     /**
+     * Sends a password reset message
+     *
+     * @param user User
+     */
+    public void sendPasswordResetMsg(final User user);
+
+    /**
      * Sends a message for user deletion
      *
      * @param user User

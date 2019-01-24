@@ -300,6 +300,31 @@ public class EmailServiceImpl implements MessageService {
      * {@inheritDoc} Required implementation.
      */
     @Override
+    public void sendPasswordResetMsg(User user) {
+        try {
+            freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates/email");
+            send(
+                    user.getId(),
+                    emailProperties.getFromAddress(),
+                    user.getEmail(),
+                    null,
+                    null,
+                    FreeMarkerTemplateUtils.processTemplateIntoString(
+                            freemarkerConfig.getTemplate("password_reset_subject.ftl"),
+                            getModelForUser(user)),
+                    FreeMarkerTemplateUtils.processTemplateIntoString(
+                            freemarkerConfig.getTemplate("password_reset_body.ftl"),
+                            getModelForUser(user)),
+                    true);
+        } catch (IOException | TemplateException e) {
+            LOGGER.warn(e.getMessage());
+        }
+    }
+
+    /**
+     * {@inheritDoc} Required implementation.
+     */
+    @Override
     public void resendUserSettingsChangeMsg(User user, String response, String originalMessage) {
         // Not implemented
     }
@@ -401,6 +426,7 @@ public class EmailServiceImpl implements MessageService {
         model.put("firstName", user.getFirstName());
         model.put("lastName", user.getLastName());
         model.put("userId", user.getId());
+        model.put("code", user.getCode());
         model.put("host", "http://localhost:8080");
         return model;
     }

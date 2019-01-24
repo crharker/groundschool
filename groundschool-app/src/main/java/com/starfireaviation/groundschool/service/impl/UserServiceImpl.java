@@ -11,9 +11,9 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.starfireaviation.groundschool.exception.ResourceNotFoundException;
 import com.starfireaviation.groundschool.model.Role;
 import com.starfireaviation.groundschool.model.User;
 import com.starfireaviation.groundschool.model.sql.UserEntity;
@@ -48,12 +48,6 @@ public class UserServiceImpl implements UserService {
     private MapperFacade mapper;
 
     /**
-     * BCryptPasswordEncoder
-     */
-    @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
-
-    /**
      * Initializes an instance of <code>UserServiceImpl</code> with the default data.
      */
     public UserServiceImpl() {
@@ -65,14 +59,11 @@ public class UserServiceImpl implements UserService {
      *
      * @param userRepository UserRepository
      * @param mapperFacade MapperFacade
-     * @param bCryptPasswordEncoder BCryptPasswordEncoder
      */
     public UserServiceImpl(
             UserRepository userRepository,
-            MapperFacade mapperFacade,
-            BCryptPasswordEncoder bCryptPasswordEncoder) {
+            MapperFacade mapperFacade) {
         this.userRepository = userRepository;
-        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         mapper = mapperFacade;
     }
 
@@ -80,29 +71,19 @@ public class UserServiceImpl implements UserService {
      * {@inheritDoc} Required implementation.
      */
     @Override
-    public User store(User user) {
+    public User store(User user) throws ResourceNotFoundException {
         if (user == null) {
             return user;
         }
-        LOGGER.info(String.format("store() looking for UserEntity with username %s", user.getUsername()));
-        UserEntity userEntity = userRepository.findByUsername(user.getUsername());
-        if (userEntity == null) {
-            LOGGER.info("store() UserEntity is null");
-            user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        } else if (!bCryptPasswordEncoder.matches(user.getPassword(), userEntity.getPassword())) {
-            LOGGER.info(
-                    String.format(
-                            "store() UserEntity is not null, and password [%s] does not match stored password [%s]",
-                            user.getPassword(),
-                            userEntity.getPassword()));
-            user.setId(userEntity.getId());
-            user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        } else {
-            LOGGER.info(
-                    String.format(
-                            "store() UserEntity is not null, setting ID to [%s] before storing",
-                            userEntity.getId()));
-            user.setId(userEntity.getId());
+        final Long userId = user.getId();
+        if (userId != null) {
+            final User existingUser = findById(userId);
+            if (existingUser == null) {
+                final String msg = String.format("No user found for ID [%s]", userId);
+                LOGGER.warn(msg);
+                throw new ResourceNotFoundException(msg);
+            }
+            user.setPassword(existingUser.getPassword());
         }
         if (user.getRole() == null) {
             LOGGER.info(String.format("store() Setting role to %s", Role.STUDENT));
@@ -142,6 +123,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findById(long id) {
         return mapper.map(userRepository.findById(id), User.class);
+    }
+
+    /**
+     * {@inheritDoc} Required implementation.
+     */
+    @Override
+    public User findByUsername(String username) {
+        return mapper.map(userRepository.findByUsername(username), User.class);
     }
 
 }

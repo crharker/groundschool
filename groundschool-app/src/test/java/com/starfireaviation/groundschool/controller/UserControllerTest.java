@@ -57,9 +57,11 @@ public class UserControllerTest {
 
     /**
      * Test setup
+     *
+     * @throws Exception when things go wrong
      */
     @Before
-    public void setUp() {
+    public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
 
         mockUser = ObjectCreator.getUser();
@@ -75,9 +77,11 @@ public class UserControllerTest {
 
     /**
      * Test the POST endpoint
+     *
+     * @throws Exception when things go wrong
      */
     @Test
-    public void testPost() {
+    public void testPost() throws Exception {
         Mockito.doReturn(mockUser).when(userService).store(ArgumentMatchers.any());
 
         User user = userController.post(mockUser);
@@ -102,9 +106,11 @@ public class UserControllerTest {
 
     /**
      * Test the PUT endpoint
+     *
+     * @throws Exception when things go wrong
      */
     @Test
-    public void testPut() {
+    public void testPut() throws Exception {
         Mockito.doReturn(mockUser).when(userService).store(ArgumentMatchers.any());
 
         User user = userController.put(mockUser, new JMXPrincipal("admin"));
@@ -151,9 +157,11 @@ public class UserControllerTest {
 
     /**
      * Test the DELETE endpoint
+     *
+     * @throws Exception when things go wrong
      */
     @Test
-    public void testDelete() {
+    public void testDelete() throws Exception {
         Mockito.doReturn(mockUser).when(userService).delete(ArgumentMatchers.anyLong());
 
         User user = userController.delete(ObjectCreator.ID, new JMXPrincipal("admin"));

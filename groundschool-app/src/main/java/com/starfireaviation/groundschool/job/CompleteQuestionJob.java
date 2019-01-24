@@ -43,7 +43,7 @@ public class CompleteQuestionJob extends QuartzJobBean {
         LOGGER.info(String.format("Completing question for quiz [%s]", quizId));
         quizService.completeQuestion(quizId);
         LOGGER.info(String.format("Starting next question for quiz [%s]", quizId));
-        quizService.startQuestion(quizId);
+        quizService.startQuestion(quizId, true);
     }
 
 }

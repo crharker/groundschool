@@ -13,6 +13,10 @@ package com.starfireaviation.groundschool.model;
 public enum NotificationEventType {
 
     /**
+     * PASSWORD_RESET
+     */
+    PASSWORD_RESET,
+    /**
      * USER_SETTINGS
      */
     USER_SETTINGS,

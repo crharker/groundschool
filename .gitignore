@@ -58,6 +58,9 @@ bin/
 compile.sh
 run.sh
 run_test.sh
+*.commit
+*.test
+*.prod
 key.json
 *.questions
 

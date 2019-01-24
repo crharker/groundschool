@@ -7,6 +7,7 @@ package com.starfireaviation.groundschool.service;
 
 import java.util.List;
 
+import com.starfireaviation.groundschool.exception.ResourceNotFoundException;
 import com.starfireaviation.groundschool.model.User;
 
 /**
@@ -21,8 +22,9 @@ public interface UserService {
      *
      * @param user User
      * @return User
+     * @throws ResourceNotFoundException when no user is found for the provided user ID
      */
-    public User store(User user);
+    public User store(User user) throws ResourceNotFoundException;
 
     /**
      * Deletes a user
@@ -46,5 +48,13 @@ public interface UserService {
      * @return User
      */
     public User findById(long id);
+
+    /**
+     * Gets a user by username
+     *
+     * @param username username
+     * @return User
+     */
+    public User findByUsername(String username);
 
 }

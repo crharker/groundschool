@@ -10,6 +10,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+
+import com.starfireaviation.groundschool.exception.ResourceNotFoundException;
 import com.starfireaviation.groundschool.model.NotificationEventType;
 import com.starfireaviation.groundschool.model.NotificationType;
 import com.starfireaviation.groundschool.model.User;
@@ -61,13 +63,17 @@ public class NotificationServiceImpl implements NotificationService {
      * {@inheritDoc} Required implementation.
      */
     @Override
-    public void send(Long userId, NotificationType notificationType, NotificationEventType notificationEventType) {
+    public void send(Long userId, NotificationType notificationType, NotificationEventType notificationEventType)
+            throws ResourceNotFoundException {
         LOGGER.info(
                 String.format(
                         "send() called with userId [%s]; notificationEventType [%s]",
                         userId,
                         notificationEventType));
         switch (notificationEventType) {
+            case PASSWORD_RESET:
+                passwordReset(userId, notificationType);
+                break;
             case USER_SETTINGS:
                 userSettings(userId, notificationType);
                 break;
@@ -127,8 +133,9 @@ public class NotificationServiceImpl implements NotificationService {
      *
      * @param userId Long
      * @param notificationType NotificationType
+     * @throws ResourceNotFoundException when no user is found
      */
-    private void userSettingsVerified(Long userId, NotificationType notificationType) {
+    private void userSettingsVerified(Long userId, NotificationType notificationType) throws ResourceNotFoundException {
         final User user = userService.findById(userId);
         if (user == null) {
             LOGGER.warn("userSettingsVerified() returning as no user was found");
@@ -199,6 +206,45 @@ public class NotificationServiceImpl implements NotificationService {
             slackService.sendUserSettingsChangeMsg(user);
         }
         LOGGER.info("userSettings() complete");
+    }
+
+    /**
+     * Sends notification for user password reset
+     *
+     * @param userId Long
+     * @param notificationType NotificationType
+     */
+    private void passwordReset(Long userId, NotificationType notificationType) {
+        final User user = userService.findById(userId);
+        if (user == null) {
+            LOGGER.warn("passwordReset() returning as no user was found");
+            return;
+        }
+        if (user.getEmail() != null
+                && !user.isEmailVerified()
+                && user.isEmailEnabled()
+                && (notificationType == null
+                        || notificationType == NotificationType.ALL
+                        || notificationType == NotificationType.EMAIL)) {
+            emailService.sendPasswordResetMsg(user);
+        }
+        if (user.getSms() != null
+                && !user.isSmsVerified()
+                && user.isSmsEnabled()
+                && (notificationType == null
+                        || notificationType == NotificationType.ALL
+                        || notificationType == NotificationType.SMS)) {
+            smsService.sendPasswordResetMsg(user);
+        }
+        if (user.getSlack() != null
+                && !user.isSlackVerified()
+                && user.isSlackEnabled()
+                && (notificationType == null
+                        || notificationType == NotificationType.ALL
+                        || notificationType == NotificationType.SLACK)) {
+            slackService.sendPasswordResetMsg(user);
+        }
+        LOGGER.info("passwordReset() complete");
     }
 
     /**

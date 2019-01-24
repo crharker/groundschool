@@ -121,6 +121,12 @@ public class UserEntity extends BaseEntity {
     private String eaaNumber;
 
     /**
+     * Code for verification purposes
+     */
+    @Column(name = "code")
+    private String code;
+
+    /**
      * Role
      */
     @Column(name = "role", nullable = false)
@@ -448,6 +454,24 @@ public class UserEntity extends BaseEntity {
      */
     public void setEaaNumber(String eaaNumber) {
         this.eaaNumber = eaaNumber;
+    }
+
+    /**
+     * Retrieves the value for {@link #code}.
+     *
+     * @return the current value
+     */
+    public String getCode() {
+        return code;
+    }
+
+    /**
+     * Provides a value for {@link #code}.
+     *
+     * @param code the new value to set
+     */
+    public void setCode(String code) {
+        this.code = code;
     }
 
 }

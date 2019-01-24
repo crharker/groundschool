@@ -215,6 +215,14 @@ public class SlackServiceImpl implements MessageService {
      * {@inheritDoc} Required implementation.
      */
     @Override
+    public void sendPasswordResetMsg(User user) {
+        // Not implemented
+    }
+
+    /**
+     * {@inheritDoc} Required implementation.
+     */
+    @Override
     public void sendInviteMsg(User user, String destination) {
         // Not implemented
     }

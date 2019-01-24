@@ -56,9 +56,11 @@ public class UserServiceTest {
 
     /**
      * Initializes tests
+     *
+     * @throws Exception when things go wrong
      */
     @Before
-    public void init() {
+    public void init() throws Exception {
         MockitoAnnotations.initMocks(this);
 
         UserEntity user = ObjectCreator.getUserEntity();
@@ -82,14 +84,16 @@ public class UserServiceTest {
                 ArgumentMatchers.any(),
                 ArgumentMatchers.eq(UserEntity.class));
 
-        userService = new UserServiceImpl(userRepository, mapperFacade, bCryptPasswordEncoder);
+        userService = new UserServiceImpl(userRepository, mapperFacade);
     }
 
     /**
      * Test new user creation
+     *
+     * @throws Exception when things go wrong
      */
     @Test
-    public void testNewUser() {
+    public void testNewUser() throws Exception {
         User mockUser = ObjectCreator.getUser();
 
         User user = userService.store(mockUser);
@@ -104,9 +108,11 @@ public class UserServiceTest {
 
     /**
      * Test save null user creation
+     *
+     * @throws Exception when things go wrong
      */
     @Test
-    public void testNullUser() {
+    public void testNullUser() throws Exception {
         User user = userService.store(null);
 
         Assert.assertNull(user);

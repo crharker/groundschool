@@ -103,6 +103,11 @@ public class User extends Base {
     private String eaaNumber;
 
     /**
+     * Code for verification purposes
+     */
+    private String code;
+
+    /**
      * Role
      */
     private Role role;
@@ -429,6 +434,24 @@ public class User extends Base {
      */
     public void setEaaNumber(String eaaNumber) {
         this.eaaNumber = eaaNumber;
+    }
+
+    /**
+     * Retrieves the value for {@link #code}.
+     *
+     * @return the current value
+     */
+    public String getCode() {
+        return code;
+    }
+
+    /**
+     * Provides a value for {@link #code}.
+     *
+     * @param code the new value to set
+     */
+    public void setCode(String code) {
+        this.code = code;
     }
 
 }

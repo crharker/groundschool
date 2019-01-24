@@ -11,9 +11,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.starfireaviation.groundschool.exception.ResourceNotFoundException;
 import com.starfireaviation.groundschool.model.JobType;
 import com.starfireaviation.groundschool.model.NotificationEventType;
 import com.starfireaviation.groundschool.model.NotificationType;
@@ -36,6 +39,11 @@ import ma.glasnost.orika.MapperFacade;
  */
 @Service
 public class QuizServiceImpl implements QuizService {
+
+    /**
+     * Logger
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(QuizServiceImpl.class);
 
     /**
      * QuizRepository
@@ -147,7 +155,7 @@ public class QuizServiceImpl implements QuizService {
             quiz.setCompleted(false);
             quiz.setCompletedTime(null);
             quiz = store(quiz);
-            startQuestion(quizId);
+            startQuestion(quizId, true);
         }
         return quiz;
     }
@@ -156,7 +164,7 @@ public class QuizServiceImpl implements QuizService {
      * {@inheritDoc} Required implementation.
      */
     @Override
-    public Quiz startQuestion(long quizId) {
+    public Quiz startQuestion(long quizId, boolean startTimer) {
         Quiz quiz = findById(quizId);
         if (quiz != null && quiz.isStarted() && !quiz.isCompleted() && quiz.getCurrentQuestion() == null) {
             Long nextQuestionId = determineNextQuestion(quiz);
@@ -166,7 +174,15 @@ public class QuizServiceImpl implements QuizService {
                 quiz = store(quiz);
                 List<Long> userIds = eventService.getAllEventUsers(eventService.getCurrentEvent());
                 for (Long userId : userIds) {
-                    notificationService.send(userId, NotificationType.ALL, NotificationEventType.QUESTION_ASKED);
+                    try {
+                        notificationService.send(userId, NotificationType.ALL, NotificationEventType.QUESTION_ASKED);
+                    } catch (ResourceNotFoundException e) {
+                        LOGGER.warn(
+                                String.format(
+                                        "Unable to send notification to [%s] for quiz [%s].  No user found.",
+                                        quizId,
+                                        userId));
+                    }
                 }
                 final Question question = questionService.findQuestionById(nextQuestionId);
                 timeService.add(

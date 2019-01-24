@@ -105,6 +105,14 @@ public class FacebookServiceImpl implements MessageService {
      * {@inheritDoc} Required implementation.
      */
     @Override
+    public void sendPasswordResetMsg(User user) {
+        // Not implemented
+    }
+
+    /**
+     * {@inheritDoc} Required implementation.
+     */
+    @Override
     public void resendUserSettingsChangeMsg(
             final User user,
             String response,
