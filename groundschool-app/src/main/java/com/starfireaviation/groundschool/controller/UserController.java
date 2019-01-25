@@ -22,15 +22,19 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.starfireaviation.groundschool.exception.AccessDeniedException;
+import com.starfireaviation.groundschool.exception.ConflictException;
 import com.starfireaviation.groundschool.exception.InvalidPayloadException;
 import com.starfireaviation.groundschool.exception.ResourceNotFoundException;
 import com.starfireaviation.groundschool.model.NotificationEventType;
 import com.starfireaviation.groundschool.model.NotificationType;
+import com.starfireaviation.groundschool.model.Role;
 import com.starfireaviation.groundschool.model.User;
 import com.starfireaviation.groundschool.service.EventService;
 import com.starfireaviation.groundschool.service.NotificationService;
 import com.starfireaviation.groundschool.service.UserService;
 import com.starfireaviation.groundschool.util.CodeGenerator;
+import com.starfireaviation.groundschool.validation.UserValidator;
 
 import java.security.Principal;
 import java.util.List;
@@ -62,6 +66,12 @@ public class UserController {
     private UserService userService;
 
     /**
+     * UserValidator
+     */
+    @Autowired
+    private UserValidator userValidator;
+
+    /**
      * EventService
      */
     @Autowired
@@ -80,43 +90,20 @@ public class UserController {
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     /**
-     * Initializes an instance of <code>UserController</code> with the default data.
-     */
-    public UserController() {
-        // Default constructor
-    }
-
-    /**
-     * Initializes an instance of <code>UserController</code> with the default data.
-     *
-     * @param userService UserService
-     * @param notificationService NotificationService
-     */
-    public UserController(UserService userService, NotificationService notificationService) {
-        this.userService = userService;
-        this.notificationService = notificationService;
-    }
-
-    /**
      * Creates a user
      *
      * @param user User
      * @return User
-     * @throws InvalidPayloadException when a username conflict occurs
+     * @throws InvalidPayloadException when invalid data is provided
      * @throws ResourceNotFoundException when no user is found
+     * @throws ConflictException when user data conflict with another user
      */
     @PostMapping
-    public User post(@RequestBody User user) throws InvalidPayloadException, ResourceNotFoundException {
-        if (user == null) {
-            return user;
-        }
-        User existingUser = userService.findByUsername(user.getUsername());
-        if (existingUser != null) {
-            String msg = String.format("Another user has already taken username [%s]", user.getUsername());
-            LOGGER.warn(msg);
-            throw new InvalidPayloadException(msg);
-        }
+    public User post(@RequestBody User user) throws InvalidPayloadException, ResourceNotFoundException,
+            ConflictException {
+        userValidator.validate(user);
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        user.setRole(Role.STUDENT);
         final User response = userService.store(user);
         notificationService.send(response.getId(), NotificationType.ALL, NotificationEventType.USER_SETTINGS);
         return response;
@@ -129,10 +116,20 @@ public class UserController {
      * @param principal Principal
      * @return User
      * @throws ResourceNotFoundException when no user is found
+     * @throws AccessDeniedException when user doesn't have permission to perform operation
+     * @throws InvalidPayloadException when invalid data is provided
+     * @throws ConflictException when user data conflict with another user
      */
     @PutMapping
-    public User put(@RequestBody User user, Principal principal) throws ResourceNotFoundException {
+    public User put(@RequestBody User user, Principal principal) throws ResourceNotFoundException,
+            AccessDeniedException, InvalidPayloadException, ConflictException {
         LOGGER.info(String.format("User is logged in as %s", principal.getName()));
+        userValidator.validate(user);
+        final User loggedInUser = userService.findByUsername(principal.getName());
+        final Role role = loggedInUser.getRole();
+        if (role != Role.ADMIN && role != Role.INSTRUCTOR && loggedInUser.getId() != user.getId()) {
+            throw new AccessDeniedException("Current user is not authorized to update user information");
+        }
         final User response = userService.store(user);
         notificationService.send(response.getId(), NotificationType.ALL, NotificationEventType.USER_SETTINGS);
         return response;
@@ -144,12 +141,18 @@ public class UserController {
      * @param userId Long
      * @param principal Principal
      * @return User
+     * @throws AccessDeniedException when user doesn't have permission to perform operation
      */
     @GetMapping(path = {
             "/{userId}"
     })
-    public User get(@PathVariable("userId") long userId, Principal principal) {
+    public User get(@PathVariable("userId") long userId, Principal principal) throws AccessDeniedException {
         LOGGER.info(String.format("User is logged in as %s", principal.getName()));
+        final User loggedInUser = userService.findByUsername(principal.getName());
+        final Role role = loggedInUser.getRole();
+        if (role != Role.ADMIN && role != Role.INSTRUCTOR && loggedInUser.getId() != userId) {
+            throw new AccessDeniedException("Current user is not authorized to update user information");
+        }
         return userService.findById(userId);
     }
 
@@ -321,6 +324,23 @@ public class UserController {
             Principal principal) {
         LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         return eventService.checkin(eventId, userId, code);
+    }
+
+    /**
+     * Login
+     *
+     * @param userId User ID
+     * @param principal Principal
+     * @return login success
+     */
+    @PostMapping(path = {
+            "/{userId}/login"
+    })
+    public boolean login(
+            @PathVariable("userId") long userId,
+            Principal principal) {
+        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
+        return userService.findById(userId) != null ? true : false;
     }
 
     /**

@@ -14,7 +14,10 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
  *
  * @author brianmichael
  */
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = {
+        "com.starfireaviation.groundschool",
+        "me.ramswaroop.jbot"
+})
 @EnableJpaAuditing
 public class GroundSchoolApplication {
 

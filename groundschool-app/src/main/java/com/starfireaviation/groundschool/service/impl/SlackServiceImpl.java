@@ -16,7 +16,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
+import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.RestTemplate;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.starfireaviation.groundschool.model.Message;
 import com.starfireaviation.groundschool.model.Statistic;
 import com.starfireaviation.groundschool.model.StatisticType;
@@ -27,13 +31,14 @@ import com.starfireaviation.groundschool.service.StatisticService;
 
 import freemarker.template.Configuration;
 import freemarker.template.TemplateException;
+import me.ramswaroop.jbot.core.slack.models.RichMessage;
 
 /**
  * SlackServiceImpl
  *
  * @author brianmichael
  */
-@Service("slackService")
+@Service("gsSlackService")
 public class SlackServiceImpl implements MessageService {
 
     /**
@@ -54,6 +59,12 @@ public class SlackServiceImpl implements MessageService {
     private SlackProperties slackProperties;
 
     /**
+     * RestTemplate
+     */
+    @Autowired
+    private RestTemplate restTemplate;
+
+    /**
      * FreeMarker Configuration
      */
     @Autowired
@@ -66,13 +77,15 @@ public class SlackServiceImpl implements MessageService {
     public void sendEventRSVPMsg(final User user) {
         try {
             freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates/slack");
-            send(
-                    user.getId(),
-                    slackProperties.getFromAddress(),
-                    user.getSlack(),
+
+            RichMessage richMessage = new RichMessage(
                     FreeMarkerTemplateUtils.processTemplateIntoString(
                             freemarkerConfig.getTemplate("event_rsvp.ftl"),
                             getModelForUser(user)));
+            richMessage.setUsername(slackProperties.getFromAddress());
+            richMessage.setChannel("@" + user.getSlack());
+
+            send(user.getId(), richMessage);
         } catch (IOException | TemplateException e) {
             LOGGER.warn(e.getMessage());
         }
@@ -85,13 +98,15 @@ public class SlackServiceImpl implements MessageService {
     public void sendEventStartMsg(final User user) {
         try {
             freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates/slack");
-            send(
-                    user.getId(),
-                    slackProperties.getFromAddress(),
-                    user.getSlack(),
+
+            RichMessage richMessage = new RichMessage(
                     FreeMarkerTemplateUtils.processTemplateIntoString(
                             freemarkerConfig.getTemplate("event_start.ftl"),
                             getModelForUser(user)));
+            richMessage.setUsername(slackProperties.getFromAddress());
+            richMessage.setChannel("@" + user.getSlack());
+
+            send(user.getId(), richMessage);
         } catch (IOException | TemplateException e) {
             LOGGER.warn(e.getMessage());
         }
@@ -104,13 +119,15 @@ public class SlackServiceImpl implements MessageService {
     public void sendQuestionAskedMsg(final User user) {
         try {
             freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates/slack");
-            send(
-                    user.getId(),
-                    slackProperties.getFromAddress(),
-                    user.getSlack(),
+
+            RichMessage richMessage = new RichMessage(
                     FreeMarkerTemplateUtils.processTemplateIntoString(
                             freemarkerConfig.getTemplate("question.ftl"),
                             getModelForUser(user)));
+            richMessage.setUsername(slackProperties.getFromAddress());
+            richMessage.setChannel("@" + user.getSlack());
+
+            send(user.getId(), richMessage);
         } catch (IOException | TemplateException e) {
             LOGGER.warn(e.getMessage());
         }
@@ -123,13 +140,15 @@ public class SlackServiceImpl implements MessageService {
     public void sendEventRegisterMsg(final User user) {
         try {
             freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates/slack");
-            send(
-                    user.getId(),
-                    slackProperties.getFromAddress(),
-                    user.getSlack(),
+
+            RichMessage richMessage = new RichMessage(
                     FreeMarkerTemplateUtils.processTemplateIntoString(
                             freemarkerConfig.getTemplate("event_register.ftl"),
                             getModelForUser(user)));
+            richMessage.setUsername(slackProperties.getFromAddress());
+            richMessage.setChannel("@" + user.getSlack());
+
+            send(user.getId(), richMessage);
         } catch (IOException | TemplateException e) {
             LOGGER.warn(e.getMessage());
         }
@@ -142,13 +161,15 @@ public class SlackServiceImpl implements MessageService {
     public void sendEventUnregisterMsg(final User user) {
         try {
             freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates/slack");
-            send(
-                    user.getId(),
-                    slackProperties.getFromAddress(),
-                    user.getSlack(),
+
+            RichMessage richMessage = new RichMessage(
                     FreeMarkerTemplateUtils.processTemplateIntoString(
                             freemarkerConfig.getTemplate("event_unregister.ftl"),
                             getModelForUser(user)));
+            richMessage.setUsername(slackProperties.getFromAddress());
+            richMessage.setChannel("@" + user.getSlack());
+
+            send(user.getId(), richMessage);
         } catch (IOException | TemplateException e) {
             LOGGER.warn(e.getMessage());
         }
@@ -161,13 +182,15 @@ public class SlackServiceImpl implements MessageService {
     public void sendUserDeleteMsg(final User user) {
         try {
             freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates/slack");
-            send(
-                    user.getId(),
-                    slackProperties.getFromAddress(),
-                    user.getSlack(),
+
+            RichMessage richMessage = new RichMessage(
                     FreeMarkerTemplateUtils.processTemplateIntoString(
                             freemarkerConfig.getTemplate("user_delete.ftl"),
                             getModelForUser(user)));
+            richMessage.setUsername(slackProperties.getFromAddress());
+            richMessage.setChannel("@" + user.getSlack());
+
+            send(user.getId(), richMessage);
         } catch (IOException | TemplateException e) {
             LOGGER.warn(e.getMessage());
         }
@@ -180,13 +203,15 @@ public class SlackServiceImpl implements MessageService {
     public void sendUserSettingsVerifiedMsg(final User user) {
         try {
             freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates/slack");
-            send(
-                    user.getId(),
-                    slackProperties.getFromAddress(),
-                    user.getSlack(),
+
+            RichMessage richMessage = new RichMessage(
                     FreeMarkerTemplateUtils.processTemplateIntoString(
                             freemarkerConfig.getTemplate("user_settings_verified.ftl"),
                             getModelForUser(user)));
+            richMessage.setUsername(slackProperties.getFromAddress());
+            richMessage.setChannel("@" + user.getSlack());
+
+            send(user.getId(), richMessage);
         } catch (IOException | TemplateException e) {
             LOGGER.warn(e.getMessage());
         }
@@ -199,13 +224,15 @@ public class SlackServiceImpl implements MessageService {
     public void sendUserSettingsChangeMsg(final User user) {
         try {
             freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates/slack");
-            send(
-                    user.getId(),
-                    slackProperties.getFromAddress(),
-                    user.getSlack(),
+
+            RichMessage richMessage = new RichMessage(
                     FreeMarkerTemplateUtils.processTemplateIntoString(
                             freemarkerConfig.getTemplate("user_verify_settings.ftl"),
                             getModelForUser(user)));
+            richMessage.setUsername(slackProperties.getFromAddress());
+            richMessage.setChannel("@" + user.getSlack());
+
+            send(user.getId(), richMessage);
         } catch (IOException | TemplateException e) {
             LOGGER.warn(e.getMessage());
         }
@@ -265,30 +292,33 @@ public class SlackServiceImpl implements MessageService {
     /**
      * Sends a Slack message
      *
-     * @param userId user ID
-     * @param fromAddress from address
-     * @param toAddress to address
-     * @param body body
+     * @param userId User ID
+     * @param richMessage RichMessage
      */
-    private void send(
-            Long userId,
-            String fromAddress,
-            String toAddress,
-            String body) {
+    private void send(Long userId, RichMessage richMessage) {
         Instant start = Instant.now();
-        LOGGER.info(
-                String.format(
-                        "Sending... fromAddress [%s]; toAddress [%s]; body [%s]",
-                        fromAddress,
-                        toAddress,
-                        body));
+        try {
+            LOGGER.info(
+                    String.format(
+                            "Sending (RichMessage): [%s] to [%s]",
+                            new ObjectMapper().writeValueAsString(richMessage),
+                            slackProperties.getWebhookUrl()));
+        } catch (JsonProcessingException e) {
+            LOGGER.debug("Error parsing RichMessage: ", e);
+        }
+        try {
+            restTemplate.postForEntity(slackProperties.getWebhookUrl(), richMessage.encodedMessage(), String.class);
+        } catch (RestClientException e) {
+            LOGGER.error("Error posting to Slack Incoming Webhook: " + e.getMessage());
+        }
         Statistic statistic = new Statistic(
                 StatisticType.SLACK_MESSAGE_SENT,
                 String.format(
-                        "Duration [%s]; Destination [%s]; Message [%s]",
+                        "Duration [%s]; Message [%s]; Channel [%s]; Username [%s]",
                         Duration.between(start, Instant.now()),
-                        toAddress,
-                        body));
+                        richMessage.getText(),
+                        richMessage.getChannel(),
+                        richMessage.getUsername()));
         statistic.setUserId(userId);
         statisticService.store(statistic);
     }

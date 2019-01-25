@@ -33,11 +33,6 @@ public class User extends Base {
     private boolean emailEnabled;
 
     /**
-     * Receive questions via email
-     */
-    private boolean questionsViaEmail;
-
-    /**
      * SMS
      */
     private String sms;
@@ -53,11 +48,6 @@ public class User extends Base {
     private boolean smsEnabled;
 
     /**
-     * Receive questions via SMS
-     */
-    private boolean questionsViaSMS;
-
-    /**
      * Slack
      */
     private String slack;
@@ -71,11 +61,6 @@ public class User extends Base {
      * Slack enabled
      */
     private boolean slackEnabled;
-
-    /**
-     * Receive questions via Slack
-     */
-    private boolean questionsViaSlack;
 
     /**
      * Username
@@ -111,6 +96,11 @@ public class User extends Base {
      * Role
      */
     private Role role;
+
+    /**
+     * QuestionPreference
+     */
+    private QuestionPreference questionPreference;
 
     /**
      * Retrieves the value for {@link #username}.
@@ -365,60 +355,6 @@ public class User extends Base {
     }
 
     /**
-     * Retrieves the value for {@link #questionsViaEmail}.
-     *
-     * @return the current value
-     */
-    public boolean isQuestionsViaEmail() {
-        return questionsViaEmail;
-    }
-
-    /**
-     * Provides a value for {@link #questionsViaEmail}.
-     *
-     * @param questionsViaEmail the new value to set
-     */
-    public void setQuestionsViaEmail(boolean questionsViaEmail) {
-        this.questionsViaEmail = questionsViaEmail;
-    }
-
-    /**
-     * Retrieves the value for {@link #questionsViaSMS}.
-     *
-     * @return the current value
-     */
-    public boolean isQuestionsViaSMS() {
-        return questionsViaSMS;
-    }
-
-    /**
-     * Provides a value for {@link #questionsViaSMS}.
-     *
-     * @param questionsViaSMS the new value to set
-     */
-    public void setQuestionsViaSMS(boolean questionsViaSMS) {
-        this.questionsViaSMS = questionsViaSMS;
-    }
-
-    /**
-     * Retrieves the value for {@link #questionsViaSlack}.
-     *
-     * @return the current value
-     */
-    public boolean isQuestionsViaSlack() {
-        return questionsViaSlack;
-    }
-
-    /**
-     * Provides a value for {@link #questionsViaSlack}.
-     *
-     * @param questionsViaSlack the new value to set
-     */
-    public void setQuestionsViaSlack(boolean questionsViaSlack) {
-        this.questionsViaSlack = questionsViaSlack;
-    }
-
-    /**
      * Retrieves the value for {@link #eaaNumber}.
      *
      * @return the current value
@@ -452,6 +388,24 @@ public class User extends Base {
      */
     public void setCode(String code) {
         this.code = code;
+    }
+
+    /**
+     * Retrieves the value for {@link #questionPreference}.
+     *
+     * @return the current value
+     */
+    public QuestionPreference getQuestionPreference() {
+        return questionPreference;
+    }
+
+    /**
+     * Provides a value for {@link #questionPreference}.
+     *
+     * @param questionPreference the new value to set
+     */
+    public void setQuestionPreference(QuestionPreference questionPreference) {
+        this.questionPreference = questionPreference;
     }
 
 }

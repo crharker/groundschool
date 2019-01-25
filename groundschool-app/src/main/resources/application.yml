@@ -11,7 +11,7 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL5InnoDBDialect
-    show-sql: false
+    show-sql: true
     hibernate:
       ddl-auto: update
       naming:
@@ -54,8 +54,21 @@ groundschool:
     username: bsmichael@gmail.com
     password: <<HIDDEN>>
   sms:
-    from-address: 4704227400
+    from-address: +15005550006
     account-sid: <<HIDDEN>>
     auth-id: <<HIDDEN>>
   slack:
-    from-address: brianmichael
+    from-address: groundschool
+
+# slack integrations
+# Note: these must be top level settings
+slackApi: https://slack.com/api
+slackBotToken: <<HIDDEN>>
+slashCommandToken: <<HIDDEN>>
+# replace the below url with your slack webhook url
+slackIncomingWebhookUrl: <<HIDDEN>>
+
+# fb bot
+fbGraphApi: https://graph.facebook.com/v3.2
+fbBotToken: fb_token_for_jbot
+fbPageAccessToken: <paste your page access token>

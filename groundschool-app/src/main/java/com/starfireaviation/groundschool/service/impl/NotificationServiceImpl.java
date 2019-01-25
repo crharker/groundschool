@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import com.starfireaviation.groundschool.exception.ResourceNotFoundException;
 import com.starfireaviation.groundschool.model.NotificationEventType;
 import com.starfireaviation.groundschool.model.NotificationType;
+import com.starfireaviation.groundschool.model.QuestionPreference;
 import com.starfireaviation.groundschool.model.User;
 import com.starfireaviation.groundschool.service.MessageService;
 import com.starfireaviation.groundschool.service.NotificationService;
@@ -56,7 +57,7 @@ public class NotificationServiceImpl implements NotificationService {
      * SlackService
      */
     @Autowired
-    @Qualifier("slackService")
+    @Qualifier("gsSlackService")
     private MessageService slackService;
 
     /**
@@ -300,7 +301,7 @@ public class NotificationServiceImpl implements NotificationService {
         if (user.getEmail() != null
                 && user.isEmailVerified()
                 && user.isEmailEnabled()
-                && user.isQuestionsViaEmail()
+                && user.getQuestionPreference() == QuestionPreference.EMAIL
                 && (notificationType == null
                         || notificationType == NotificationType.ALL
                         || notificationType == NotificationType.EMAIL)) {
@@ -309,7 +310,7 @@ public class NotificationServiceImpl implements NotificationService {
         if (user.getSms() != null
                 && user.isSmsVerified()
                 && user.isSmsEnabled()
-                && user.isQuestionsViaSMS()
+                && user.getQuestionPreference() == QuestionPreference.SMS
                 && (notificationType == null
                         || notificationType == NotificationType.ALL
                         || notificationType == NotificationType.SMS)) {
@@ -318,7 +319,7 @@ public class NotificationServiceImpl implements NotificationService {
         if (user.getSlack() != null
                 && user.isSlackVerified()
                 && user.isSlackEnabled()
-                && user.isQuestionsViaSlack()
+                && user.getQuestionPreference() == QuestionPreference.SLACK
                 && (notificationType == null
                         || notificationType == NotificationType.ALL
                         || notificationType == NotificationType.SLACK)) {
@@ -341,7 +342,7 @@ public class NotificationServiceImpl implements NotificationService {
         if (user.getEmail() != null
                 && user.isEmailVerified()
                 && user.isEmailEnabled()
-                && user.isQuestionsViaEmail()
+                && user.getQuestionPreference() == QuestionPreference.EMAIL
                 && (notificationType == null
                         || notificationType == NotificationType.ALL
                         || notificationType == NotificationType.EMAIL)) {
@@ -350,7 +351,7 @@ public class NotificationServiceImpl implements NotificationService {
         if (user.getSms() != null
                 && user.isSmsVerified()
                 && user.isSmsEnabled()
-                && user.isQuestionsViaSMS()
+                && user.getQuestionPreference() == QuestionPreference.SMS
                 && (notificationType == null
                         || notificationType == NotificationType.ALL
                         || notificationType == NotificationType.SMS)) {
@@ -359,7 +360,7 @@ public class NotificationServiceImpl implements NotificationService {
         if (user.getSlack() != null
                 && user.isSlackVerified()
                 && user.isSlackEnabled()
-                && user.isQuestionsViaSlack()
+                && user.getQuestionPreference() == QuestionPreference.SLACK
                 && (notificationType == null
                         || notificationType == NotificationType.ALL
                         || notificationType == NotificationType.SLACK)) {

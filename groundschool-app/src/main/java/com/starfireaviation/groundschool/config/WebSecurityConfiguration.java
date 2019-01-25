@@ -17,6 +17,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.starfireaviation.groundschool.properties.AuthorizationProperties;
@@ -52,16 +53,27 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     private AuthenticationEntryPoint authenticationEntryPoint;
 
     /**
+     * UserDetailsService
+     */
+    @Autowired
+    private UserDetailsService userDetailsService;
+
+    /**
      * DatabaseProperties
      */
     @Autowired
     private DatabaseProperties databaseProperties;
 
     /**
-     * AuthorizationProperties
+     * Configure authentication
+     *
+     * @param auth AuthenticationManagerBuilder
+     * @throws Exception when things go wrong
      */
     @Autowired
-    private AuthorizationProperties authorizationProperties;
+    public void configureAuthentication(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userDetailsService).passwordEncoder(encoder());
+    }
 
     /**
      * {@inheritDoc} Required implementation.
@@ -75,11 +87,9 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 // Allow non-logged in users to access
                 .antMatchers(HttpMethod.POST, "/notifications/sms")
                 .permitAll()
-                .antMatchers(HttpMethod.POST, "/users")
+                .antMatchers(HttpMethod.POST, "/users/**")
                 .permitAll()
                 .antMatchers(HttpMethod.GET, "/users/username/**/available")
-                .permitAll()
-                .antMatchers(HttpMethod.POST, "/users/**/password/**")
                 .permitAll()
                 .antMatchers(HttpMethod.GET, "/events/rsvp/**")
                 .permitAll()
@@ -150,27 +160,6 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
                 .httpBasic()
                 .authenticationEntryPoint(authenticationEntryPoint);
-    }
-
-    /**
-     * Configure admin user
-     *
-     * @param auth AuthenticationManagerBuilder
-     * @throws Exception when things go wrong
-     */
-    @Autowired
-    public void configureAuthentication(AuthenticationManagerBuilder auth) throws Exception {
-        auth
-                .inMemoryAuthentication()
-                .withUser("admin")
-                .password(authorizationProperties.getAdminPassword())
-                .roles("ADMIN");
-        auth
-                .jdbcAuthentication()
-                .dataSource(dataSource())
-                .usersByUsernameQuery(USERNAME_PASSWORD_QUERY)
-                .authoritiesByUsernameQuery(USERNAME_ROLE_QUERY)
-                .passwordEncoder(encoder());
     }
 
     /**

@@ -33,7 +33,7 @@ public interface UserRepository extends Repository<UserEntity, Long> {
     List<UserEntity> findAll();
 
     /**
-     * Gets a user
+     * Gets a user by ID
      *
      * @param id Long
      * @return User
@@ -41,12 +41,44 @@ public interface UserRepository extends Repository<UserEntity, Long> {
     UserEntity findById(long id);
 
     /**
-     * Gets a user
+     * Gets a user by Username
      *
      * @param username String
      * @return User
      */
     UserEntity findByUsername(String username);
+
+    /**
+     * Gets a user by SMS Number
+     *
+     * @param sms String
+     * @return User
+     */
+    UserEntity findBySms(String sms);
+
+    /**
+     * Gets a user by Slack name
+     *
+     * @param slack String
+     * @return User
+     */
+    UserEntity findBySlack(String slack);
+
+    /**
+     * Gets a user by Email Address
+     *
+     * @param email String
+     * @return User
+     */
+    UserEntity findByEmail(String email);
+
+    /**
+     * Gets a user by EAA Number
+     *
+     * @param eaaNumber String
+     * @return User
+     */
+    UserEntity findByEaaNumber(String eaaNumber);
 
     /**
      * Saves a user

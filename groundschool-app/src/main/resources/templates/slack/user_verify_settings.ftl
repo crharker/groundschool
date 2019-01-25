@@ -1,3 +1,3 @@
-Hi ${firstName} ${lastName}, please verify your phone number by responding with CONFIRM, DECLINE.
+Hi ${firstName} ${lastName}, please verify your slack name by responding with /confirm, /decline.
 
-Reply with STOP to no longer receive these messages.
+Reply with /stop to no longer receive these messages.

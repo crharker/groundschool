@@ -73,24 +73,6 @@ public class UserEntity extends BaseEntity {
     private boolean slackEnabled;
 
     /**
-     * Receive questions via Email
-     */
-    @Column(name = "questions_via_email")
-    private boolean questionsViaEmail;
-
-    /**
-     * Receive questions via SMS
-     */
-    @Column(name = "questions_via_sms")
-    private boolean questionsViaSMS;
-
-    /**
-     * Receive questions via Slack
-     */
-    @Column(name = "questions_via_slack")
-    private boolean questionsViaSlack;
-
-    /**
      * Username
      */
     @Column(name = "username", nullable = false)
@@ -127,10 +109,53 @@ public class UserEntity extends BaseEntity {
     private String code;
 
     /**
+     * Enabled - used by spring security
+     */
+    @Column(name = "enabled")
+    private int enabled;
+
+    /**
      * Role
      */
     @Column(name = "role", nullable = false)
     private String role;
+
+    /**
+     * QuestionPreference
+     */
+    @Column(name = "question_preference", nullable = false)
+    private String questionPreference;
+
+    /**
+     * Initializes an instance of <code>UserEntity</code> with the default data.
+     */
+    public UserEntity() {
+        // Default constructor
+    }
+
+    /**
+     * Initializes an instance of <code>UserEntity</code> with the default data.
+     *
+     * @param user User
+     */
+    public UserEntity(UserEntity user) {
+        code = user.getCode();
+        eaaNumber = user.getEaaNumber();
+        email = user.getEmail();
+        emailEnabled = user.isEmailEnabled();
+        emailVerified = user.isEmailVerified();
+        firstName = user.getFirstName();
+        lastName = user.getLastName();
+        password = user.getPassword();
+        role = user.getRole();
+        slack = user.getSlack();
+        slackEnabled = user.isSlackEnabled();
+        slackVerified = user.isSmsVerified();
+        sms = user.getSms();
+        smsEnabled = user.isSmsEnabled();
+        smsVerified = user.isSmsVerified();
+        username = user.getUsername();
+    }
 
     /**
      * Retrieves the value for {@link #email}.
@@ -385,60 +410,6 @@ public class UserEntity extends BaseEntity {
     }
 
     /**
-     * Retrieves the value for {@link #questionsViaEmail}.
-     *
-     * @return the current value
-     */
-    public boolean isQuestionsViaEmail() {
-        return questionsViaEmail;
-    }
-
-    /**
-     * Provides a value for {@link #questionsViaEmail}.
-     *
-     * @param questionsViaEmail the new value to set
-     */
-    public void setQuestionsViaEmail(boolean questionsViaEmail) {
-        this.questionsViaEmail = questionsViaEmail;
-    }
-
-    /**
-     * Retrieves the value for {@link #questionsViaSMS}.
-     *
-     * @return the current value
-     */
-    public boolean isQuestionsViaSMS() {
-        return questionsViaSMS;
-    }
-
-    /**
-     * Provides a value for {@link #questionsViaSMS}.
-     *
-     * @param questionsViaSMS the new value to set
-     */
-    public void setQuestionsViaSMS(boolean questionsViaSMS) {
-        this.questionsViaSMS = questionsViaSMS;
-    }
-
-    /**
-     * Retrieves the value for {@link #questionsViaSlack}.
-     *
-     * @return the current value
-     */
-    public boolean isQuestionsViaSlack() {
-        return questionsViaSlack;
-    }
-
-    /**
-     * Provides a value for {@link #questionsViaSlack}.
-     *
-     * @param questionsViaSlack the new value to set
-     */
-    public void setQuestionsViaSlack(boolean questionsViaSlack) {
-        this.questionsViaSlack = questionsViaSlack;
-    }
-
-    /**
      * Retrieves the value for {@link #eaaNumber}.
      *
      * @return the current value
@@ -472,6 +443,42 @@ public class UserEntity extends BaseEntity {
      */
     public void setCode(String code) {
         this.code = code;
+    }
+
+    /**
+     * Retrieves the value for {@link #enabled}.
+     *
+     * @return the current value
+     */
+    public int getEnabled() {
+        return enabled;
+    }
+
+    /**
+     * Provides a value for {@link #enabled}.
+     *
+     * @param enabled the new value to set
+     */
+    public void setEnabled(int enabled) {
+        this.enabled = enabled;
+    }
+
+    /**
+     * Retrieves the value for {@link #questionPreference}.
+     *
+     * @return the current value
+     */
+    public String getQuestionPreference() {
+        return questionPreference;
+    }
+
+    /**
+     * Provides a value for {@link #questionPreference}.
+     *
+     * @param questionPreference the new value to set
+     */
+    public void setQuestionPreference(String questionPreference) {
+        this.questionPreference = questionPreference;
     }
 
 }
