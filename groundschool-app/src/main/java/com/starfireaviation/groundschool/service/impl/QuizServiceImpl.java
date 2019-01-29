@@ -175,7 +175,12 @@ public class QuizServiceImpl implements QuizService {
                 List<Long> userIds = eventService.getAllEventUsers(eventService.getCurrentEvent());
                 for (Long userId : userIds) {
                     try {
-                        notificationService.send(userId, NotificationType.ALL, NotificationEventType.QUESTION_ASKED);
+                        notificationService.send(
+                                userId,
+                                null,
+                                nextQuestionId,
+                                NotificationType.ALL,
+                                NotificationEventType.QUESTION_ASKED);
                     } catch (ResourceNotFoundException e) {
                         LOGGER.warn(
                                 String.format(
@@ -241,6 +246,22 @@ public class QuizServiceImpl implements QuizService {
      * {@inheritDoc} Required implementation.
      */
     @Override
+    public Quiz getCurrentQuiz() {
+        Quiz current = null;
+        List<Quiz> quizzes = findAllQuizzes();
+        for (Quiz quiz : quizzes) {
+            if (quiz.isStarted() && !quiz.isCompleted()) {
+                current = quiz;
+                break;
+            }
+        }
+        return current;
+    }
+
+    /**
+     * {@inheritDoc} Required implementation.
+     */
+    @Override
     public Question getCurrentQuestion(long quizId) {
         Question question = null;
         Quiz quiz = findById(quizId);
@@ -249,6 +270,7 @@ public class QuizServiceImpl implements QuizService {
             for (Question q : quiz.getQuestions()) {
                 if (currentQuestionId.equals(q.getId())) {
                     question = q;
+                    break;
                 }
             }
         }

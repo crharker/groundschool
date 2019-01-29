@@ -8,6 +8,8 @@ package com.starfireaviation.groundschool.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -27,6 +29,11 @@ import ma.glasnost.orika.MapperFacade;
  */
 @Service
 public class SecurityUserDetailsService implements UserDetailsService {
+
+    /**
+     * Logger
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(SecurityUserDetailsService.class);
 
     /**
      * UserRepository
@@ -50,6 +57,7 @@ public class SecurityUserDetailsService implements UserDetailsService {
         if (user == null) {
             throw new UsernameNotFoundException(String.format("No user present with username [%s]", username));
         }
+        LOGGER.info(String.format("loaded user [%s] with role [%s]", user.getUsername(), user.getRole()));
         List<String> userRoles = new ArrayList<>();
         userRoles.add(user.getRole());
         return new SecurityUserDetails(mapper.map(user, UserEntity.class), userRoles);

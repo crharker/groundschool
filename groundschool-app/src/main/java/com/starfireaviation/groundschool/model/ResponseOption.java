@@ -10,7 +10,7 @@ package com.starfireaviation.groundschool.model;
  *
  * @author brianmichael
  */
-public enum SMSResponseOption {
+public enum ResponseOption {
 
     /**
      * UNKNOWN

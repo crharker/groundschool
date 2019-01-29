@@ -20,11 +20,18 @@ public interface NotificationService {
      * Sends a notification
      *
      * @param userId Long
+     * @param eventId Long
+     * @param questionId Long
      * @param notificationType NotificationType
      * @param notificationEventType NotificationEventType
      * @throws ResourceNotFoundException when no user is found
      */
-    public void send(Long userId, NotificationType notificationType, NotificationEventType notificationEventType)
+    public void send(
+            Long userId,
+            Long eventId,
+            Long questionId,
+            NotificationType notificationType,
+            NotificationEventType notificationEventType)
             throws ResourceNotFoundException;
 
     /**

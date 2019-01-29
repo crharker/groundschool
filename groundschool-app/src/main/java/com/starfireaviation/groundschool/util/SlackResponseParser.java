@@ -11,11 +11,11 @@ import java.util.regex.Pattern;
 import com.starfireaviation.groundschool.model.ResponseOption;
 
 /**
- * SMSResponseParser
+ * SlackResponseParser
  *
  * @author brianmichael
  */
-public class SMSResponseParser {
+public class SlackResponseParser {
 
     /**
      * A_PATTERN
@@ -56,7 +56,7 @@ public class SMSResponseParser {
      * Determines user's response
      *
      * @param message to be evaluated
-     * @return SMSResponseOption
+     * @return ResponseOption
      */
     public static ResponseOption determineResponse(String message) {
         ResponseOption responseOption = ResponseOption.UNKNOWN;

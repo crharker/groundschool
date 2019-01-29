@@ -11,7 +11,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.starfireaviation.groundschool.model.Event;
 import com.starfireaviation.groundschool.model.Message;
+import com.starfireaviation.groundschool.model.Question;
 import com.starfireaviation.groundschool.model.Statistic;
 import com.starfireaviation.groundschool.model.StatisticType;
 import com.starfireaviation.groundschool.model.User;
@@ -49,7 +52,7 @@ public class TwitterServiceImpl implements MessageService {
      * {@inheritDoc} Required implementation.
      */
     @Override
-    public void sendEventRSVPMsg(final User user) {
+    public void sendEventRSVPMsg(final User user, final Event event) {
         // Not implemented
     }
 
@@ -57,7 +60,7 @@ public class TwitterServiceImpl implements MessageService {
      * {@inheritDoc} Required implementation.
      */
     @Override
-    public void sendEventStartMsg(final User user) {
+    public void sendEventStartMsg(final User user, final Event event) {
         // Not implemented
     }
 
@@ -65,7 +68,7 @@ public class TwitterServiceImpl implements MessageService {
      * {@inheritDoc} Required implementation.
      */
     @Override
-    public void sendQuestionAskedMsg(final User user) {
+    public void sendQuestionAskedMsg(final User user, final Question question) {
         // Not implemented
     }
 
@@ -73,7 +76,7 @@ public class TwitterServiceImpl implements MessageService {
      * {@inheritDoc} Required implementation.
      */
     @Override
-    public void sendEventRegisterMsg(final User user) {
+    public void sendEventRegisterMsg(final User user, final Event event) {
         // Not implemented
     }
 
@@ -81,7 +84,7 @@ public class TwitterServiceImpl implements MessageService {
      * {@inheritDoc} Required implementation.
      */
     @Override
-    public void sendEventUnregisterMsg(final User user) {
+    public void sendEventUnregisterMsg(final User user, final Event event) {
         // Not implemented
     }
 

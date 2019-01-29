@@ -214,7 +214,7 @@ public class EventController {
             @PathVariable("eventId") long eventId,
             @PathVariable("userId") long userId) throws ResourceNotFoundException {
         eventService.register(eventId, userId);
-        notificationService.send(userId, NotificationType.ALL, NotificationEventType.EVENT_REGISTER);
+        notificationService.send(userId, eventId, null, NotificationType.ALL, NotificationEventType.EVENT_REGISTER);
     }
 
     /**
@@ -231,7 +231,7 @@ public class EventController {
             @PathVariable("eventId") long eventId,
             @PathVariable("userId") long userId) throws ResourceNotFoundException {
         eventService.unregister(eventId, userId);
-        notificationService.send(userId, NotificationType.ALL, NotificationEventType.EVENT_UNREGISTER);
+        notificationService.send(userId, eventId, null, NotificationType.ALL, NotificationEventType.EVENT_UNREGISTER);
     }
 
     /**

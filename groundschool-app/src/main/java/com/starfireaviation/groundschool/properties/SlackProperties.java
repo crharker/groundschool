@@ -25,17 +25,8 @@ public class SlackProperties {
     /**
      * Slack BOT Token
      */
-    @Value("${slackBotToken}")
+    @Value("${slack.bot.key}")
     private String token;
-
-    /**
-     * Incoming Webhook URL
-     *
-     * The Url you get while configuring a new incoming webhook on Slack. You can setup a new incoming webhook
-     * <a href="https://my.slack.com/services/new/incoming-webhook/">here</a>.
-     */
-    @Value("${slackIncomingWebhookUrl}")
-    private String webhookUrl;
 
     /**
      * Retrieves the value for {@link #fromAddress}.
@@ -71,24 +62,6 @@ public class SlackProperties {
      */
     public void setToken(String token) {
         this.token = token;
-    }
-
-    /**
-     * Retrieves the value for {@link #webhookUrl}.
-     *
-     * @return the current value
-     */
-    public String getWebhookUrl() {
-        return webhookUrl;
-    }
-
-    /**
-     * Provides a value for {@link #webhookUrl}.
-     *
-     * @param webhookUrl the new value to set
-     */
-    public void setWebhookUrl(String webhookUrl) {
-        this.webhookUrl = webhookUrl;
     }
 
 }

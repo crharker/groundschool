@@ -105,7 +105,12 @@ public class UserController {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         user.setRole(Role.STUDENT);
         final User response = userService.store(user);
-        notificationService.send(response.getId(), NotificationType.ALL, NotificationEventType.USER_SETTINGS);
+        notificationService.send(
+                response.getId(),
+                null,
+                null,
+                NotificationType.ALL,
+                NotificationEventType.USER_SETTINGS);
         return response;
     }
 
@@ -131,7 +136,12 @@ public class UserController {
             throw new AccessDeniedException("Current user is not authorized to update user information");
         }
         final User response = userService.store(user);
-        notificationService.send(response.getId(), NotificationType.ALL, NotificationEventType.USER_SETTINGS);
+        notificationService.send(
+                response.getId(),
+                null,
+                null,
+                NotificationType.ALL,
+                NotificationEventType.USER_SETTINGS);
         return response;
     }
 
@@ -183,7 +193,12 @@ public class UserController {
         LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         final User response = userService.delete(userId);
         try {
-            notificationService.send(response.getId(), NotificationType.ALL, NotificationEventType.USER_DELETE);
+            notificationService.send(
+                    response.getId(),
+                    null,
+                    null,
+                    NotificationType.ALL,
+                    NotificationEventType.USER_DELETE);
         } catch (ResourceNotFoundException e) {
             LOGGER.warn(
                     String.format(
@@ -229,7 +244,7 @@ public class UserController {
                 default:
             }
             userService.store(user);
-            notificationService.send(userId, NotificationType.ALL, NotificationEventType.USER_VERIFIED);
+            notificationService.send(userId, null, null, NotificationType.ALL, NotificationEventType.USER_VERIFIED);
         }
     }
 
@@ -285,7 +300,7 @@ public class UserController {
         // TODO do something with verificationCode
         user.setCode(CodeGenerator.generateCode(4));
         userService.store(user);
-        notificationService.send(userId, NotificationType.ALL, NotificationEventType.PASSWORD_RESET);
+        notificationService.send(userId, null, null, NotificationType.ALL, NotificationEventType.PASSWORD_RESET);
         return true;
     }
 

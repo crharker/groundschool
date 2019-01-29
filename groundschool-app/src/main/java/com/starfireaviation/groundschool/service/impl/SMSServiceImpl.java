@@ -26,9 +26,11 @@ import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 import org.springframework.util.CollectionUtils;
 
 import com.starfireaviation.groundschool.exception.ResourceNotFoundException;
+import com.starfireaviation.groundschool.model.Event;
 import com.starfireaviation.groundschool.model.NotificationEventType;
 import com.starfireaviation.groundschool.model.NotificationType;
-import com.starfireaviation.groundschool.model.SMSResponseOption;
+import com.starfireaviation.groundschool.model.Question;
+import com.starfireaviation.groundschool.model.ResponseOption;
 import com.starfireaviation.groundschool.model.Statistic;
 import com.starfireaviation.groundschool.model.StatisticType;
 import com.starfireaviation.groundschool.model.User;
@@ -135,7 +137,7 @@ public class SMSServiceImpl implements MessageService {
      * {@inheritDoc} Required implementation.
      */
     @Override
-    public void sendEventRSVPMsg(final User user) {
+    public void sendEventRSVPMsg(final User user, final Event event) {
         try {
             freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates/sms");
             send(
@@ -158,7 +160,7 @@ public class SMSServiceImpl implements MessageService {
      * {@inheritDoc} Required implementation.
      */
     @Override
-    public void sendEventStartMsg(final User user) {
+    public void sendEventStartMsg(final User user, final Event event) {
         try {
             freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates/sms");
             send(
@@ -181,7 +183,7 @@ public class SMSServiceImpl implements MessageService {
      * {@inheritDoc} Required implementation.
      */
     @Override
-    public void sendQuestionAskedMsg(final User user) {
+    public void sendQuestionAskedMsg(final User user, final Question question) {
         try {
             freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates/sms");
             send(
@@ -204,7 +206,7 @@ public class SMSServiceImpl implements MessageService {
      * {@inheritDoc} Required implementation.
      */
     @Override
-    public void sendEventRegisterMsg(final User user) {
+    public void sendEventRegisterMsg(final User user, final Event event) {
         try {
             freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates/sms");
             send(
@@ -227,7 +229,7 @@ public class SMSServiceImpl implements MessageService {
      * {@inheritDoc} Required implementation.
      */
     @Override
-    public void sendEventUnregisterMsg(final User user) {
+    public void sendEventUnregisterMsg(final User user, final Event event) {
         try {
             freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates/sms");
             send(
@@ -438,7 +440,7 @@ public class SMSServiceImpl implements MessageService {
                     }
                 } else {
                     final String body = message.getBody();
-                    if (body != null && SMSResponseOption.STOP == SMSResponseParser.determineResponse(body)) {
+                    if (body != null && ResponseOption.STOP == SMSResponseParser.determineResponse(body)) {
                         handleStop(userId);
                     }
                 }
@@ -546,7 +548,7 @@ public class SMSServiceImpl implements MessageService {
     private boolean processUserVerifiedResponse(Long userId, com.starfireaviation.groundschool.model.Message message)
             throws ResourceNotFoundException {
         final String body = message.getBody();
-        if (body != null && SMSResponseOption.STOP == SMSResponseParser.determineResponse(body)) {
+        if (body != null && ResponseOption.STOP == SMSResponseParser.determineResponse(body)) {
             handleStop(userId);
         }
         return true;
@@ -575,7 +577,12 @@ public class SMSServiceImpl implements MessageService {
                     user = userService.findById(userId);
                     user.setSmsVerified(true);
                     userService.store(user);
-                    notificationService.send(userId, NotificationType.SMS, NotificationEventType.USER_VERIFIED);
+                    notificationService.send(
+                            userId,
+                            null,
+                            null,
+                            NotificationType.SMS,
+                            NotificationEventType.USER_VERIFIED);
                     break;
                 case DECLINE:
                     user = userService.findById(userId);
@@ -612,7 +619,7 @@ public class SMSServiceImpl implements MessageService {
     private boolean processUserDeletedResponse(Long userId, com.starfireaviation.groundschool.model.Message message)
             throws ResourceNotFoundException {
         final String body = message.getBody();
-        if (body != null && SMSResponseOption.STOP == SMSResponseParser.determineResponse(body)) {
+        if (body != null && ResponseOption.STOP == SMSResponseParser.determineResponse(body)) {
             handleStop(userId);
         }
         return true;

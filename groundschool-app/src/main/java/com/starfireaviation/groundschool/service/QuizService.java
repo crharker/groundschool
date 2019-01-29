@@ -91,6 +91,15 @@ public interface QuizService {
     public Quiz completeQuestion(long quizId);
 
     /**
+     * Gets the current quiz
+     *
+     * The response is null if there is no active quiz
+     *
+     * @return Quiz
+     */
+    public Quiz getCurrentQuiz();
+
+    /**
      * Gets the current question for a quiz
      *
      * @param quizId Long

@@ -5,7 +5,9 @@
  */
 package com.starfireaviation.groundschool.service;
 
+import com.starfireaviation.groundschool.model.Event;
 import com.starfireaviation.groundschool.model.Message;
+import com.starfireaviation.groundschool.model.Question;
 import com.starfireaviation.groundschool.model.User;
 
 /**
@@ -33,36 +35,41 @@ public interface MessageService {
      * Sends a message to RSVP for an upcoming event
      *
      * @param user User
+     * @param event Event
      */
-    public void sendEventRSVPMsg(final User user);
+    public void sendEventRSVPMsg(final User user, final Event event);
 
     /**
      * Sends a message to RSVP for an upcoming event
      *
      * @param user User
+     * @param event Event
      */
-    public void sendEventStartMsg(final User user);
+    public void sendEventStartMsg(final User user, final Event event);
 
     /**
      * Sends a message that a question has been asked
      *
      * @param user User
+     * @param question Question
      */
-    public void sendQuestionAskedMsg(final User user);
+    public void sendQuestionAskedMsg(final User user, final Question question);
 
     /**
      * Sends a message for registering for an upcoming event
      *
      * @param user User
+     * @param event Event
      */
-    public void sendEventRegisterMsg(final User user);
+    public void sendEventRegisterMsg(final User user, final Event event);
 
     /**
      * Sends a message for unregistering from an upcoming event
      *
      * @param user User
+     * @param event Event
      */
-    public void sendEventUnregisterMsg(final User user);
+    public void sendEventUnregisterMsg(final User user, final Event event);
 
     /**
      * Sends a message for user settings verified

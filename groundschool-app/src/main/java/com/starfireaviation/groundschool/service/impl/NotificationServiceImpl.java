@@ -12,12 +12,16 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.starfireaviation.groundschool.exception.ResourceNotFoundException;
+import com.starfireaviation.groundschool.model.Event;
 import com.starfireaviation.groundschool.model.NotificationEventType;
 import com.starfireaviation.groundschool.model.NotificationType;
+import com.starfireaviation.groundschool.model.Question;
 import com.starfireaviation.groundschool.model.QuestionPreference;
 import com.starfireaviation.groundschool.model.User;
+import com.starfireaviation.groundschool.service.EventService;
 import com.starfireaviation.groundschool.service.MessageService;
 import com.starfireaviation.groundschool.service.NotificationService;
+import com.starfireaviation.groundschool.service.QuestionService;
 import com.starfireaviation.groundschool.service.UserService;
 
 /**
@@ -38,6 +42,18 @@ public class NotificationServiceImpl implements NotificationService {
      */
     @Autowired
     private UserService userService;
+
+    /**
+     * EventService
+     */
+    @Autowired
+    private EventService eventService;
+
+    /**
+     * QuestionService
+     */
+    @Autowired
+    private QuestionService questionService;
 
     /**
      * EmailService
@@ -64,7 +80,12 @@ public class NotificationServiceImpl implements NotificationService {
      * {@inheritDoc} Required implementation.
      */
     @Override
-    public void send(Long userId, NotificationType notificationType, NotificationEventType notificationEventType)
+    public void send(
+            Long userId,
+            Long eventId,
+            Long questionId,
+            NotificationType notificationType,
+            NotificationEventType notificationEventType)
             throws ResourceNotFoundException {
         LOGGER.info(
                 String.format(
@@ -85,19 +106,19 @@ public class NotificationServiceImpl implements NotificationService {
                 userDelete(userId, notificationType);
                 break;
             case EVENT_RSVP:
-                eventRSVP(userId, notificationType);
+                eventRSVP(userId, eventId, notificationType);
                 break;
             case EVENT_START:
-                eventStart(userId, notificationType);
+                eventStart(userId, eventId, notificationType);
                 break;
             case EVENT_REGISTER:
-                eventRegister(userId, notificationType);
+                eventRegister(userId, eventId, notificationType);
                 break;
             case EVENT_UNREGISTER:
-                eventUnregister(userId, notificationType);
+                eventUnregister(userId, eventId, notificationType);
                 break;
             case QUESTION_ASKED:
-                questionAsked(userId, notificationType);
+                questionAsked(userId, questionId, notificationType);
                 break;
             default:
         }
@@ -290,10 +311,12 @@ public class NotificationServiceImpl implements NotificationService {
      * Sends notification that an event has started
      *
      * @param userId Long
+     * @param eventId Long
      * @param notificationType NotificationType
      */
-    private void eventStart(Long userId, NotificationType notificationType) {
+    private void eventStart(Long userId, Long eventId, NotificationType notificationType) {
         final User user = userService.findById(userId);
+        final Event event = eventService.findById(eventId);
         if (user == null) {
             LOGGER.warn("eventStart() returning as no user was found");
             return;
@@ -305,7 +328,7 @@ public class NotificationServiceImpl implements NotificationService {
                 && (notificationType == null
                         || notificationType == NotificationType.ALL
                         || notificationType == NotificationType.EMAIL)) {
-            emailService.sendEventStartMsg(user);
+            emailService.sendEventStartMsg(user, event);
         }
         if (user.getSms() != null
                 && user.isSmsVerified()
@@ -314,7 +337,7 @@ public class NotificationServiceImpl implements NotificationService {
                 && (notificationType == null
                         || notificationType == NotificationType.ALL
                         || notificationType == NotificationType.SMS)) {
-            smsService.sendEventStartMsg(user);
+            smsService.sendEventStartMsg(user, event);
         }
         if (user.getSlack() != null
                 && user.isSlackVerified()
@@ -323,7 +346,7 @@ public class NotificationServiceImpl implements NotificationService {
                 && (notificationType == null
                         || notificationType == NotificationType.ALL
                         || notificationType == NotificationType.SLACK)) {
-            slackService.sendEventStartMsg(user);
+            slackService.sendEventStartMsg(user, event);
         }
     }
 
@@ -331,10 +354,12 @@ public class NotificationServiceImpl implements NotificationService {
      * Sends notification that a question has been asked
      *
      * @param userId Long
+     * @param questionId Long
      * @param notificationType NotificationType
      */
-    private void questionAsked(Long userId, NotificationType notificationType) {
+    private void questionAsked(Long userId, Long questionId, NotificationType notificationType) {
         final User user = userService.findById(userId);
+        final Question question = questionService.findQuestionById(questionId);
         if (user == null) {
             LOGGER.warn("questionAsked() returning as no user was found");
             return;
@@ -346,7 +371,7 @@ public class NotificationServiceImpl implements NotificationService {
                 && (notificationType == null
                         || notificationType == NotificationType.ALL
                         || notificationType == NotificationType.EMAIL)) {
-            emailService.sendQuestionAskedMsg(user);
+            emailService.sendQuestionAskedMsg(user, question);
         }
         if (user.getSms() != null
                 && user.isSmsVerified()
@@ -355,7 +380,7 @@ public class NotificationServiceImpl implements NotificationService {
                 && (notificationType == null
                         || notificationType == NotificationType.ALL
                         || notificationType == NotificationType.SMS)) {
-            smsService.sendQuestionAskedMsg(user);
+            smsService.sendQuestionAskedMsg(user, question);
         }
         if (user.getSlack() != null
                 && user.isSlackVerified()
@@ -364,7 +389,7 @@ public class NotificationServiceImpl implements NotificationService {
                 && (notificationType == null
                         || notificationType == NotificationType.ALL
                         || notificationType == NotificationType.SLACK)) {
-            slackService.sendQuestionAskedMsg(user);
+            slackService.sendQuestionAskedMsg(user, question);
         }
     }
 
@@ -372,10 +397,12 @@ public class NotificationServiceImpl implements NotificationService {
      * Sends notification to RSVP for an upcoming event
      *
      * @param userId Long
+     * @param eventId Long
      * @param notificationType NotificationType
      */
-    private void eventRSVP(Long userId, NotificationType notificationType) {
+    private void eventRSVP(Long userId, Long eventId, NotificationType notificationType) {
         final User user = userService.findById(userId);
+        final Event event = eventService.findById(eventId);
         if (user == null) {
             LOGGER.warn("eventRSVP() returning as no user was found");
             return;
@@ -386,7 +413,7 @@ public class NotificationServiceImpl implements NotificationService {
                 && (notificationType == null
                         || notificationType == NotificationType.ALL
                         || notificationType == NotificationType.EMAIL)) {
-            emailService.sendEventRSVPMsg(user);
+            emailService.sendEventRSVPMsg(user, event);
         }
         if (user.getSms() != null
                 && user.isSmsVerified()
@@ -394,7 +421,7 @@ public class NotificationServiceImpl implements NotificationService {
                 && (notificationType == null
                         || notificationType == NotificationType.ALL
                         || notificationType == NotificationType.SMS)) {
-            smsService.sendEventRSVPMsg(user);
+            smsService.sendEventRSVPMsg(user, event);
         }
         if (user.getSlack() != null
                 && user.isSlackVerified()
@@ -402,7 +429,7 @@ public class NotificationServiceImpl implements NotificationService {
                 && (notificationType == null
                         || notificationType == NotificationType.ALL
                         || notificationType == NotificationType.SLACK)) {
-            slackService.sendEventRSVPMsg(user);
+            slackService.sendEventRSVPMsg(user, event);
         }
     }
 
@@ -410,10 +437,12 @@ public class NotificationServiceImpl implements NotificationService {
      * Sends notification of registration for an event
      *
      * @param userId Long
+     * @param eventId Long
      * @param notificationType NotificationType
      */
-    private void eventRegister(Long userId, NotificationType notificationType) {
+    private void eventRegister(Long userId, Long eventId, NotificationType notificationType) {
         final User user = userService.findById(userId);
+        final Event event = eventService.findById(eventId);
         if (user == null) {
             LOGGER.warn("eventRegister() returning as no user was found");
             return;
@@ -424,7 +453,7 @@ public class NotificationServiceImpl implements NotificationService {
                 && (notificationType == null
                         || notificationType == NotificationType.ALL
                         || notificationType == NotificationType.EMAIL)) {
-            emailService.sendEventRegisterMsg(user);
+            emailService.sendEventRegisterMsg(user, event);
         }
         if (user.getSms() != null
                 && user.isSmsVerified()
@@ -432,7 +461,7 @@ public class NotificationServiceImpl implements NotificationService {
                 && (notificationType == null
                         || notificationType == NotificationType.ALL
                         || notificationType == NotificationType.SMS)) {
-            smsService.sendEventRegisterMsg(user);
+            smsService.sendEventRegisterMsg(user, event);
         }
         if (user.getSlack() != null
                 && user.isSlackVerified()
@@ -440,7 +469,7 @@ public class NotificationServiceImpl implements NotificationService {
                 && (notificationType == null
                         || notificationType == NotificationType.ALL
                         || notificationType == NotificationType.SLACK)) {
-            slackService.sendEventRegisterMsg(user);
+            slackService.sendEventRegisterMsg(user, event);
         }
     }
 
@@ -448,10 +477,12 @@ public class NotificationServiceImpl implements NotificationService {
      * Sends notification of de-registration from an event
      *
      * @param userId Long
+     * @param eventId Long
      * @param notificationType NotificationType
      */
-    private void eventUnregister(Long userId, NotificationType notificationType) {
+    private void eventUnregister(Long userId, Long eventId, NotificationType notificationType) {
         final User user = userService.findById(userId);
+        final Event event = eventService.findById(eventId);
         if (user == null) {
             LOGGER.warn("eventUnregister() returning as no user was found");
             return;
@@ -462,7 +493,7 @@ public class NotificationServiceImpl implements NotificationService {
                 && (notificationType == null
                         || notificationType == NotificationType.ALL
                         || notificationType == NotificationType.EMAIL)) {
-            emailService.sendEventUnregisterMsg(user);
+            emailService.sendEventUnregisterMsg(user, event);
         }
         if (user.getSms() != null
                 && user.isSmsVerified()
@@ -470,7 +501,7 @@ public class NotificationServiceImpl implements NotificationService {
                 && (notificationType == null
                         || notificationType == NotificationType.ALL
                         || notificationType == NotificationType.SMS)) {
-            smsService.sendEventUnregisterMsg(user);
+            smsService.sendEventUnregisterMsg(user, event);
         }
         if (user.getSlack() != null
                 && user.isSlackVerified()
@@ -478,7 +509,7 @@ public class NotificationServiceImpl implements NotificationService {
                 && (notificationType == null
                         || notificationType == NotificationType.ALL
                         || notificationType == NotificationType.SLACK)) {
-            slackService.sendEventUnregisterMsg(user);
+            slackService.sendEventUnregisterMsg(user, event);
         }
     }
 
