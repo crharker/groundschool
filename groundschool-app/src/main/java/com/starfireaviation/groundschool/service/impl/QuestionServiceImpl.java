@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import com.starfireaviation.groundschool.exception.ResourceNotFoundException;
 import com.starfireaviation.groundschool.model.Answer;
 import com.starfireaviation.groundschool.model.Event;
 import com.starfireaviation.groundschool.model.LessonPlan;
@@ -158,7 +159,11 @@ public class QuestionServiceImpl implements QuestionService {
         final Question question = mapper.map(findById(id, true), Question.class);
         if (question != null) {
             for (Answer answer : question.getAnswers()) {
-                answerService.delete(answer.getId());
+                try {
+                    answerService.delete(answer.getId());
+                } catch (ResourceNotFoundException e) {
+                    // Do nothing
+                }
             }
             for (QuestionReferenceMaterialEntity questionReferenceMaterial : questionReferenceMaterialRepository
                     .findByQuestionId(id)) {
@@ -217,7 +222,8 @@ public class QuestionServiceImpl implements QuestionService {
      * {@inheritDoc} Required implementation.
      */
     @Override
-    public boolean answer(long questionId, long userId, String selection, Date startTime) {
+    public boolean answer(long questionId, long userId, String selection, Date startTime)
+            throws ResourceNotFoundException {
         final Instant start = startTime == null ? Instant.now() : startTime.toInstant();
         boolean answeredCorrectly = false;
         final Question question = findById(questionId, false);

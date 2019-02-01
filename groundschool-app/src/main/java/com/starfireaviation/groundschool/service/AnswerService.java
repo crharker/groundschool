@@ -7,6 +7,7 @@ package com.starfireaviation.groundschool.service;
 
 import java.util.List;
 
+import com.starfireaviation.groundschool.exception.ResourceNotFoundException;
 import com.starfireaviation.groundschool.model.Answer;
 
 /**
@@ -23,15 +24,16 @@ public interface AnswerService {
      * @param answer Answer
      * @return Answer
      */
-    public Answer store(Long questionId, Answer answer);
+    public Answer store(final Long questionId, final Answer answer);
 
     /**
      * Deletes a answer
      *
      * @param id Long
      * @return Answer
+     * @throws ResourceNotFoundException when no answer is found
      */
-    public Answer delete(long id);
+    public Answer delete(final long id) throws ResourceNotFoundException;
 
     /**
      * Gets all answers
@@ -46,14 +48,15 @@ public interface AnswerService {
      * @param questionId Long
      * @return list of Answer
      */
-    public List<Answer> findByQuestionId(Long questionId);
+    public List<Answer> findByQuestionId(final Long questionId);
 
     /**
      * Gets a answer
      *
      * @param id Long
      * @return Answer
+     * @throws ResourceNotFoundException when no answer is found
      */
-    public Answer findAnswerById(long id);
+    public Answer findAnswerById(final long id) throws ResourceNotFoundException;
 
 }

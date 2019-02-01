@@ -7,6 +7,7 @@ package com.starfireaviation.groundschool.service;
 
 import java.util.List;
 
+import com.starfireaviation.groundschool.exception.ResourceNotFoundException;
 import com.starfireaviation.groundschool.model.Address;
 
 /**
@@ -30,8 +31,9 @@ public interface AddressService {
      *
      * @param id Long
      * @return Address
+     * @throws ResourceNotFoundException when no address is found
      */
-    public Address delete(long id);
+    public Address delete(long id) throws ResourceNotFoundException;
 
     /**
      * Gets all addresses
@@ -45,15 +47,17 @@ public interface AddressService {
      *
      * @param eventId Long
      * @return list of Address
+     * @throws ResourceNotFoundException when no address is found
      */
-    public Address findByEventId(Long eventId);
+    public Address findByEventId(Long eventId) throws ResourceNotFoundException;
 
     /**
      * Gets a address
      *
      * @param id Long
      * @return Address
+     * @throws ResourceNotFoundException when no address is found
      */
-    public Address findAddressById(long id);
+    public Address findAddressById(long id) throws ResourceNotFoundException;
 
 }

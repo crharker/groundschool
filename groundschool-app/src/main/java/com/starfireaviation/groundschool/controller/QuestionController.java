@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.starfireaviation.groundschool.exception.ResourceNotFoundException;
 import com.starfireaviation.groundschool.model.Question;
 import com.starfireaviation.groundschool.service.QuestionService;
 import java.security.Principal;
@@ -144,6 +145,7 @@ public class QuestionController {
      * @param selection String
      * @param principal Principal
      * @return answered correctly?
+     * @throws ResourceNotFoundException when user or question is not found
      */
     @PostMapping(path = {
             "/{questionId}/answer/{userId}/{selection}"
@@ -152,7 +154,7 @@ public class QuestionController {
             @PathVariable("questionId") long questionId,
             @PathVariable("userId") long userId,
             @PathVariable("selection") String selection,
-            Principal principal) {
+            Principal principal) throws ResourceNotFoundException {
         LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         return questionService.answer(questionId, userId, selection, null);
     }
@@ -163,6 +165,7 @@ public class QuestionController {
      * @param questionId Event ID
      * @param referenceMaterialId LessonPlan ID
      * @param principal Principal
+     * @throws ResourceNotFoundException when question is not found
      */
     @PostMapping(path = {
             "/{questionId}/assign/referencematerial/{referenceMaterialId}"
@@ -170,7 +173,7 @@ public class QuestionController {
     public void assignReferenceMaterial(
             @PathVariable("questionId") long questionId,
             @PathVariable("referenceMaterialId") long referenceMaterialId,
-            Principal principal) {
+            Principal principal) throws ResourceNotFoundException {
         LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         questionService.assignReferenceMaterial(questionId, referenceMaterialId);
     }
@@ -181,6 +184,7 @@ public class QuestionController {
      * @param questionId Event ID
      * @param referenceMaterialId LessonPlan ID
      * @param principal Principal
+     * @throws ResourceNotFoundException when question is not found
      */
     @PostMapping(path = {
             "/{questionId}/unassign/referencematerial/{referenceMaterialId}"
@@ -188,7 +192,7 @@ public class QuestionController {
     public void unassignReferenceMaterial(
             @PathVariable("questionId") long questionId,
             @PathVariable("referenceMaterialId") long referenceMaterialId,
-            Principal principal) {
+            Principal principal) throws ResourceNotFoundException {
         LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         questionService.unassignReferenceMaterial(questionId, referenceMaterialId);
     }

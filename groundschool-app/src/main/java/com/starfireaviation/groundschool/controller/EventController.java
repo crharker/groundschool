@@ -118,11 +118,12 @@ public class EventController {
      * @param eventId Long
      * @param principal Principal
      * @return Event
+     * @throws ResourceNotFoundException when address is not found
      */
     @GetMapping(path = {
             "/{eventId}"
     })
-    public Event get(@PathVariable("eventId") long eventId, Principal principal) {
+    public Event get(@PathVariable("eventId") long eventId, Principal principal) throws ResourceNotFoundException {
         LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         Event event = eventService.findById(eventId, false);
         event.setAddress(addressService.findByEventId(event.getId()));
@@ -171,9 +172,10 @@ public class EventController {
      * @param principal Principal
      *
      * @return list of Event
+     * @throws ResourceNotFoundException when address is not found
      */
     @GetMapping
-    public List<Event> list(Principal principal) {
+    public List<Event> list(Principal principal) throws ResourceNotFoundException {
         LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         List<Event> events = eventService.findAllEvents();
         for (Event event : events) {
@@ -189,6 +191,7 @@ public class EventController {
      * @param userId user ID
      * @param confirm confirm or decline
      * @param type NotificationType
+     * @throws ResourceNotFoundException when event or user is not found
      */
     @GetMapping(path = {
             "/{eventId}/rsvp/{userId}/{confirm}/{type}"
@@ -197,7 +200,7 @@ public class EventController {
             @PathVariable("eventId") long eventId,
             @PathVariable("userId") long userId,
             @PathVariable("confirm") boolean confirm,
-            @PathVariable("type") NotificationType type) {
+            @PathVariable("type") NotificationType type) throws ResourceNotFoundException {
         eventService.rsvp(eventId, userId, confirm);
     }
 
@@ -281,11 +284,13 @@ public class EventController {
      * @param eventId Long
      * @param principal Principal
      * @return Event's checkin code
+     * @throws ResourceNotFoundException when event is not found
      */
     @GetMapping(path = {
             "/{eventId}/checkincode"
     })
-    public String getCheckinCode(@PathVariable("eventId") long eventId, Principal principal) {
+    public String getCheckinCode(@PathVariable("eventId") long eventId, Principal principal)
+            throws ResourceNotFoundException {
         LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         String code = null;
         Event event = eventService.findById(eventId, true);
@@ -303,6 +308,7 @@ public class EventController {
      * @param code checkin code
      * @param principal Principal
      * @return checkin success
+     * @throws ResourceNotFoundException when event or user is not found
      */
     @PostMapping(path = {
             "/{eventId}/checkin/{userId}/{code}"
@@ -311,7 +317,7 @@ public class EventController {
             @PathVariable("eventId") long eventId,
             @PathVariable("userId") long userId,
             @PathVariable("code") String code,
-            Principal principal) {
+            Principal principal) throws ResourceNotFoundException {
         LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         return eventService.checkin(eventId, userId, code);
     }
@@ -322,11 +328,12 @@ public class EventController {
      * @param eventId Long
      * @param principal Principal
      * @return started event
+     * @throws ResourceNotFoundException when event is not found
      */
     @PostMapping(path = {
             "/{eventId}/start"
     })
-    public Event start(@PathVariable("eventId") long eventId, Principal principal) {
+    public Event start(@PathVariable("eventId") long eventId, Principal principal) throws ResourceNotFoundException {
         LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         Event event = eventService.findById(eventId, true);
         if (event != null && !event.isStarted()) {
@@ -357,11 +364,12 @@ public class EventController {
      * @param eventId Long
      * @param principal Principal
      * @return completed event
+     * @throws ResourceNotFoundException when event is not found
      */
     @PostMapping(path = {
             "/{eventId}/complete"
     })
-    public Event complete(@PathVariable("eventId") long eventId, Principal principal) {
+    public Event complete(@PathVariable("eventId") long eventId, Principal principal) throws ResourceNotFoundException {
         LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         Event event = eventService.findById(eventId, true);
         if (event != null && event.isStarted()) {

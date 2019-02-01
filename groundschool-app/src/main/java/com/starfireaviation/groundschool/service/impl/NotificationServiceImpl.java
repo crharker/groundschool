@@ -316,8 +316,10 @@ public class NotificationServiceImpl implements NotificationService {
      * @param userId Long
      * @param eventId Long
      * @param notificationType NotificationType
+     * @throws ResourceNotFoundException when user or event is not found
      */
-    private void eventStart(Long userId, Long eventId, NotificationType notificationType) {
+    private void eventStart(Long userId, Long eventId, NotificationType notificationType)
+            throws ResourceNotFoundException {
         final User user = userService.findById(userId);
         final Event event = eventService.findById(eventId, true);
         if (user == null) {
@@ -443,8 +445,10 @@ public class NotificationServiceImpl implements NotificationService {
      * @param userId Long
      * @param eventId Long
      * @param notificationType NotificationType
+     * @throws ResourceNotFoundException when event is not found
      */
-    private void eventRSVP(Long userId, Long eventId, NotificationType notificationType) {
+    private void eventRSVP(Long userId, Long eventId, NotificationType notificationType)
+            throws ResourceNotFoundException {
         final User user = userService.findById(userId);
         final Event event = eventService.findById(eventId, true);
         if (user == null) {
@@ -483,8 +487,10 @@ public class NotificationServiceImpl implements NotificationService {
      * @param userId Long
      * @param eventId Long
      * @param notificationType NotificationType
+     * @throws ResourceNotFoundException when user or event is not found
      */
-    private void eventRegister(Long userId, Long eventId, NotificationType notificationType) {
+    private void eventRegister(Long userId, Long eventId, NotificationType notificationType)
+            throws ResourceNotFoundException {
         final User user = userService.findById(userId);
         final Event event = eventService.findById(eventId, true);
         if (user == null) {
@@ -523,8 +529,10 @@ public class NotificationServiceImpl implements NotificationService {
      * @param userId Long
      * @param eventId Long
      * @param notificationType NotificationType
+     * @throws ResourceNotFoundException when user or event is not found
      */
-    private void eventUnregister(Long userId, Long eventId, NotificationType notificationType) {
+    private void eventUnregister(Long userId, Long eventId, NotificationType notificationType)
+            throws ResourceNotFoundException {
         final User user = userService.findById(userId);
         final Event event = eventService.findById(eventId, true);
         if (user == null) {

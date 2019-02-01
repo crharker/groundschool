@@ -11,6 +11,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.starfireaviation.groundschool.exception.ResourceNotFoundException;
 import com.starfireaviation.groundschool.model.Answer;
 import com.starfireaviation.groundschool.model.sql.AnswerEntity;
 import com.starfireaviation.groundschool.repository.AnswerRepository;
@@ -79,7 +80,7 @@ public class AnswerServiceImpl implements AnswerService {
      * {@inheritDoc} Required implementation.
      */
     @Override
-    public Answer delete(long id) {
+    public Answer delete(long id) throws ResourceNotFoundException {
         Answer answer = mapper.map(findAnswerById(id), Answer.class);
         if (answer != null) {
             answerRepository.delete(mapper.map(answer, AnswerEntity.class));
@@ -117,8 +118,12 @@ public class AnswerServiceImpl implements AnswerService {
      * {@inheritDoc} Required implementation.
      */
     @Override
-    public Answer findAnswerById(long id) {
-        return mapper.map(answerRepository.findById(id), Answer.class);
+    public Answer findAnswerById(long id) throws ResourceNotFoundException {
+        AnswerEntity answerEntity = answerRepository.findById(id);
+        if (answerEntity == null) {
+            throw new ResourceNotFoundException();
+        }
+        return mapper.map(answerEntity, Answer.class);
     }
 
 }

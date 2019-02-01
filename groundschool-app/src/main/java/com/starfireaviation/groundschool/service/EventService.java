@@ -7,6 +7,7 @@ package com.starfireaviation.groundschool.service;
 
 import java.util.List;
 
+import com.starfireaviation.groundschool.exception.ResourceNotFoundException;
 import com.starfireaviation.groundschool.model.Event;
 
 /**
@@ -45,24 +46,27 @@ public interface EventService {
      * @param id Long
      * @param partial only load base event data
      * @return Event
+     * @throws ResourceNotFoundException when the event is not found
      */
-    public Event findById(long id, boolean partial);
+    public Event findById(long id, boolean partial) throws ResourceNotFoundException;
 
     /**
      * Register a user for an event
      *
      * @param eventId Event ID
      * @param userId User ID
+     * @throws ResourceNotFoundException when the event or user is not found
      */
-    public void register(Long eventId, Long userId);
+    public void register(Long eventId, Long userId) throws ResourceNotFoundException;
 
     /**
      * Unregister a user from an event
      *
      * @param eventId Event ID
      * @param userId User ID
+     * @throws ResourceNotFoundException when the event or user is not found
      */
-    public void unregister(Long eventId, Long userId);
+    public void unregister(Long eventId, Long userId) throws ResourceNotFoundException;
 
     /**
      * RSVP's a user for an event
@@ -70,8 +74,9 @@ public interface EventService {
      * @param eventId Event ID
      * @param userId User ID
      * @param confirm confirm or decline
+     * @throws ResourceNotFoundException when the event or user is not found
      */
-    public void rsvp(Long eventId, Long userId, boolean confirm);
+    public void rsvp(Long eventId, Long userId, boolean confirm) throws ResourceNotFoundException;
 
     /**
      * Checks in a user for an event
@@ -80,8 +85,9 @@ public interface EventService {
      * @param userId User ID
      * @param code checkin code
      * @return checkin success
+     * @throws ResourceNotFoundException when the event or user is not found
      */
-    public boolean checkin(Long eventId, Long userId, String code);
+    public boolean checkin(Long eventId, Long userId, String code) throws ResourceNotFoundException;
 
     /**
      * Did the user check in to an event?
@@ -89,8 +95,9 @@ public interface EventService {
      * @param eventId Event ID
      * @param userId User ID
      * @return checked in?
+     * @throws ResourceNotFoundException when the event or user is not found
      */
-    public boolean didCheckIn(Long eventId, Long userId);
+    public boolean didCheckIn(Long eventId, Long userId) throws ResourceNotFoundException;
 
     /**
      * Retrieves all users for an event
@@ -120,8 +127,9 @@ public interface EventService {
      *
      * @param userId User ID
      * @return Event ID for the event in which user is checked in
+     * @throws ResourceNotFoundException when the user is not found
      */
-    public Long isCheckedIn(Long userId);
+    public Long isCheckedIn(Long userId) throws ResourceNotFoundException;
 
     /**
      * Is the user registered for an event?
@@ -129,6 +137,7 @@ public interface EventService {
      * @param eventId Event ID
      * @param userId User ID
      * @return whether or not user is registered
+     * @throws ResourceNotFoundException when the event or user is not found
      */
-    public boolean isRegistered(Long eventId, Long userId);
+    public boolean isRegistered(Long eventId, Long userId) throws ResourceNotFoundException;
 }

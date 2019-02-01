@@ -38,6 +38,7 @@ import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.Event.Source;
 import com.google.api.services.calendar.model.EventDateTime;
 import com.starfireaviation.groundschool.GroundSchoolApplication;
+import com.starfireaviation.groundschool.exception.ResourceNotFoundException;
 import com.starfireaviation.groundschool.model.Address;
 import com.starfireaviation.groundschool.model.LessonPlan;
 import com.starfireaviation.groundschool.model.Quiz;
@@ -123,7 +124,7 @@ public class CalendarServiceImpl implements CalendarService {
      * {@inheritDoc} Required implementation.
      */
     @Override
-    public boolean hasEvent(Long eventId) {
+    public boolean hasEvent(Long eventId) throws ResourceNotFoundException {
         Instant start = Instant.now();
         boolean found = false;
         com.starfireaviation.groundschool.model.Event event = eventService.findById(eventId, true);
@@ -147,12 +148,17 @@ public class CalendarServiceImpl implements CalendarService {
      * {@inheritDoc} Required implementation.
      */
     @Override
-    public String add(Long eventId) {
+    public String add(Long eventId) throws ResourceNotFoundException {
         Instant start = Instant.now();
         String eventUrl = null;
         com.starfireaviation.groundschool.model.Event groundSchoolEvent = eventService.findById(eventId, true);
         LessonPlan lessonPlan = lessonPlanService.findById(eventId);
-        Address address = addressService.findByEventId(eventId);
+        Address address = null;
+        try {
+            address = addressService.findByEventId(eventId);
+        } catch (ResourceNotFoundException e) {
+            // Do nothing
+        }
         if (groundSchoolEvent != null && lessonPlan != null && address != null) {
             try {
                 final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
@@ -205,7 +211,7 @@ public class CalendarServiceImpl implements CalendarService {
      * {@inheritDoc} Required implementation.
      */
     @Override
-    public boolean delete(Long eventId) {
+    public boolean delete(Long eventId) throws ResourceNotFoundException {
         // TODO Implement this!
         return false;
     }

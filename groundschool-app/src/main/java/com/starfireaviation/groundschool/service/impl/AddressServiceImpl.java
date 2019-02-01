@@ -11,6 +11,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.starfireaviation.groundschool.exception.ResourceNotFoundException;
 import com.starfireaviation.groundschool.model.Address;
 import com.starfireaviation.groundschool.model.sql.AddressEntity;
 import com.starfireaviation.groundschool.repository.AddressRepository;
@@ -79,7 +80,7 @@ public class AddressServiceImpl implements AddressService {
      * {@inheritDoc} Required implementation.
      */
     @Override
-    public Address delete(long id) {
+    public Address delete(final long id) throws ResourceNotFoundException {
         Address address = mapper.map(findAddressById(id), Address.class);
         if (address != null) {
             addressRepository.delete(mapper.map(address, AddressEntity.class));
@@ -104,16 +105,24 @@ public class AddressServiceImpl implements AddressService {
      * {@inheritDoc} Required implementation.
      */
     @Override
-    public Address findByEventId(Long eventId) {
-        return mapper.map(addressRepository.findAddressByEventId(eventId), Address.class);
+    public Address findByEventId(final Long eventId) throws ResourceNotFoundException {
+        final AddressEntity addressEntity = addressRepository.findAddressByEventId(eventId);
+        if (addressEntity == null) {
+            throw new ResourceNotFoundException();
+        }
+        return mapper.map(addressEntity, Address.class);
     }
 
     /**
      * {@inheritDoc} Required implementation.
      */
     @Override
-    public Address findAddressById(long id) {
-        return mapper.map(addressRepository.findById(id), Address.class);
+    public Address findAddressById(final long id) throws ResourceNotFoundException {
+        final AddressEntity addressEntity = addressRepository.findById(id);
+        if (addressEntity == null) {
+            throw new ResourceNotFoundException();
+        }
+        return mapper.map(addressEntity, Address.class);
     }
 
 }
