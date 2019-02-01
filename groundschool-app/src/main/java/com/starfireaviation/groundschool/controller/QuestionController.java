@@ -90,7 +90,7 @@ public class QuestionController {
     })
     public Question get(@PathVariable("questionId") long questionId, Principal principal) {
         LOGGER.info(String.format("User is logged in as %s", principal.getName()));
-        return questionService.findQuestionById(questionId);
+        return questionService.findById(questionId, false);
     }
 
     /**
@@ -154,7 +154,7 @@ public class QuestionController {
             @PathVariable("selection") String selection,
             Principal principal) {
         LOGGER.info(String.format("User is logged in as %s", principal.getName()));
-        return questionService.answer(questionId, userId, selection);
+        return questionService.answer(questionId, userId, selection, null);
     }
 
     /**

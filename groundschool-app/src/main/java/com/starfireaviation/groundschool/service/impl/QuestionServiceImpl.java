@@ -8,6 +8,7 @@ package com.starfireaviation.groundschool.service.impl;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -154,7 +155,7 @@ public class QuestionServiceImpl implements QuestionService {
      */
     @Override
     public Question delete(long id) {
-        final Question question = mapper.map(findQuestionById(id), Question.class);
+        final Question question = mapper.map(findById(id, true), Question.class);
         if (question != null) {
             for (Answer answer : question.getAnswers()) {
                 answerService.delete(answer.getId());
@@ -196,17 +197,19 @@ public class QuestionServiceImpl implements QuestionService {
      * {@inheritDoc} Required implementation.
      */
     @Override
-    public Question findQuestionById(long id) {
+    public Question findById(final long id, final boolean partial) {
         Question response = mapper.map(questionRepository.findById(id), Question.class);
-        response.setAnswers(answerService.findByQuestionId(id));
-        List<ReferenceMaterial> referenceMaterials = new ArrayList<>();
-        for (QuestionReferenceMaterialEntity questionReferenceMaterial : questionReferenceMaterialRepository
-                .findByQuestionId(id)) {
-            referenceMaterials.add(
-                    referenceMaterialService.findReferenceMaterialById(
-                            questionReferenceMaterial.getReferenceMaterialId()));
+        if (!partial) {
+            response.setAnswers(answerService.findByQuestionId(id));
+            List<ReferenceMaterial> referenceMaterials = new ArrayList<>();
+            for (QuestionReferenceMaterialEntity questionReferenceMaterial : questionReferenceMaterialRepository
+                    .findByQuestionId(id)) {
+                referenceMaterials.add(
+                        referenceMaterialService.findReferenceMaterialById(
+                                questionReferenceMaterial.getReferenceMaterialId()));
+            }
+            response.setReferenceMaterials(referenceMaterials);
         }
-        response.setReferenceMaterials(referenceMaterials);
         return response;
     }
 
@@ -214,10 +217,10 @@ public class QuestionServiceImpl implements QuestionService {
      * {@inheritDoc} Required implementation.
      */
     @Override
-    public boolean answer(long questionId, long userId, String selection) {
-        final Instant start = Instant.now();
+    public boolean answer(long questionId, long userId, String selection, Date startTime) {
+        final Instant start = startTime == null ? Instant.now() : startTime.toInstant();
         boolean answeredCorrectly = false;
-        final Question question = findQuestionById(questionId);
+        final Question question = findById(questionId, false);
         if (question == null) {
             return answeredCorrectly;
         }
@@ -234,7 +237,7 @@ public class QuestionServiceImpl implements QuestionService {
             final Event event = eventService.findById(eventId, true);
             final LessonPlan lessonPlan = lessonPlanService.findById(event.getLessonPlanId());
             for (final Long id : lessonPlan.getQuizIds()) {
-                final Quiz quiz = quizService.findById(id);
+                final Quiz quiz = quizService.findById(id, true);
                 if (quiz.isStarted() && !quiz.isCompleted()) {
                     quizId = quiz.getId();
                 }
@@ -262,7 +265,7 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public boolean assignReferenceMaterial(long questionId, long referenceMaterialId) {
         boolean success = false;
-        Question question = findQuestionById(questionId);
+        Question question = findById(questionId, false);
         ReferenceMaterial referenceMaterial = referenceMaterialService.findReferenceMaterialById(referenceMaterialId);
         if (question != null
                 && referenceMaterial != null

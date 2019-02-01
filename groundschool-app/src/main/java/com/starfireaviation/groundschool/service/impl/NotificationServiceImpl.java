@@ -120,6 +120,9 @@ public class NotificationServiceImpl implements NotificationService {
             case QUESTION_ASKED:
                 questionAsked(userId, questionId, notificationType);
                 break;
+            case QUIZ_COMPLETE:
+                quizComplete(userId, notificationType);
+                break;
             default:
         }
     }
@@ -359,7 +362,7 @@ public class NotificationServiceImpl implements NotificationService {
      */
     private void questionAsked(Long userId, Long questionId, NotificationType notificationType) {
         final User user = userService.findById(userId);
-        final Question question = questionService.findQuestionById(questionId);
+        final Question question = questionService.findById(questionId, false);
         if (user == null) {
             LOGGER.warn("questionAsked() returning as no user was found");
             return;
@@ -390,6 +393,47 @@ public class NotificationServiceImpl implements NotificationService {
                         || notificationType == NotificationType.ALL
                         || notificationType == NotificationType.SLACK)) {
             slackService.sendQuestionAskedMsg(user, question);
+        }
+    }
+
+    /**
+     * Sends notification that a question has been asked
+     *
+     * @param userId Long
+     * @param notificationType NotificationType
+     */
+    private void quizComplete(Long userId, NotificationType notificationType) {
+        final User user = userService.findById(userId);
+        if (user == null) {
+            LOGGER.warn("questionAsked() returning as no user was found");
+            return;
+        }
+        if (user.getEmail() != null
+                && user.isEmailVerified()
+                && user.isEmailEnabled()
+                && user.getQuestionPreference() == QuestionPreference.EMAIL
+                && (notificationType == null
+                        || notificationType == NotificationType.ALL
+                        || notificationType == NotificationType.EMAIL)) {
+            emailService.sendQuizCompleteMsg(user);
+        }
+        if (user.getSms() != null
+                && user.isSmsVerified()
+                && user.isSmsEnabled()
+                && user.getQuestionPreference() == QuestionPreference.SMS
+                && (notificationType == null
+                        || notificationType == NotificationType.ALL
+                        || notificationType == NotificationType.SMS)) {
+            smsService.sendQuizCompleteMsg(user);
+        }
+        if (user.getSlack() != null
+                && user.isSlackVerified()
+                && user.isSlackEnabled()
+                && user.getQuestionPreference() == QuestionPreference.SLACK
+                && (notificationType == null
+                        || notificationType == NotificationType.ALL
+                        || notificationType == NotificationType.SLACK)) {
+            slackService.sendQuizCompleteMsg(user);
         }
     }
 

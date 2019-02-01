@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import com.starfireaviation.groundschool.exception.ResourceNotFoundException;
-import com.starfireaviation.groundschool.model.Question;
 import com.starfireaviation.groundschool.model.Quiz;
 
 /**
@@ -23,9 +22,10 @@ public interface QuizService {
      * Creates a quiz
      *
      * @param quiz Quiz
+     * @param partial only store base quiz data
      * @return Quiz
      */
-    public Quiz store(Quiz quiz);
+    public Quiz store(final Quiz quiz, final boolean partial);
 
     /**
      * Deletes a quiz
@@ -33,7 +33,7 @@ public interface QuizService {
      * @param id Long
      * @return Quiz
      */
-    public Quiz delete(long id);
+    public Quiz delete(final long id);
 
     /**
      * Gets all quizzes
@@ -48,15 +48,16 @@ public interface QuizService {
      * @param lessonPlanId Long
      * @return list of Quiz
      */
-    public List<Quiz> findQuizzesByLessonPlanId(Long lessonPlanId);
+    public List<Quiz> findQuizzesByLessonPlanId(final Long lessonPlanId);
 
     /**
      * Gets a quiz
      *
      * @param id Long
+     * @param partial only load base quiz data
      * @return Quiz
      */
-    public Quiz findById(long id);
+    public Quiz findById(final long id, final boolean partial);
 
     /**
      * Starts a quiz
@@ -65,7 +66,7 @@ public interface QuizService {
      * @return started quiz
      * @throws ResourceNotFoundException when things go wrong
      */
-    public Quiz start(long quizId) throws ResourceNotFoundException;
+    public Quiz start(final long quizId) throws ResourceNotFoundException;
 
     /**
      * Complete's a quiz
@@ -73,7 +74,7 @@ public interface QuizService {
      * @param quizId Long
      * @return completed quiz
      */
-    public Quiz complete(long quizId);
+    public Quiz complete(final long quizId);
 
     /**
      * Gets the current quiz
@@ -88,9 +89,9 @@ public interface QuizService {
      * Gets the current question for a quiz
      *
      * @param quizId Long
-     * @return Question
+     * @return Question ID
      */
-    public Question getCurrentQuestion(long quizId);
+    public Long getCurrentQuestion(final long quizId);
 
     /**
      * Gets the current question start time for a quiz
@@ -98,7 +99,7 @@ public interface QuizService {
      * @param quizId Long
      * @return Question start time
      */
-    public LocalDateTime getCurrentQuestionStart(long quizId);
+    public LocalDateTime getCurrentQuestionStart(final long quizId);
 
     /**
      * Adds a question to a quiz
@@ -107,7 +108,7 @@ public interface QuizService {
      * @param questionId Long
      * @return Quiz with question added
      */
-    public Quiz addQuestion(long quizId, long questionId);
+    public Quiz addQuestion(final long quizId, final long questionId);
 
     /**
      * Removes a question from a quiz
@@ -116,7 +117,7 @@ public interface QuizService {
      * @param questionId Long
      * @return Quiz with question added
      */
-    public Quiz removeQuestion(long quizId, long questionId);
+    public Quiz removeQuestion(final long quizId, final long questionId);
 
     /**
      * Determines the next question for a quiz.
@@ -127,5 +128,5 @@ public interface QuizService {
      * @param previousQuestionId Question ID
      * @return next question ID
      */
-    public Long getNextQuestion(Long quizId, Long previousQuestionId);
+    public Long getNextQuestion(final Long quizId, final Long previousQuestionId);
 }

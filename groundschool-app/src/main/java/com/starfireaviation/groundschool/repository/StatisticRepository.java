@@ -38,7 +38,39 @@ public interface StatisticRepository extends Repository<StatisticEntity, Long> {
      * @param id Long
      * @return Statistic
      */
-    StatisticEntity findById(long id);
+    StatisticEntity findById(final long id);
+
+    /**
+     * Gets statistics for a user
+     *
+     * @param userId Long
+     * @return list of Statistic
+     */
+    List<StatisticEntity> findByUserId(final long userId);
+
+    /**
+     * Gets statistics for an event
+     *
+     * @param eventId Long
+     * @return list of Statistic
+     */
+    List<StatisticEntity> findByEventId(final long eventId);
+
+    /**
+     * Gets statistics for a question
+     *
+     * @param questionId Long
+     * @return list of Statistic
+     */
+    List<StatisticEntity> findByQuestionId(final long questionId);
+
+    /**
+     * Gets statistics for a quiz
+     *
+     * @param quizId Long
+     * @return list of Statistic
+     */
+    List<StatisticEntity> findByQuizId(final long quizId);
 
     /**
      * Saves a statistic

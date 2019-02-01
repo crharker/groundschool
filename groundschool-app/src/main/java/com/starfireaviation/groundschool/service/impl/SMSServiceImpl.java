@@ -481,7 +481,11 @@ public class SMSServiceImpl implements MessageService {
                             slackService.clearMessageHistory(userId);
                             break;
                         case QUESTION_ASKED:
-                            success = processQuestionAskedResponse(questionId, userId, message);
+                            success = processQuestionAskedResponse(
+                                    questionId,
+                                    userId,
+                                    message,
+                                    smsMessageEntity.getTime());
                             slackService.clearMessageHistory(userId);
                             break;
                         default:
@@ -650,13 +654,15 @@ public class SMSServiceImpl implements MessageService {
      * @param questionId question ID
      * @param userId user ID
      * @param message to be processed
+     * @param startTime when question was asked
      * @return success
      * @throws ResourceNotFoundException when no user is found
      */
     private boolean processQuestionAskedResponse(
             Long questionId,
             Long userId,
-            SMSMessage message) throws ResourceNotFoundException {
+            SMSMessage message,
+            Date startTime) throws ResourceNotFoundException {
         boolean success = true;
         // STOP, CONFIRM, DECLINE, other
         if (message != null) {
@@ -670,7 +676,7 @@ public class SMSServiceImpl implements MessageService {
                 case B:
                 case C:
                 case D:
-                    questionService.answer(questionId, userId, responseOption.toString());
+                    questionService.answer(questionId, userId, responseOption.toString(), startTime);
                     Quiz quiz = quizService.getCurrentQuiz();
                     if (quiz != null) {
                         askNextQuestion(userId, eventService.getCurrentEvent(), quiz.getId(), questionId);
@@ -701,6 +707,17 @@ public class SMSServiceImpl implements MessageService {
                         nextQuestionId,
                         NotificationType.ALL,
                         NotificationEventType.QUESTION_ASKED);
+            } catch (ResourceNotFoundException e) {
+                LOGGER.warn(String.format("Exception %s", e.getMessage()));
+            }
+        } else {
+            try {
+                notificationService.send(
+                        userId,
+                        eventId,
+                        null,
+                        NotificationType.ALL,
+                        NotificationEventType.QUIZ_COMPLETE);
             } catch (ResourceNotFoundException e) {
                 LOGGER.warn(String.format("Exception %s", e.getMessage()));
             }

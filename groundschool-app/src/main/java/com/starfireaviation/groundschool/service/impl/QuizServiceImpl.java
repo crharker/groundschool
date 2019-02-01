@@ -100,11 +100,11 @@ public class QuizServiceImpl implements QuizService {
      * {@inheritDoc} Required implementation.
      */
     @Override
-    public Quiz store(final Quiz quiz) {
+    public Quiz store(final Quiz quiz, final boolean partial) {
         if (quiz == null) {
             return quiz;
         }
-        if (quiz.getId() != null) {
+        if (quiz.getId() != null && !partial) {
             final List<QuizQuestionEntity> quizQuestions = quizQuestionRepository.findByQuizId(quiz.getId());
             final List<QuizQuestionEntity> keepList = new ArrayList<>();
             if (quiz.getQuestions() != null && quiz.getQuestions().size() > 0) {
@@ -136,7 +136,7 @@ public class QuizServiceImpl implements QuizService {
             }
         }
         final QuizEntity quizEntity = quizRepository.save(mapper.map(quiz, QuizEntity.class));
-        return findById(quizEntity.getId());
+        return findById(quizEntity.getId(), false);
     }
 
     /**
@@ -144,9 +144,10 @@ public class QuizServiceImpl implements QuizService {
      */
     @Override
     public Quiz delete(final long id) {
-        final Quiz quiz = mapper.map(findById(id), Quiz.class);
+        final Quiz quiz = mapper.map(findById(id, true), Quiz.class);
         if (quiz != null) {
             quizRepository.delete(mapper.map(quiz, QuizEntity.class));
+            // TODO delete quiz/questions
         }
         return quiz;
     }
@@ -160,7 +161,6 @@ public class QuizServiceImpl implements QuizService {
         final List<QuizEntity> quizEntities = quizRepository.findAll();
         for (QuizEntity quizEntity : quizEntities) {
             final Quiz quiz = mapper.map(quizEntity, Quiz.class);
-            addQuizQuestions(quiz);
             quizzes.add(quiz);
         }
         return quizzes;
@@ -170,9 +170,11 @@ public class QuizServiceImpl implements QuizService {
      * {@inheritDoc} Required implementation.
      */
     @Override
-    public Quiz findById(final long id) {
+    public Quiz findById(final long id, final boolean partial) {
         final Quiz quiz = mapper.map(quizRepository.findById(id), Quiz.class);
-        addQuizQuestions(quiz);
+        if (!partial) {
+            addQuizQuestions(quiz);
+        }
         return quiz;
     }
 
@@ -181,15 +183,15 @@ public class QuizServiceImpl implements QuizService {
      */
     @Override
     public Quiz start(final long quizId) {
-        Quiz quiz = findById(quizId);
+        Quiz quiz = findById(quizId, true);
         if (quiz != null && !quiz.isStarted()) {
             quiz.setStarted(true);
             quiz.setStartTime(LocalDateTime.now());
             quiz.setCompleted(false);
             quiz.setCompletedTime(null);
-            quiz.setCurrentQuestion(determineFirstQuestion(quiz));
+            quiz.setCurrentQuestion(determineFirstQuestion(findById(quizId, false)));
             quiz.setCurrentQuestionStartTime(LocalDateTime.now());
-            quiz = store(quiz);
+            quiz = store(quiz, true);
             final Long eventId = eventService.getCurrentEvent();
             final List<Long> eventUsers = eventService.getAllEventCheckedInUsers(eventId);
             for (Long userId : eventUsers) {
@@ -213,11 +215,11 @@ public class QuizServiceImpl implements QuizService {
      */
     @Override
     public Quiz complete(final long quizId) {
-        Quiz quiz = findById(quizId);
+        Quiz quiz = findById(quizId, true);
         if (quiz != null && quiz.isStarted()) {
             quiz.setCompleted(true);
             quiz.setCompletedTime(LocalDateTime.now());
-            quiz = store(quiz);
+            quiz = store(quiz, true);
         }
         return quiz;
     }
@@ -242,19 +244,13 @@ public class QuizServiceImpl implements QuizService {
      * {@inheritDoc} Required implementation.
      */
     @Override
-    public Question getCurrentQuestion(final long quizId) {
-        Question question = null;
-        final Quiz quiz = findById(quizId);
+    public Long getCurrentQuestion(final long quizId) {
+        Long currentQuestionId = null;
+        final Quiz quiz = findById(quizId, true);
         if (quiz != null && !quiz.isCompleted()) {
-            Long currentQuestionId = quiz.getCurrentQuestion();
-            for (Question q : quiz.getQuestions()) {
-                if (currentQuestionId.equals(q.getId())) {
-                    question = q;
-                    break;
-                }
-            }
+            currentQuestionId = quiz.getCurrentQuestion();
         }
-        return question;
+        return currentQuestionId;
     }
 
     /**
@@ -263,7 +259,7 @@ public class QuizServiceImpl implements QuizService {
     @Override
     public LocalDateTime getCurrentQuestionStart(final long quizId) {
         LocalDateTime start = null;
-        final Quiz quiz = findById(quizId);
+        final Quiz quiz = findById(quizId, true);
         if (quiz != null && !quiz.isCompleted()) {
             start = quiz.getCurrentQuestionStartTime();
         }
@@ -289,8 +285,8 @@ public class QuizServiceImpl implements QuizService {
     @Override
     public Quiz addQuestion(final long quizId, final long questionId) {
         LOGGER.info(String.format("Adding question ID [%s] to quiz ID [%s]", questionId, quizId));
-        final Quiz quiz = findById(quizId);
-        final Question question = questionService.findQuestionById(questionId);
+        final Quiz quiz = findById(quizId, false);
+        final Question question = questionService.findById(questionId, true);
         List<Question> questions = quiz.getQuestions();
         // Initialize list if null
         if (questions == null) {
@@ -308,7 +304,7 @@ public class QuizServiceImpl implements QuizService {
             questions.add(question);
         }
         quiz.setQuestions(questions);
-        return store(quiz);
+        return store(quiz, false);
     }
 
     /**
@@ -317,7 +313,7 @@ public class QuizServiceImpl implements QuizService {
     @Override
     public Quiz removeQuestion(final long quizId, final long questionId) {
         LOGGER.info(String.format("Removing question ID [%s] from quiz ID [%s]", questionId, quizId));
-        final Quiz quiz = findById(quizId);
+        final Quiz quiz = findById(quizId, false);
         List<Question> questions = quiz.getQuestions();
         // Initialize list if null
         if (questions == null) {
@@ -331,7 +327,7 @@ public class QuizServiceImpl implements QuizService {
             }
         }
         quiz.setQuestions(list);
-        return store(quiz);
+        return store(quiz, false);
     }
 
     /**
@@ -353,24 +349,23 @@ public class QuizServiceImpl implements QuizService {
      */
     @Override
     public Long getNextQuestion(Long quizId, Long previousQuestionId) {
-        Quiz quiz = findById(quizId);
         Long questionId = null;
-        if (quiz == null) {
+        if (quizId == null) {
             return questionId;
         }
-        final List<Question> questions = quiz.getQuestions();
-        if (questions != null && questions.size() > 0 && previousQuestionId != null) {
+        final List<QuizQuestionEntity> quizQuestions = quizQuestionRepository.findByQuizId(quizId);
+        if (quizQuestions != null && quizQuestions.size() > 0 && previousQuestionId != null) {
             int index = 0;
             int count = 0;
-            for (Question question : questions) {
-                if (question.getId() == previousQuestionId) {
+            for (QuizQuestionEntity question : quizQuestions) {
+                if (question.getQuestionId() == previousQuestionId) {
                     index = count + 1;
                     break;
                 }
                 count++;
             }
-            if (index < questions.size()) {
-                questionId = questions.get(index).getId();
+            if (index < quizQuestions.size()) {
+                questionId = quizQuestions.get(index).getQuestionId();
             }
         }
         LOGGER.info(String.format("getNextQuestion() returning questionId [%s] for quizId [%s]", questionId, quizId));
@@ -390,7 +385,7 @@ public class QuizServiceImpl implements QuizService {
         final List<Question> questions = new ArrayList<>();
         if (quizQuestions != null && quizQuestions.size() > 0) {
             for (final QuizQuestionEntity quizQuestionEntity : quizQuestions) {
-                questions.add(questionService.findQuestionById(quizQuestionEntity.getQuestionId()));
+                questions.add(questionService.findById(quizQuestionEntity.getQuestionId(), true));
             }
         }
         quiz.setQuestions(questions);

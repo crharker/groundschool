@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.starfireaviation.groundschool.model.Statistic;
+import com.starfireaviation.groundschool.model.StatisticType;
 import com.starfireaviation.groundschool.model.sql.StatisticEntity;
 import com.starfireaviation.groundschool.model.sql.UserQuestionEntity;
 import com.starfireaviation.groundschool.repository.StatisticRepository;
@@ -129,6 +130,66 @@ public class StatisticServiceImpl implements StatisticService {
     }
 
     /**
+     * {@inheritDoc} Required implementation.
+     */
+    @Override
+    public List<Statistic> findByUserId(long userId, StatisticType statisticType) {
+        final List<Statistic> statistics = new ArrayList<>();
+        final List<StatisticEntity> statisticEntities = statisticRepository.findByUserId(userId);
+        for (final StatisticEntity statisticEntity : statisticEntities) {
+            if (statisticType == StatisticType.ALL || statisticEntity.getStatisticType() == statisticType) {
+                statistics.add(mapper.map(statisticEntity, Statistic.class));
+            }
+        }
+        return statistics;
+    }
+
+    /**
+     * {@inheritDoc} Required implementation.
+     */
+    @Override
+    public List<Statistic> findByQuizId(long quizId, StatisticType statisticType) {
+        final List<Statistic> statistics = new ArrayList<>();
+        final List<StatisticEntity> statisticEntities = statisticRepository.findByQuizId(quizId);
+        for (final StatisticEntity statisticEntity : statisticEntities) {
+            if (statisticType == StatisticType.ALL || statisticEntity.getStatisticType() == statisticType) {
+                statistics.add(mapper.map(statisticEntity, Statistic.class));
+            }
+        }
+        return statistics;
+    }
+
+    /**
+     * {@inheritDoc} Required implementation.
+     */
+    @Override
+    public List<Statistic> findByQuestionId(long questionId, StatisticType statisticType) {
+        final List<Statistic> statistics = new ArrayList<>();
+        final List<StatisticEntity> statisticEntities = statisticRepository.findByQuestionId(questionId);
+        for (final StatisticEntity statisticEntity : statisticEntities) {
+            if (statisticType == StatisticType.ALL || statisticEntity.getStatisticType() == statisticType) {
+                statistics.add(mapper.map(statisticEntity, Statistic.class));
+            }
+        }
+        return statistics;
+    }
+
+    /**
+     * {@inheritDoc} Required implementation.
+     */
+    @Override
+    public List<Statistic> findByEventId(long eventId, StatisticType statisticType) {
+        final List<Statistic> statistics = new ArrayList<>();
+        final List<StatisticEntity> statisticEntities = statisticRepository.findByEventId(eventId);
+        for (final StatisticEntity statisticEntity : statisticEntities) {
+            if (statisticType == StatisticType.ALL || statisticEntity.getStatisticType() == statisticType) {
+                statistics.add(mapper.map(statisticEntity, Statistic.class));
+            }
+        }
+        return statistics;
+    }
+
+    /**
      * Maps a Statistic to a UserQuestionEntity
      *
      * @param statistic Statistic
@@ -166,4 +227,5 @@ public class StatisticServiceImpl implements StatisticService {
         }
         return value;
     }
+
 }

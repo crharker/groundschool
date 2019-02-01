@@ -5,6 +5,7 @@
  */
 package com.starfireaviation.groundschool.service;
 
+import java.util.Date;
 import java.util.List;
 
 import com.starfireaviation.groundschool.model.Question;
@@ -43,9 +44,10 @@ public interface QuestionService {
      * Gets a question
      *
      * @param id Long
+     * @param partial whether or not to load answers to question
      * @return Question
      */
-    public Question findQuestionById(long id);
+    public Question findById(final long id, final boolean partial);
 
     /**
      * Answers a question for a user
@@ -53,9 +55,10 @@ public interface QuestionService {
      * @param questionId Long
      * @param userId Long
      * @param selection Long
+     * @param startTime when question was asked
      * @return answered correctly?
      */
-    public boolean answer(long questionId, long userId, String selection);
+    public boolean answer(long questionId, long userId, String selection, Date startTime);
 
     /**
      * Assigns reference material to a question

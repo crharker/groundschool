@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.starfireaviation.groundschool.exception.ResourceNotFoundException;
 import com.starfireaviation.groundschool.model.Question;
 import com.starfireaviation.groundschool.model.Quiz;
+import com.starfireaviation.groundschool.service.QuestionService;
 import com.starfireaviation.groundschool.service.QuizService;
 
 import java.security.Principal;
@@ -45,10 +46,16 @@ public class QuizController {
     private static final Logger LOGGER = LoggerFactory.getLogger(QuizController.class);
 
     /**
-     * UserService
+     * QuizService
      */
     @Autowired
     private QuizService quizService;
+
+    /**
+     * QuestionService
+     */
+    @Autowired
+    private QuestionService questionService;
 
     /**
      * Initializes an instance of <code>QuizController</code> with the default data.
@@ -79,7 +86,7 @@ public class QuizController {
         if (quiz == null) {
             return quiz;
         }
-        return quizService.store(quiz);
+        return quizService.store(quiz, false);
     }
 
     /**
@@ -94,7 +101,7 @@ public class QuizController {
     })
     public Quiz get(@PathVariable("quizId") long quizId, Principal principal) {
         LOGGER.info(String.format("User is logged in as %s", principal.getName()));
-        return quizService.findById(quizId);
+        return quizService.findById(quizId, false);
     }
 
     /**
@@ -110,7 +117,7 @@ public class QuizController {
         if (quiz == null) {
             return quiz;
         }
-        return quizService.store(quiz);
+        return quizService.store(quiz, false);
     }
 
     /**
@@ -183,7 +190,8 @@ public class QuizController {
     })
     public Question getCurrentQuestion(@PathVariable("quizId") long quizId, Principal principal) {
         LOGGER.info(String.format("User is logged in as %s", principal.getName()));
-        return quizService.getCurrentQuestion(quizId);
+        final Long currentQuestionId = quizService.getCurrentQuestion(quizId);
+        return questionService.findById(currentQuestionId, false);
     }
 
     /**

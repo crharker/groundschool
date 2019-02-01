@@ -273,7 +273,7 @@ public class CalendarServiceImpl implements CalendarService {
 
         List<Long> quizIds = lessonPlan.getQuizIds();
         for (Long quizId : quizIds) {
-            Quiz quiz = quizService.findById(quizId);
+            Quiz quiz = quizService.findById(quizId, true);
             endTime = endTime.plusSeconds(quiz.getDuration());
         }
         // TODO set end time to next 30 minute boundary

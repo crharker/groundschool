@@ -13,6 +13,10 @@ package com.starfireaviation.groundschool.model;
 public enum StatisticType {
 
     /**
+     * ALL
+     */
+    ALL,
+    /**
      * USER_SAVED
      */
     USER_SAVED,

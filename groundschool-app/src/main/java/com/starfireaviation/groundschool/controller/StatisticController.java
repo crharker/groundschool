@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.starfireaviation.groundschool.model.Statistic;
+import com.starfireaviation.groundschool.model.StatisticType;
 import com.starfireaviation.groundschool.service.StatisticService;
 
 import java.security.Principal;
@@ -120,7 +121,7 @@ public class StatisticController {
     @DeleteMapping(path = {
             "/{statisticId}"
     })
-    public Statistic delete(@PathVariable("statisticId") long statisticId, Principal principal) {
+    public Statistic delete(@PathVariable("statisticId") final long statisticId, Principal principal) {
         LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         return statisticService.delete(statisticId);
     }
@@ -135,5 +136,81 @@ public class StatisticController {
     public List<Statistic> list(Principal principal) {
         LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         return statisticService.findAllStatistics();
+    }
+
+    /**
+     * Get all statistics for a user
+     *
+     * @param userId User ID
+     * @param statisticType StatisticType
+     * @param principal Principal
+     * @return list of Statistic
+     */
+    @GetMapping(path = {
+            "/user/{userId}/{statisticType}"
+    })
+    public List<Statistic> listByUser(
+            @PathVariable("userId") final Long userId,
+            @PathVariable("statisticType") final StatisticType statisticType,
+            Principal principal) {
+        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
+        return statisticService.findByUserId(userId, statisticType);
+    }
+
+    /**
+     * Get all statistics for an event
+     *
+     * @param eventId User ID
+     * @param statisticType StatisticType
+     * @param principal Principal
+     * @return list of Statistic
+     */
+    @GetMapping(path = {
+            "/event/{eventId}/{statisticType}"
+    })
+    public List<Statistic> listByEvent(
+            @PathVariable("eventId") final Long eventId,
+            @PathVariable("statisticType") final StatisticType statisticType,
+            Principal principal) {
+        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
+        return statisticService.findByEventId(eventId, statisticType);
+    }
+
+    /**
+     * Get all statistics for a question
+     *
+     * @param questionId User ID
+     * @param statisticType StatisticType
+     * @param principal Principal
+     * @return list of Statistic
+     */
+    @GetMapping(path = {
+            "/question/{questionId}/{statisticType}"
+    })
+    public List<Statistic> listByQuestion(
+            @PathVariable("questionId") final Long questionId,
+            @PathVariable("statisticType") final StatisticType statisticType,
+            Principal principal) {
+        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
+        return statisticService.findByQuestionId(questionId, statisticType);
+    }
+
+    /**
+     * Get all statistics for a quiz
+     *
+     * @param quizId User ID
+     * @param statisticType StatisticType
+     * @param principal Principal
+     * @return list of Statistic
+     */
+    @GetMapping(path = {
+            "/quiz/{quizId}/{statisticType}"
+    })
+    public List<Statistic> listByQuiz(
+            @PathVariable("quizId") final Long quizId,
+            @PathVariable("statisticType") final StatisticType statisticType,
+            Principal principal) {
+        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
+        return statisticService.findByQuizId(quizId, statisticType);
     }
 }
