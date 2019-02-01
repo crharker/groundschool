@@ -32,6 +32,13 @@ public interface MessageService {
     public void sendUserDeleteMsg(final User user);
 
     /**
+     * Sends a message for quiz completion
+     *
+     * @param user User
+     */
+    public void sendQuizCompleteMsg(final User user);
+
+    /**
      * Sends a message to RSVP for an upcoming event
      *
      * @param user User

@@ -43,9 +43,10 @@ public interface EventService {
      * Gets a event
      *
      * @param id Long
+     * @param partial only load base event data
      * @return Event
      */
-    public Event findById(long id);
+    public Event findById(long id, boolean partial);
 
     /**
      * Register a user for an event

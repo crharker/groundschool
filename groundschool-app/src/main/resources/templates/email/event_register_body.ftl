@@ -1,6 +1,6 @@
 <html>
     <body>
-Hi ${firstName} ${lastName}, your registration is confirmed for the ground school session:
+Hi ${firstName} ${lastName}, thank you for registering for the ground school session:
 
 ${event}
     </body>

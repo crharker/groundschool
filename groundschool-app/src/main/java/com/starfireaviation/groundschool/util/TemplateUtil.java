@@ -29,7 +29,7 @@ public class TemplateUtil {
     /**
      * SimpleDateFormat
      */
-    private static SimpleDateFormat sdf = new SimpleDateFormat("EEE dd/MM/yyyy hh:mm a");
+    private static SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd, yyyy hh:mm a");
 
     /**
      * Builds model for use in templates

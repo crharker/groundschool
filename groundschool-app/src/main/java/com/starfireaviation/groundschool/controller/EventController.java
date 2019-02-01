@@ -31,6 +31,7 @@ import com.starfireaviation.groundschool.util.CodeGenerator;
 
 import java.security.Principal;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 
 /**
@@ -123,7 +124,7 @@ public class EventController {
     })
     public Event get(@PathVariable("eventId") long eventId, Principal principal) {
         LOGGER.info(String.format("User is logged in as %s", principal.getName()));
-        Event event = eventService.findById(eventId);
+        Event event = eventService.findById(eventId, false);
         event.setAddress(addressService.findByEventId(event.getId()));
         return event;
     }
@@ -287,7 +288,7 @@ public class EventController {
     public String getCheckinCode(@PathVariable("eventId") long eventId, Principal principal) {
         LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         String code = null;
-        Event event = eventService.findById(eventId);
+        Event event = eventService.findById(eventId, true);
         if (event != null) {
             code = event.getCheckinCode();
         }
@@ -327,12 +328,25 @@ public class EventController {
     })
     public Event start(@PathVariable("eventId") long eventId, Principal principal) {
         LOGGER.info(String.format("User is logged in as %s", principal.getName()));
-        Event event = eventService.findById(eventId);
+        Event event = eventService.findById(eventId, true);
         if (event != null && !event.isStarted()) {
             event.setStarted(true);
-            event.setStartTime(LocalDateTime.now());
+            event.setStartTime(LocalDateTime.now(ZoneOffset.UTC));
             event.setCheckinCode(CodeGenerator.generateCode(4));
             event = eventService.store(event);
+            List<Long> eventParticipants = eventService.getAllEventUsers(eventId);
+            for (Long userId : eventParticipants) {
+                try {
+                    notificationService.send(
+                            userId,
+                            eventId,
+                            null,
+                            NotificationType.ALL,
+                            NotificationEventType.EVENT_START);
+                } catch (ResourceNotFoundException e) {
+                    // Do nothing
+                }
+            }
         }
         return event;
     }
@@ -349,7 +363,7 @@ public class EventController {
     })
     public Event complete(@PathVariable("eventId") long eventId, Principal principal) {
         LOGGER.info(String.format("User is logged in as %s", principal.getName()));
-        Event event = eventService.findById(eventId);
+        Event event = eventService.findById(eventId, true);
         if (event != null && event.isStarted()) {
             event.setCompleted(true);
             event.setCompletedTime(LocalDateTime.now());

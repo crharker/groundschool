@@ -97,7 +97,7 @@ public class EventServiceImpl implements EventService {
      */
     @Override
     public Event delete(long id) {
-        Event event = mapper.map(findById(id), Event.class);
+        Event event = mapper.map(findById(id, true), Event.class);
         if (event != null) {
             eventRepository.delete(mapper.map(event, EventEntity.class));
         }
@@ -129,30 +129,32 @@ public class EventServiceImpl implements EventService {
      * {@inheritDoc} Required implementation.
      */
     @Override
-    public Event findById(long id) {
+    public Event findById(long id, boolean partial) {
         EventEntity eventEntity = eventRepository.findById(id);
         LOGGER.info(String.format("retrieved lessonPlanId [%s] for event [%s]", eventEntity.getLessonPlanId(), id));
         Event event = mapper.map(eventEntity, Event.class);
-        List<EventParticipantEntity> EventParticipantEntities = eventUserRepository.findByEventId(id);
-        List<User> participants = new ArrayList<>();
-        for (EventParticipantEntity eventParticipantEntity : EventParticipantEntities) {
-            participants.add(userService.findById(eventParticipantEntity.getUserId()));
-        }
-        event.setParticipants(participants);
-        if (event.getParticipants() != null) {
-            LOGGER.info(
-                    String.format(
-                            "event [%s] has [%s] participants and lessonPlanId [%s]",
-                            id,
-                            event.getParticipants().size(),
-                            event.getLessonPlanId()));
-        } else {
-            LOGGER.info(
-                    String.format(
-                            "event [%s] has lessonPlanId [%s]",
-                            id,
-                            event.getParticipants().size(),
-                            event.getLessonPlanId()));
+        if (!partial) {
+            List<EventParticipantEntity> EventParticipantEntities = eventUserRepository.findByEventId(id);
+            List<User> participants = new ArrayList<>();
+            for (EventParticipantEntity eventParticipantEntity : EventParticipantEntities) {
+                participants.add(userService.findById(eventParticipantEntity.getUserId()));
+            }
+            event.setParticipants(participants);
+            if (event.getParticipants() != null) {
+                LOGGER.info(
+                        String.format(
+                                "event [%s] has [%s] participants and lessonPlanId [%s]",
+                                id,
+                                event.getParticipants().size(),
+                                event.getLessonPlanId()));
+            } else {
+                LOGGER.info(
+                        String.format(
+                                "event [%s] has lessonPlanId [%s]",
+                                id,
+                                event.getParticipants().size(),
+                                event.getLessonPlanId()));
+            }
         }
         return event;
     }
@@ -229,7 +231,7 @@ public class EventServiceImpl implements EventService {
     public boolean checkin(Long eventId, Long userId, String code) {
         boolean success = false;
         EventParticipantEntity eventUserEntity = eventUserRepository.findByEventAndUserId(eventId, userId);
-        Event event = findById(eventId);
+        Event event = findById(eventId, true);
         if (eventUserEntity != null
                 && event != null
                 && event.getCheckinCode() != null

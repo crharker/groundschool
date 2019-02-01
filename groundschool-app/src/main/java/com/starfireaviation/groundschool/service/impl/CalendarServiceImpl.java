@@ -126,7 +126,7 @@ public class CalendarServiceImpl implements CalendarService {
     public boolean hasEvent(Long eventId) {
         Instant start = Instant.now();
         boolean found = false;
-        com.starfireaviation.groundschool.model.Event event = eventService.findById(eventId);
+        com.starfireaviation.groundschool.model.Event event = eventService.findById(eventId, true);
         if (event.getCalendarUrl() != null) {
             found = true;
         }
@@ -150,7 +150,7 @@ public class CalendarServiceImpl implements CalendarService {
     public String add(Long eventId) {
         Instant start = Instant.now();
         String eventUrl = null;
-        com.starfireaviation.groundschool.model.Event groundSchoolEvent = eventService.findById(eventId);
+        com.starfireaviation.groundschool.model.Event groundSchoolEvent = eventService.findById(eventId, true);
         LessonPlan lessonPlan = lessonPlanService.findById(eventId);
         Address address = addressService.findByEventId(eventId);
         if (groundSchoolEvent != null && lessonPlan != null && address != null) {

@@ -48,4 +48,8 @@ public enum NotificationEventType {
      * QUESTION_ASKED
      */
     QUESTION_ASKED,
+    /**
+     * QUIZ_COMPLETE
+     */
+    QUIZ_COMPLETE;
 }

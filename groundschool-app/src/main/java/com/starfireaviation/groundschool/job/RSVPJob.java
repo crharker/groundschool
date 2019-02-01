@@ -41,7 +41,8 @@ public class RSVPJob extends QuartzJobBean {
     @Override
     protected void executeInternal(JobExecutionContext jobExecutionContext) {
         final Event event = eventService.findById(
-                Long.valueOf(jobExecutionContext.getJobDetail().getJobDataMap().getString(Constants.ID)));
+                Long.valueOf(jobExecutionContext.getJobDetail().getJobDataMap().getString(Constants.ID)),
+                true);
 
         LOGGER.info(String.format("Sending RSVP notifications for %s - %s", event.getId(), event.getTitle()));
         //emailService.rsvp(event);

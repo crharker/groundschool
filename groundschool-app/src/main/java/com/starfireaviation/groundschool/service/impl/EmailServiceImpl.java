@@ -102,6 +102,31 @@ public class EmailServiceImpl implements MessageService {
      * {@inheritDoc} Required implementation.
      */
     @Override
+    public void sendQuizCompleteMsg(final User user) {
+        try {
+            freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates/email");
+            send(
+                    user.getId(),
+                    emailProperties.getFromAddress(),
+                    user.getEmail(),
+                    null,
+                    null,
+                    FreeMarkerTemplateUtils.processTemplateIntoString(
+                            freemarkerConfig.getTemplate("quiz_complete_subject.ftl"),
+                            getModelForUser(user)),
+                    FreeMarkerTemplateUtils.processTemplateIntoString(
+                            freemarkerConfig.getTemplate("quiz_complete_body.ftl"),
+                            getModelForUser(user)),
+                    true);
+        } catch (IOException | TemplateException e) {
+            LOGGER.warn(e.getMessage());
+        }
+    }
+
+    /**
+     * {@inheritDoc} Required implementation.
+     */
+    @Override
     public void sendEventRSVPMsg(final User user, final Event event) {
         try {
             freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates/email");

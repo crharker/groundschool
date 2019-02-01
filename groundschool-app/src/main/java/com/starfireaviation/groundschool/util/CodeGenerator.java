@@ -57,7 +57,7 @@ public class CodeGenerator {
     public static String generateCode(int length) {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < length; i++) {
-            sb.append(ACCEPTABLE_CHARACTERS[getRandomNumberInRange(0, ACCEPTABLE_CHARACTERS.length)]);
+            sb.append(ACCEPTABLE_CHARACTERS[getRandomNumberInRange(0, ACCEPTABLE_CHARACTERS.length - 1)]);
         }
         return sb.toString();
     }

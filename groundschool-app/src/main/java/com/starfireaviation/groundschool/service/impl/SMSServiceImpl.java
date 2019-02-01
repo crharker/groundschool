@@ -160,6 +160,29 @@ public class SMSServiceImpl implements MessageService {
      * {@inheritDoc} Required implementation.
      */
     @Override
+    public void sendQuizCompleteMsg(final User user) {
+        try {
+            freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates/sms");
+            send(
+                    user.getId(),
+                    null,
+                    null,
+                    null,
+                    NotificationEventType.QUIZ_COMPLETE,
+                    smsProperties.getFromAddress(),
+                    user.getSms(),
+                    FreeMarkerTemplateUtils.processTemplateIntoString(
+                            freemarkerConfig.getTemplate("quiz_complete.ftl"),
+                            TemplateUtil.getModel(user, null, null)));
+        } catch (IOException | TemplateException e) {
+            LOGGER.warn(e.getMessage());
+        }
+    }
+
+    /**
+     * {@inheritDoc} Required implementation.
+     */
+    @Override
     public void sendEventRSVPMsg(final User user, final Event event) {
         try {
             freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates/sms");

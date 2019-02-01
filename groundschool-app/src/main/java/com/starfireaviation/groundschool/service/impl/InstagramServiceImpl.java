@@ -40,6 +40,14 @@ public class InstagramServiceImpl implements MessageService {
      * {@inheritDoc} Required implementation.
      */
     @Override
+    public void sendQuizCompleteMsg(final User user) {
+        // Not implemented
+    }
+
+    /**
+     * {@inheritDoc} Required implementation.
+     */
+    @Override
     public void sendEventRSVPMsg(final User user, final Event event) {
         // Not implemented
     }

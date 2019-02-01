@@ -231,7 +231,7 @@ public class QuestionServiceImpl implements QuestionService {
         final Long eventId = eventService.isCheckedIn(userId);
         Long quizId = null;
         if (eventId != null) {
-            final Event event = eventService.findById(eventId);
+            final Event event = eventService.findById(eventId, true);
             final LessonPlan lessonPlan = lessonPlanService.findById(event.getLessonPlanId());
             for (final Long id : lessonPlan.getQuizIds()) {
                 final Quiz quiz = quizService.findById(id);

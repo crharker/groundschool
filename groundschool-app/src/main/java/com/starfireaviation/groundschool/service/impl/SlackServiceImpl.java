@@ -238,6 +238,23 @@ public class SlackServiceImpl implements MessageService, SlackMessagePostedListe
      * {@inheritDoc} Required implementation.
      */
     @Override
+    public void sendQuizCompleteMsg(final User user) {
+        try {
+            freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates/slack");
+
+            final String message = FreeMarkerTemplateUtils.processTemplateIntoString(
+                    freemarkerConfig.getTemplate("quiz_complete.ftl"),
+                    TemplateUtil.getModel(user, null, null));
+            send(user, null, null, null, message, NotificationEventType.QUIZ_COMPLETE);
+        } catch (IOException | TemplateException e) {
+            LOGGER.warn(e.getMessage());
+        }
+    }
+
+    /**
+     * {@inheritDoc} Required implementation.
+     */
+    @Override
     public void sendUserSettingsVerifiedMsg(final User user) {
         try {
             freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates/slack");

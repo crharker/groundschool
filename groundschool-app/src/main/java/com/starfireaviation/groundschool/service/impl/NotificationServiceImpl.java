@@ -316,7 +316,7 @@ public class NotificationServiceImpl implements NotificationService {
      */
     private void eventStart(Long userId, Long eventId, NotificationType notificationType) {
         final User user = userService.findById(userId);
-        final Event event = eventService.findById(eventId);
+        final Event event = eventService.findById(eventId, true);
         if (user == null) {
             LOGGER.warn("eventStart() returning as no user was found");
             return;
@@ -402,7 +402,7 @@ public class NotificationServiceImpl implements NotificationService {
      */
     private void eventRSVP(Long userId, Long eventId, NotificationType notificationType) {
         final User user = userService.findById(userId);
-        final Event event = eventService.findById(eventId);
+        final Event event = eventService.findById(eventId, true);
         if (user == null) {
             LOGGER.warn("eventRSVP() returning as no user was found");
             return;
@@ -442,7 +442,7 @@ public class NotificationServiceImpl implements NotificationService {
      */
     private void eventRegister(Long userId, Long eventId, NotificationType notificationType) {
         final User user = userService.findById(userId);
-        final Event event = eventService.findById(eventId);
+        final Event event = eventService.findById(eventId, true);
         if (user == null) {
             LOGGER.warn("eventRegister() returning as no user was found");
             return;
@@ -482,7 +482,7 @@ public class NotificationServiceImpl implements NotificationService {
      */
     private void eventUnregister(Long userId, Long eventId, NotificationType notificationType) {
         final User user = userService.findById(userId);
-        final Event event = eventService.findById(eventId);
+        final Event event = eventService.findById(eventId, true);
         if (user == null) {
             LOGGER.warn("eventUnregister() returning as no user was found");
             return;
