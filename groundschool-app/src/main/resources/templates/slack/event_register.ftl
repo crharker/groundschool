@@ -1,4 +1,4 @@
-Hi ${firstName} ${lastName}, this message confirms your registration for the ground school event:
+Hi ${firstName} ${lastName}, your registration is confirmed for the ground school session:
 
 ${event}
 

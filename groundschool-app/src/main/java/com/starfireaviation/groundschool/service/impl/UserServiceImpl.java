@@ -77,11 +77,20 @@ public class UserServiceImpl implements UserService {
         }
         final Long userId = user.getId();
         if (userId != null) {
-            final User existingUser = findById(userId);
+            final UserEntity existingUser = findByIdWithPassword(userId);
             if (existingUser == null) {
                 final String msg = String.format("No user found for ID [%s]", userId);
                 LOGGER.warn(msg);
                 throw new ResourceNotFoundException(msg);
+            }
+            if (!existingUser.getEmail().equals(user.getEmail())) {
+                user.setEmailVerified(false);
+            }
+            if (!existingUser.getSms().equals(user.getSms())) {
+                user.setSmsVerified(false);
+            }
+            if (!existingUser.getSlack().equals(user.getSlack())) {
+                user.setSlackVerified(false);
             }
             user.setPassword(existingUser.getPassword());
         }
@@ -112,7 +121,9 @@ public class UserServiceImpl implements UserService {
         final List<User> users = new ArrayList<>();
         final List<UserEntity> userEntities = userRepository.findAll();
         for (UserEntity userEntity : userEntities) {
-            users.add(mapper.map(userEntity, User.class));
+            final User user = mapper.map(userEntity, User.class);
+            user.setPassword(null);
+            users.add(user);
         }
         return users;
     }
@@ -122,7 +133,9 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public User findById(long id) {
-        return mapper.map(userRepository.findById(id), User.class);
+        final User user = mapper.map(userRepository.findById(id), User.class);
+        user.setPassword(null);
+        return user;
     }
 
     /**
@@ -130,7 +143,19 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public User findByUsername(String username) {
-        return mapper.map(userRepository.findByUsername(username), User.class);
+        final User user = mapper.map(userRepository.findByUsername(username), User.class);
+        user.setPassword(null);
+        return user;
+    }
+
+    /**
+     * Gets UserEntity including the user's password
+     *
+     * @param userId User ID
+     * @return UserEntity
+     */
+    private UserEntity findByIdWithPassword(long userId) {
+        return userRepository.findById(userId);
     }
 
 }

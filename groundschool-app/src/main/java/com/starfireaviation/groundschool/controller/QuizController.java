@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.starfireaviation.groundschool.exception.ResourceNotFoundException;
 import com.starfireaviation.groundschool.model.Question;
 import com.starfireaviation.groundschool.model.Quiz;
 import com.starfireaviation.groundschool.service.QuizService;
@@ -145,28 +146,14 @@ public class QuizController {
      * @param quizId Long
      * @param principal Principal
      * @return started quiz
+     * @throws ResourceNotFoundException when things go wrong
      */
     @PostMapping(path = {
             "/{quizId}/start"
     })
-    public Quiz start(@PathVariable("quizId") long quizId, Principal principal) {
+    public Quiz start(@PathVariable("quizId") long quizId, Principal principal) throws ResourceNotFoundException {
         LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         return quizService.start(quizId);
-    }
-
-    /**
-     * Starts the next quiz question
-     *
-     * @param quizId Long
-     * @param principal Principal
-     * @return started quiz
-     */
-    @PostMapping(path = {
-            "/{quizId}/start/question"
-    })
-    public Quiz startQuestion(@PathVariable("quizId") long quizId, Principal principal) {
-        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
-        return quizService.startQuestion(quizId, false);
     }
 
     /**
@@ -182,21 +169,6 @@ public class QuizController {
     public Quiz complete(@PathVariable("quizId") long quizId, Principal principal) {
         LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         return quizService.complete(quizId);
-    }
-
-    /**
-     * Complete's a quiz question
-     *
-     * @param quizId Long
-     * @param principal Principal
-     * @return completed quiz
-     */
-    @PostMapping(path = {
-            "/{quizId}/complete/question"
-    })
-    public Quiz completeQuestion(@PathVariable("quizId") long quizId, Principal principal) {
-        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
-        return quizService.completeQuestion(quizId);
     }
 
     /**
@@ -227,6 +199,44 @@ public class QuizController {
     public LocalDateTime getCurrentQuestionStart(@PathVariable("quizId") long quizId, Principal principal) {
         LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         return quizService.getCurrentQuestionStart(quizId);
+    }
+
+    /**
+     * Adds a question to a quiz
+     *
+     * @param quizId Long
+     * @param questionId Long
+     * @param principal Principal
+     * @return completed quiz
+     */
+    @PostMapping(path = {
+            "/{quizId}/add/{questionId}"
+    })
+    public Quiz addQuestion(
+            @PathVariable("quizId") long quizId,
+            @PathVariable("questionId") long questionId,
+            Principal principal) {
+        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
+        return quizService.addQuestion(quizId, questionId);
+    }
+
+    /**
+     * Removes a question from a quiz
+     *
+     * @param quizId Long
+     * @param questionId Long
+     * @param principal Principal
+     * @return completed quiz
+     */
+    @PostMapping(path = {
+            "/{quizId}/remove/{questionId}"
+    })
+    public Quiz removeQuestion(
+            @PathVariable("quizId") long quizId,
+            @PathVariable("questionId") long questionId,
+            Principal principal) {
+        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
+        return quizService.removeQuestion(quizId, questionId);
     }
 
 }

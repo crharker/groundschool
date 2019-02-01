@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -17,17 +16,17 @@ import java.util.TreeMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 
 import com.starfireaviation.groundschool.exception.ResourceNotFoundException;
-import com.starfireaviation.groundschool.model.Answer;
 import com.starfireaviation.groundschool.model.Event;
-import com.starfireaviation.groundschool.model.Message;
+import com.starfireaviation.groundschool.model.SMSMessage;
 import com.starfireaviation.groundschool.model.NotificationEventType;
 import com.starfireaviation.groundschool.model.NotificationType;
 import com.starfireaviation.groundschool.model.Question;
-import com.starfireaviation.groundschool.model.ReferenceMaterial;
+import com.starfireaviation.groundschool.model.Quiz;
 import com.starfireaviation.groundschool.model.ResponseOption;
 import com.starfireaviation.groundschool.model.Statistic;
 import com.starfireaviation.groundschool.model.StatisticType;
@@ -38,9 +37,12 @@ import com.starfireaviation.groundschool.repository.SlackMessageRepository;
 import com.starfireaviation.groundschool.service.EventService;
 import com.starfireaviation.groundschool.service.MessageService;
 import com.starfireaviation.groundschool.service.NotificationService;
+import com.starfireaviation.groundschool.service.QuestionService;
+import com.starfireaviation.groundschool.service.QuizService;
 import com.starfireaviation.groundschool.service.StatisticService;
 import com.starfireaviation.groundschool.service.UserService;
-import com.starfireaviation.groundschool.util.SlackResponseParser;
+import com.starfireaviation.groundschool.util.ResponseParser;
+import com.starfireaviation.groundschool.util.TemplateUtil;
 import com.ullink.slack.simpleslackapi.SlackSession;
 import com.ullink.slack.simpleslackapi.SlackUser;
 import com.ullink.slack.simpleslackapi.events.SlackEventType;
@@ -77,10 +79,29 @@ public class SlackServiceImpl implements MessageService, SlackMessagePostedListe
     private UserService userService;
 
     /**
+     * QuizService
+     */
+    @Autowired
+    private QuizService quizService;
+
+    /**
      * EventService
      */
     @Autowired
     private EventService eventService;
+
+    /**
+     * QuestionService
+     */
+    @Autowired
+    private QuestionService questionService;
+
+    /**
+     * SMSService
+     */
+    @Autowired
+    @Qualifier("smsService")
+    private MessageService smsService;
 
     /**
      * NotificationService
@@ -116,35 +137,13 @@ public class SlackServiceImpl implements MessageService, SlackMessagePostedListe
      */
     @Override
     public void sendEventRSVPMsg(final User user, final Event event) {
-        Instant start = Instant.now();
         try {
             freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates/slack");
 
-            initSlackSession();
-            final SlackUser slackUser = slackSession.findUserByUserName(user.getSlack());
             final String message = FreeMarkerTemplateUtils.processTemplateIntoString(
                     freemarkerConfig.getTemplate("event_rsvp.ftl"),
-                    getModelForUser(user));
-            slackSession.sendMessageToUser(slackUser, message, null);
-            slackMessageRepository.save(
-                    new SlackMessageEntity(
-                            user.getId(),
-                            event.getId(),
-                            null,
-                            null,
-                            user.getSlack(),
-                            new Date(),
-                            message,
-                            NotificationEventType.EVENT_RSVP));
-            final Statistic statistic = new Statistic(
-                    StatisticType.SLACK_MESSAGE_SENT,
-                    String.format(
-                            "Duration [%s]; Message [%s]; Channel [%s]",
-                            Duration.between(start, Instant.now()),
-                            message,
-                            user.getSlack()));
-            statistic.setUserId(user.getId());
-            statisticService.store(statistic);
+                    TemplateUtil.getModel(user, event, null));
+            send(user, event, null, null, message, NotificationEventType.EVENT_RSVP);
         } catch (IOException | TemplateException e) {
             LOGGER.warn(e.getMessage());
         }
@@ -155,35 +154,13 @@ public class SlackServiceImpl implements MessageService, SlackMessagePostedListe
      */
     @Override
     public void sendEventStartMsg(final User user, final Event event) {
-        Instant start = Instant.now();
         try {
             freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates/slack");
 
-            initSlackSession();
-            final SlackUser slackUser = slackSession.findUserByUserName(user.getSlack());
             final String message = FreeMarkerTemplateUtils.processTemplateIntoString(
                     freemarkerConfig.getTemplate("event_start.ftl"),
-                    getModelForUser(user));
-            slackSession.sendMessageToUser(slackUser, message, null);
-            slackMessageRepository.save(
-                    new SlackMessageEntity(
-                            user.getId(),
-                            event.getId(),
-                            null,
-                            null,
-                            user.getSlack(),
-                            new Date(),
-                            message,
-                            NotificationEventType.EVENT_START));
-            final Statistic statistic = new Statistic(
-                    StatisticType.SLACK_MESSAGE_SENT,
-                    String.format(
-                            "Duration [%s]; Message [%s]; Channel [%s]",
-                            Duration.between(start, Instant.now()),
-                            message,
-                            user.getSlack()));
-            statistic.setUserId(user.getId());
-            statisticService.store(statistic);
+                    TemplateUtil.getModel(user, event, null));
+            send(user, event, null, null, message, NotificationEventType.EVENT_START);
         } catch (IOException | TemplateException e) {
             LOGGER.warn(e.getMessage());
         }
@@ -194,35 +171,13 @@ public class SlackServiceImpl implements MessageService, SlackMessagePostedListe
      */
     @Override
     public void sendQuestionAskedMsg(final User user, final Question question) {
-        Instant start = Instant.now();
         try {
             freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates/slack");
 
-            initSlackSession();
-            final SlackUser slackUser = slackSession.findUserByUserName(user.getSlack());
             final String message = FreeMarkerTemplateUtils.processTemplateIntoString(
                     freemarkerConfig.getTemplate("question.ftl"),
-                    getModelForQuestion(question));
-            slackSession.sendMessageToUser(slackUser, message, null);
-            slackMessageRepository.save(
-                    new SlackMessageEntity(
-                            user.getId(),
-                            null,
-                            null,
-                            question.getId(),
-                            user.getSlack(),
-                            new Date(),
-                            message,
-                            NotificationEventType.QUESTION_ASKED));
-            final Statistic statistic = new Statistic(
-                    StatisticType.SLACK_MESSAGE_SENT,
-                    String.format(
-                            "Duration [%s]; Message [%s]; Channel [%s]",
-                            Duration.between(start, Instant.now()),
-                            message,
-                            user.getSlack()));
-            statistic.setUserId(user.getId());
-            statisticService.store(statistic);
+                    TemplateUtil.getModel(user, null, question));
+            send(user, null, null, question, message, NotificationEventType.QUESTION_ASKED);
         } catch (IOException | TemplateException e) {
             LOGGER.warn(e.getMessage());
         }
@@ -233,35 +188,13 @@ public class SlackServiceImpl implements MessageService, SlackMessagePostedListe
      */
     @Override
     public void sendEventRegisterMsg(final User user, final Event event) {
-        Instant start = Instant.now();
         try {
             freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates/slack");
 
-            initSlackSession();
-            final SlackUser slackUser = slackSession.findUserByUserName(user.getSlack());
             final String message = FreeMarkerTemplateUtils.processTemplateIntoString(
                     freemarkerConfig.getTemplate("event_register.ftl"),
-                    getModelForUser(user));
-            slackSession.sendMessageToUser(slackUser, message, null);
-            slackMessageRepository.save(
-                    new SlackMessageEntity(
-                            user.getId(),
-                            event.getId(),
-                            null,
-                            null,
-                            user.getSlack(),
-                            new Date(),
-                            message,
-                            NotificationEventType.EVENT_REGISTER));
-            final Statistic statistic = new Statistic(
-                    StatisticType.SLACK_MESSAGE_SENT,
-                    String.format(
-                            "Duration [%s]; Message [%s]; Channel [%s]",
-                            Duration.between(start, Instant.now()),
-                            message,
-                            user.getSlack()));
-            statistic.setUserId(user.getId());
-            statisticService.store(statistic);
+                    TemplateUtil.getModel(user, event, null));
+            send(user, event, null, null, message, NotificationEventType.EVENT_REGISTER);
         } catch (IOException | TemplateException e) {
             LOGGER.warn(e.getMessage());
         }
@@ -272,35 +205,13 @@ public class SlackServiceImpl implements MessageService, SlackMessagePostedListe
      */
     @Override
     public void sendEventUnregisterMsg(final User user, final Event event) {
-        Instant start = Instant.now();
         try {
             freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates/slack");
 
-            initSlackSession();
-            final SlackUser slackUser = slackSession.findUserByUserName(user.getSlack());
             final String message = FreeMarkerTemplateUtils.processTemplateIntoString(
                     freemarkerConfig.getTemplate("event_unregister.ftl"),
-                    getModelForUser(user));
-            slackSession.sendMessageToUser(slackUser, message, null);
-            slackMessageRepository.save(
-                    new SlackMessageEntity(
-                            user.getId(),
-                            event.getId(),
-                            null,
-                            null,
-                            user.getSlack(),
-                            new Date(),
-                            message,
-                            NotificationEventType.EVENT_UNREGISTER));
-            final Statistic statistic = new Statistic(
-                    StatisticType.SLACK_MESSAGE_SENT,
-                    String.format(
-                            "Duration [%s]; Message [%s]; Channel [%s]",
-                            Duration.between(start, Instant.now()),
-                            message,
-                            user.getSlack()));
-            statistic.setUserId(user.getId());
-            statisticService.store(statistic);
+                    TemplateUtil.getModel(user, event, null));
+            send(user, event, null, null, message, NotificationEventType.EVENT_UNREGISTER);
         } catch (IOException | TemplateException e) {
             LOGGER.warn(e.getMessage());
         }
@@ -311,35 +222,13 @@ public class SlackServiceImpl implements MessageService, SlackMessagePostedListe
      */
     @Override
     public void sendUserDeleteMsg(final User user) {
-        Instant start = Instant.now();
         try {
             freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates/slack");
 
-            initSlackSession();
-            final SlackUser slackUser = slackSession.findUserByUserName(user.getSlack());
             final String message = FreeMarkerTemplateUtils.processTemplateIntoString(
                     freemarkerConfig.getTemplate("user_delete.ftl"),
-                    getModelForUser(user));
-            slackSession.sendMessageToUser(slackUser, message, null);
-            slackMessageRepository.save(
-                    new SlackMessageEntity(
-                            user.getId(),
-                            null,
-                            null,
-                            null,
-                            user.getSlack(),
-                            new Date(),
-                            message,
-                            NotificationEventType.USER_DELETE));
-            final Statistic statistic = new Statistic(
-                    StatisticType.SLACK_MESSAGE_SENT,
-                    String.format(
-                            "Duration [%s]; Message [%s]; Channel [%s]",
-                            Duration.between(start, Instant.now()),
-                            message,
-                            user.getSlack()));
-            statistic.setUserId(user.getId());
-            statisticService.store(statistic);
+                    TemplateUtil.getModel(user, null, null));
+            send(user, null, null, null, message, NotificationEventType.USER_DELETE);
         } catch (IOException | TemplateException e) {
             LOGGER.warn(e.getMessage());
         }
@@ -350,35 +239,13 @@ public class SlackServiceImpl implements MessageService, SlackMessagePostedListe
      */
     @Override
     public void sendUserSettingsVerifiedMsg(final User user) {
-        Instant start = Instant.now();
         try {
             freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates/slack");
 
-            initSlackSession();
-            final SlackUser slackUser = slackSession.findUserByUserName(user.getSlack());
             final String message = FreeMarkerTemplateUtils.processTemplateIntoString(
                     freemarkerConfig.getTemplate("user_settings_verified.ftl"),
-                    getModelForUser(user));
-            slackSession.sendMessageToUser(slackUser, message, null);
-            slackMessageRepository.save(
-                    new SlackMessageEntity(
-                            user.getId(),
-                            null,
-                            null,
-                            null,
-                            user.getSlack(),
-                            new Date(),
-                            message,
-                            NotificationEventType.USER_VERIFIED));
-            final Statistic statistic = new Statistic(
-                    StatisticType.SLACK_MESSAGE_SENT,
-                    String.format(
-                            "Duration [%s]; Message [%s]; Channel [%s]",
-                            Duration.between(start, Instant.now()),
-                            message,
-                            user.getSlack()));
-            statistic.setUserId(user.getId());
-            statisticService.store(statistic);
+                    TemplateUtil.getModel(user, null, null));
+            send(user, null, null, null, message, NotificationEventType.USER_VERIFIED);
         } catch (IOException | TemplateException e) {
             LOGGER.warn(e.getMessage());
         }
@@ -389,35 +256,13 @@ public class SlackServiceImpl implements MessageService, SlackMessagePostedListe
      */
     @Override
     public void sendUserSettingsChangeMsg(final User user) {
-        Instant start = Instant.now();
         try {
             freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates/slack");
 
-            initSlackSession();
-            final SlackUser slackUser = slackSession.findUserByUserName(user.getSlack());
             final String message = FreeMarkerTemplateUtils.processTemplateIntoString(
                     freemarkerConfig.getTemplate("user_verify_settings.ftl"),
-                    getModelForUser(user));
-            slackSession.sendMessageToUser(slackUser, message, null);
-            slackMessageRepository.save(
-                    new SlackMessageEntity(
-                            user.getId(),
-                            null,
-                            null,
-                            null,
-                            user.getSlack(),
-                            new Date(),
-                            message,
-                            NotificationEventType.USER_SETTINGS));
-            final Statistic statistic = new Statistic(
-                    StatisticType.SLACK_MESSAGE_SENT,
-                    String.format(
-                            "Duration [%s]; Message [%s]; Channel [%s]",
-                            Duration.between(start, Instant.now()),
-                            message,
-                            user.getSlack()));
-            statistic.setUserId(user.getId());
-            statisticService.store(statistic);
+                    TemplateUtil.getModel(user, null, null));
+            send(user, null, null, null, message, NotificationEventType.USER_SETTINGS);
         } catch (IOException | TemplateException e) {
             LOGGER.warn(e.getMessage());
         }
@@ -428,7 +273,16 @@ public class SlackServiceImpl implements MessageService, SlackMessagePostedListe
      */
     @Override
     public void sendPasswordResetMsg(User user) {
-        // Not implemented
+        try {
+            freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates/slack");
+
+            final String message = FreeMarkerTemplateUtils.processTemplateIntoString(
+                    freemarkerConfig.getTemplate("password_reset.ftl"),
+                    TemplateUtil.getModel(user, null, null));
+            send(user, null, null, null, message, NotificationEventType.PASSWORD_RESET);
+        } catch (IOException | TemplateException e) {
+            LOGGER.warn(e.getMessage());
+        }
     }
 
     /**
@@ -451,27 +305,20 @@ public class SlackServiceImpl implements MessageService, SlackMessagePostedListe
      * {@inheritDoc} Required implementation.
      */
     @Override
-    public String receiveMessage(Message message) {
-        String response = null;
-        Instant start = Instant.now();
-        LOGGER.info(String.format("receiveMessage() message received was [%s]", message));
-        Statistic statistic = new Statistic(
-                StatisticType.SLACK_MESSAGE_RECEIVED,
-                String.format(
-                        "Duration [%s]; Source [%s]; Message [%s]",
-                        Duration.between(start, Instant.now()),
-                        message.getFrom(),
-                        message.getBody()));
-        statisticService.store(statistic);
-        return response;
+    public String receiveMessage(SMSMessage message) {
+        // Not implemented
+        return null;
     }
 
     /**
      * {@inheritDoc} Required implementation.
      */
     @Override
-    public void closeAllMessages(Long userId) {
-        // Not implemented
+    public void clearMessageHistory(Long userId) {
+        List<SlackMessageEntity> slackMessageEntities = slackMessageRepository.findByUserId(userId);
+        for (SlackMessageEntity slackMessageEntity : slackMessageEntities) {
+            slackMessageRepository.delete(slackMessageEntity);
+        }
     }
 
     /**
@@ -491,6 +338,51 @@ public class SlackServiceImpl implements MessageService, SlackMessagePostedListe
                 }
             }
         }
+    }
+
+    /**
+     * Sends message to Slack
+     *
+     * @param user User
+     * @param event Event
+     * @param quiz Quiz
+     * @param question Question
+     * @param message message to be sent
+     * @param notificationEventType NotificationEventType
+     */
+    private void send(
+            final User user,
+            final Event event,
+            final Quiz quiz,
+            final Question question,
+            final String message,
+            NotificationEventType notificationEventType) {
+        Instant start = Instant.now();
+        initSlackSession();
+        final SlackUser slackUser = slackSession.findUserByUserName(user.getSlack());
+        slackSession.sendMessageToUser(slackUser, message, null);
+        slackMessageRepository.save(
+                new SlackMessageEntity(
+                        user.getId(),
+                        event == null ? null : event.getId(),
+                        quiz == null ? null : quiz.getId(),
+                        question == null ? null : question.getId(),
+                        user.getSlack(),
+                        new Date(),
+                        message,
+                        notificationEventType));
+        statisticService.store(
+                new Statistic(
+                        user.getId(),
+                        event == null ? null : event.getId(),
+                        quiz == null ? null : quiz.getId(),
+                        question == null ? null : question.getId(),
+                        StatisticType.SLACK_MESSAGE_SENT,
+                        String.format(
+                                "Duration [%s]; Message [%s]; Channel [%s]",
+                                Duration.between(start, Instant.now()),
+                                message,
+                                user.getSlack())));
     }
 
     /**
@@ -519,11 +411,13 @@ public class SlackServiceImpl implements MessageService, SlackMessagePostedListe
         LOGGER.info(String.format("Last message sent to [%s] was [%s]", user, slackMessageEntity.getMessage()));
         Long userId = null;
         Long eventId = null;
+        Long questionId = null;
         try {
             if (slackMessageEntity.isOpen()) {
                 userId = slackMessageEntity.getUserId();
                 eventId = slackMessageEntity.getEventId();
-                closeAllMessages(userId);
+                questionId = slackMessageEntity.getQuestionId();
+                clearMessageHistory(userId);
                 boolean success = false;
                 switch (slackMessageEntity.getNotificationEventType()) {
                     case USER_SETTINGS:
@@ -537,6 +431,11 @@ public class SlackServiceImpl implements MessageService, SlackMessagePostedListe
                         break;
                     case EVENT_RSVP:
                         success = processEventRSVPResponse(eventId, userId, message);
+                        smsService.clearMessageHistory(userId);
+                        break;
+                    case QUESTION_ASKED:
+                        success = processQuestionAskedResponse(questionId, userId, message);
+                        smsService.clearMessageHistory(userId);
                         break;
                     default:
                         break;
@@ -550,7 +449,7 @@ public class SlackServiceImpl implements MessageService, SlackMessagePostedListe
                             slackMessageEntity.getMessage());
                 }
             } else {
-                if (message != null && ResponseOption.STOP == SlackResponseParser.determineResponse(message)) {
+                if (message != null && ResponseOption.STOP == ResponseParser.determineResponse(message)) {
                     handleStop(userId);
                 }
             }
@@ -581,7 +480,7 @@ public class SlackServiceImpl implements MessageService, SlackMessagePostedListe
      */
     private boolean processUserVerifiedResponse(Long userId, String message)
             throws ResourceNotFoundException {
-        if (message != null && ResponseOption.STOP == SlackResponseParser.determineResponse(message)) {
+        if (message != null && ResponseOption.STOP == ResponseParser.determineResponse(message)) {
             handleStop(userId);
         }
         return true;
@@ -601,7 +500,7 @@ public class SlackServiceImpl implements MessageService, SlackMessagePostedListe
         User user = null;
         // STOP, CONFIRM, DECLINE, other
         if (message != null) {
-            switch (SlackResponseParser.determineResponse(message)) {
+            switch (ResponseParser.determineResponse(message)) {
                 case STOP:
                     handleStop(userId);
                     break;
@@ -638,7 +537,7 @@ public class SlackServiceImpl implements MessageService, SlackMessagePostedListe
      */
     private boolean processUserDeletedResponse(Long userId, String message)
             throws ResourceNotFoundException {
-        if (message != null && ResponseOption.STOP == SlackResponseParser.determineResponse(message)) {
+        if (message != null && ResponseOption.STOP == ResponseParser.determineResponse(message)) {
             handleStop(userId);
         }
         return true;
@@ -660,7 +559,7 @@ public class SlackServiceImpl implements MessageService, SlackMessagePostedListe
         boolean success = true;
         // STOP, CONFIRM, DECLINE, other
         if (message != null) {
-            switch (SlackResponseParser.determineResponse(message)) {
+            switch (ResponseParser.determineResponse(message)) {
                 case STOP:
                     handleStop(userId);
                     break;
@@ -675,6 +574,68 @@ public class SlackServiceImpl implements MessageService, SlackMessagePostedListe
             }
         }
         return success;
+    }
+
+    /**
+     * Process question asked response
+     *
+     * @param questionId question ID
+     * @param userId user ID
+     * @param message to be processed
+     * @return success
+     * @throws ResourceNotFoundException when no user is found
+     */
+    private boolean processQuestionAskedResponse(
+            Long questionId,
+            Long userId,
+            String message) throws ResourceNotFoundException {
+        boolean success = true;
+        // STOP, CONFIRM, DECLINE, other
+        if (message != null) {
+            ResponseOption responseOption = ResponseParser.determineResponse(message);
+            switch (responseOption) {
+                case STOP:
+                    handleStop(userId);
+                    break;
+                case A:
+                case B:
+                case C:
+                case D:
+                    questionService.answer(questionId, userId, responseOption.toString());
+                    Quiz quiz = quizService.getCurrentQuiz();
+                    if (quiz != null) {
+                        askNextQuestion(userId, eventService.getCurrentEvent(), quiz.getId(), questionId);
+                    }
+                    break;
+                default:
+                    success = false;
+            }
+        }
+        return success;
+    }
+
+    /**
+     * Asks the next question in a quiz, if applicable
+     *
+     * @param userId User ID
+     * @param eventId Event ID
+     * @param quizId Quiz ID
+     * @param previousQuestionId Question ID
+     */
+    private void askNextQuestion(Long userId, Long eventId, Long quizId, Long previousQuestionId) {
+        final Long nextQuestionId = quizService.getNextQuestion(quizId, previousQuestionId);
+        if (nextQuestionId != null) {
+            try {
+                notificationService.send(
+                        userId,
+                        eventId,
+                        nextQuestionId,
+                        NotificationType.ALL,
+                        NotificationEventType.QUESTION_ASKED);
+            } catch (ResourceNotFoundException e) {
+                LOGGER.warn(String.format("Exception %s", e.getMessage()));
+            }
+        }
     }
 
     /**
@@ -713,48 +674,6 @@ public class SlackServiceImpl implements MessageService, SlackMessagePostedListe
             }
         }
         return slackMessageEntity;
-    }
-
-    /**
-     * Builds model from User information
-     *
-     * @param user User
-     * @return model
-     */
-    private static Map<String, Object> getModelForUser(final User user) {
-        Map<String, Object> model = new HashMap<>();
-        model.put("firstName", user.getFirstName());
-        model.put("lastName", user.getLastName());
-        model.put("userId", user.getId());
-        model.put("host", "http://localhost:8080");
-        return model;
-    }
-
-    /**
-     * Builds model from Question information
-     *
-     * @param question Question
-     * @return model
-     */
-    private static Map<String, Object> getModelForQuestion(final Question question) {
-        Map<String, Object> model = new HashMap<>();
-        model.put("questionText", question.getText());
-        model.put("callbackId", "question");
-        final List<ReferenceMaterial> referenceMaterials = question.getReferenceMaterials();
-        if (referenceMaterials != null && referenceMaterials.size() > 0) {
-            StringBuilder sb = new StringBuilder("Reference Material: ");
-            for (ReferenceMaterial referenceMaterial : referenceMaterials) {
-                sb.append("<" + referenceMaterial.getResourceLocation() + ">\n");
-            }
-            model.put("referenceMaterial", sb.toString());
-        }
-        int count = 1;
-        for (Answer answer : question.getAnswers()) {
-            model.put("answer" + count + "Choice", answer.getChoice());
-            model.put("answer" + count + "Text", answer.getText());
-            count++;
-        }
-        return model;
     }
 
 }

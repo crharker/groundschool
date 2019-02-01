@@ -30,7 +30,6 @@ import com.starfireaviation.groundschool.model.NotificationEventType;
 import com.starfireaviation.groundschool.model.NotificationType;
 import com.starfireaviation.groundschool.model.Role;
 import com.starfireaviation.groundschool.model.User;
-import com.starfireaviation.groundschool.service.EventService;
 import com.starfireaviation.groundschool.service.NotificationService;
 import com.starfireaviation.groundschool.service.UserService;
 import com.starfireaviation.groundschool.util.CodeGenerator;
@@ -70,12 +69,6 @@ public class UserController {
      */
     @Autowired
     private UserValidator userValidator;
-
-    /**
-     * EventService
-     */
-    @Autowired
-    private EventService eventService;
 
     /**
      * NotificationService
@@ -318,27 +311,6 @@ public class UserController {
         if (auth != null) {
             new SecurityContextLogoutHandler().logout(request, response, auth);
         }
-    }
-
-    /**
-     * Checkin
-     *
-     * @param userId User ID
-     * @param eventId Event ID
-     * @param code checkin code
-     * @param principal Principal
-     * @return checkin success
-     */
-    @PostMapping(path = {
-            "/{userId}/checkin/{eventId}/{code}"
-    })
-    public boolean checkin(
-            @PathVariable("userId") long userId,
-            @PathVariable("eventId") long eventId,
-            @PathVariable("code") String code,
-            Principal principal) {
-        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
-        return eventService.checkin(eventId, userId, code);
     }
 
     /**

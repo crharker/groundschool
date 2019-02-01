@@ -240,18 +240,18 @@ public class QuestionServiceImpl implements QuestionService {
                 }
             }
         }
-        final Statistic statistic = new Statistic(
-                StatisticType.QUESTION_ANSWERED,
-                String.format(
-                        "Duration [%s]; Question ID [%s]; Event ID [%s]; Quiz ID [%s]; Answer Given [%s]; Answered Correctly [%s]",
-                        Duration.between(start, Instant.now()),
-                        questionId,
+        statisticService.store(
+                new Statistic(
+                        userId,
                         eventId,
                         quizId,
-                        selection,
-                        answeredCorrectly));
-        statistic.setUserId(userId);
-        statisticService.store(statistic);
+                        questionId,
+                        StatisticType.QUESTION_ANSWERED,
+                        String.format(
+                                "Duration [%s]; Answer Given [%s]; Answered Correctly [%s]",
+                                Duration.between(start, Instant.now()),
+                                selection,
+                                answeredCorrectly)));
 
         return answeredCorrectly;
     }

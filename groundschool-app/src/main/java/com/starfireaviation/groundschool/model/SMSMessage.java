@@ -12,7 +12,7 @@ import java.net.URLDecoder;
  *
  * @author brianmichael
  */
-public class Message {
+public class SMSMessage {
 
     /**
      * UTF-8
@@ -117,7 +117,7 @@ public class Message {
     /**
      * Initializes an instance of <code>SMSMessage</code> with the default data.
      */
-    public Message() {
+    public SMSMessage() {
         // Default constructor
     }
 
@@ -126,7 +126,7 @@ public class Message {
      *
      * @param message to be parsed
      */
-    public Message(String message) {
+    public SMSMessage(String message) {
         if (message != null) {
             String[] parts = message.split("&");
             for (String part : parts) {

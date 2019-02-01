@@ -1,6 +1,9 @@
 <html>
     <body>
-        <h3>Hi ${firstName} ${lastName}, the ground school event has started.</H3>
-        <p>${event}</p>
+Hi ${firstName} ${lastName}, the ground school session:
+
+${event}
+
+has just started.  Be sure to check in at ${groundSchoolLink}
     </body>
 </html>

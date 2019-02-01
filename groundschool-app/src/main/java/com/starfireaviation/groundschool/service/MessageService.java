@@ -6,7 +6,7 @@
 package com.starfireaviation.groundschool.service;
 
 import com.starfireaviation.groundschool.model.Event;
-import com.starfireaviation.groundschool.model.Message;
+import com.starfireaviation.groundschool.model.SMSMessage;
 import com.starfireaviation.groundschool.model.Question;
 import com.starfireaviation.groundschool.model.User;
 
@@ -111,12 +111,12 @@ public interface MessageService {
      * @param message received
      * @return response
      */
-    public String receiveMessage(Message message);
+    public String receiveMessage(SMSMessage message);
 
     /**
-     * Closes all open messages
+     * Clears message history
      *
      * @param userId user ID
      */
-    public void closeAllMessages(Long userId);
+    public void clearMessageHistory(Long userId);
 }

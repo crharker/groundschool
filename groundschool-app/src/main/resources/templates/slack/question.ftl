@@ -1,30 +1,13 @@
-{
-    "text": "${questionText}",
-    "attachments": [
-        {
-            "text": "${referenceMaterial}\n${answer1Choice}) ${answer1Text}\n${answer2Choice}) ${answer2Text}\n${answer3Choice}) ${answer3Text}",
-            "callback_id": "${callbackId}",
-            "attachment_type": "default",
-            "actions": [
-                {
-                    "name": "choice",
-                    "text": "${answer1Choice}",
-                    "type": "button",
-                    "value": "${answer1Choice}"
-                },
-                {
-                    "name": "choice",
-                    "text": "${answer2Choice}",
-                    "type": "button",
-                    "value": "${answer2Choice}"
-                },
-                {
-                    "name": "choice",
-                    "text": "${answer3Choice}",
-                    "type": "button",
-                    "value": "${answer3Choice}"
-                }
-            ]
-        }
-    ]
-}
+Unit: ${questionUnit}
+Sub-Unit: ${questionSubUnit}
+Learning Statement Code: ${questionLearningStatementCode}
+
+${referenceMaterial}
+
+Question: ${questionText}
+Answers:
+${answerChoice1}: ${answerText1}
+${answerChoice2}: ${answerText2}
+${answerChoice3}: ${answerText3}
+
+Reply with one of (${answerChoice1}, ${answerChoice2}, ${answerChoice3}) to answer this question or STOP to no longer receive these messages.

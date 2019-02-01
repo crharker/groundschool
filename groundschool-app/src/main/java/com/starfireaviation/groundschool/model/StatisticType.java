@@ -199,9 +199,5 @@ public enum StatisticType {
     /**
      * SMS_MESSAGE_RECEIVED
      */
-    SMS_MESSAGE_RECEIVED,
-    /**
-     * SMS_ALL_MESSAGES_CLOSED
-     */
-    SMS_ALL_MESSAGES_CLOSED;
+    SMS_MESSAGE_RECEIVED;
 }

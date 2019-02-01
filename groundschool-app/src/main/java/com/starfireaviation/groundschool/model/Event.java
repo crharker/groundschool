@@ -6,6 +6,7 @@
 package com.starfireaviation.groundschool.model;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * User
@@ -65,6 +66,11 @@ public class Event extends Base {
     private Long lessonPlanId;
 
     /**
+     * Event participants
+     */
+    private List<User> participants;
+
+    /**
      * Retrieves the value for {@link #title}.
      *
      * @return the current value
@@ -116,24 +122,6 @@ public class Event extends Base {
      */
     public void setAddress(Address address) {
         this.address = address;
-    }
-
-    /**
-     * Retrieves the value for {@link #lessonPlanId}.
-     *
-     * @return the current value
-     */
-    public Long getLessonPlanId() {
-        return lessonPlanId;
-    }
-
-    /**
-     * Provides a value for {@link #lessonPlanId}.
-     *
-     * @param lessonPlanId the new value to set
-     */
-    public void setLessonPlan(Long lessonPlanId) {
-        this.lessonPlanId = lessonPlanId;
     }
 
     /**
@@ -224,6 +212,42 @@ public class Event extends Base {
      */
     public void setCompletedTime(LocalDateTime completedTime) {
         this.completedTime = completedTime;
+    }
+
+    /**
+     * Retrieves the value for {@link #participants}.
+     *
+     * @return the current value
+     */
+    public List<User> getParticipants() {
+        return participants;
+    }
+
+    /**
+     * Provides a value for {@link #participants}.
+     *
+     * @param participants the new value to set
+     */
+    public void setParticipants(List<User> participants) {
+        this.participants = participants;
+    }
+
+    /**
+     * Retrieves the value for {@link #lessonPlanId}.
+     *
+     * @return the current value
+     */
+    public Long getLessonPlanId() {
+        return lessonPlanId;
+    }
+
+    /**
+     * Provides a value for {@link #lessonPlanId}.
+     *
+     * @param lessonPlanId the new value to set
+     */
+    public void setLessonPlanId(Long lessonPlanId) {
+        this.lessonPlanId = lessonPlanId;
     }
 
 }

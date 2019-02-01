@@ -1,12 +1,17 @@
 <html>
     <body>
-        ${referenceMaterial}
-        <h3>Question: ${questionText}</H3>
-        <p>Answers:</p>
+Unit: ${questionUnit}
+Sub-Unit: ${questionSubUnit}
+Learning Statement Code: ${questionLearningStatementCode}
+
+${referenceMaterial}
+
+Question: ${questionText}
+Answers:
         <ol>
-            <li><a href="http://localhost:8080/questions/${questionId}/answer/${userId}/${answerChoice1}">${answerChoice1}: ${answerText1}</a></li>
-            <li><a href="http://localhost:8080/questions/${questionId}/answer/${userId}/${answerChoice2}">${answerChoice2}: ${answerText2}</a></li>
-            <li><a href="http://localhost:8080/questions/${questionId}/answer/${userId}/${answerChoice3}">${answerChoice3}: ${answerText3}</a></li>
+            <li><a href="http://localhost:8080/questions/${questionId}/answer/${userId}/${answerChoice1}">${answerChoice1}</a>: ${answerText1}</li>
+            <li><a href="http://localhost:8080/questions/${questionId}/answer/${userId}/${answerChoice2}">${answerChoice2}</a>: ${answerText2}</li>
+            <li><a href="http://localhost:8080/questions/${questionId}/answer/${userId}/${answerChoice3}">${answerChoice3}</a>: ${answerText3}</li>
         </ol>
         <table>
             <tr>

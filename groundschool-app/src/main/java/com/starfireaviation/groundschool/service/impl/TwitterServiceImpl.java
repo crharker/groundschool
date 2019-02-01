@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.starfireaviation.groundschool.model.Event;
-import com.starfireaviation.groundschool.model.Message;
+import com.starfireaviation.groundschool.model.SMSMessage;
 import com.starfireaviation.groundschool.model.Question;
 import com.starfireaviation.groundschool.model.Statistic;
 import com.starfireaviation.groundschool.model.StatisticType;
@@ -127,18 +127,22 @@ public class TwitterServiceImpl implements MessageService {
      * {@inheritDoc} Required implementation.
      */
     @Override
-    public String receiveMessage(Message message) {
+    public String receiveMessage(SMSMessage message) {
         String response = null;
         Instant start = Instant.now();
         LOGGER.info(String.format("receiveMessage() message received was [%s]", message));
-        Statistic statistic = new Statistic(
-                StatisticType.TWITTER_MESSAGE_RECEIVED,
-                String.format(
-                        "Duration [%s]; Source [%s]; Message [%s]",
-                        Duration.between(start, Instant.now()),
-                        message.getFrom(),
-                        message.getBody()));
-        statisticService.store(statistic);
+        statisticService.store(
+                new Statistic(
+                        null,
+                        null,
+                        null,
+                        null,
+                        StatisticType.TWITTER_MESSAGE_RECEIVED,
+                        String.format(
+                                "Duration [%s]; Source [%s]; Message [%s]",
+                                Duration.between(start, Instant.now()),
+                                message.getFrom(),
+                                message.getBody())));
         return response;
     }
 
@@ -146,7 +150,7 @@ public class TwitterServiceImpl implements MessageService {
      * {@inheritDoc} Required implementation.
      */
     @Override
-    public void closeAllMessages(Long userId) {
+    public void clearMessageHistory(Long userId) {
         // Not implemented
     }
 

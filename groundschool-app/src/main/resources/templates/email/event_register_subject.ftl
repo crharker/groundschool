@@ -1,1 +1,1 @@
-EAA 690 Ground School Event Registration
+EAA 690 Ground School Session Registration

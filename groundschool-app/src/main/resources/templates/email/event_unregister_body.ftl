@@ -1,6 +1,7 @@
 <html>
     <body>
-        <h3>Hi ${firstName} ${lastName}, this message confirms you are no longer registered for the ground school event:</H3>
-        <p>${event}</p>
+Hi ${firstName} ${lastName}, you have been unregistered from the ground school session:
+
+${event}
     </body>
 </html>

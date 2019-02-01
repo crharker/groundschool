@@ -5,21 +5,15 @@
  */
 package com.starfireaviation.groundschool.service.impl;
 
-import java.time.Duration;
-import java.time.Instant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.starfireaviation.groundschool.model.Event;
-import com.starfireaviation.groundschool.model.Message;
+import com.starfireaviation.groundschool.model.SMSMessage;
 import com.starfireaviation.groundschool.model.Question;
-import com.starfireaviation.groundschool.model.Statistic;
-import com.starfireaviation.groundschool.model.StatisticType;
 import com.starfireaviation.groundschool.model.User;
 import com.starfireaviation.groundschool.service.MessageService;
-import com.starfireaviation.groundschool.service.StatisticService;
 
 /**
  * FacebookServiceImpl
@@ -33,12 +27,6 @@ public class FacebookServiceImpl implements MessageService {
      * Logger
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(FacebookServiceImpl.class);
-
-    /**
-     * StatisticService
-     */
-    @Autowired
-    private StatisticService statisticService;
 
     /**
      * {@inheritDoc} Required implementation.
@@ -127,18 +115,9 @@ public class FacebookServiceImpl implements MessageService {
      * {@inheritDoc} Required implementation.
      */
     @Override
-    public String receiveMessage(Message message) {
+    public String receiveMessage(SMSMessage message) {
         String response = null;
-        Instant start = Instant.now();
-        LOGGER.info(String.format("receiveMessage() message received was [%s]", message));
-        Statistic statistic = new Statistic(
-                StatisticType.FACEBOOK_MESSAGE_RECEIVED,
-                String.format(
-                        "Duration [%s]; Source [%s]; Message [%s]",
-                        Duration.between(start, Instant.now()),
-                        message.getFrom(),
-                        message.getBody()));
-        statisticService.store(statistic);
+        // Not implemented
         return response;
     }
 
@@ -146,7 +125,7 @@ public class FacebookServiceImpl implements MessageService {
      * {@inheritDoc} Required implementation.
      */
     @Override
-    public void closeAllMessages(Long userId) {
+    public void clearMessageHistory(Long userId) {
         // Not implemented
     }
 

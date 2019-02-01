@@ -1,1 +1,1 @@
-EAA 690 Ground School RSVP For Event
+RSVP for EAA 690 Ground School Session

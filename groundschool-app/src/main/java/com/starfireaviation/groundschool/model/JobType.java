@@ -15,13 +15,5 @@ public enum JobType {
     /**
      * RSVP
      */
-    RSVP,
-    /**
-     * COMPLETE_QUESTION
-     */
-    COMPLETE_QUESTION,
-    /**
-     * MEMBER_DETAILS_REFRESH
-     */
-    MEMBER_DETAILS_REFRESH;
+    RSVP;
 }

@@ -1,1 +1,1 @@
-Hi ${firstName} ${lastName}, we are sorry to see you go!
+Bye ${firstName} ${lastName}, we are sorry to see you go!

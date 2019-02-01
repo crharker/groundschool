@@ -29,7 +29,7 @@ public class EventEntity extends BaseEntity {
     /**
      * LessonPlan ID
      */
-    @Column(name = "lessin_plan_id", nullable = false)
+    @Column(name = "lesson_plan_id", nullable = false)
     private Long lessonPlanId;
 
     /**

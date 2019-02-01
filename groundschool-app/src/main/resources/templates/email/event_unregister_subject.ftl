@@ -1,1 +1,1 @@
-EAA 690 Ground School Event De-registration
+De-registration from EAA 690 Ground School Session

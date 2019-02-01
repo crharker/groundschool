@@ -31,6 +31,24 @@ public class StatisticEntity extends BaseEntity {
     private Long userId;
 
     /**
+     * Event ID
+     */
+    @Column(name = "event_id")
+    private Long eventId;
+
+    /**
+     * Question ID
+     */
+    @Column(name = "question_id")
+    private Long questionId;
+
+    /**
+     * Quiz ID
+     */
+    @Column(name = "quiz_id")
+    private Long quizId;
+
+    /**
      * Statistic Type (Question answerd, quiz started, etc)
      */
     @Column(name = "type", length = 100)
@@ -46,7 +64,7 @@ public class StatisticEntity extends BaseEntity {
     /**
      * Description
      */
-    @Column(name = "description", nullable = true, length = 2000)
+    @Column(name = "description", nullable = true, length = 4000)
     private String description;
 
     /**
@@ -119,6 +137,60 @@ public class StatisticEntity extends BaseEntity {
      */
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    /**
+     * Retrieves the value for {@link #eventId}.
+     *
+     * @return the current value
+     */
+    public Long getEventId() {
+        return eventId;
+    }
+
+    /**
+     * Provides a value for {@link #eventId}.
+     *
+     * @param eventId the new value to set
+     */
+    public void setEventId(Long eventId) {
+        this.eventId = eventId;
+    }
+
+    /**
+     * Retrieves the value for {@link #questionId}.
+     *
+     * @return the current value
+     */
+    public Long getQuestionId() {
+        return questionId;
+    }
+
+    /**
+     * Provides a value for {@link #questionId}.
+     *
+     * @param questionId the new value to set
+     */
+    public void setQuestionId(Long questionId) {
+        this.questionId = questionId;
+    }
+
+    /**
+     * Retrieves the value for {@link #quizId}.
+     *
+     * @return the current value
+     */
+    public Long getQuizId() {
+        return quizId;
+    }
+
+    /**
+     * Provides a value for {@link #quizId}.
+     *
+     * @param quizId the new value to set
+     */
+    public void setQuizId(Long quizId) {
+        this.quizId = quizId;
     }
 
 }

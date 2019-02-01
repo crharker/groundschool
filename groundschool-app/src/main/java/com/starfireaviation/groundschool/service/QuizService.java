@@ -8,6 +8,7 @@ package com.starfireaviation.groundschool.service;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.starfireaviation.groundschool.exception.ResourceNotFoundException;
 import com.starfireaviation.groundschool.model.Question;
 import com.starfireaviation.groundschool.model.Quiz;
 
@@ -62,17 +63,9 @@ public interface QuizService {
      *
      * @param quizId Long
      * @return started quiz
+     * @throws ResourceNotFoundException when things go wrong
      */
-    public Quiz start(long quizId);
-
-    /**
-     * Starts the next quiz question
-     *
-     * @param quizId Long
-     * @param startTimer start timer to auto kick-off next question?
-     * @return started quiz
-     */
-    public Quiz startQuestion(long quizId, boolean startTimer);
+    public Quiz start(long quizId) throws ResourceNotFoundException;
 
     /**
      * Complete's a quiz
@@ -81,14 +74,6 @@ public interface QuizService {
      * @return completed quiz
      */
     public Quiz complete(long quizId);
-
-    /**
-     * Complete's a quiz question
-     *
-     * @param quizId Long
-     * @return completed quiz
-     */
-    public Quiz completeQuestion(long quizId);
 
     /**
      * Gets the current quiz
@@ -114,4 +99,33 @@ public interface QuizService {
      * @return Question start time
      */
     public LocalDateTime getCurrentQuestionStart(long quizId);
+
+    /**
+     * Adds a question to a quiz
+     *
+     * @param quizId Long
+     * @param questionId Long
+     * @return Quiz with question added
+     */
+    public Quiz addQuestion(long quizId, long questionId);
+
+    /**
+     * Removes a question from a quiz
+     *
+     * @param quizId Long
+     * @param questionId Long
+     * @return Quiz with question added
+     */
+    public Quiz removeQuestion(long quizId, long questionId);
+
+    /**
+     * Determines the next question for a quiz.
+     *
+     * Note: returns null if no "next" question is available
+     *
+     * @param quizId Quiz ID
+     * @param previousQuestionId Question ID
+     * @return next question ID
+     */
+    public Long getNextQuestion(Long quizId, Long previousQuestionId);
 }

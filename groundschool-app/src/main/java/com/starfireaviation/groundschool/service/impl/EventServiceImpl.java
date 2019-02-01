@@ -10,15 +10,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.starfireaviation.groundschool.model.Event;
+import com.starfireaviation.groundschool.model.User;
 import com.starfireaviation.groundschool.model.sql.EventEntity;
 import com.starfireaviation.groundschool.model.sql.EventParticipantEntity;
 import com.starfireaviation.groundschool.repository.EventRepository;
 import com.starfireaviation.groundschool.repository.EventParticipantRepository;
 import com.starfireaviation.groundschool.service.EventService;
+import com.starfireaviation.groundschool.service.UserService;
 
 import ma.glasnost.orika.MapperFacade;
 
@@ -31,6 +35,11 @@ import ma.glasnost.orika.MapperFacade;
 public class EventServiceImpl implements EventService {
 
     /**
+     * Logger
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(EventServiceImpl.class);
+
+    /**
      * EventRepository
      */
     @Autowired
@@ -41,6 +50,12 @@ public class EventServiceImpl implements EventService {
      */
     @Autowired
     private EventParticipantRepository eventUserRepository;
+
+    /**
+     * UserService
+     */
+    @Autowired
+    private UserService userService;
 
     /**
      * MapperFacade
@@ -97,7 +112,15 @@ public class EventServiceImpl implements EventService {
         List<Event> events = new ArrayList<>();
         List<EventEntity> eventEntities = eventRepository.findAll();
         for (EventEntity eventEntity : eventEntities) {
-            events.add(mapper.map(eventEntity, Event.class));
+            Event event = mapper.map(eventEntity, Event.class);
+            List<EventParticipantEntity> EventParticipantEntities = eventUserRepository.findByEventId(
+                    eventEntity.getId());
+            List<User> participants = new ArrayList<>();
+            for (EventParticipantEntity eventParticipantEntity : EventParticipantEntities) {
+                participants.add(userService.findById(eventParticipantEntity.getUserId()));
+            }
+            event.setParticipants(participants);
+            events.add(event);
         }
         return events;
     }
@@ -107,7 +130,31 @@ public class EventServiceImpl implements EventService {
      */
     @Override
     public Event findById(long id) {
-        return mapper.map(eventRepository.findById(id), Event.class);
+        EventEntity eventEntity = eventRepository.findById(id);
+        LOGGER.info(String.format("retrieved lessonPlanId [%s] for event [%s]", eventEntity.getLessonPlanId(), id));
+        Event event = mapper.map(eventEntity, Event.class);
+        List<EventParticipantEntity> EventParticipantEntities = eventUserRepository.findByEventId(id);
+        List<User> participants = new ArrayList<>();
+        for (EventParticipantEntity eventParticipantEntity : EventParticipantEntities) {
+            participants.add(userService.findById(eventParticipantEntity.getUserId()));
+        }
+        event.setParticipants(participants);
+        if (event.getParticipants() != null) {
+            LOGGER.info(
+                    String.format(
+                            "event [%s] has [%s] participants and lessonPlanId [%s]",
+                            id,
+                            event.getParticipants().size(),
+                            event.getLessonPlanId()));
+        } else {
+            LOGGER.info(
+                    String.format(
+                            "event [%s] has lessonPlanId [%s]",
+                            id,
+                            event.getParticipants().size(),
+                            event.getLessonPlanId()));
+        }
+        return event;
     }
 
     /**
@@ -228,6 +275,20 @@ public class EventServiceImpl implements EventService {
      * {@inheritDoc} Required implementation.
      */
     @Override
+    public List<Long> getAllEventCheckedInUsers(Long eventId) {
+        List<Long> userIds = new ArrayList<>();
+        for (Long userId : getAllEventUsers(eventId)) {
+            if (didCheckIn(eventId, userId)) {
+                userIds.add(userId);
+            }
+        }
+        return userIds;
+    }
+
+    /**
+     * {@inheritDoc} Required implementation.
+     */
+    @Override
     public Long isCheckedIn(Long userId) {
         Long currentEventId = getCurrentEvent();
         Long eventId = null;
@@ -250,6 +311,21 @@ public class EventServiceImpl implements EventService {
             }
         }
         return eventId;
+    }
+
+    /**
+     * {@inheritDoc} Required implementation.
+     */
+    @Override
+    public boolean isRegistered(Long eventId, Long userId) {
+        boolean registered = false;
+        if (eventId == null || userId == null) {
+            return registered;
+        }
+        if (eventUserRepository.findByEventAndUserId(eventId, userId) != null) {
+            registered = true;
+        }
+        return registered;
     }
 
 }

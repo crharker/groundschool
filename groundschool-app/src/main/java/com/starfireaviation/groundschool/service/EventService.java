@@ -100,6 +100,14 @@ public interface EventService {
     public List<Long> getAllEventUsers(Long eventId);
 
     /**
+     * Retrieves all users for an event who have checked in
+     *
+     * @param eventId Event ID
+     * @return list of User ID
+     */
+    public List<Long> getAllEventCheckedInUsers(Long eventId);
+
+    /**
      * Returns the current (started but not completed) event. If no event is found, null is returned
      *
      * @return Event ID
@@ -107,10 +115,19 @@ public interface EventService {
     public Long getCurrentEvent();
 
     /**
-     * Is the user checked in to an event?
+     * Is the user checked in to the current event?
      *
      * @param userId User ID
      * @return Event ID for the event in which user is checked in
      */
     public Long isCheckedIn(Long userId);
+
+    /**
+     * Is the user registered for an event?
+     *
+     * @param eventId Event ID
+     * @param userId User ID
+     * @return whether or not user is registered
+     */
+    public boolean isRegistered(Long eventId, Long userId);
 }

@@ -5,10 +5,8 @@
  */
 package com.starfireaviation.groundschool.service.impl;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -17,19 +15,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.starfireaviation.groundschool.exception.ResourceNotFoundException;
-import com.starfireaviation.groundschool.model.JobType;
 import com.starfireaviation.groundschool.model.NotificationEventType;
 import com.starfireaviation.groundschool.model.NotificationType;
 import com.starfireaviation.groundschool.model.Question;
 import com.starfireaviation.groundschool.model.Quiz;
 import com.starfireaviation.groundschool.model.sql.QuizEntity;
+import com.starfireaviation.groundschool.model.sql.QuizQuestionEntity;
+import com.starfireaviation.groundschool.repository.QuizQuestionRepository;
 import com.starfireaviation.groundschool.repository.QuizRepository;
 import com.starfireaviation.groundschool.service.EventService;
 import com.starfireaviation.groundschool.service.NotificationService;
 import com.starfireaviation.groundschool.service.QuestionService;
 import com.starfireaviation.groundschool.service.QuizService;
-import com.starfireaviation.groundschool.service.TimeService;
-
 import ma.glasnost.orika.MapperFacade;
 
 /**
@@ -52,10 +49,16 @@ public class QuizServiceImpl implements QuizService {
     private QuizRepository quizRepository;
 
     /**
-     * TimeService
+     * QuizQuestionRepository
      */
     @Autowired
-    private TimeService timeService;
+    private QuizQuestionRepository quizQuestionRepository;
+
+    /**
+     * NotificationService
+     */
+    @Autowired
+    private NotificationService notificationService;
 
     /**
      * QuestionService
@@ -68,12 +71,6 @@ public class QuizServiceImpl implements QuizService {
      */
     @Autowired
     private EventService eventService;
-
-    /**
-     * NotificationService
-     */
-    @Autowired
-    private NotificationService notificationService;
 
     /**
      * MapperFacade
@@ -103,19 +100,51 @@ public class QuizServiceImpl implements QuizService {
      * {@inheritDoc} Required implementation.
      */
     @Override
-    public Quiz store(Quiz quiz) {
+    public Quiz store(final Quiz quiz) {
         if (quiz == null) {
             return quiz;
         }
-        return mapper.map(quizRepository.save(mapper.map(quiz, QuizEntity.class)), Quiz.class);
+        if (quiz.getId() != null) {
+            final List<QuizQuestionEntity> quizQuestions = quizQuestionRepository.findByQuizId(quiz.getId());
+            final List<QuizQuestionEntity> keepList = new ArrayList<>();
+            if (quiz.getQuestions() != null && quiz.getQuestions().size() > 0) {
+                for (final Question question : quiz.getQuestions()) {
+                    QuizQuestionEntity quizQuestionEntity = getQuizQuestionEntity(
+                            quiz.getId(),
+                            question.getId(),
+                            quizQuestions);
+                    if (quizQuestionEntity == null) {
+                        quizQuestionEntity = new QuizQuestionEntity();
+                        quizQuestionEntity.setQuestionId(question.getId());
+                        quizQuestionEntity.setQuizId(quiz.getId());
+                    }
+                    keepList.add(quizQuestionRepository.save(quizQuestionEntity));
+                }
+            }
+            // Remove entries that are not still in the list
+            for (final QuizQuestionEntity qqe : quizQuestions) {
+                boolean keep = false;
+                for (final QuizQuestionEntity qqe2 : keepList) {
+                    if (qqe.getId() == qqe2.getId()) {
+                        keep = true;
+                        break;
+                    }
+                }
+                if (!keep) {
+                    quizQuestionRepository.delete(qqe);
+                }
+            }
+        }
+        final QuizEntity quizEntity = quizRepository.save(mapper.map(quiz, QuizEntity.class));
+        return findById(quizEntity.getId());
     }
 
     /**
      * {@inheritDoc} Required implementation.
      */
     @Override
-    public Quiz delete(long id) {
-        Quiz quiz = mapper.map(findById(id), Quiz.class);
+    public Quiz delete(final long id) {
+        final Quiz quiz = mapper.map(findById(id), Quiz.class);
         if (quiz != null) {
             quizRepository.delete(mapper.map(quiz, QuizEntity.class));
         }
@@ -127,10 +156,12 @@ public class QuizServiceImpl implements QuizService {
      */
     @Override
     public List<Quiz> findAllQuizzes() {
-        List<Quiz> quizzes = new ArrayList<>();
-        List<QuizEntity> quizEntities = quizRepository.findAll();
+        final List<Quiz> quizzes = new ArrayList<>();
+        final List<QuizEntity> quizEntities = quizRepository.findAll();
         for (QuizEntity quizEntity : quizEntities) {
-            quizzes.add(mapper.map(quizEntity, Quiz.class));
+            final Quiz quiz = mapper.map(quizEntity, Quiz.class);
+            addQuizQuestions(quiz);
+            quizzes.add(quiz);
         }
         return quizzes;
     }
@@ -139,65 +170,39 @@ public class QuizServiceImpl implements QuizService {
      * {@inheritDoc} Required implementation.
      */
     @Override
-    public Quiz findById(long id) {
-        return mapper.map(quizRepository.findById(id), Quiz.class);
+    public Quiz findById(final long id) {
+        final Quiz quiz = mapper.map(quizRepository.findById(id), Quiz.class);
+        addQuizQuestions(quiz);
+        return quiz;
     }
 
     /**
      * {@inheritDoc} Required implementation.
      */
     @Override
-    public Quiz start(long quizId) {
+    public Quiz start(final long quizId) {
         Quiz quiz = findById(quizId);
         if (quiz != null && !quiz.isStarted()) {
             quiz.setStarted(true);
             quiz.setStartTime(LocalDateTime.now());
             quiz.setCompleted(false);
             quiz.setCompletedTime(null);
+            quiz.setCurrentQuestion(determineFirstQuestion(quiz));
+            quiz.setCurrentQuestionStartTime(LocalDateTime.now());
             quiz = store(quiz);
-            startQuestion(quizId, true);
-        }
-        return quiz;
-    }
-
-    /**
-     * {@inheritDoc} Required implementation.
-     */
-    @Override
-    public Quiz startQuestion(long quizId, boolean startTimer) {
-        Quiz quiz = findById(quizId);
-        if (quiz != null && quiz.isStarted() && !quiz.isCompleted() && quiz.getCurrentQuestion() == null) {
-            Long nextQuestionId = determineNextQuestion(quiz);
-            if (nextQuestionId != null) {
-                quiz.setCurrentQuestion(nextQuestionId);
-                quiz.setCurrentQuestionStartTime(LocalDateTime.now());
-                quiz = store(quiz);
-                List<Long> userIds = eventService.getAllEventUsers(eventService.getCurrentEvent());
-                for (Long userId : userIds) {
-                    try {
-                        notificationService.send(
-                                userId,
-                                null,
-                                nextQuestionId,
-                                NotificationType.ALL,
-                                NotificationEventType.QUESTION_ASKED);
-                    } catch (ResourceNotFoundException e) {
-                        LOGGER.warn(
-                                String.format(
-                                        "Unable to send notification to [%s] for quiz [%s].  No user found.",
-                                        quizId,
-                                        userId));
-                    }
+            final Long eventId = eventService.getCurrentEvent();
+            final List<Long> eventUsers = eventService.getAllEventCheckedInUsers(eventId);
+            for (Long userId : eventUsers) {
+                try {
+                    notificationService.send(
+                            userId,
+                            eventId,
+                            quiz.getCurrentQuestion(),
+                            NotificationType.ALL,
+                            NotificationEventType.QUESTION_ASKED);
+                } catch (ResourceNotFoundException e) {
+                    LOGGER.warn(String.format("Exception %s", e.getMessage()));
                 }
-                final Question question = questionService.findQuestionById(nextQuestionId);
-                timeService.add(
-                        quizId,
-                        false,
-                        Date.from(Instant.now().plusSeconds(question.getDuration())),
-                        null,
-                        JobType.COMPLETE_QUESTION);
-            } else {
-                complete(quizId);
             }
         }
         return quiz;
@@ -207,37 +212,12 @@ public class QuizServiceImpl implements QuizService {
      * {@inheritDoc} Required implementation.
      */
     @Override
-    public Quiz complete(long quizId) {
+    public Quiz complete(final long quizId) {
         Quiz quiz = findById(quizId);
         if (quiz != null && quiz.isStarted()) {
             quiz.setCompleted(true);
             quiz.setCompletedTime(LocalDateTime.now());
             quiz = store(quiz);
-        }
-        return quiz;
-    }
-
-    /**
-     * {@inheritDoc} Required implementation.
-     */
-    @Override
-    public Quiz completeQuestion(long quizId) {
-        Quiz quiz = findById(quizId);
-        if (quiz != null && quiz.isStarted()) {
-            Long questionId = quiz.getCurrentQuestion();
-            String completedQuestions = quiz.getCompletedQuestions();
-            if (completedQuestions == null) {
-                completedQuestions = questionId.toString();
-            } else {
-                completedQuestions = completedQuestions + "," + questionId.toString();
-            }
-            quiz.setCompletedQuestions(completedQuestions);
-            quiz.setCurrentQuestion(null);
-            quiz.setStartTime(null);
-            quiz = store(quiz);
-            if (determineNextQuestion(quiz) == null) {
-                complete(quizId);
-            }
         }
         return quiz;
     }
@@ -262,9 +242,9 @@ public class QuizServiceImpl implements QuizService {
      * {@inheritDoc} Required implementation.
      */
     @Override
-    public Question getCurrentQuestion(long quizId) {
+    public Question getCurrentQuestion(final long quizId) {
         Question question = null;
-        Quiz quiz = findById(quizId);
+        final Quiz quiz = findById(quizId);
         if (quiz != null && !quiz.isCompleted()) {
             Long currentQuestionId = quiz.getCurrentQuestion();
             for (Question q : quiz.getQuestions()) {
@@ -281,9 +261,9 @@ public class QuizServiceImpl implements QuizService {
      * {@inheritDoc} Required implementation.
      */
     @Override
-    public LocalDateTime getCurrentQuestionStart(long quizId) {
+    public LocalDateTime getCurrentQuestionStart(final long quizId) {
         LocalDateTime start = null;
-        Quiz quiz = findById(quizId);
+        final Quiz quiz = findById(quizId);
         if (quiz != null && !quiz.isCompleted()) {
             start = quiz.getCurrentQuestionStartTime();
         }
@@ -291,29 +271,79 @@ public class QuizServiceImpl implements QuizService {
     }
 
     /**
-     * Determines the next question in a quiz
+     * {@inheritDoc} Required implementation.
+     */
+    @Override
+    public List<Quiz> findQuizzesByLessonPlanId(final Long lessonPlanId) {
+        final List<QuizEntity> quizEntities = quizRepository.findByLessonPlanId(lessonPlanId);
+        final List<Quiz> quizzes = new ArrayList<>();
+        for (QuizEntity quizEntity : quizEntities) {
+            quizzes.add(mapper.map(quizEntity, Quiz.class));
+        }
+        return quizzes;
+    }
+
+    /**
+     * {@inheritDoc} Required implementation.
+     */
+    @Override
+    public Quiz addQuestion(final long quizId, final long questionId) {
+        LOGGER.info(String.format("Adding question ID [%s] to quiz ID [%s]", questionId, quizId));
+        final Quiz quiz = findById(quizId);
+        final Question question = questionService.findQuestionById(questionId);
+        List<Question> questions = quiz.getQuestions();
+        // Initialize list if null
+        if (questions == null) {
+            questions = new ArrayList<>();
+        }
+        // Make sure question is not already in the list
+        boolean alreadyPresent = false;
+        for (final Question q : questions) {
+            if (q.getId() == questionId) {
+                alreadyPresent = true;
+            }
+        }
+        // Add question if not already present
+        if (!alreadyPresent) {
+            questions.add(question);
+        }
+        quiz.setQuestions(questions);
+        return store(quiz);
+    }
+
+    /**
+     * {@inheritDoc} Required implementation.
+     */
+    @Override
+    public Quiz removeQuestion(final long quizId, final long questionId) {
+        LOGGER.info(String.format("Removing question ID [%s] from quiz ID [%s]", questionId, quizId));
+        final Quiz quiz = findById(quizId);
+        List<Question> questions = quiz.getQuestions();
+        // Initialize list if null
+        if (questions == null) {
+            questions = new ArrayList<>();
+        }
+        // Only keep questions that don't match the question ID provided
+        final List<Question> list = new ArrayList<>();
+        for (final Question q : questions) {
+            if (q.getId() != questionId) {
+                list.add(q);
+            }
+        }
+        quiz.setQuestions(list);
+        return store(quiz);
+    }
+
+    /**
+     * Determines the 1st question for a quiz
      *
      * @param quiz Quiz
-     * @return question ID
+     * @return first question ID
      */
-    private static Long determineNextQuestion(Quiz quiz) {
+    private static Long determineFirstQuestion(Quiz quiz) {
         Long questionId = null;
-        String completedQuestions = quiz.getCompletedQuestions();
-        if (completedQuestions == null || "".equals(completedQuestions)) {
+        if (quiz.getQuestions() != null && quiz.getQuestions().size() > 0) {
             questionId = quiz.getQuestions().get(0).getId();
-            return questionId;
-        }
-        String[] completedQuestionsArray = quiz.getCompletedQuestions().split(",");
-        Long lastQuestionId = Long.valueOf(completedQuestionsArray[completedQuestionsArray.length - 1]);
-        boolean useNext = false;
-        for (Question question : quiz.getQuestions()) {
-            if (useNext) {
-                questionId = question.getId();
-                break;
-            }
-            if (lastQuestionId == question.getId()) {
-                useNext = true;
-            }
         }
         return questionId;
     }
@@ -322,13 +352,73 @@ public class QuizServiceImpl implements QuizService {
      * {@inheritDoc} Required implementation.
      */
     @Override
-    public List<Quiz> findQuizzesByLessonPlanId(Long lessonPlanId) {
-        List<QuizEntity> quizEntities = quizRepository.findByLessonPlanId(lessonPlanId);
-        List<Quiz> quizzes = new ArrayList<>();
-        for (QuizEntity quizEntity : quizEntities) {
-            quizzes.add(mapper.map(quizEntity, Quiz.class));
+    public Long getNextQuestion(Long quizId, Long previousQuestionId) {
+        Quiz quiz = findById(quizId);
+        Long questionId = null;
+        if (quiz == null) {
+            return questionId;
         }
-        return quizzes;
+        final List<Question> questions = quiz.getQuestions();
+        if (questions != null && questions.size() > 0 && previousQuestionId != null) {
+            int index = 0;
+            int count = 0;
+            for (Question question : questions) {
+                if (question.getId() == previousQuestionId) {
+                    index = count + 1;
+                    break;
+                }
+                count++;
+            }
+            if (index < questions.size()) {
+                questionId = questions.get(index).getId();
+            }
+        }
+        LOGGER.info(String.format("getNextQuestion() returning questionId [%s] for quizId [%s]", questionId, quizId));
+        return questionId;
+    }
+
+    /**
+     * Adds quiz questions
+     *
+     * @param quiz Quiz
+     */
+    private void addQuizQuestions(final Quiz quiz) {
+        if (quiz == null) {
+            return;
+        }
+        final List<QuizQuestionEntity> quizQuestions = quizQuestionRepository.findByQuizId(quiz.getId());
+        final List<Question> questions = new ArrayList<>();
+        if (quizQuestions != null && quizQuestions.size() > 0) {
+            for (final QuizQuestionEntity quizQuestionEntity : quizQuestions) {
+                questions.add(questionService.findQuestionById(quizQuestionEntity.getQuestionId()));
+            }
+        }
+        quiz.setQuestions(questions);
+    }
+
+    /**
+     * Retrieves the QuizQuestionEntity specified for a list of QuizQuestionEntity
+     *
+     * @param quizId Long
+     * @param questionId Long
+     * @param quizQuestions list of QuizQuestionEntity
+     * @return QuizQuestionEntity
+     */
+    private static QuizQuestionEntity getQuizQuestionEntity(
+            final long quizId,
+            final long questionId,
+            final List<QuizQuestionEntity> quizQuestions) {
+        QuizQuestionEntity quizQuestionEntity = null;
+        if (quizQuestions == null) {
+            return quizQuestionEntity;
+        }
+        for (final QuizQuestionEntity qqe : quizQuestions) {
+            if (qqe.getQuestionId() == questionId && qqe.getQuizId() == quizId) {
+                quizQuestionEntity = qqe;
+                break;
+            }
+        }
+        return quizQuestionEntity;
     }
 
 }

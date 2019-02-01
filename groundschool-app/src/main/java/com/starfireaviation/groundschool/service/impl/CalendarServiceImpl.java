@@ -130,12 +130,16 @@ public class CalendarServiceImpl implements CalendarService {
         if (event.getCalendarUrl() != null) {
             found = true;
         }
-        Statistic statistic = new Statistic(
-                StatisticType.CALENDAR_RETRIEVE_ALL_EVENTS,
-                String.format(
-                        "Duration [%s]",
-                        Duration.between(start, Instant.now())));
-        statisticService.store(statistic);
+        statisticService.store(
+                new Statistic(
+                        null,
+                        eventId,
+                        null,
+                        null,
+                        StatisticType.CALENDAR_RETRIEVE_ALL_EVENTS,
+                        String.format(
+                                "Duration [%s]",
+                                Duration.between(start, Instant.now()))));
         return found;
     }
 
@@ -183,13 +187,17 @@ public class CalendarServiceImpl implements CalendarService {
             }
         }
 
-        Statistic statistic = new Statistic(
-                StatisticType.CALENDAR_ADD_EVENT,
-                String.format(
-                        "Duration [%s] Event URL [%s]",
-                        Duration.between(start, Instant.now()),
-                        eventUrl));
-        statisticService.store(statistic);
+        statisticService.store(
+                new Statistic(
+                        null,
+                        eventId,
+                        null,
+                        null,
+                        StatisticType.CALENDAR_ADD_EVENT,
+                        String.format(
+                                "Duration [%s] Event URL [%s]",
+                                Duration.between(start, Instant.now()),
+                                eventUrl)));
         return eventUrl;
     }
 

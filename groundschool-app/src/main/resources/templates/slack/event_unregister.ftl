@@ -1,4 +1,4 @@
-Hi ${firstName} ${lastName}, this message confirms you are no longer registered for the ground school event:
+Hi ${firstName} ${lastName}, you have been unregistered from the ground school session:
 
 ${event}
 

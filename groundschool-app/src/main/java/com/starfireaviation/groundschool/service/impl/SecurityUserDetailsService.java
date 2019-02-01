@@ -20,7 +20,6 @@ import org.springframework.stereotype.Service;
 import com.starfireaviation.groundschool.model.SecurityUserDetails;
 import com.starfireaviation.groundschool.model.sql.UserEntity;
 import com.starfireaviation.groundschool.repository.UserRepository;
-import ma.glasnost.orika.MapperFacade;
 
 /**
  * SecurityUserDetailsService
@@ -43,12 +42,6 @@ public class SecurityUserDetailsService implements UserDetailsService {
     private UserRepository userRepository;
 
     /**
-     * MapperFacade
-     */
-    @Autowired
-    private MapperFacade mapper;
-
-    /**
      * {@inheritDoc} Required implementation.
      */
     @Override
@@ -60,7 +53,7 @@ public class SecurityUserDetailsService implements UserDetailsService {
         LOGGER.info(String.format("loaded user [%s] with role [%s]", user.getUsername(), user.getRole()));
         List<String> userRoles = new ArrayList<>();
         userRoles.add(user.getRole());
-        return new SecurityUserDetails(mapper.map(user, UserEntity.class), userRoles);
+        return new SecurityUserDetails(user, userRoles);
     }
 
 }

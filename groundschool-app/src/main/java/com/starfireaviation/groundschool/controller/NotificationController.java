@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.starfireaviation.groundschool.model.Message;
+import com.starfireaviation.groundschool.model.SMSMessage;
 import com.starfireaviation.groundschool.service.MessageService;
 
 /**
@@ -51,7 +51,7 @@ public class NotificationController {
     })
     public String sms(@RequestBody String message) {
         LOGGER.info(String.format("sms() called with [%s]", message));
-        return smsService.receiveMessage(new Message(message));
+        return smsService.receiveMessage(new SMSMessage(message));
     }
 
 }

@@ -213,8 +213,10 @@ public class EventController {
     public void register(
             @PathVariable("eventId") long eventId,
             @PathVariable("userId") long userId) throws ResourceNotFoundException {
-        eventService.register(eventId, userId);
-        notificationService.send(userId, eventId, null, NotificationType.ALL, NotificationEventType.EVENT_REGISTER);
+        if (!eventService.isRegistered(eventId, userId)) {
+            eventService.register(eventId, userId);
+            notificationService.send(userId, eventId, null, NotificationType.ALL, NotificationEventType.EVENT_REGISTER);
+        }
     }
 
     /**
@@ -290,6 +292,27 @@ public class EventController {
             code = event.getCheckinCode();
         }
         return code;
+    }
+
+    /**
+     * Checkin
+     *
+     * @param userId User ID
+     * @param eventId Event ID
+     * @param code checkin code
+     * @param principal Principal
+     * @return checkin success
+     */
+    @PostMapping(path = {
+            "/{eventId}/checkin/{userId}/{code}"
+    })
+    public boolean checkin(
+            @PathVariable("eventId") long eventId,
+            @PathVariable("userId") long userId,
+            @PathVariable("code") String code,
+            Principal principal) {
+        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
+        return eventService.checkin(eventId, userId, code);
     }
 
     /**

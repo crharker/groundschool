@@ -27,7 +27,7 @@ public class SlackMessageEntity extends BaseEntity {
     /**
      * Message
      */
-    @Column(name = "message")
+    @Column(name = "message", length = 4000)
     private String message;
 
     /**

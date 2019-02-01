@@ -1,7 +1,7 @@
-Hi ${firstName} ${lastName}, please RSVP for the ground school event:
+Hi ${firstName} ${lastName}, the ground school session:
 
 ${event}
 
-by responding with CONFIRM, DECLINE.
+has just started.  Be sure to check in at ${groundSchoolLink}
 
 Reply with STOP to no longer receive these messages.

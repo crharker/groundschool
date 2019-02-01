@@ -1,3 +1,1 @@
-Hi ${firstName} ${lastName}, please verify your phone number by responding with CONFIRM, DECLINE.
-
-Reply with STOP to no longer receive these messages.
+Go to ${groundSchoolPasswordResetLink} and enter {code} to reset your password.  If you did not make this request, you may ignore this message.
