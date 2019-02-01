@@ -95,6 +95,7 @@ public class UserServiceTest {
     @Test
     public void testNewUser() throws Exception {
         User mockUser = ObjectCreator.getUser();
+        mockUser.setId(null);
 
         User user = userService.store(mockUser);
 
