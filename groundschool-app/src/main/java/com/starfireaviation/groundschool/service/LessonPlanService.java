@@ -43,8 +43,9 @@ public interface LessonPlanService {
      * Gets a lessonPlan
      *
      * @param id Long
+     * @param partial whether or not to load activities for lesson plan
      * @return LessonPlan
      */
-    public LessonPlan findById(long id);
+    public LessonPlan findById(long id, boolean partial);
 
 }

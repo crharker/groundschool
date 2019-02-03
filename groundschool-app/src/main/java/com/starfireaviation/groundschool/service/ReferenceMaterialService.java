@@ -42,6 +42,14 @@ public interface ReferenceMaterialService {
     /**
      * Gets a referenceMaterial
      *
+     * @param questionId Long
+     * @return list of ReferenceMaterial
+     */
+    public List<ReferenceMaterial> findByQuestionId(long questionId);
+
+    /**
+     * Gets a referenceMaterial
+     *
      * @param id Long
      * @return ReferenceMaterial
      */

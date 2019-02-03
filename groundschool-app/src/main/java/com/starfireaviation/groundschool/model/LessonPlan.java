@@ -8,7 +8,7 @@ package com.starfireaviation.groundschool.model;
 import java.util.List;
 
 /**
- * User
+ * LessonPlan
  *
  * @author brianmichael
  */
@@ -25,99 +25,49 @@ public class LessonPlan extends Base {
     private String title;
 
     /**
-     * Attention
-     */
-    private String attention;
-
-    /**
-     * AttentionTime (in minutes)
-     */
-    private Integer attentionTime;
-
-    /**
-     * Motivation
-     */
-    private String motivation;
-
-    /**
-     * MotivationTime (in minutes)
-     */
-    private Integer motivationTime;
-
-    /**
-     * Overview
-     */
-    private String overview;
-
-    /**
-     * OverviewTime (in minutes)
-     */
-    private Integer overviewTime;
-
-    /**
-     * Explanation Demonstration
-     */
-    private String explanationDemonstration;
-
-    /**
-     * ExplanationDemonstrationTime (in minutes)
-     */
-    private Integer explanationDemonstrationTime;
-
-    /**
-     * Performance Supervision
-     */
-    private String performanceSupervision;
-
-    /**
-     * PerformanceSupervisionTime (in minutes)
-     */
-    private Integer performanceSupervisionTime;
-
-    /**
-     * Evaluation
-     */
-    private String evaluation;
-
-    /**
-     * EvaluationTime (in minutes)
-     */
-    private Integer evaluationTime;
-
-    /**
      * Summary
      */
     private String summary;
 
     /**
-     * SummaryTime (in minutes)
+     * Objective
      */
-    private Integer summaryTime;
+    private String objective;
 
     /**
-     * Remotivation
+     * Content
      */
-    private String remotivation;
+    private String content;
 
     /**
-     * RemotivationTime (in minutes)
+     * Schedule
      */
-    private Integer remotivationTime;
+    private String schedule;
 
     /**
-     * Closure
+     * Equipment
      */
-    private String closure;
+    private String equipment;
 
     /**
-     * ClosureTime (in minutes)
+     * Instructor's Actions
      */
-    private Integer closureTime;
+    private String instructorActions;
 
     /**
-     * Quiz IDs
+     * Student's Actions
      */
-    private List<Long> quizIds;
+    private String studentActions;
+
+    /**
+     * Completion Standards
+     */
+    private String completionStandards;
+
+    /**
+     * Activities
+     */
+    private List<Activity> activities;
 
     /**
      * Retrieves the value for {@link #title}.
@@ -135,222 +85,6 @@ public class LessonPlan extends Base {
      */
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    /**
-     * Retrieves the value for {@link #attention}.
-     *
-     * @return the current value
-     */
-    public String getAttention() {
-        return attention;
-    }
-
-    /**
-     * Provides a value for {@link #attention}.
-     *
-     * @param attention the new value to set
-     */
-    public void setAttention(String attention) {
-        this.attention = attention;
-    }
-
-    /**
-     * Retrieves the value for {@link #attentionTime}.
-     *
-     * @return the current value
-     */
-    public Integer getAttentionTime() {
-        return attentionTime;
-    }
-
-    /**
-     * Provides a value for {@link #attentionTime}.
-     *
-     * @param attentionTime the new value to set
-     */
-    public void setAttentionTime(Integer attentionTime) {
-        this.attentionTime = attentionTime;
-    }
-
-    /**
-     * Retrieves the value for {@link #motivation}.
-     *
-     * @return the current value
-     */
-    public String getMotivation() {
-        return motivation;
-    }
-
-    /**
-     * Provides a value for {@link #motivation}.
-     *
-     * @param motivation the new value to set
-     */
-    public void setMotivation(String motivation) {
-        this.motivation = motivation;
-    }
-
-    /**
-     * Retrieves the value for {@link #motivationTime}.
-     *
-     * @return the current value
-     */
-    public Integer getMotivationTime() {
-        return motivationTime;
-    }
-
-    /**
-     * Provides a value for {@link #motivationTime}.
-     *
-     * @param motivationTime the new value to set
-     */
-    public void setMotivationTime(Integer motivationTime) {
-        this.motivationTime = motivationTime;
-    }
-
-    /**
-     * Retrieves the value for {@link #overview}.
-     *
-     * @return the current value
-     */
-    public String getOverview() {
-        return overview;
-    }
-
-    /**
-     * Provides a value for {@link #overview}.
-     *
-     * @param overview the new value to set
-     */
-    public void setOverview(String overview) {
-        this.overview = overview;
-    }
-
-    /**
-     * Retrieves the value for {@link #overviewTime}.
-     *
-     * @return the current value
-     */
-    public Integer getOverviewTime() {
-        return overviewTime;
-    }
-
-    /**
-     * Provides a value for {@link #overviewTime}.
-     *
-     * @param overviewTime the new value to set
-     */
-    public void setOverviewTime(Integer overviewTime) {
-        this.overviewTime = overviewTime;
-    }
-
-    /**
-     * Retrieves the value for {@link #explanationDemonstration}.
-     *
-     * @return the current value
-     */
-    public String getExplanationDemonstration() {
-        return explanationDemonstration;
-    }
-
-    /**
-     * Provides a value for {@link #explanationDemonstration}.
-     *
-     * @param explanationDemonstration the new value to set
-     */
-    public void setExplanationDemonstration(String explanationDemonstration) {
-        this.explanationDemonstration = explanationDemonstration;
-    }
-
-    /**
-     * Retrieves the value for {@link #explanationDemonstrationTime}.
-     *
-     * @return the current value
-     */
-    public Integer getExplanationDemonstrationTime() {
-        return explanationDemonstrationTime;
-    }
-
-    /**
-     * Provides a value for {@link #explanationDemonstrationTime}.
-     *
-     * @param explanationDemonstrationTime the new value to set
-     */
-    public void setExplanationDemonstrationTime(Integer explanationDemonstrationTime) {
-        this.explanationDemonstrationTime = explanationDemonstrationTime;
-    }
-
-    /**
-     * Retrieves the value for {@link #performanceSupervision}.
-     *
-     * @return the current value
-     */
-    public String getPerformanceSupervision() {
-        return performanceSupervision;
-    }
-
-    /**
-     * Provides a value for {@link #performanceSupervision}.
-     *
-     * @param performanceSupervision the new value to set
-     */
-    public void setPerformanceSupervision(String performanceSupervision) {
-        this.performanceSupervision = performanceSupervision;
-    }
-
-    /**
-     * Retrieves the value for {@link #performanceSupervisionTime}.
-     *
-     * @return the current value
-     */
-    public Integer getPerformanceSupervisionTime() {
-        return performanceSupervisionTime;
-    }
-
-    /**
-     * Provides a value for {@link #performanceSupervisionTime}.
-     *
-     * @param performanceSupervisionTime the new value to set
-     */
-    public void setPerformanceSupervisionTime(Integer performanceSupervisionTime) {
-        this.performanceSupervisionTime = performanceSupervisionTime;
-    }
-
-    /**
-     * Retrieves the value for {@link #evaluation}.
-     *
-     * @return the current value
-     */
-    public String getEvaluation() {
-        return evaluation;
-    }
-
-    /**
-     * Provides a value for {@link #evaluation}.
-     *
-     * @param evaluation the new value to set
-     */
-    public void setEvaluation(String evaluation) {
-        this.evaluation = evaluation;
-    }
-
-    /**
-     * Retrieves the value for {@link #evaluationTime}.
-     *
-     * @return the current value
-     */
-    public Integer getEvaluationTime() {
-        return evaluationTime;
-    }
-
-    /**
-     * Provides a value for {@link #evaluationTime}.
-     *
-     * @param evaluationTime the new value to set
-     */
-    public void setEvaluationTime(Integer evaluationTime) {
-        this.evaluationTime = evaluationTime;
     }
 
     /**
@@ -372,111 +106,147 @@ public class LessonPlan extends Base {
     }
 
     /**
-     * Retrieves the value for {@link #summaryTime}.
+     * Retrieves the value for {@link #objective}.
      *
      * @return the current value
      */
-    public Integer getSummaryTime() {
-        return summaryTime;
+    public String getObjective() {
+        return objective;
     }
 
     /**
-     * Provides a value for {@link #summaryTime}.
+     * Provides a value for {@link #objective}.
      *
-     * @param summaryTime the new value to set
+     * @param objective the new value to set
      */
-    public void setSummaryTime(Integer summaryTime) {
-        this.summaryTime = summaryTime;
+    public void setObjective(String objective) {
+        this.objective = objective;
     }
 
     /**
-     * Retrieves the value for {@link #remotivation}.
-     *
-     * @return the current value
-     */
-    public String getRemotivation() {
-        return remotivation;
-    }
-
-    /**
-     * Provides a value for {@link #remotivation}.
-     *
-     * @param remotivation the new value to set
-     */
-    public void setRemotivation(String remotivation) {
-        this.remotivation = remotivation;
-    }
-
-    /**
-     * Retrieves the value for {@link #remotivationTime}.
+     * Retrieves the value for {@link #content}.
      *
      * @return the current value
      */
-    public Integer getRemotivationTime() {
-        return remotivationTime;
+    public String getContent() {
+        return content;
     }
 
     /**
-     * Provides a value for {@link #remotivationTime}.
+     * Provides a value for {@link #content}.
      *
-     * @param remotivationTime the new value to set
+     * @param content the new value to set
      */
-    public void setRemotivationTime(Integer remotivationTime) {
-        this.remotivationTime = remotivationTime;
+    public void setContent(String content) {
+        this.content = content;
     }
 
     /**
-     * Retrieves the value for {@link #closure}.
-     *
-     * @return the current value
-     */
-    public String getClosure() {
-        return closure;
-    }
-
-    /**
-     * Provides a value for {@link #closure}.
-     *
-     * @param closure the new value to set
-     */
-    public void setClosure(String closure) {
-        this.closure = closure;
-    }
-
-    /**
-     * Retrieves the value for {@link #closureTime}.
+     * Retrieves the value for {@link #schedule}.
      *
      * @return the current value
      */
-    public Integer getClosureTime() {
-        return closureTime;
+    public String getSchedule() {
+        return schedule;
     }
 
     /**
-     * Provides a value for {@link #closureTime}.
+     * Provides a value for {@link #schedule}.
      *
-     * @param closureTime the new value to set
+     * @param schedule the new value to set
      */
-    public void setClosureTime(Integer closureTime) {
-        this.closureTime = closureTime;
+    public void setSchedule(String schedule) {
+        this.schedule = schedule;
     }
 
     /**
-     * Retrieves the value for {@link #quizIds}.
+     * Retrieves the value for {@link #equipment}.
      *
      * @return the current value
      */
-    public List<Long> getQuizIds() {
-        return quizIds;
+    public String getEquipment() {
+        return equipment;
     }
 
     /**
-     * Provides a value for {@link #quizIds}.
+     * Provides a value for {@link #equipment}.
      *
-     * @param quizIds the new value to set
+     * @param equipment the new value to set
      */
-    public void setQuizIds(List<Long> quizIds) {
-        this.quizIds = quizIds;
+    public void setEquipment(String equipment) {
+        this.equipment = equipment;
+    }
+
+    /**
+     * Retrieves the value for {@link #instructorActions}.
+     *
+     * @return the current value
+     */
+    public String getInstructorActions() {
+        return instructorActions;
+    }
+
+    /**
+     * Provides a value for {@link #instructorActions}.
+     *
+     * @param instructorActions the new value to set
+     */
+    public void setInstructorActions(String instructorActions) {
+        this.instructorActions = instructorActions;
+    }
+
+    /**
+     * Retrieves the value for {@link #studentActions}.
+     *
+     * @return the current value
+     */
+    public String getStudentActions() {
+        return studentActions;
+    }
+
+    /**
+     * Provides a value for {@link #studentActions}.
+     *
+     * @param studentActions the new value to set
+     */
+    public void setStudentActions(String studentActions) {
+        this.studentActions = studentActions;
+    }
+
+    /**
+     * Retrieves the value for {@link #completionStandards}.
+     *
+     * @return the current value
+     */
+    public String getCompletionStandards() {
+        return completionStandards;
+    }
+
+    /**
+     * Provides a value for {@link #completionStandards}.
+     *
+     * @param completionStandards the new value to set
+     */
+    public void setCompletionStandards(String completionStandards) {
+        this.completionStandards = completionStandards;
+    }
+
+    /**
+     * Retrieves the value for {@link #activities}.
+     *
+     * @return the current value
+     */
+    public List<Activity> getActivities() {
+        return activities;
+    }
+
+    /**
+     * Provides a value for {@link #activities}.
+     *
+     * @param activities the new value to set
+     */
+    public void setActivities(List<Activity> activities) {
+        this.activities = activities;
     }
 
 }

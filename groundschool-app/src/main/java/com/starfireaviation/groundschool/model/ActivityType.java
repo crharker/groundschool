@@ -6,46 +6,30 @@
 package com.starfireaviation.groundschool.model;
 
 /**
- * SMSResponseOption
+ * ActivityType
  *
  * @author brianmichael
  */
-public enum ResponseOption {
+public enum ActivityType {
 
     /**
-     * UNKNOWN
+     * OTHER
      */
-    UNKNOWN,
+    OTHER,
     /**
-     * A
+     * QUIZ
      */
-    A,
+    QUIZ,
     /**
-     * B
+     * LECTURE
      */
-    B,
+    LECTURE,
     /**
-     * C
+     * REVIEW
      */
-    C,
+    REVIEW,
     /**
-     * D
+     * HANDS_ON
      */
-    D,
-    /**
-     * SKIP
-     */
-    SKIP,
-    /**
-     * STOP
-     */
-    STOP,
-    /**
-     * CONFIRM
-     */
-    CONFIRM,
-    /**
-     * DECLINE
-     */
-    DECLINE;
+    HANDS_ON;
 }

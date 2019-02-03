@@ -10,12 +10,13 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import com.starfireaviation.groundschool.exception.ResourceNotFoundException;
+import com.starfireaviation.groundschool.model.Activity;
+import com.starfireaviation.groundschool.model.ActivityType;
 import com.starfireaviation.groundschool.model.Answer;
 import com.starfireaviation.groundschool.model.Event;
 import com.starfireaviation.groundschool.model.LessonPlan;
@@ -182,18 +183,7 @@ public class QuestionServiceImpl implements QuestionService {
         final List<Question> questions = new ArrayList<>();
         final List<QuestionEntity> questionEntities = questionRepository.findAll();
         for (QuestionEntity questionEntity : questionEntities) {
-            Question question = mapper.map(questionEntity, Question.class);
-            question.setAnswers(answerService.findByQuestionId(question.getId()));
-            final List<QuestionReferenceMaterialEntity> questionReferenceMaterialEntities =
-                    questionReferenceMaterialRepository.findAll();
-            for (QuestionReferenceMaterialEntity questionReferenceMaterial : questionReferenceMaterialEntities) {
-                if (question.getId() == questionReferenceMaterial.getQuestionId()) {
-                    question.addReferenceMaterial(
-                            referenceMaterialService.findReferenceMaterialById(
-                                    questionReferenceMaterial.getReferenceMaterialId()));
-                }
-            }
-            questions.add(question);
+            questions.add(mapper.map(questionEntity, Question.class));
         }
         return questions;
     }
@@ -206,14 +196,7 @@ public class QuestionServiceImpl implements QuestionService {
         Question response = mapper.map(questionRepository.findById(id), Question.class);
         if (!partial) {
             response.setAnswers(answerService.findByQuestionId(id));
-            List<ReferenceMaterial> referenceMaterials = new ArrayList<>();
-            for (QuestionReferenceMaterialEntity questionReferenceMaterial : questionReferenceMaterialRepository
-                    .findByQuestionId(id)) {
-                referenceMaterials.add(
-                        referenceMaterialService.findReferenceMaterialById(
-                                questionReferenceMaterial.getReferenceMaterialId()));
-            }
-            response.setReferenceMaterials(referenceMaterials);
+            response.setReferenceMaterials(referenceMaterialService.findByQuestionId(id));
         }
         return response;
     }
@@ -241,11 +224,17 @@ public class QuestionServiceImpl implements QuestionService {
         Long quizId = null;
         if (eventId != null) {
             final Event event = eventService.findById(eventId, true);
-            final LessonPlan lessonPlan = lessonPlanService.findById(event.getLessonPlanId());
-            for (final Long id : lessonPlan.getQuizIds()) {
-                final Quiz quiz = quizService.findById(id, true);
-                if (quiz.isStarted() && !quiz.isCompleted()) {
-                    quizId = quiz.getId();
+            final LessonPlan lessonPlan = lessonPlanService.findById(event.getLessonPlanId(), false);
+            final List<Activity> activities = lessonPlan.getActivities();
+            if (activities != null) {
+                for (final Activity activity : activities) {
+                    if (activity.getActivityType() == ActivityType.QUIZ) {
+                        final Quiz quiz = quizService.findById(activity.getReferenceId(), true);
+                        if (quiz.isStarted() && !quiz.isCompleted()) {
+                            quizId = quiz.getId();
+                            break;
+                        }
+                    }
                 }
             }
         }

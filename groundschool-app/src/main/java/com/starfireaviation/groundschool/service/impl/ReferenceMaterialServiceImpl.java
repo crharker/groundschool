@@ -7,6 +7,7 @@ package com.starfireaviation.groundschool.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -103,6 +104,27 @@ public class ReferenceMaterialServiceImpl implements ReferenceMaterialService {
         List<ReferenceMaterialEntity> referenceMaterialEntities = referenceMaterialRepository.findAll();
         for (ReferenceMaterialEntity referenceMaterialEntity : referenceMaterialEntities) {
             referenceMaterials.add(mapper.map(referenceMaterialEntity, ReferenceMaterial.class));
+        }
+        return referenceMaterials;
+    }
+
+    /**
+     * {@inheritDoc} Required implementation.
+     */
+    @Override
+    public List<ReferenceMaterial> findByQuestionId(long questionId) {
+        List<ReferenceMaterial> referenceMaterials = new ArrayList<>();
+        List<QuestionReferenceMaterialEntity> questionReferenceMaterialEntities = questionReferenceMaterialRepository
+                .findByQuestionId(questionId);
+        if (questionReferenceMaterialEntities != null) {
+            questionReferenceMaterialEntities
+                    .parallelStream()
+                    .map(
+                            questionReferenceMaterialEntity -> mapper.map(
+                                    referenceMaterialRepository.findById(
+                                            questionReferenceMaterialEntity.getReferenceMaterialId()),
+                                    ReferenceMaterial.class))
+                    .collect(Collectors.toList());
         }
         return referenceMaterials;
     }

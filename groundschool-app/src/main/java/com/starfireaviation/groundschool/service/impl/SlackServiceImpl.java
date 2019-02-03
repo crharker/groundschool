@@ -620,15 +620,12 @@ public class SlackServiceImpl implements MessageService, SlackMessagePostedListe
                 case STOP:
                     handleStop(userId);
                     break;
+                case SKIP:
                 case A:
                 case B:
                 case C:
                 case D:
-                    questionService.answer(questionId, userId, responseOption.toString(), startTime);
-                    Quiz quiz = quizService.getCurrentQuiz();
-                    if (quiz != null) {
-                        askNextQuestion(userId, eventService.getCurrentEvent(), quiz.getId(), questionId);
-                    }
+                    handleAnsweredQuestion(questionId, userId, startTime, responseOption);
                     break;
                 default:
                     success = false;
@@ -638,15 +635,34 @@ public class SlackServiceImpl implements MessageService, SlackMessagePostedListe
     }
 
     /**
+     * Answers question then asks next question, if applicable
+     *
+     * @param questionId Long
+     * @param userId Long
+     * @param startTime Date
+     * @param responseOption ResponseOption
+     * @throws ResourceNotFoundException when question or user is not found
+     */
+    private void handleAnsweredQuestion(Long questionId, Long userId, Date startTime, ResponseOption responseOption)
+            throws ResourceNotFoundException {
+        if (responseOption != ResponseOption.SKIP) {
+            questionService.answer(questionId, userId, responseOption.toString(), startTime);
+        }
+        Quiz quiz = quizService.getCurrentQuiz();
+        if (quiz != null) {
+            askNextQuestion(userId, eventService.getCurrentEvent(), quiz.getId());
+        }
+    }
+
+    /**
      * Asks the next question in a quiz, if applicable
      *
      * @param userId User ID
      * @param eventId Event ID
      * @param quizId Quiz ID
-     * @param previousQuestionId Question ID
      */
-    private void askNextQuestion(Long userId, Long eventId, Long quizId, Long previousQuestionId) {
-        final Long nextQuestionId = quizService.getNextQuestion(quizId, previousQuestionId);
+    private void askNextQuestion(Long userId, Long eventId, Long quizId) {
+        final Long nextQuestionId = quizService.getNextQuestion(quizId, userId);
         if (nextQuestionId != null) {
             try {
                 notificationService.send(

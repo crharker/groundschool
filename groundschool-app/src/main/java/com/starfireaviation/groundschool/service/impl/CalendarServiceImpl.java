@@ -39,16 +39,15 @@ import com.google.api.services.calendar.model.Event.Source;
 import com.google.api.services.calendar.model.EventDateTime;
 import com.starfireaviation.groundschool.GroundSchoolApplication;
 import com.starfireaviation.groundschool.exception.ResourceNotFoundException;
+import com.starfireaviation.groundschool.model.Activity;
 import com.starfireaviation.groundschool.model.Address;
 import com.starfireaviation.groundschool.model.LessonPlan;
-import com.starfireaviation.groundschool.model.Quiz;
 import com.starfireaviation.groundschool.model.Statistic;
 import com.starfireaviation.groundschool.model.StatisticType;
 import com.starfireaviation.groundschool.service.AddressService;
 import com.starfireaviation.groundschool.service.CalendarService;
 import com.starfireaviation.groundschool.service.EventService;
 import com.starfireaviation.groundschool.service.LessonPlanService;
-import com.starfireaviation.groundschool.service.QuizService;
 import com.starfireaviation.groundschool.service.StatisticService;
 
 /**
@@ -109,12 +108,6 @@ public class CalendarServiceImpl implements CalendarService {
     private LessonPlanService lessonPlanService;
 
     /**
-     * QuizService
-     */
-    @Autowired
-    private QuizService quizService;
-
-    /**
      * StatisticService
      */
     @Autowired
@@ -152,7 +145,7 @@ public class CalendarServiceImpl implements CalendarService {
         Instant start = Instant.now();
         String eventUrl = null;
         com.starfireaviation.groundschool.model.Event groundSchoolEvent = eventService.findById(eventId, true);
-        LessonPlan lessonPlan = lessonPlanService.findById(eventId);
+        LessonPlan lessonPlan = lessonPlanService.findById(eventId, true);
         Address address = null;
         try {
             address = addressService.findByEventId(eventId);
@@ -170,7 +163,7 @@ public class CalendarServiceImpl implements CalendarService {
                         .setLocation(address.toString())
                         .setSource(getSource(groundSchoolEvent))
                         .setVisibility("public")
-                        .setDescription(lessonPlan.getTitle());
+                        .setDescription(lessonPlan.getSummary());
 
                 event.setStart(
                         new EventDateTime()
@@ -264,23 +257,10 @@ public class CalendarServiceImpl implements CalendarService {
         if (event.getCompletedTime() != null) {
             return new DateTime(sdf.format(event.getCompletedTime()));
         }
-        LessonPlan lessonPlan = lessonPlanService.findById(event.getLessonPlanId());
-        LocalDateTime endTime = event.getStartTime().plusMinutes(lessonPlan.getAttentionTime());
-        endTime = endTime.plusMinutes(lessonPlan.getMotivationTime());
-        endTime = endTime.plusMinutes(lessonPlan.getOverviewTime());
-
-        endTime = endTime.plusMinutes(lessonPlan.getExplanationDemonstrationTime());
-        endTime = endTime.plusMinutes(lessonPlan.getPerformanceSupervisionTime());
-        endTime = endTime.plusMinutes(lessonPlan.getEvaluationTime());
-
-        endTime = endTime.plusMinutes(lessonPlan.getSummaryTime());
-        endTime = endTime.plusMinutes(lessonPlan.getRemotivationTime());
-        endTime = endTime.plusMinutes(lessonPlan.getClosureTime());
-
-        List<Long> quizIds = lessonPlan.getQuizIds();
-        for (Long quizId : quizIds) {
-            Quiz quiz = quizService.findById(quizId, true);
-            endTime = endTime.plusSeconds(quiz.getDuration());
+        LessonPlan lessonPlan = lessonPlanService.findById(event.getLessonPlanId(), false);
+        LocalDateTime endTime = event.getStartTime();
+        for (Activity activity : lessonPlan.getActivities()) {
+            endTime = endTime.plusSeconds(activity.getDuration());
         }
         // TODO set end time to next 30 minute boundary
         return new DateTime(sdf.format(endTime));

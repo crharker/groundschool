@@ -91,7 +91,7 @@ public class LessonPlanController {
     })
     public LessonPlan get(@PathVariable("lessonPlanId") long lessonPlanId, Principal principal) {
         LOGGER.info(String.format("User is logged in as %s", principal.getName()));
-        return lessonPlanService.findById(lessonPlanId);
+        return lessonPlanService.findById(lessonPlanId, false);
     }
 
     /**

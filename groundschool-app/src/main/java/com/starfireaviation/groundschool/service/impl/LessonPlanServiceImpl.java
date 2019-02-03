@@ -7,16 +7,22 @@ package com.starfireaviation.groundschool.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ForkJoinPool;
+import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.starfireaviation.groundschool.model.Activity;
 import com.starfireaviation.groundschool.model.LessonPlan;
-import com.starfireaviation.groundschool.model.Quiz;
+import com.starfireaviation.groundschool.model.sql.ActivityEntity;
 import com.starfireaviation.groundschool.model.sql.LessonPlanEntity;
+import com.starfireaviation.groundschool.repository.ActivityRepository;
 import com.starfireaviation.groundschool.repository.LessonPlanRepository;
 import com.starfireaviation.groundschool.service.LessonPlanService;
-import com.starfireaviation.groundschool.service.QuizService;
 
 import ma.glasnost.orika.MapperFacade;
 
@@ -29,16 +35,21 @@ import ma.glasnost.orika.MapperFacade;
 public class LessonPlanServiceImpl implements LessonPlanService {
 
     /**
+     * Logger
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(LessonPlanServiceImpl.class);
+
+    /**
      * LessonPlanRepository
      */
     @Autowired
     private LessonPlanRepository lessonPlanRepository;
 
     /**
-     * QuizService
+     * ActivityRepository
      */
     @Autowired
-    private QuizService quizService;
+    private ActivityRepository activityRepository;
 
     /**
      * MapperFacade
@@ -80,10 +91,11 @@ public class LessonPlanServiceImpl implements LessonPlanService {
      */
     @Override
     public LessonPlan delete(long id) {
-        LessonPlan lessonPlan = mapper.map(findById(id), LessonPlan.class);
+        LessonPlan lessonPlan = mapper.map(findById(id, false), LessonPlan.class);
         if (lessonPlan != null) {
             lessonPlanRepository.delete(mapper.map(lessonPlan, LessonPlanEntity.class));
         }
+        // TODO cascade to delete activities
         return lessonPlan;
     }
 
@@ -104,14 +116,27 @@ public class LessonPlanServiceImpl implements LessonPlanService {
      * {@inheritDoc} Required implementation.
      */
     @Override
-    public LessonPlan findById(long id) {
+    public LessonPlan findById(long id, boolean partial) {
         final LessonPlan lessonPlan = mapper.map(lessonPlanRepository.findById(id), LessonPlan.class);
-        final List<Quiz> quizzes = quizService.findQuizzesByLessonPlanId(id);
-        List<Long> quizIds = new ArrayList<>();
-        for (Quiz quiz : quizzes) {
-            quizIds.add(quiz.getId());
+        final List<ActivityEntity> activityEntities = activityRepository.findActivityByLessonPlanId(id);
+        if (activityEntities != null) {
+            ForkJoinPool forkJoinPool = new ForkJoinPool(4);
+            List<Activity> activities = new ArrayList<>();
+            try {
+                activities.addAll(
+                        forkJoinPool
+                                .submit(
+                                        () -> activityEntities
+                                                .parallelStream()
+                                                .map(activity -> mapper.map(activity, Activity.class))
+                                                .collect(
+                                                        Collectors.toList()))
+                                .get());
+            } catch (InterruptedException | ExecutionException e) {
+                LOGGER.info("Unable to process lesson plan activities");
+            }
+            lessonPlan.setActivities(activities);
         }
-        lessonPlan.setQuizIds(quizIds);
         return lessonPlan;
     }
 

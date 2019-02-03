@@ -5,7 +5,7 @@ spring:
   datasource:
     url: jdbc:mysql://35.185.77.211:3306/groundschool
     username: root
-    password: <<HIDDEN>>
+    password: Sw33tDr34ms
     driver-class-name: com.mysql.jdbc.Driver
   jpa:
     properties:
@@ -32,7 +32,7 @@ logging:
 EAA690:
   authentication:
     username: brian.michael@yahoo.com
-    password: <<HIDDEN>>
+    password: swonk1on
     signing-key: <<HIDDEN>>
     token-prefix: "Bearer "
     authorities-key: scopes
@@ -52,23 +52,16 @@ groundschool:
     host: smtp.gmail.com
     port: 587
     username: bsmichael@gmail.com
-    password: <<HIDDEN>>
+    password: swonk1on
   sms:
     from-address: +15005550006
-    account-sid: <<HIDDEN>>
-    auth-id: <<HIDDEN>>
+    account-sid: ACe05df43fe06b985d63995b4decf1e5d8
+    auth-id: c6da2d9ddab64899992cf8a0adcf27ce
   slack:
-    from-address: groundschool
+    from-address: brianmichael
 
-# slack integrations
-# Note: these must be top level settings
-slackApi: https://slack.com/api
-slackBotToken: <<HIDDEN>>
-slashCommandToken: <<HIDDEN>>
-# replace the below url with your slack webhook url
-slackIncomingWebhookUrl: <<HIDDEN>>
-
-# fb bot
-fbGraphApi: https://graph.facebook.com/v3.2
-fbBotToken: fb_token_for_jbot
-fbPageAccessToken: <paste your page access token>
+slack:
+  bot:
+    key: xoxb-377129945713-532745405744-Sy6D3XI0mIUj90h3fQR8cNlY
+    channel: groundschool
+    name: groundschool

@@ -19,13 +19,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.starfireaviation.groundschool.exception.ResourceNotFoundException;
-import com.starfireaviation.groundschool.model.Question;
 import com.starfireaviation.groundschool.model.Quiz;
-import com.starfireaviation.groundschool.service.QuestionService;
 import com.starfireaviation.groundschool.service.QuizService;
 
 import java.security.Principal;
-import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -50,12 +47,6 @@ public class QuizController {
      */
     @Autowired
     private QuizService quizService;
-
-    /**
-     * QuestionService
-     */
-    @Autowired
-    private QuestionService questionService;
 
     /**
      * Initializes an instance of <code>QuizController</code> with the default data.
@@ -176,37 +167,6 @@ public class QuizController {
     public Quiz complete(@PathVariable("quizId") long quizId, Principal principal) {
         LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         return quizService.complete(quizId);
-    }
-
-    /**
-     * Gets the current question for a quiz
-     *
-     * @param quizId Long
-     * @param principal Principal
-     * @return Question
-     */
-    @GetMapping(path = {
-            "/{quizId}/current"
-    })
-    public Question getCurrentQuestion(@PathVariable("quizId") long quizId, Principal principal) {
-        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
-        final Long currentQuestionId = quizService.getCurrentQuestion(quizId);
-        return questionService.findById(currentQuestionId, false);
-    }
-
-    /**
-     * Gets the current question start time for a quiz
-     *
-     * @param quizId Long
-     * @param principal Principal
-     * @return Question start time
-     */
-    @GetMapping(path = {
-            "/{quizId}/current/start"
-    })
-    public LocalDateTime getCurrentQuestionStart(@PathVariable("quizId") long quizId, Principal principal) {
-        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
-        return quizService.getCurrentQuestionStart(quizId);
     }
 
     /**

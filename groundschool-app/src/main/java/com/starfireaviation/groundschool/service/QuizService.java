@@ -5,7 +5,6 @@
  */
 package com.starfireaviation.groundschool.service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import com.starfireaviation.groundschool.exception.ResourceNotFoundException;
@@ -86,22 +85,6 @@ public interface QuizService {
     public Quiz getCurrentQuiz();
 
     /**
-     * Gets the current question for a quiz
-     *
-     * @param quizId Long
-     * @return Question ID
-     */
-    public Long getCurrentQuestion(final long quizId);
-
-    /**
-     * Gets the current question start time for a quiz
-     *
-     * @param quizId Long
-     * @return Question start time
-     */
-    public LocalDateTime getCurrentQuestionStart(final long quizId);
-
-    /**
      * Adds a question to a quiz
      *
      * @param quizId Long
@@ -125,8 +108,8 @@ public interface QuizService {
      * Note: returns null if no "next" question is available
      *
      * @param quizId Quiz ID
-     * @param previousQuestionId Question ID
+     * @param userId User ID
      * @return next question ID
      */
-    public Long getNextQuestion(final Long quizId, final Long previousQuestionId);
+    public Long getNextQuestion(final Long quizId, final Long userId);
 }

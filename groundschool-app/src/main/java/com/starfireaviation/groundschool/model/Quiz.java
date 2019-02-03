@@ -46,21 +46,6 @@ public class Quiz extends Base {
     private LocalDateTime completedTime;
 
     /**
-     * Current question
-     */
-    private Long currentQuestion;
-
-    /**
-     * LocalDateTime - currentQuestionStartTime
-     */
-    private LocalDateTime currentQuestionStartTime;
-
-    /**
-     * Completed questions
-     */
-    private String completedQuestions;
-
-    /**
      * Questions
      */
     private List<Question> questions;
@@ -69,6 +54,11 @@ public class Quiz extends Base {
      * LessonPlan ID
      */
     private Long lessonPlanId;
+
+    /**
+     * QuizType
+     */
+    private QuizType quizType;
 
     /**
      * Retrieves the value for {@link #title}.
@@ -194,60 +184,6 @@ public class Quiz extends Base {
     }
 
     /**
-     * Retrieves the value for {@link #currentQuestion}.
-     *
-     * @return the current value
-     */
-    public Long getCurrentQuestion() {
-        return currentQuestion;
-    }
-
-    /**
-     * Provides a value for {@link #currentQuestion}.
-     *
-     * @param currentQuestion the new value to set
-     */
-    public void setCurrentQuestion(Long currentQuestion) {
-        this.currentQuestion = currentQuestion;
-    }
-
-    /**
-     * Retrieves the value for {@link #currentQuestionStartTime}.
-     *
-     * @return the current value
-     */
-    public LocalDateTime getCurrentQuestionStartTime() {
-        return currentQuestionStartTime;
-    }
-
-    /**
-     * Provides a value for {@link #currentQuestionStartTime}.
-     *
-     * @param currentQuestionStartTime the new value to set
-     */
-    public void setCurrentQuestionStartTime(LocalDateTime currentQuestionStartTime) {
-        this.currentQuestionStartTime = currentQuestionStartTime;
-    }
-
-    /**
-     * Retrieves the value for {@link #completedQuestions}.
-     *
-     * @return the current value
-     */
-    public String getCompletedQuestions() {
-        return completedQuestions;
-    }
-
-    /**
-     * Provides a value for {@link #completedQuestions}.
-     *
-     * @param completedQuestions the new value to set
-     */
-    public void setCompletedQuestions(String completedQuestions) {
-        this.completedQuestions = completedQuestions;
-    }
-
-    /**
      * Retrieves the value for {@link #lessonPlanId}.
      *
      * @return the current value
@@ -263,5 +199,23 @@ public class Quiz extends Base {
      */
     public void setLessonPlanId(Long lessonPlanId) {
         this.lessonPlanId = lessonPlanId;
+    }
+
+    /**
+     * Retrieves the value for {@link #quizType}.
+     *
+     * @return the current value
+     */
+    public QuizType getQuizType() {
+        return quizType;
+    }
+
+    /**
+     * Provides a value for {@link #quizType}.
+     *
+     * @param quizType the new value to set
+     */
+    public void setQuizType(QuizType quizType) {
+        this.quizType = quizType;
     }
 }

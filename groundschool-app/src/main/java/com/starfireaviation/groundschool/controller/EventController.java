@@ -256,7 +256,7 @@ public class EventController {
             Principal principal) {
         LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         //final LessonPlan lessonPlan =
-        lessonPlanService.findById(lessonPlanId);
+        lessonPlanService.findById(lessonPlanId, true);
     }
 
     /**
@@ -275,7 +275,7 @@ public class EventController {
             Principal principal) {
         LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         //final LessonPlan lessonPlan =
-        lessonPlanService.findById(lessonPlanId);
+        lessonPlanService.findById(lessonPlanId, true);
     }
 
     /**

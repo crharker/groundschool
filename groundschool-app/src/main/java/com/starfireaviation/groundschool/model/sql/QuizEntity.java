@@ -9,7 +9,11 @@ import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Table;
+
+import com.starfireaviation.groundschool.model.QuizType;
 
 /**
  * QuizEntity
@@ -51,30 +55,17 @@ public class QuizEntity extends BaseEntity {
     private LocalDateTime completedTime;
 
     /**
-     * Current question
-     */
-    @Column(name = "current_question", nullable = true)
-    private Long currentQuestion;
-
-    /**
-     * LocalDateTime - currentQuestionStartTime
-     */
-    @Column(name = "current_question_start_time")
-    private LocalDateTime currentQuestionStartTime;
-
-    /**
-     * Completed questions
-     *
-     * comma separated list of question IDs
-     */
-    @Column(name = "completed_questions", nullable = true, length = 2000)
-    private String completedQuestions;
-
-    /**
      * Lesson Plan ID
      */
     @Column(name = "lesson_plan_id", nullable = false)
     private Long lessonPlanId;
+
+    /**
+     * Quiz Type (Exam, Informal, Formal, etc)
+     */
+    @Column(name = "type", length = 100)
+    @Enumerated(EnumType.STRING)
+    private QuizType quizType;
 
     /**
      * Retrieves the value for {@link #title}.
@@ -167,60 +158,6 @@ public class QuizEntity extends BaseEntity {
     }
 
     /**
-     * Retrieves the value for {@link #currentQuestion}.
-     *
-     * @return the current value
-     */
-    public Long getCurrentQuestion() {
-        return currentQuestion;
-    }
-
-    /**
-     * Provides a value for {@link #currentQuestion}.
-     *
-     * @param currentQuestion the new value to set
-     */
-    public void setCurrentQuestion(Long currentQuestion) {
-        this.currentQuestion = currentQuestion;
-    }
-
-    /**
-     * Retrieves the value for {@link #currentQuestionStartTime}.
-     *
-     * @return the current value
-     */
-    public LocalDateTime getCurrentQuestionStartTime() {
-        return currentQuestionStartTime;
-    }
-
-    /**
-     * Provides a value for {@link #currentQuestionStartTime}.
-     *
-     * @param currentQuestionStartTime the new value to set
-     */
-    public void setCurrentQuestionStartTime(LocalDateTime currentQuestionStartTime) {
-        this.currentQuestionStartTime = currentQuestionStartTime;
-    }
-
-    /**
-     * Retrieves the value for {@link #completedQuestions}.
-     *
-     * @return the current value
-     */
-    public String getCompletedQuestions() {
-        return completedQuestions;
-    }
-
-    /**
-     * Provides a value for {@link #completedQuestions}.
-     *
-     * @param completedQuestions the new value to set
-     */
-    public void setCompletedQuestions(String completedQuestions) {
-        this.completedQuestions = completedQuestions;
-    }
-
-    /**
      * Retrieves the value for {@link #lessonPlanId}.
      *
      * @return the current value
@@ -236,6 +173,24 @@ public class QuizEntity extends BaseEntity {
      */
     public void setLessonPlanId(Long lessonPlanId) {
         this.lessonPlanId = lessonPlanId;
+    }
+
+    /**
+     * Retrieves the value for {@link #quizType}.
+     *
+     * @return the current value
+     */
+    public QuizType getQuizType() {
+        return quizType;
+    }
+
+    /**
+     * Provides a value for {@link #quizType}.
+     *
+     * @param quizType the new value to set
+     */
+    public void setQuizType(QuizType quizType) {
+        this.quizType = quizType;
     }
 
 }
