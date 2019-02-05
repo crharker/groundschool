@@ -20,37 +20,42 @@ public class ResponseParser {
     /**
      * A_PATTERN
      */
-    public static final Pattern A_PATTERN = Pattern.compile("A", Pattern.CASE_INSENSITIVE);
+    public static final Pattern A_PATTERN = Pattern.compile("^(A)$", Pattern.CASE_INSENSITIVE);
 
     /**
      * B_PATTERN
      */
-    public static final Pattern B_PATTERN = Pattern.compile("B", Pattern.CASE_INSENSITIVE);
+    public static final Pattern B_PATTERN = Pattern.compile("^(B)$", Pattern.CASE_INSENSITIVE);
 
     /**
      * C_PATTERN
      */
-    public static final Pattern C_PATTERN = Pattern.compile("C", Pattern.CASE_INSENSITIVE);
+    public static final Pattern C_PATTERN = Pattern.compile("^(C)$", Pattern.CASE_INSENSITIVE);
 
     /**
      * D_PATTERN
      */
-    public static final Pattern D_PATTERN = Pattern.compile("D", Pattern.CASE_INSENSITIVE);
+    public static final Pattern D_PATTERN = Pattern.compile("^(D)$", Pattern.CASE_INSENSITIVE);
 
     /**
      * STOP_PATTERN
      */
-    public static final Pattern STOP_PATTERN = Pattern.compile(".*?(STOP).*?", Pattern.CASE_INSENSITIVE);
+    public static final Pattern STOP_PATTERN = Pattern.compile("^(STOP)$", Pattern.CASE_INSENSITIVE);
+
+    /**
+     * STOP_PATTERN
+     */
+    public static final Pattern SKIP_PATTERN = Pattern.compile("^(SKIP)$", Pattern.CASE_INSENSITIVE);
 
     /**
      * CONFIRM_PATTERN
      */
-    public static final Pattern CONFIRM_PATTERN = Pattern.compile(".*?(CONFIRM).*?", Pattern.CASE_INSENSITIVE);
+    public static final Pattern CONFIRM_PATTERN = Pattern.compile("^(CONFIRM)$", Pattern.CASE_INSENSITIVE);
 
     /**
      * DECLINE_PATTERN
      */
-    public static final Pattern DECLINE_PATTERN = Pattern.compile(".*?(DECLINE).*?", Pattern.CASE_INSENSITIVE);
+    public static final Pattern DECLINE_PATTERN = Pattern.compile("^(DECLINE)$", Pattern.CASE_INSENSITIVE);
 
     /**
      * Determines user's response
@@ -62,6 +67,8 @@ public class ResponseParser {
         ResponseOption responseOption = ResponseOption.UNKNOWN;
         if (isStopResponse(message)) {
             responseOption = ResponseOption.STOP;
+        } else if (isSkipResponse(message)) {
+            responseOption = ResponseOption.SKIP;
         } else if (isDeclineResponse(message)) {
             responseOption = ResponseOption.DECLINE;
         } else if (isConfirmResponse(message)) {
@@ -91,6 +98,21 @@ public class ResponseParser {
             isStop = true;
         }
         return isStop;
+    }
+
+    /**
+     * Evaluates user's message to see if it is a SKIP message
+     *
+     * @param message to be evaluated
+     * @return if a SKIP message
+     */
+    private static boolean isSkipResponse(String message) {
+        boolean isSkip = false;
+        Matcher matcher = SKIP_PATTERN.matcher(message);
+        if (matcher.find()) {
+            isSkip = true;
+        }
+        return isSkip;
     }
 
     /**

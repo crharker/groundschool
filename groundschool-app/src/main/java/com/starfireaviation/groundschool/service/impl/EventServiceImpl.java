@@ -234,8 +234,10 @@ public class EventServiceImpl implements EventService {
         Event event = findById(eventId, true);
         if (eventUserEntity != null
                 && event != null
-                && event.getCheckinCode() != null
-                && event.getCheckinCode().equalsIgnoreCase(code)) {
+                && (!event.isCheckinCodeRequired()
+                        || (event.isCheckinCodeRequired()
+                                && event.getCheckinCode() != null
+                                && event.getCheckinCode().equalsIgnoreCase(code)))) {
             eventUserEntity.setCheckedIn(true);
             eventUserEntity.setCheckinTime(LocalDateTime.now());
             eventUserRepository.save(eventUserEntity);

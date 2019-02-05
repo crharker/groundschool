@@ -27,14 +27,6 @@ public interface UserService {
     public User store(User user) throws ResourceNotFoundException;
 
     /**
-     * Deletes a user
-     *
-     * @param id Long
-     * @return User
-     */
-    public User delete(long id);
-
-    /**
      * Gets all users
      *
      * @return list of Users

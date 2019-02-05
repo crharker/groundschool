@@ -105,18 +105,6 @@ public class UserServiceImpl implements UserService {
      * {@inheritDoc} Required implementation.
      */
     @Override
-    public User delete(long id) {
-        final User user = mapper.map(findById(id), User.class);
-        if (user != null) {
-            userRepository.delete(mapper.map(user, UserEntity.class));
-        }
-        return user;
-    }
-
-    /**
-     * {@inheritDoc} Required implementation.
-     */
-    @Override
     public List<User> findAllUsers() {
         final List<User> users = new ArrayList<>();
         final List<UserEntity> userEntities = userRepository.findAll();

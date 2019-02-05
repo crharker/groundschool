@@ -16,13 +16,13 @@ import javax.persistence.Table;
 import com.starfireaviation.groundschool.model.NotificationEventType;
 
 /**
- * SMSMessageEntity
+ * MessageEntity
  *
  * @author brianmichael
  */
 @Entity
-@Table(name = "SMS_MESSAGE")
-public class SMSMessageEntity extends BaseEntity {
+@Table(name = "MESSAGE")
+public class MessageEntity extends BaseEntity {
 
     /**
      * Message
@@ -86,14 +86,14 @@ public class SMSMessageEntity extends BaseEntity {
     private NotificationEventType notificationEventType;
 
     /**
-     * Initializes an instance of <code>SMSMessageEntity</code> with the default data.
+     * Initializes an instance of <code>MessageEntity</code> with the default data.
      */
-    public SMSMessageEntity() {
+    public MessageEntity() {
         // Default constructor
     }
 
     /**
-     * Initializes an instance of <code>SMSMessageEntity</code> with the default data.
+     * Initializes an instance of <code>MessageEntity</code> with the default data.
      *
      * @param userId user ID
      * @param eventId event ID
@@ -104,7 +104,7 @@ public class SMSMessageEntity extends BaseEntity {
      * @param message text
      * @param type NotificationEventType
      */
-    public SMSMessageEntity(
+    public MessageEntity(
             Long userId,
             Long eventId,
             Long quizId,

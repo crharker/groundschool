@@ -136,14 +136,6 @@ public class UserServiceTest {
     }
 
     /**
-     * Test deletion of a user
-     */
-    @Test
-    public void testDeleteUser() {
-        userService.delete(ObjectCreator.ID);
-    }
-
-    /**
      * Test retrieval of a user
      */
     @Test

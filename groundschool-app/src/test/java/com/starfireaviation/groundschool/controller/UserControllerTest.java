@@ -182,38 +182,6 @@ public class UserControllerTest {
     }
 
     /**
-     * Test the DELETE endpoint
-     *
-     * @throws Exception when things go wrong
-     */
-    @Test
-    @Ignore
-    public void testDelete() throws Exception {
-        Mockito.doReturn(mockUser).when(userService).delete(ArgumentMatchers.anyLong());
-
-        User user = userController.delete(ObjectCreator.ID, new JMXPrincipal("admin"));
-
-        Assert.assertNotNull(user);
-        Assert.assertNotNull(user.getId());
-        Assert.assertSame(ObjectCreator.ID, user.getId());
-        Assert.assertSame(ObjectCreator.PASSWORD, user.getPassword());
-        Assert.assertSame(ObjectCreator.USERNAME, user.getUsername());
-        Assert.assertSame(ObjectCreator.FIRST_NAME, user.getFirstName());
-        Assert.assertSame(ObjectCreator.LAST_NAME, user.getLastName());
-        Assert.assertSame(ObjectCreator.EMAIL, user.getEmail());
-
-        Mockito.verify(userService, times(1)).delete(ArgumentMatchers.anyLong());
-        Mockito.verify(notificationService, times(1)).send(
-                ArgumentMatchers.any(),
-                ArgumentMatchers.any(),
-                ArgumentMatchers.any(),
-                ArgumentMatchers.any(),
-                ArgumentMatchers.any());
-        Mockito.verifyNoMoreInteractions(userService);
-        Mockito.verifyNoMoreInteractions(notificationService);
-    }
-
-    /**
      * Test the GET all endpoint
      */
     @Test

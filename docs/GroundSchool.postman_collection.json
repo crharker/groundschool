@@ -11,6 +11,30 @@
 				{
 					"name": "event",
 					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{instructor-password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{instructor-user}}",
+									"type": "string"
+								},
+								{
+									"key": "saveHelperData",
+									"type": "any"
+								},
+								{
+									"key": "showPassword",
+									"value": false,
+									"type": "boolean"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [
 							{
@@ -26,14 +50,14 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"title\": \"Testing\",\n\t\"startTime\": \"2019-01-11T14:00:00.0\"\n}"
+							"raw": "{\n\t\"title\": \"Airplanes & Aerodynamics: Flight Controls & Aerodynamic Forces\",\n\t\"startTime\": \"2019-02-01T14:00:00.0\",\n\t\"started\": false,\n\t\"completed\": false,\n\t\"completedTime\": null,\n\t\"calendarUrl\": null,\n\t\"checkinCode\": null,\n\t\"checkinCodeRequired\": false,\n\t\"lessonPlanId\": 1,\n\t\"address\": {\n\t\t\"addressLine1\": \"Hangar #1\",\n\t\t\"addressLine2\": \"690 Airport Road\",\n\t\t\"city\": \"Lawrenceville\",\n\t\t\"state\": \"GA\",\n\t\t\"zipCode\": \"30046\"\n\t},\n\t\"participants\": null\n}"
 						},
 						"url": {
-							"raw": "localhost:8080/events",
+							"raw": "http://{{host-app}}/events",
+							"protocol": "http",
 							"host": [
-								"localhost"
+								"{{host-app}}"
 							],
-							"port": "8080",
 							"path": [
 								"events"
 							]
@@ -48,6 +72,30 @@
 						"disableBodyPruning": true
 					},
 					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{instructor-password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{instructor-user}}",
+									"type": "string"
+								},
+								{
+									"key": "saveHelperData",
+									"type": "any"
+								},
+								{
+									"key": "showPassword",
+									"value": false,
+									"type": "boolean"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [
 							{
@@ -66,11 +114,11 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "localhost:8080/events/1",
+							"raw": "http://{{host-app}}/events/1",
+							"protocol": "http",
 							"host": [
-								"localhost"
+								"{{host-app}}"
 							],
-							"port": "8080",
 							"path": [
 								"events",
 								"1"
@@ -83,6 +131,30 @@
 				{
 					"name": "event",
 					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{instructor-password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{instructor-user}}",
+									"type": "string"
+								},
+								{
+									"key": "saveHelperData",
+									"type": "any"
+								},
+								{
+									"key": "showPassword",
+									"value": false,
+									"type": "boolean"
+								}
+							]
+						},
 						"method": "PUT",
 						"header": [
 							{
@@ -98,14 +170,14 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"id\": 1,\n    \"title\": \"Testing\",\n    \"startTime\": \"2019-01-11T13:00:00\"\n}"
+							"raw": "{\n\t\"id\": 1,\n\t\"title\": \"Airplanes & Aerodynamics: Flight Controls & Aerodynamic Forces\",\n\t\"startTime\": \"2019-02-01T14:00:00.0\",\n\t\"started\": false,\n\t\"completed\": false,\n\t\"completedTime\": null,\n\t\"calendarUrl\": null,\n\t\"checkinCode\": null,\n\t\"checkinCodeRequired\": false,\n\t\"lessonPlanId\": 1,\n\t\"address\": {\n\t\t\"addressLine1\": \"Hangar #1\",\n\t\t\"addressLine2\": \"690 Airport Road\",\n\t\t\"city\": \"Lawrenceville\",\n\t\t\"state\": \"GA\",\n\t\t\"zipCode\": \"30046\"\n\t},\n\t\"participants\": null\n}"
 						},
 						"url": {
-							"raw": "localhost:8080/events",
+							"raw": "http://{{host-app}}/events",
+							"protocol": "http",
 							"host": [
-								"localhost"
+								"{{host-app}}"
 							],
-							"port": "8080",
 							"path": [
 								"events"
 							]
@@ -117,6 +189,30 @@
 				{
 					"name": "event",
 					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{instructor-password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{instructor-user}}",
+									"type": "string"
+								},
+								{
+									"key": "saveHelperData",
+									"type": "any"
+								},
+								{
+									"key": "showPassword",
+									"value": false,
+									"type": "boolean"
+								}
+							]
+						},
 						"method": "DELETE",
 						"header": [
 							{
@@ -135,11 +231,11 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "localhost:8080/events/1",
+							"raw": "http://{{host-app}}/events/1",
+							"protocol": "http",
 							"host": [
-								"localhost"
+								"{{host-app}}"
 							],
-							"port": "8080",
 							"path": [
 								"events",
 								"1"
@@ -152,6 +248,30 @@
 				{
 					"name": "events",
 					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{instructor-password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{instructor-user}}",
+									"type": "string"
+								},
+								{
+									"key": "saveHelperData",
+									"type": "any"
+								},
+								{
+									"key": "showPassword",
+									"value": false,
+									"type": "boolean"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [
 							{
@@ -170,11 +290,11 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "localhost:8080/events",
+							"raw": "http://{{host-app}}/events",
+							"protocol": "http",
 							"host": [
-								"localhost"
+								"{{host-app}}"
 							],
-							"port": "8080",
 							"path": [
 								"events"
 							]
@@ -204,15 +324,15 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "localhost:8080/events/register/1/1",
+							"raw": "http://{{host-app}}/events/1/register/1",
+							"protocol": "http",
 							"host": [
-								"localhost"
+								"{{host-app}}"
 							],
-							"port": "8080",
 							"path": [
 								"events",
-								"register",
 								"1",
+								"register",
 								"1"
 							]
 						},
@@ -241,11 +361,11 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "localhost:8080/events/rsvp/1/1/true/EMAIL",
+							"raw": "http://{{host-app}}/events/rsvp/1/1/true/EMAIL",
+							"protocol": "http",
 							"host": [
-								"localhost"
+								"{{host-app}}"
 							],
-							"port": "8080",
 							"path": [
 								"events",
 								"rsvp",
@@ -258,15 +378,34 @@
 						"description": "localhost:8080/events/rsvp/1/1/true/EMAIL"
 					},
 					"response": []
-				}
-			]
-		},
-		{
-			"name": "lessonplan",
-			"item": [
+				},
 				{
-					"name": "lessonplan",
+					"name": "assign lessonplan",
 					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{instructor-password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{instructor-user}}",
+									"type": "string"
+								},
+								{
+									"key": "saveHelperData",
+									"type": "any"
+								},
+								{
+									"key": "showPassword",
+									"value": false,
+									"type": "boolean"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [
 							{
@@ -282,15 +421,325 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"title\": \"Test plan\",\n\t\"attention\": \"something\",\n\t\"attentionTime\": 1,\n\t\"motivation\": \"something\",\n\t\"motivationTime\": 1,\n\t\"overview\": \"something\",\n\t\"overviewTime\": 1,\n\t\"explanationDemonstration\": \"something\",\n\t\"explanationDemonstrationTime\": 1,\n\t\"performanceSupervision\": \"something\",\n\t\"performanceSupervisionTime\": 1,\n\t\"evaluation\": \"something\",\n\t\"evaluationTime\": 1,\n\t\"summary\": \"something\",\n\t\"summaryTime\": 1,\n\t\"remotivation\": \"something\",\n\t\"remotivationTime\": 1,\n\t\"closure\": \"something\",\n\t\"closureTime\": 1\n}"
+							"raw": ""
 						},
 						"url": {
-							"raw": "http://localhost:8080/lessonplans",
+							"raw": "http://{{host-app}}/events/1/assign/lessonplan/1",
 							"protocol": "http",
 							"host": [
-								"localhost"
+								"{{host-app}}"
 							],
-							"port": "8080",
+							"path": [
+								"events",
+								"1",
+								"assign",
+								"lessonplan",
+								"1"
+							]
+						},
+						"description": "localhost:8080/events/1/assign/lessonplan/1"
+					},
+					"response": []
+				},
+				{
+					"name": "unassign lessonplan",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{instructor-password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{instructor-user}}",
+									"type": "string"
+								},
+								{
+									"key": "saveHelperData",
+									"type": "any"
+								},
+								{
+									"key": "showPassword",
+									"value": false,
+									"type": "boolean"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{host-app}}/events/1/unassign/lessonplan/1",
+							"protocol": "http",
+							"host": [
+								"{{host-app}}"
+							],
+							"path": [
+								"events",
+								"1",
+								"unassign",
+								"lessonplan",
+								"1"
+							]
+						},
+						"description": "localhost:8080/events/1/unassign/lessonplan/1"
+					},
+					"response": []
+				},
+				{
+					"name": "start",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{instructor-password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{instructor-user}}",
+									"type": "string"
+								},
+								{
+									"key": "saveHelperData",
+									"type": "any"
+								},
+								{
+									"key": "showPassword",
+									"value": false,
+									"type": "boolean"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{host-app}}/events/1/start",
+							"protocol": "http",
+							"host": [
+								"{{host-app}}"
+							],
+							"path": [
+								"events",
+								"1",
+								"start"
+							]
+						},
+						"description": "http://{{host-app}}/events/1/start"
+					},
+					"response": []
+				},
+				{
+					"name": "complete",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{instructor-password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{instructor-user}}",
+									"type": "string"
+								},
+								{
+									"key": "saveHelperData",
+									"type": "any"
+								},
+								{
+									"key": "showPassword",
+									"value": false,
+									"type": "boolean"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{host-app}}/events/1/complete",
+							"protocol": "http",
+							"host": [
+								"{{host-app}}"
+							],
+							"path": [
+								"events",
+								"1",
+								"complete"
+							]
+						},
+						"description": "http://{{host-app}}/events/1/complete"
+					},
+					"response": []
+				},
+				{
+					"name": "checkin",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{instructor-password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{instructor-user}}",
+									"type": "string"
+								},
+								{
+									"key": "saveHelperData",
+									"type": "any"
+								},
+								{
+									"key": "showPassword",
+									"value": false,
+									"type": "boolean"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{host-app}}/events/1/checkin/1/ABC123",
+							"protocol": "http",
+							"host": [
+								"{{host-app}}"
+							],
+							"path": [
+								"events",
+								"1",
+								"checkin",
+								"1",
+								"ABC123"
+							]
+						},
+						"description": "http://{{host-app}}/users/1/checkin/1/ABC123"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "lessonplan",
+			"item": [
+				{
+					"name": "lessonplan",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{instructor-password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{instructor-user}}",
+									"type": "string"
+								},
+								{
+									"key": "saveHelperData",
+									"type": "any"
+								},
+								{
+									"key": "showPassword",
+									"value": false,
+									"type": "boolean"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"title\": \"Airplanes & Aerodynamics: Flight Controls & Aerodynamic Forces\",\n\t\"summary\": \"Clear understanding of airplane flight controls, the 4 forces acting on an airplane, and Bernoulli's Principle\",\n    \"objective\": \"\",\n    \"content\": \"\",\n    \"schedule\": \"\",\n    \"equipment\": \"\",\n    \"instructorActions\": \"\",\n    \"studentActions\": \"\",\n    \"completionStandards\": \"\"\n}"
+						},
+						"url": {
+							"raw": "http://{{host-app}}/lessonplans",
+							"protocol": "http",
+							"host": [
+								"{{host-app}}"
+							],
 							"path": [
 								"lessonplans"
 							]
@@ -302,6 +751,30 @@
 				{
 					"name": "lessonplan",
 					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{instructor-password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{instructor-user}}",
+									"type": "string"
+								},
+								{
+									"key": "saveHelperData",
+									"type": "any"
+								},
+								{
+									"key": "showPassword",
+									"value": false,
+									"type": "boolean"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [
 							{
@@ -320,12 +793,11 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://localhost:8080/lessonplans/1",
+							"raw": "http://{{host-app}}/lessonplans/1",
 							"protocol": "http",
 							"host": [
-								"localhost"
+								"{{host-app}}"
 							],
-							"port": "8080",
 							"path": [
 								"lessonplans",
 								"1"
@@ -338,6 +810,30 @@
 				{
 					"name": "lessonplan",
 					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{instructor-password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{instructor-user}}",
+									"type": "string"
+								},
+								{
+									"key": "saveHelperData",
+									"type": "any"
+								},
+								{
+									"key": "showPassword",
+									"value": false,
+									"type": "boolean"
+								}
+							]
+						},
 						"method": "DELETE",
 						"header": [
 							{
@@ -356,12 +852,11 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://localhost:8080/lessonplans/1",
+							"raw": "http://{{host-app}}/lessonplans/1",
 							"protocol": "http",
 							"host": [
-								"localhost"
+								"{{host-app}}"
 							],
-							"port": "8080",
 							"path": [
 								"lessonplans",
 								"1"
@@ -374,6 +869,30 @@
 				{
 					"name": "lessonplans",
 					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{instructor-password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{instructor-user}}",
+									"type": "string"
+								},
+								{
+									"key": "saveHelperData",
+									"type": "any"
+								},
+								{
+									"key": "showPassword",
+									"value": false,
+									"type": "boolean"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [
 							{
@@ -392,12 +911,11 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://localhost:8080/lessonplans",
+							"raw": "http://{{host-app}}/lessonplans",
 							"protocol": "http",
 							"host": [
-								"localhost"
+								"{{host-app}}"
 							],
-							"port": "8080",
 							"path": [
 								"lessonplans"
 							]
@@ -409,159 +927,14 @@
 			]
 		},
 		{
-			"name": "memberdetails",
-			"item": [
-				{
-					"name": "memberdetails",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json",
-								"type": "text"
-							},
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "http://localhost:8080/memberdetails/73",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"memberdetails",
-								"73"
-							]
-						},
-						"description": "http://localhost:8080/memberdetails/1"
-					},
-					"response": []
-				},
-				{
-					"name": "memberdetails",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json",
-								"type": "text"
-							},
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n\t\"localId\": 1,\n\t\"userId\": 1,\n\t\"firstName\": \"Brian\",\n\t\"lastName\": \"Michael\",\n\t\"addressLine1\": \"123 Main St.\",\n\t\"city\": \"Anytown\",\n\t\"state\": \"GA\",\n\t\"zipCode\": \"30338\",\n\t\"homePhone\": \"4047355660\",\n\t\"cellPhone\": \"4047355660\",\n\t\"email\": \"brian.michael@yahoo.com\",\n\t\"spouseName\": \"Aimee\",\n\t\"eaaNumber\": \"12345\",\n\t\"eaaPaid\": true,\n\t\"eaaYouthProtection\": true,\n\t\"eaaYouthProtectionExpiryDate\": \"\",\n\t\"eaaMemberExpiryDate\": \"\",\n\t\"tailNumber\": \"\",\n\t\"chapterMember\": true,\n\t\"chapterPaid\": true,\n\t\"chapterDatePaid\": \"\",\n\t\"chapterMembershipType\": \"FAMILY\"\n}"
-						},
-						"url": {
-							"raw": "http://localhost:8080/memberdetails",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"memberdetails"
-							]
-						},
-						"description": "http://localhost:8080/memberdetails"
-					},
-					"response": []
-				},
-				{
-					"name": "memberdetails",
-					"request": {
-						"method": "DELETE",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json",
-								"type": "text"
-							},
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n\t\"localId\": 1,\n\t\"userId\": 1,\n\t\"firstName\": \"Brian\",\n\t\"lastName\": \"Michael\",\n\t\"addressLine1\": \"123 Main St.\",\n\t\"city\": \"Anytown\",\n\t\"state\": \"GA\",\n\t\"zipCode\": \"30338\",\n\t\"homePhone\": \"4047355660\",\n\t\"cellPhone\": \"4047355660\",\n\t\"email\": \"brian.michael@yahoo.com\",\n\t\"spouseName\": \"Aimee\",\n\t\"eaaNumber\": \"12345\",\n\t\"eaaPaid\": true,\n\t\"eaaYouthProtection\": true,\n\t\"eaaYouthProtectionExpiryDate\": \"\",\n\t\"eaaMemberExpiryDate\": \"\",\n\t\"tailNumber\": \"\",\n\t\"chapterMember\": true,\n\t\"chapterPaid\": true,\n\t\"chapterDatePaid\": \"\",\n\t\"chapterMembershipType\": \"FAMILY\"\n}"
-						},
-						"url": {
-							"raw": "http://localhost:8080/memberdetails/1",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"memberdetails",
-								"1"
-							]
-						},
-						"description": "http://localhost:8080/memberdetails/1"
-					},
-					"response": []
-				},
-				{
-					"name": "rebuild memberdetails",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json",
-								"type": "text"
-							},
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "http://localhost:8080/memberdetails/rebuild",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"memberdetails",
-								"rebuild"
-							]
-						},
-						"description": "http://localhost:8080/memberdetails/rebuild"
-					},
-					"response": []
-				}
-			]
-		},
-		{
 			"name": "notifications",
 			"item": [
 				{
 					"name": "sms",
 					"request": {
+						"auth": {
+							"type": "noauth"
+						},
 						"method": "POST",
 						"header": [
 							{
@@ -577,14 +950,14 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "ToCountry=US&ToState=GA&SmsMessageSid=SMa0652fcce9dd2db0bf6596f6885019d9&NumMedia=0&ToCity=ATLANTA&FromZip=30319&SmsSid=SMa0652fcce9dd2db0bf6596f6885019d9&FromState=GA&SmsStatus=received&FromCity=ATLANTA&Body=Hello&FromCountry=US&To=%2B14704227400&ToZip=&NumSegments=1&MessageSid=SMa0652fcce9dd2db0bf6596f6885019d9&AccountSid=ACfd7999f66d142ea0147b95f7e8dc12a5&From=%2B14047355660&ApiVersion=2010-04-01"
+							"raw": "ToCountry=US&ToState=GA&SmsMessageSid=SMa0652fcce9dd2db0bf6596f6885019d9&NumMedia=0&ToCity=ATLANTA&FromZip=30319&SmsSid=SMa0652fcce9dd2db0bf6596f6885019d9&FromState=GA&SmsStatus=received&FromCity=ATLANTA&Body=Confirm&FromCountry=US&To=%2B14704227400&ToZip=&NumSegments=1&MessageSid=SMa0652fcce9dd2db0bf6596f6885019d9&AccountSid=ACfd7999f66d142ea0147b95f7e8dc12a5&From=%2B14047355660&ApiVersion=2010-04-01"
 						},
 						"url": {
-							"raw": "localhost:8080/notifications/sms",
+							"raw": "http://{{host-app}}/notifications/sms",
+							"protocol": "http",
 							"host": [
-								"localhost"
+								"{{host-app}}"
 							],
-							"port": "8080",
 							"path": [
 								"notifications",
 								"sms"
@@ -600,8 +973,502 @@
 			"name": "question",
 			"item": [
 				{
+					"name": "questions",
+					"item": [
+						{
+							"name": "question 2",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "{{instructor-password}}",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "{{instructor-user}}",
+											"type": "string"
+										},
+										{
+											"key": "saveHelperData",
+											"type": "any"
+										},
+										{
+											"key": "showPassword",
+											"value": false,
+											"type": "boolean"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"text\": \"One of the main functions of flaps during approach and landing is to\",\n\t\"course\": \"Private Pilot\",\n\t\"unit\": \"1: Airplanes and Aerodynamics\", \n\t\"subUnit\": \"1: Flight Controls\",\n\t\"discussion\": \"Source: FAA-H-8083-25B Chap 6\",\n\t\"learningStatementCode\": \"PLT473\",\n\t\"duration\": 90,\n\t\"referenceMaterials\": [\n                {\n                        \"id\": 1,\n                        \"title\": \"FAA-H-8083-25B\",\n                        \"resourceLocation\": \"https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/phak/media/pilot_handbook.pdf\"\n                }\n        ],\n\t\"answers\": [\n\t\t{\n                        \"choice\": \"A\",\n\t\t\t\"correct\": false,\n\t\t\t\"text\": \"decrease the angle of descent without increasing the airspeed.\",\n\t\t\t\"discussion\": \"Extending the flaps increases lift and induced drag, which enables the pilot to increase (not decrease) the angle of descent without increasing the airspeed.\"\n\t\t},\n\t\t{\n                        \"choice\": \"B\",\n\t\t\t\"correct\": false,\n\t\t\t\"text\": \"permit a touchdown at a higher indicated airspeed.\",\n\t\t\t\"discussion\": \"Flaps increase lift at slow airspeed, which permits touchdown at a lower (not higher) indicated airspeed.\"\n\t\t},\n\t\t{\n                        \"choice\": \"C\",\n\t\t\t\"correct\": true,\n\t\t\t\"text\": \"increase the angle of descent without increasing the airspeed.\",\n\t\t\t\"discussion\": \"Extending the flaps increases the wing camber and the angle of attack of the wing. This increases wing lift and induced drag, which enables the pilot to increase the angle of descent without increasing the airspeed.\"\n\t\t}\n\t]\n}"
+								},
+								"url": {
+									"raw": "http://{{host-app}}/questions",
+									"protocol": "http",
+									"host": [
+										"{{host-app}}"
+									],
+									"path": [
+										"questions"
+									]
+								},
+								"description": "http://{{host-app}}/questions"
+							},
+							"response": []
+						},
+						{
+							"name": "question 3",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "{{instructor-password}}",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "{{instructor-user}}",
+											"type": "string"
+										},
+										{
+											"key": "saveHelperData",
+											"type": "any"
+										},
+										{
+											"key": "showPassword",
+											"value": false,
+											"type": "boolean"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"text\": \"What is the purpose of the rudder on an airplane?\",\n\t\"course\": \"Private Pilot\",\n\t\"unit\": \"1: Airplanes and Aerodynamics\", \n\t\"subUnit\": \"1: Flight Controls\",\n\t\"discussion\": \"Source: FAA-H-8083-25B Chap 6\",\n\t\"learningStatementCode\": \"PLT346\",\n\t\"duration\": 90,\n\t\"referenceMaterials\": [\n                {\n                        \"id\": 1,\n                        \"title\": \"FAA-H-8083-25B\",\n                        \"resourceLocation\": \"https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/phak/media/pilot_handbook.pdf\"\n                }\n        ],\n\t\"answers\": [\n\t\t{\n                        \"choice\": \"A\",\n\t\t\t\"correct\": true,\n\t\t\t\"text\": \"To control yaw.\",\n\t\t\t\"discussion\": \"The rudder is used to control yaw, which is rotation about the airplane’s vertical axis.\"\n\t\t},\n\t\t{\n                        \"choice\": \"B\",\n\t\t\t\"correct\": false,\n\t\t\t\"text\": \"To control overbanking tendency.\",\n\t\t\t\"discussion\": \"The ailerons (not the rudder) control overbanking. Overbanking tendency refers to the outside wing traveling significantly faster than the inside wing in a steep turn and generating incremental lift to raise the outside wing higher unless corrected by aileron pressure.\"\n\t\t},\n\t\t{\n                        \"choice\": \"C\",\n\t\t\t\"correct\": false,\n\t\t\t\"text\": \"To control roll.\",\n\t\t\t\"discussion\": \"Roll is movement about the longitudinal axis and is controlled by ailerons.\"\n\t\t}\n\t]\n}"
+								},
+								"url": {
+									"raw": "http://{{host-app}}/questions",
+									"protocol": "http",
+									"host": [
+										"{{host-app}}"
+									],
+									"path": [
+										"questions"
+									]
+								},
+								"description": "http://{{host-app}}/questions"
+							},
+							"response": []
+						},
+						{
+							"name": "question 4",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "{{instructor-password}}",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "{{instructor-user}}",
+											"type": "string"
+										},
+										{
+											"key": "saveHelperData",
+											"type": "any"
+										},
+										{
+											"key": "showPassword",
+											"value": false,
+											"type": "boolean"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"text\": \"Which is not a primary flight control surface?\",\n\t\"course\": \"Private Pilot\",\n\t\"unit\": \"1: Airplanes and Aerodynamics\", \n\t\"subUnit\": \"1: Flight Controls\",\n\t\"discussion\": \"Source: FAA-H-8083-25B Chap 6\",\n\t\"learningStatementCode\": \"PLT346\",\n\t\"duration\": 90,\n\t\"referenceMaterials\": [\n                {\n                        \"id\": 1,\n                        \"title\": \"FAA-H-8083-25B\",\n                        \"resourceLocation\": \"https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/phak/media/pilot_handbook.pdf\"\n                }\n        ],\n\t\"answers\": [\n\t\t{\n                        \"choice\": \"A\",\n\t\t\t\"correct\": true,\n\t\t\t\"text\": \"Flaps.\",\n\t\t\t\"discussion\": \"The three primary flight controls of an airplane are the ailerons, the elevator (or stabilator), and the rudder.\"\n\t\t},\n\t\t{\n                        \"choice\": \"B\",\n\t\t\t\"correct\": false,\n\t\t\t\"text\": \"Stabilator.\",\n\t\t\t\"discussion\": \"The stabilator, or elevator, is a primary flight control surface.\"\n\t\t},\n\t\t{\n                        \"choice\": \"C\",\n\t\t\t\"correct\": false,\n\t\t\t\"text\": \"Ailerons.\",\n\t\t\t\"discussion\": \"Ailerons are a primary flight control surface.\"\n\t\t}\n\t]\n}"
+								},
+								"url": {
+									"raw": "http://{{host-app}}/questions",
+									"protocol": "http",
+									"host": [
+										"{{host-app}}"
+									],
+									"path": [
+										"questions"
+									]
+								},
+								"description": "http://{{host-app}}/questions"
+							},
+							"response": []
+						},
+						{
+							"name": "question 5",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "{{instructor-password}}",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "{{instructor-user}}",
+											"type": "string"
+										},
+										{
+											"key": "saveHelperData",
+											"type": "any"
+										},
+										{
+											"key": "showPassword",
+											"value": false,
+											"type": "boolean"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"text\": \"The elevator controls movement around which axis?\",\n\t\"course\": \"Private Pilot\",\n\t\"unit\": \"1: Airplanes and Aerodynamics\", \n\t\"subUnit\": \"1: Flight Controls\",\n\t\"discussion\": \"Source: FAA-H-8083-25B Chap 6\",\n\t\"learningStatementCode\": \"PLT346\",\n\t\"duration\": 90,\n\t\"referenceMaterials\": [\n                {\n                        \"id\": 1,\n                        \"title\": \"FAA-H-8083-25B\",\n                        \"resourceLocation\": \"https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/phak/media/pilot_handbook.pdf\"\n                }\n        ],\n\t\"answers\": [\n\t\t{\n                        \"choice\": \"A\",\n\t\t\t\"correct\": false,\n\t\t\t\"text\": \"Longitudinal.\",\n\t\t\t\"discussion\": \"Ailerons are control surfaces attached to each wing that move in the opposite direction from one another to control roll about the longitudinal axis.\"\n\t\t},\n\t\t{\n                        \"choice\": \"B\",\n\t\t\t\"correct\": true,\n\t\t\t\"text\": \"Lateral.\",\n\t\t\t\"discussion\": \"The elevator is the primary control device for changing the pitch attitude of an airplane about the lateral axis.\"\n\t\t},\n\t\t{\n                        \"choice\": \"C\",\n\t\t\t\"correct\": false,\n\t\t\t\"text\": \"Vertical.\",\n\t\t\t\"discussion\": \"The rudder controls movement of the aircraft about its vertical axis.\"\n\t\t}\n\t]\n}"
+								},
+								"url": {
+									"raw": "http://{{host-app}}/questions",
+									"protocol": "http",
+									"host": [
+										"{{host-app}}"
+									],
+									"path": [
+										"questions"
+									]
+								},
+								"description": "http://{{host-app}}/questions"
+							},
+							"response": []
+						},
+						{
+							"name": "question 6",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "{{instructor-password}}",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "{{instructor-user}}",
+											"type": "string"
+										},
+										{
+											"key": "saveHelperData",
+											"type": "any"
+										},
+										{
+											"key": "showPassword",
+											"value": false,
+											"type": "boolean"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"text\": \"Which statement is true concerning primary flight controls?\",\n\t\"course\": \"Private Pilot\",\n\t\"unit\": \"1: Airplanes and Aerodynamics\", \n\t\"subUnit\": \"1: Flight Controls\",\n\t\"discussion\": \"Source: FAA-H-8083-25B Chap 6\",\n\t\"learningStatementCode\": \"PLT346\",\n\t\"duration\": 90,\n\t\"referenceMaterials\": [\n                {\n                        \"id\": 1,\n                        \"title\": \"FAA-H-8083-25B\",\n                        \"resourceLocation\": \"https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/phak/media/pilot_handbook.pdf\"\n                }\n        ],\n\t\"answers\": [\n\t\t{\n                        \"choice\": \"A\",\n\t\t\t\"correct\": true,\n\t\t\t\"text\": \"The effectiveness of each control surface increases with speed because there is more airflow over them.\",\n\t\t\t\"discussion\": \"Rudder, aileron, and elevator effectiveness increase with speed because there is more airflow over the surface of the control device.\"\n\t\t},\n\t\t{\n                        \"choice\": \"B\",\n\t\t\t\"correct\": false,\n\t\t\t\"text\": \"Only when all three primary flight controls move in sequence do the airflow and pressure distribution change over and around the airfoil.\",\n\t\t\t\"discussion\": \"Movement of any primary flight control surface changes the airflow and pressure distribution over and around the airfoil.\"\n\t\t},\n\t\t{\n                        \"choice\": \"C\",\n\t\t\t\"correct\": false,\n\t\t\t\"text\": \"Primary flight controls include ailerons, rudder, elevator, and trim systems.\",\n\t\t\t\"discussion\": \"The primary flight controls do not include trim systems; these are considered secondary flight controls.\"\n\t\t}\n\t]\n}"
+								},
+								"url": {
+									"raw": "http://{{host-app}}/questions",
+									"protocol": "http",
+									"host": [
+										"{{host-app}}"
+									],
+									"path": [
+										"questions"
+									]
+								},
+								"description": "http://{{host-app}}/questions"
+							},
+							"response": []
+						},
+						{
+							"name": "question 7",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "{{instructor-password}}",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "{{instructor-user}}",
+											"type": "string"
+										},
+										{
+											"key": "saveHelperData",
+											"type": "any"
+										},
+										{
+											"key": "showPassword",
+											"value": false,
+											"type": "boolean"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"text\": \"Which of the following is true concerning flaps?\",\n\t\"course\": \"Private Pilot\",\n\t\"unit\": \"1: Airplanes and Aerodynamics\", \n\t\"subUnit\": \"1: Flight Controls\",\n\t\"discussion\": \"Source: FAA-H-8083-25B Chap 6\",\n\t\"learningStatementCode\": \"PLT346\",\n\t\"duration\": 90,\n\t\"referenceMaterials\": [\n                {\n                        \"id\": 1,\n                        \"title\": \"FAA-H-8083-25B\",\n                        \"resourceLocation\": \"https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/phak/media/pilot_handbook.pdf\"\n                }\n        ],\n\t\"answers\": [\n\t\t{\n                        \"choice\": \"A\",\n\t\t\t\"correct\": false,\n\t\t\t\"text\": \"Flaps are attached to the leading edge of the wing and are used to increase wing lift.\",\n\t\t\t\"discussion\": \"Flaps are attached to the trailing edge, not the leading edge, of the wing.\"\n\t\t},\n\t\t{\n                        \"choice\": \"B\",\n\t\t\t\"correct\": true,\n\t\t\t\"text\": \"Flaps allow an increase in the angle of descent without increasing airspeed.\",\n\t\t\t\"discussion\": \"Flaps are attached to the trailing edge of the wing and are used during approach and landing to increase wing lift. This allows an increase in the angle of descent without increasing airspeed.\"\n\t\t},\n\t\t{\n                        \"choice\": \"C\",\n\t\t\t\"correct\": false,\n\t\t\t\"text\": \"Flaps are high drag devices deployed from the wings to reduce lift.\",\n\t\t\t\"discussion\": \"Spoilers, not flaps, are high-drag devices deployed from the wings to reduce lift and increase drag.\"\n\t\t}\n\t]\n}"
+								},
+								"url": {
+									"raw": "http://{{host-app}}/questions",
+									"protocol": "http",
+									"host": [
+										"{{host-app}}"
+									],
+									"path": [
+										"questions"
+									]
+								},
+								"description": "http://{{host-app}}/questions"
+							},
+							"response": []
+						},
+						{
+							"name": "question 8",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "{{instructor-password}}",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "{{instructor-user}}",
+											"type": "string"
+										},
+										{
+											"key": "saveHelperData",
+											"type": "any"
+										},
+										{
+											"key": "showPassword",
+											"value": false,
+											"type": "boolean"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"text\": \"Which device is a secondary flight control?\",\n\t\"course\": \"Private Pilot\",\n\t\"unit\": \"1: Airplanes and Aerodynamics\", \n\t\"subUnit\": \"1: Flight Controls\",\n\t\"discussion\": \"Source: FAA-H-8083-25B Chap 6\",\n\t\"learningStatementCode\": \"PLT346\",\n\t\"duration\": 90,\n\t\"referenceMaterials\": [\n                {\n                        \"id\": 1,\n                        \"title\": \"FAA-H-8083-25B\",\n                        \"resourceLocation\": \"https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/phak/media/pilot_handbook.pdf\"\n                }\n        ],\n\t\"answers\": [\n\t\t{\n                        \"choice\": \"A\",\n\t\t\t\"correct\": true,\n\t\t\t\"text\": \"Spoilers.\",\n\t\t\t\"discussion\": \"Spoilers are high-drag devices that assist an aircraft in slowing down and losing altitude without gaining extra speed. They are common on gliders and some high-speed aircraft.\"\n\t\t},\n\t\t{\n                        \"choice\": \"B\",\n\t\t\t\"correct\": false,\n\t\t\t\"text\": \"Ailerons.\",\n\t\t\t\"discussion\": \"Ailerons control the roll of the aircraft and are a primary flight control surface.\"\n\t\t},\n\t\t{\n                        \"choice\": \"C\",\n\t\t\t\"correct\": false,\n\t\t\t\"text\": \"Stabilators.\",\n\t\t\t\"discussion\": \"Stabilators function as both a horizontal stabilizer and an elevator, which makes them a primary control surface.\"\n\t\t}\n\t]\n}"
+								},
+								"url": {
+									"raw": "http://{{host-app}}/questions",
+									"protocol": "http",
+									"host": [
+										"{{host-app}}"
+									],
+									"path": [
+										"questions"
+									]
+								},
+								"description": "http://{{host-app}}/questions"
+							},
+							"response": []
+						},
+						{
+							"name": "question 9",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "{{instructor-password}}",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "{{instructor-user}}",
+											"type": "string"
+										},
+										{
+											"key": "saveHelperData",
+											"type": "any"
+										},
+										{
+											"key": "showPassword",
+											"value": false,
+											"type": "boolean"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"text\": \"Trim systems are designed to do what?\",\n\t\"course\": \"Private Pilot\",\n\t\"unit\": \"1: Airplanes and Aerodynamics\", \n\t\"subUnit\": \"1: Flight Controls\",\n\t\"discussion\": \"Source: FAA-H-8083-25B Chap 6\",\n\t\"learningStatementCode\": \"PLT346\",\n\t\"duration\": 90,\n\t\"referenceMaterials\": [\n                {\n                        \"id\": 1,\n                        \"title\": \"FAA-H-8083-25B\",\n                        \"resourceLocation\": \"https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/phak/media/pilot_handbook.pdf\"\n                }\n        ],\n\t\"answers\": [\n\t\t{\n                        \"choice\": \"A\",\n\t\t\t\"correct\": true,\n\t\t\t\"text\": \"They relieve the pilot of the need to maintain constant pressure on the flight controls.\",\n\t\t\t\"discussion\": \"Trim systems are used to relieve the pilot of the need to maintain constant pressure on the flight controls. They include trim tabs, anti-servo tabs, and ground adjustable tabs.\"\n\t\t},\n\t\t{\n                        \"choice\": \"B\",\n\t\t\t\"correct\": false,\n\t\t\t\"text\": \"They are used during approach and landing to increase wing lift.\",\n\t\t\t\"discussion\": \"Flaps, not trim systems, are used during approach and landing to increase lift. This allows an increase in the angle of descent without increasing airspeed.\"\n\t\t},\n\t\t{\n                        \"choice\": \"C\",\n\t\t\t\"correct\": false,\n\t\t\t\"text\": \"They move in the opposite direction from one another to control roll.\",\n\t\t\t\"discussion\": \"Ailerons are control surfaces attached to each wing that move in the opposite direction from one another to control roll about the longitudinal axis.\"\n\t\t}\n\t]\n}"
+								},
+								"url": {
+									"raw": "http://{{host-app}}/questions",
+									"protocol": "http",
+									"host": [
+										"{{host-app}}"
+									],
+									"path": [
+										"questions"
+									]
+								},
+								"description": "http://{{host-app}}/questions"
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
 					"name": "question",
 					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{instructor-password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{instructor-user}}",
+									"type": "string"
+								},
+								{
+									"key": "saveHelperData",
+									"type": "any"
+								},
+								{
+									"key": "showPassword",
+									"value": false,
+									"type": "boolean"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [
 							{
@@ -617,15 +1484,14 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"text\": \"This is a test?\",\n\t\"unit\": \"1\", \n\t\"subUnit\": \"1\",\n\t\"discussion\": \"Something should go here\",\n\t\"learningStatementCode\": \"PLT0001\",\n\t\"answers\": [\n\t\t{\n\t\t\t\"correct\": false,\n\t\t\t\"text\": \"This is the answer text\",\n\t\t\t\"discussion\": \"Say something\"\n\t\t},\n\t\t{\n\t\t\t\"correct\": true,\n\t\t\t\"text\": \"This is another answer text\",\n\t\t\t\"discussion\": \"Say something else\"\n\t\t}\n\t]\n}"
+							"raw": "{\n\t\"text\": \"What is one purpose of wing flaps?\",\n\t\"course\": \"Private Pilot\",\n\t\"unit\": \"1: Airplanes and Aerodynamics\", \n\t\"subUnit\": \"1: Flight Controls\",\n\t\"discussion\": \"Source: FAA-H-8083-25B Chap 6\",\n\t\"learningStatementCode\": \"PLT473\",\n\t\"duration\": 90,\n\t\"referenceMaterials\": [\n                {\n                        \"id\": 1,\n                        \"title\": \"FAA-H-8083-25B\",\n                        \"resourceLocation\": \"https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/phak/media/pilot_handbook.pdf\"\n                }\n        ],\n\t\"answers\": [\n\t\t{\n                        \"choice\": \"A\",\n\t\t\t\"correct\": true,\n\t\t\t\"text\": \"To enable the pilot to make steeper approaches to a landing without increasing the airspeed.\",\n\t\t\t\"discussion\": \"Extending the flaps increases the wing camber and the angle of attack of the wing. This increases wing lift and induced drag, which enables the pilot to make steeper approaches to a landing without an increase in airspeed. (FAA-H-8083-25B Chap 6)\"\n\t\t},\n\t\t{\n                        \"choice\": \"B\",\n\t\t\t\"correct\": false,\n\t\t\t\"text\": \"To relieve the pilot of maintaining continuous pressure on the controls.\",\n\t\t\t\"discussion\": \"Trim tabs (not wing flaps) help relieve control pressures.\"\n\t\t},\n\t\t{\n                        \"choice\": \"C\",\n\t\t\t\"correct\": false,\n\t\t\t\"text\": \"To decrease wing area to vary the lift.\",\n\t\t\t\"discussion\": \"Wing area usually remains the same, except for certain specialized flaps that increase (not decrease) the wing area.\"\n\t\t}\n\t]\n}"
 						},
 						"url": {
-							"raw": "http://localhost:8080/questions",
+							"raw": "http://{{host-app}}/questions",
 							"protocol": "http",
 							"host": [
-								"localhost"
+								"{{host-app}}"
 							],
-							"port": "8080",
 							"path": [
 								"questions"
 							]
@@ -637,6 +1503,30 @@
 				{
 					"name": "questions",
 					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{instructor-password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{instructor-user}}",
+									"type": "string"
+								},
+								{
+									"key": "saveHelperData",
+									"type": "any"
+								},
+								{
+									"key": "showPassword",
+									"value": false,
+									"type": "boolean"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [
 							{
@@ -655,12 +1545,11 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://localhost:8080/questions",
+							"raw": "http://{{host-app}}/questions",
 							"protocol": "http",
 							"host": [
-								"localhost"
+								"{{host-app}}"
 							],
-							"port": "8080",
 							"path": [
 								"questions"
 							]
@@ -690,29 +1579,106 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://localhost:8080/questions/2",
+							"raw": "http://{{host-app}}/questions/1",
 							"protocol": "http",
 							"host": [
-								"localhost"
+								"{{host-app}}"
 							],
-							"port": "8080",
 							"path": [
 								"questions",
-								"2"
+								"1"
 							]
 						},
 						"description": "http://localhost:8080/questions/2"
 					},
 					"response": []
-				}
-			]
-		},
-		{
-			"name": "quiz",
-			"item": [
+				},
 				{
-					"name": "quiz",
+					"name": "question",
 					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{instructor-password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{instructor-user}}",
+									"type": "string"
+								},
+								{
+									"key": "saveHelperData",
+									"type": "any"
+								},
+								{
+									"key": "showPassword",
+									"value": false,
+									"type": "boolean"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{host-app}}/questions/5",
+							"protocol": "http",
+							"host": [
+								"{{host-app}}"
+							],
+							"path": [
+								"questions",
+								"5"
+							]
+						},
+						"description": "http://localhost:8080/questions/1"
+					},
+					"response": []
+				},
+				{
+					"name": "answer",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{student-password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{student-user}}",
+									"type": "string"
+								},
+								{
+									"key": "saveHelperData",
+									"type": "any"
+								},
+								{
+									"key": "showPassword",
+									"value": false,
+									"type": "boolean"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [
 							{
@@ -728,14 +1694,81 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"title\": \"Test quiz\",\n\t\"questions\": [\n\t]\n}"
+							"raw": ""
 						},
 						"url": {
-							"raw": "localhost:8080/quizzes",
+							"raw": "http://{{host-app}}/questions/1/answer/1/B",
+							"protocol": "http",
 							"host": [
-								"localhost"
+								"{{host-app}}"
 							],
-							"port": "8080",
+							"path": [
+								"questions",
+								"1",
+								"answer",
+								"1",
+								"B"
+							]
+						},
+						"description": "http://localhost:8080/questions/1/answer/1/B"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "quiz",
+			"item": [
+				{
+					"name": "quiz",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{instructor-password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{instructor-user}}",
+									"type": "string"
+								},
+								{
+									"key": "saveHelperData",
+									"type": "any"
+								},
+								{
+									"key": "showPassword",
+									"value": false,
+									"type": "boolean"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"title\": \"Test quiz\",\n\t\"lessonPlanId\": 1\n}"
+						},
+						"url": {
+							"raw": "http://{{host-app}}/quizzes",
+							"protocol": "http",
+							"host": [
+								"{{host-app}}"
+							],
 							"path": [
 								"quizzes"
 							]
@@ -747,6 +1780,30 @@
 				{
 					"name": "quiz",
 					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{instructor-password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{instructor-user}}",
+									"type": "string"
+								},
+								{
+									"key": "saveHelperData",
+									"type": "any"
+								},
+								{
+									"key": "showPassword",
+									"value": false,
+									"type": "boolean"
+								}
+							]
+						},
 						"method": "PUT",
 						"header": [
 							{
@@ -765,11 +1822,11 @@
 							"raw": "{\n\t\"id\": 1,\n\t\"title\": \"Test quiz\",\n\t\"questions\": [\n\t]\n}"
 						},
 						"url": {
-							"raw": "localhost:8080/quizzes",
+							"raw": "http://{{host-app}}/quizzes",
+							"protocol": "http",
 							"host": [
-								"localhost"
+								"{{host-app}}"
 							],
-							"port": "8080",
 							"path": [
 								"quizzes"
 							]
@@ -799,11 +1856,11 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "localhost:8080/quizzes",
+							"raw": "http://{{host-app}}/quizzes",
+							"protocol": "http",
 							"host": [
-								"localhost"
+								"{{host-app}}"
 							],
-							"port": "8080",
 							"path": [
 								"quizzes"
 							]
@@ -815,6 +1872,30 @@
 				{
 					"name": "quiz",
 					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{instructor-password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{instructor-user}}",
+									"type": "string"
+								},
+								{
+									"key": "saveHelperData",
+									"type": "any"
+								},
+								{
+									"key": "showPassword",
+									"value": false,
+									"type": "boolean"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [
 							{
@@ -833,11 +1914,11 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "localhost:8080/quizzes/1",
+							"raw": "http://{{host-app}}/quizzes/1",
+							"protocol": "http",
 							"host": [
-								"localhost"
+								"{{host-app}}"
 							],
-							"port": "8080",
 							"path": [
 								"quizzes",
 								"1"
@@ -850,6 +1931,30 @@
 				{
 					"name": "quiz",
 					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{instructor-password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{instructor-user}}",
+									"type": "string"
+								},
+								{
+									"key": "saveHelperData",
+									"type": "any"
+								},
+								{
+									"key": "showPassword",
+									"value": false,
+									"type": "boolean"
+								}
+							]
+						},
 						"method": "DELETE",
 						"header": [
 							{
@@ -868,11 +1973,11 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "localhost:8080/quizzes/1",
+							"raw": "http://{{host-app}}/quizzes/1",
+							"protocol": "http",
 							"host": [
-								"localhost"
+								"{{host-app}}"
 							],
-							"port": "8080",
 							"path": [
 								"quizzes",
 								"1"
@@ -881,15 +1986,34 @@
 						"description": "localhost:8080/quizzes/1"
 					},
 					"response": []
-				}
-			]
-		},
-		{
-			"name": "referencematerial",
-			"item": [
+				},
 				{
-					"name": "referencematerial",
+					"name": "add question",
 					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{instructor-password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{instructor-user}}",
+									"type": "string"
+								},
+								{
+									"key": "saveHelperData",
+									"type": "any"
+								},
+								{
+									"key": "showPassword",
+									"value": false,
+									"type": "boolean"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [
 							{
@@ -905,15 +2029,200 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"title\": \"Reference material\",\n\t\"resourceLocation\": \"http://somewhere.com\"\n}"
+							"raw": ""
 						},
 						"url": {
-							"raw": "http://localhost:8080/referencematerials",
+							"raw": "http://{{host-app}}/quizzes/1/add/1",
 							"protocol": "http",
 							"host": [
-								"localhost"
+								"{{host-app}}"
 							],
-							"port": "8080",
+							"path": [
+								"quizzes",
+								"1",
+								"add",
+								"1"
+							]
+						},
+						"description": "http://{{host-app}}/quizzes/1/add/1"
+					},
+					"response": []
+				},
+				{
+					"name": "start",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{instructor-password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{instructor-user}}",
+									"type": "string"
+								},
+								{
+									"key": "saveHelperData",
+									"type": "any"
+								},
+								{
+									"key": "showPassword",
+									"value": false,
+									"type": "boolean"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{host-app}}/quizzes/1/start",
+							"protocol": "http",
+							"host": [
+								"{{host-app}}"
+							],
+							"path": [
+								"quizzes",
+								"1",
+								"start"
+							]
+						},
+						"description": "http://{{host-app}}/quizzes/1/start"
+					},
+					"response": []
+				},
+				{
+					"name": "complete",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{instructor-password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{instructor-user}}",
+									"type": "string"
+								},
+								{
+									"key": "saveHelperData",
+									"type": "any"
+								},
+								{
+									"key": "showPassword",
+									"value": false,
+									"type": "boolean"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{host-app}}/quizzes/1/complete",
+							"protocol": "http",
+							"host": [
+								"{{host-app}}"
+							],
+							"path": [
+								"quizzes",
+								"1",
+								"complete"
+							]
+						},
+						"description": "http://{{host-app}}/quizzes/1/complete"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "referencematerial",
+			"item": [
+				{
+					"name": "referencematerial",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{instructor-password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{instructor-user}}",
+									"type": "string"
+								},
+								{
+									"key": "saveHelperData",
+									"type": "any"
+								},
+								{
+									"key": "showPassword",
+									"value": false,
+									"type": "boolean"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"title\": \"FAA-H-8083-25B\",\n\t\"resourceLocation\": \"https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/phak/media/pilot_handbook.pdf\"\n}"
+						},
+						"url": {
+							"raw": "http://{{host-app}}/referencematerials",
+							"protocol": "http",
+							"host": [
+								"{{host-app}}"
+							],
 							"path": [
 								"referencematerials"
 							]
@@ -943,12 +2252,11 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://localhost:8080/referencematerials/1",
+							"raw": "http://{{host-app}}/referencematerials/1",
 							"protocol": "http",
 							"host": [
-								"localhost"
+								"{{host-app}}"
 							],
-							"port": "8080",
 							"path": [
 								"referencematerials",
 								"1"
@@ -961,6 +2269,30 @@
 				{
 					"name": "referencematerial",
 					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{instructor-password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{instructor-user}}",
+									"type": "string"
+								},
+								{
+									"key": "saveHelperData",
+									"type": "any"
+								},
+								{
+									"key": "showPassword",
+									"value": false,
+									"type": "boolean"
+								}
+							]
+						},
 						"method": "DELETE",
 						"header": [
 							{
@@ -979,12 +2311,11 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://localhost:8080/referencematerials/1",
+							"raw": "http://{{host-app}}/referencematerials/1",
 							"protocol": "http",
 							"host": [
-								"localhost"
+								"{{host-app}}"
 							],
-							"port": "8080",
 							"path": [
 								"referencematerials",
 								"1"
@@ -1015,12 +2346,11 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://localhost:8080/referencematerials",
+							"raw": "http://{{host-app}}/referencematerials",
 							"protocol": "http",
 							"host": [
-								"localhost"
+								"{{host-app}}"
 							],
-							"port": "8080",
 							"path": [
 								"referencematerials"
 							]
@@ -1055,12 +2385,11 @@
 							"raw": "{\n\t\"userId\": 1,\n\t\"statisticType\": \"USER_SAVED\",\n\t\"date\": \"\",\n\t\"description\": \"\"\n}"
 						},
 						"url": {
-							"raw": "http://localhost:8080/statistics",
+							"raw": "http://{{host-app}}/statistics",
 							"protocol": "http",
 							"host": [
-								"localhost"
+								"{{host-app}}"
 							],
-							"port": "8080",
 							"path": [
 								"statistics"
 							]
@@ -1090,12 +2419,11 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://localhost:8080/statistics/1",
+							"raw": "http://{{host-app}}/statistics/1",
 							"protocol": "http",
 							"host": [
-								"localhost"
+								"{{host-app}}"
 							],
-							"port": "8080",
 							"path": [
 								"statistics",
 								"1"
@@ -1108,6 +2436,30 @@
 				{
 					"name": "statistic",
 					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{instructor-password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{instructor-user}}",
+									"type": "string"
+								},
+								{
+									"key": "saveHelperData",
+									"type": "any"
+								},
+								{
+									"key": "showPassword",
+									"value": false,
+									"type": "boolean"
+								}
+							]
+						},
 						"method": "DELETE",
 						"header": [
 							{
@@ -1126,12 +2478,11 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://localhost:8080/statistics/1",
+							"raw": "http://{{host-app}}/statistics/1",
 							"protocol": "http",
 							"host": [
-								"localhost"
+								"{{host-app}}"
 							],
-							"port": "8080",
 							"path": [
 								"statistics",
 								"1"
@@ -1162,12 +2513,11 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://localhost:8080/statistics",
+							"raw": "http://{{host-app}}/statistics",
 							"protocol": "http",
 							"host": [
-								"localhost"
+								"{{host-app}}"
 							],
-							"port": "8080",
 							"path": [
 								"statistics"
 							]
@@ -1175,15 +2525,34 @@
 						"description": "http://localhost:8080/statistics"
 					},
 					"response": []
-				}
-			]
-		},
-		{
-			"name": "user",
-			"item": [
+				},
 				{
-					"name": "user",
+					"name": "statistics by user (ALL)",
 					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{instructor-password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{instructor-user}}",
+									"type": "string"
+								},
+								{
+									"key": "saveHelperData",
+									"type": "any"
+								},
+								{
+									"key": "showPassword",
+									"value": false,
+									"type": "boolean"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [
 							{
@@ -1202,12 +2571,260 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://localhost:8080/users/1",
+							"raw": "http://{{host-app}}/statistics/user/1/ALL",
 							"protocol": "http",
 							"host": [
-								"localhost"
+								"{{host-app}}"
 							],
-							"port": "8080",
+							"path": [
+								"statistics",
+								"user",
+								"1",
+								"ALL"
+							]
+						},
+						"description": "http://{{host-app}}/statistics/user/1/ALL"
+					},
+					"response": []
+				},
+				{
+					"name": "statistics by event (ALL)",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{instructor-password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{instructor-user}}",
+									"type": "string"
+								},
+								{
+									"key": "saveHelperData",
+									"type": "any"
+								},
+								{
+									"key": "showPassword",
+									"value": false,
+									"type": "boolean"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{host-app}}/statistics/event/1/ALL",
+							"protocol": "http",
+							"host": [
+								"{{host-app}}"
+							],
+							"path": [
+								"statistics",
+								"event",
+								"1",
+								"ALL"
+							]
+						},
+						"description": "http://{{host-app}}/statistics/event/1/ALL"
+					},
+					"response": []
+				},
+				{
+					"name": "statistics by question (ALL)",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{instructor-password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{instructor-user}}",
+									"type": "string"
+								},
+								{
+									"key": "saveHelperData",
+									"type": "any"
+								},
+								{
+									"key": "showPassword",
+									"value": false,
+									"type": "boolean"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{host-app}}/statistics/question/1/ALL",
+							"protocol": "http",
+							"host": [
+								"{{host-app}}"
+							],
+							"path": [
+								"statistics",
+								"question",
+								"1",
+								"ALL"
+							]
+						},
+						"description": "http://{{host-app}}/statistics/question/1/ALL"
+					},
+					"response": []
+				},
+				{
+					"name": "statistics by quiz (ALL)",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{instructor-password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{instructor-user}}",
+									"type": "string"
+								},
+								{
+									"key": "saveHelperData",
+									"type": "any"
+								},
+								{
+									"key": "showPassword",
+									"value": false,
+									"type": "boolean"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{host-app}}/statistics/quiz/1/ALL",
+							"protocol": "http",
+							"host": [
+								"{{host-app}}"
+							],
+							"path": [
+								"statistics",
+								"quiz",
+								"1",
+								"ALL"
+							]
+						},
+						"description": "http://{{host-app}}/statistics/quiz/1/ALL"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "user",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{instructor-password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{instructor-user}}",
+									"type": "string"
+								},
+								{
+									"key": "saveHelperData",
+									"type": "any"
+								},
+								{
+									"key": "showPassword",
+									"value": false,
+									"type": "boolean"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{host-app}}/users/1",
+							"protocol": "http",
+							"host": [
+								"{{host-app}}"
+							],
 							"path": [
 								"users",
 								"1"
@@ -1220,6 +2837,30 @@
 				{
 					"name": "user",
 					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{instructor-password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{instructor-user}}",
+									"type": "string"
+								},
+								{
+									"key": "saveHelperData",
+									"type": "any"
+								},
+								{
+									"key": "showPassword",
+									"value": false,
+									"type": "boolean"
+								}
+							]
+						},
 						"method": "PUT",
 						"header": [
 							{
@@ -1235,15 +2876,14 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"id\": 1,\n    \"email\": \"brian.michael@yahoo.com\",\n    \"firstName\": \"Brian\",\n    \"lastName\": \"Michael\",\n    \"username\": \"bsmichael\",\n    \"password\": \"password\",\n    \"role\": \"ADMIN\"\n}"
+							"raw": "{\n\t\"id\": 1,\n    \"email\": \"brian.michael@yahoo.com\",\n    \"emailEnabled\": false,\n    \"questionPreference\": \"SLACK\",\n    \"sms\": \"4047355660\",\n    \"smsEnabled\": false,\n    \"slack\": \"bsmichael\",\n    \"slackEnabled\": true,\n    \"firstName\": \"Brian\",\n    \"lastName\": \"Michael\",\n    \"username\": \"{{instructor-user}}\",\n    \"password\": \"{{instructor-password}}\",\n    \"eaaNumber\": \"873175\",\n    \"certificateNumber\": \"3442084CFI\",\n    \"role\": \"INSTRUCTOR\"\n}"
 						},
 						"url": {
-							"raw": "http://localhost:8080/users",
+							"raw": "http://{{host-app}}/users",
 							"protocol": "http",
 							"host": [
-								"localhost"
+								"{{host-app}}"
 							],
-							"port": "8080",
 							"path": [
 								"users"
 							]
@@ -1254,6 +2894,101 @@
 				},
 				{
 					"name": "user",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"brian.michael@yahoo.com\",\n    \"emailEnabled\": true,\n    \"questionPreference\": \"SLACK\",\n    \"sms\": \"4047355660\",\n    \"smsEnabled\": true,\n    \"slack\": \"bsmichael\",\n    \"slackEnabled\": true,\n    \"firstName\": \"Brian\",\n    \"lastName\": \"Michael\",\n    \"username\": \"{{instructor-user}}\",\n    \"password\": \"{{instructor-password}}\",\n    \"eaaNumber\": \"873175\",\n    \"certificateNumber\": \"3442084CFI\",\n    \"role\": \"INSTRUCTOR\"\n}"
+						},
+						"url": {
+							"raw": "http://{{host-app}}/users",
+							"protocol": "http",
+							"host": [
+								"{{host-app}}"
+							],
+							"path": [
+								"users"
+							]
+						},
+						"description": "http://localhost:8080/users"
+					},
+					"response": []
+				},
+				{
+					"name": "users",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{instructor-password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{instructor-user}}",
+									"type": "string"
+								},
+								{
+									"key": "saveHelperData",
+									"type": "any"
+								},
+								{
+									"key": "showPassword",
+									"value": false,
+									"type": "boolean"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{host-app}}/users",
+							"protocol": "http",
+							"host": [
+								"{{host-app}}"
+							],
+							"path": [
+								"users"
+							]
+						},
+						"description": "http://localhost:8080/users"
+					},
+					"response": []
+				},
+				{
+					"name": "logout",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -1270,61 +3005,25 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"email\": \"brian.michael@yahoo.com\",\n    \"emailEnabled\": false,\n    \"sms\": \"4047355660\",\n    \"smsEnabled\": true,\n    \"slack\": \"brianmichael\",\n    \"slackEnabled\": false,\n    \"firstName\": \"Brian\",\n    \"lastName\": \"Michael\",\n    \"username\": \"bsmichael\",\n    \"password\": \"password\",\n    \"role\": \"ADMIN\"\n}"
-						},
-						"url": {
-							"raw": "http://localhost:8080/users",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"users"
-							]
-						},
-						"description": "http://localhost:8080/users"
-					},
-					"response": []
-				},
-				{
-					"name": "user",
-					"request": {
-						"method": "DELETE",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json",
-								"type": "text"
-							},
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://localhost:8080/users/1",
+							"raw": "http://{{host-app}}/users/logout",
 							"protocol": "http",
 							"host": [
-								"localhost"
+								"{{host-app}}"
 							],
-							"port": "8080",
 							"path": [
 								"users",
-								"1"
+								"logout"
 							]
 						},
-						"description": "http://localhost:8080/users/1"
+						"description": "localhost:8080/users/logout"
 					},
 					"response": []
 				},
 				{
-					"name": "users",
+					"name": "verify email",
 					"request": {
 						"method": "GET",
 						"header": [
@@ -1344,17 +3043,94 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://localhost:8080/users",
+							"raw": "http://{{host-app}}/users/1/verify/EMAIL",
 							"protocol": "http",
 							"host": [
-								"localhost"
+								"{{host-app}}"
 							],
-							"port": "8080",
 							"path": [
-								"users"
+								"users",
+								"1",
+								"verify",
+								"EMAIL"
 							]
 						},
-						"description": "http://localhost:8080/users"
+						"description": "http://localhost:8080/users/1/verify/EMAIL"
+					},
+					"response": []
+				},
+				{
+					"name": "password reset",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{host-app}}/users/1/password/reset",
+							"protocol": "http",
+							"host": [
+								"{{host-app}}"
+							],
+							"path": [
+								"users",
+								"1",
+								"password",
+								"reset"
+							]
+						},
+						"description": "http://{{host-app}}/users/1/password/reset"
+					},
+					"response": []
+				},
+				{
+					"name": "password update",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{host-app}}/users/1/password/password/SKYC",
+							"protocol": "http",
+							"host": [
+								"{{host-app}}"
+							],
+							"path": [
+								"users",
+								"1",
+								"password",
+								"password",
+								"SKYC"
+							]
+						},
+						"description": "http://{{host-app}}/users/1/password/password/SKYC"
 					},
 					"response": []
 				}

@@ -2,8 +2,6 @@ Unit: ${questionUnit}
 Sub-Unit: ${questionSubUnit}
 Learning Statement Code: ${questionLearningStatementCode}
 
-${referenceMaterial}
-
 Question: ${questionText}
 Answers:
 ${answerChoice1}: ${answerText1}

@@ -13,7 +13,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -96,7 +95,11 @@ public class UserController {
             ConflictException {
         userValidator.validate(user);
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        user.setRole(Role.STUDENT);
+        if (user.getCertificateNumber() != null && user.getCertificateNumber().endsWith("CFI")) {
+            user.setRole(Role.INSTRUCTOR);
+        } else {
+            user.setRole(Role.STUDENT);
+        }
         final User response = userService.store(user);
         notificationService.send(
                 response.getId(),
@@ -170,35 +173,6 @@ public class UserController {
     })
     public boolean checkUsername(@PathVariable("username") String username) {
         return userService.findByUsername(username) != null ? false : true;
-    }
-
-    /**
-     * Deletes a user
-     *
-     * @param userId Long
-     * @param principal Principal
-     * @return User
-     */
-    @DeleteMapping(path = {
-            "/{userId}"
-    })
-    public User delete(@PathVariable("userId") long userId, Principal principal) {
-        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
-        final User response = userService.delete(userId);
-        try {
-            notificationService.send(
-                    response.getId(),
-                    null,
-                    null,
-                    NotificationType.ALL,
-                    NotificationEventType.USER_DELETE);
-        } catch (ResourceNotFoundException e) {
-            LOGGER.warn(
-                    String.format(
-                            "Unable to send notification to [%s].  No user found.",
-                            userId));
-        }
-        return response;
     }
 
     /**

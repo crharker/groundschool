@@ -56,6 +56,11 @@ public class Event extends Base {
     private String checkinCode;
 
     /**
+     * Checkin code required
+     */
+    private boolean checkinCodeRequired;
+
+    /**
      * Address
      */
     private Address address;
@@ -158,6 +163,24 @@ public class Event extends Base {
      */
     public void setCheckinCode(String checkinCode) {
         this.checkinCode = checkinCode;
+    }
+
+    /**
+     * Retrieves the value for {@link #checkinCodeRequired}.
+     *
+     * @return the current value
+     */
+    public boolean isCheckinCodeRequired() {
+        return checkinCodeRequired;
+    }
+
+    /**
+     * Provides a value for {@link #checkinCodeRequired}.
+     *
+     * @param checkinCodeRequired the new value to set
+     */
+    public void setCheckinCodeRequired(boolean checkinCodeRequired) {
+        this.checkinCodeRequired = checkinCodeRequired;
     }
 
     /**

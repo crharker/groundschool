@@ -88,6 +88,11 @@ public class User extends Base {
     private String eaaNumber;
 
     /**
+     * Certificate Number
+     */
+    private String certificateNumber;
+
+    /**
      * Code for verification purposes
      */
     private String code;
@@ -370,6 +375,24 @@ public class User extends Base {
      */
     public void setEaaNumber(String eaaNumber) {
         this.eaaNumber = eaaNumber;
+    }
+
+    /**
+     * Retrieves the value for {@link #certificateNumber}.
+     *
+     * @return the current value
+     */
+    public String getCertificateNumber() {
+        return certificateNumber;
+    }
+
+    /**
+     * Provides a value for {@link #certificateNumber}.
+     *
+     * @param certificateNumber the new value to set
+     */
+    public void setCertificateNumber(String certificateNumber) {
+        this.certificateNumber = certificateNumber;
     }
 
     /**

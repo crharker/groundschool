@@ -251,12 +251,12 @@ public class QuizServiceImpl implements QuizService {
      * {@inheritDoc} Required implementation.
      */
     @Override
-    public Quiz getCurrentQuiz() {
-        Quiz current = null;
+    public Long getCurrentQuiz() {
+        Long current = null;
         List<Quiz> quizzes = findAllQuizzes();
         for (Quiz quiz : quizzes) {
             if (quiz.isStarted() && !quiz.isCompleted()) {
-                current = quiz;
+                current = quiz.getId();
                 break;
             }
         }
@@ -352,18 +352,27 @@ public class QuizServiceImpl implements QuizService {
         }
         final List<QuizQuestionEntity> quizQuestions = quizQuestionRepository.findByQuizId(quizId);
         if (quizQuestions != null && quizQuestions.size() > 0) {
+            LOGGER.info(String.format("getNextQuestion() found [%s] quiz questions", quizQuestions.size()));
             List<Long> quizQuestionIds = quizQuestions
                     .stream()
                     .map(quizQuestionEntity -> quizQuestionEntity.getQuestionId())
                     .collect(Collectors.toList());
             final List<Statistic> statistics = statisticService.findByQuizId(quizId, StatisticType.QUESTION_ANSWERED);
+            LOGGER.info(String.format("getNextQuestion() found [%s] statistics", statistics.size()));
             final List<Long> userAnsweredQuestions = statistics
                     .stream()
                     .filter(statistic -> statistic.getUserId() == userId)
                     .map(statistic -> statistic.getQuestionId())
                     .collect(Collectors.toList());
+            LOGGER.info(
+                    String.format(
+                            "getNextQuestion() Filtering questions [%s] from quiz questions list [%s]",
+                            userAnsweredQuestions,
+                            quizQuestionIds));
             quizQuestionIds.removeAll(userAnsweredQuestions);
-            questionId = quizQuestionIds.get(0);
+            if (quizQuestionIds.size() > 0) {
+                questionId = quizQuestionIds.get(0);
+            }
         }
         LOGGER.info(String.format("getNextQuestion() returning questionId [%s] for quizId [%s]", questionId, quizId));
         return questionId;

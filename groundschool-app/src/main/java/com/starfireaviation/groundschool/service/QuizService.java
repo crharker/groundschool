@@ -80,9 +80,9 @@ public interface QuizService {
      *
      * The response is null if there is no active quiz
      *
-     * @return Quiz
+     * @return Quiz ID
      */
-    public Quiz getCurrentQuiz();
+    public Long getCurrentQuiz();
 
     /**
      * Adds a question to a quiz

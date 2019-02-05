@@ -103,6 +103,12 @@ public class UserEntity extends BaseEntity {
     private String eaaNumber;
 
     /**
+     * Certificate Number
+     */
+    @Column(name = "certificate_number")
+    private String certificateNumber;
+
+    /**
      * Code for verification purposes
      */
     @Column(name = "code")
@@ -425,6 +431,24 @@ public class UserEntity extends BaseEntity {
      */
     public void setEaaNumber(String eaaNumber) {
         this.eaaNumber = eaaNumber;
+    }
+
+    /**
+     * Retrieves the value for {@link #certificateNumber}.
+     *
+     * @return the current value
+     */
+    public String getCertificateNumber() {
+        return certificateNumber;
+    }
+
+    /**
+     * Provides a value for {@link #certificateNumber}.
+     *
+     * @param certificateNumber the new value to set
+     */
+    public void setCertificateNumber(String certificateNumber) {
+        this.certificateNumber = certificateNumber;
     }
 
     /**

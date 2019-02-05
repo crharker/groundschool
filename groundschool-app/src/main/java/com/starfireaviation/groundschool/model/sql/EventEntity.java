@@ -69,6 +69,12 @@ public class EventEntity extends BaseEntity {
     private String checkinCode;
 
     /**
+     * Checkin code required
+     */
+    @Column(name = "checkin_code_required", nullable = false)
+    private boolean checkinCodeRequired;
+
+    /**
      * Retrieves the value for {@link #title}.
      *
      * @return the current value
@@ -138,6 +144,24 @@ public class EventEntity extends BaseEntity {
      */
     public void setCheckinCode(String checkinCode) {
         this.checkinCode = checkinCode;
+    }
+
+    /**
+     * Retrieves the value for {@link #checkinCodeRequired}.
+     *
+     * @return the current value
+     */
+    public boolean isCheckinCodeRequired() {
+        return checkinCodeRequired;
+    }
+
+    /**
+     * Provides a value for {@link #checkinCodeRequired}.
+     *
+     * @param checkinCodeRequired the new value to set
+     */
+    public void setCheckinCodeRequired(boolean checkinCodeRequired) {
+        this.checkinCodeRequired = checkinCodeRequired;
     }
 
     /**

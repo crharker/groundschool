@@ -15,13 +15,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import com.starfireaviation.groundschool.exception.ResourceNotFoundException;
-import com.starfireaviation.groundschool.model.Activity;
-import com.starfireaviation.groundschool.model.ActivityType;
 import com.starfireaviation.groundschool.model.Answer;
-import com.starfireaviation.groundschool.model.Event;
-import com.starfireaviation.groundschool.model.LessonPlan;
 import com.starfireaviation.groundschool.model.Question;
-import com.starfireaviation.groundschool.model.Quiz;
 import com.starfireaviation.groundschool.model.ReferenceMaterial;
 import com.starfireaviation.groundschool.model.Statistic;
 import com.starfireaviation.groundschool.model.StatisticType;
@@ -70,12 +65,6 @@ public class QuestionServiceImpl implements QuestionService {
      */
     @Autowired
     private EventService eventService;
-
-    /**
-     * LessonPlanService
-     */
-    @Autowired
-    private LessonPlanService lessonPlanService;
 
     /**
      * ReferenceMaterialService
@@ -205,8 +194,7 @@ public class QuestionServiceImpl implements QuestionService {
      * {@inheritDoc} Required implementation.
      */
     @Override
-    public boolean answer(long questionId, long userId, String selection, Date startTime)
-            throws ResourceNotFoundException {
+    public boolean answer(long questionId, long userId, String selection, Date startTime) {
         final Instant start = startTime == null ? Instant.now() : startTime.toInstant();
         boolean answeredCorrectly = false;
         final Question question = findById(questionId, false);
@@ -220,24 +208,8 @@ public class QuestionServiceImpl implements QuestionService {
                 answeredCorrectly = answer.isCorrect();
             }
         }
-        final Long eventId = eventService.isCheckedIn(userId);
-        Long quizId = null;
-        if (eventId != null) {
-            final Event event = eventService.findById(eventId, true);
-            final LessonPlan lessonPlan = lessonPlanService.findById(event.getLessonPlanId(), false);
-            final List<Activity> activities = lessonPlan.getActivities();
-            if (activities != null) {
-                for (final Activity activity : activities) {
-                    if (activity.getActivityType() == ActivityType.QUIZ) {
-                        final Quiz quiz = quizService.findById(activity.getReferenceId(), true);
-                        if (quiz.isStarted() && !quiz.isCompleted()) {
-                            quizId = quiz.getId();
-                            break;
-                        }
-                    }
-                }
-            }
-        }
+        final Long eventId = eventService.getCurrentEvent();
+        final Long quizId = quizService.getCurrentQuiz();
         statisticService.store(
                 new Statistic(
                         userId,
