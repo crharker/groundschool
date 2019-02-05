@@ -39,9 +39,6 @@ EAA690:
     header-string: Authorization
 
 groundschool:
-  admin:
-    # for testing, password is "password"
-    password: "$2a$04$nUo76pGPgQna4oj.1CsfVuSJk9CUZZjpsbe6E/Ai39dPr4RQiiKHi"
   timeout:
     read: 10000
     connect: 1000

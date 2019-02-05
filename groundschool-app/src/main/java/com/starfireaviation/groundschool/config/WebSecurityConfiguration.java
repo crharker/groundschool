@@ -20,7 +20,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import com.starfireaviation.groundschool.properties.AuthorizationProperties;
 import com.starfireaviation.groundschool.properties.DatabaseProperties;
 
 /**
@@ -31,8 +30,7 @@ import com.starfireaviation.groundschool.properties.DatabaseProperties;
 @Configuration
 @EnableWebSecurity
 @EnableConfigurationProperties({
-        DatabaseProperties.class,
-        AuthorizationProperties.class
+        DatabaseProperties.class
 })
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
