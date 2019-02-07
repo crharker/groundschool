@@ -283,7 +283,7 @@ public abstract class AbstractMessageServiceImpl implements MessageService {
      * @throws ResourceNotFoundException when no user is found
      */
     protected void handleStop(Long userId, NotificationType notificationType) throws ResourceNotFoundException {
-        User user = userService.findById(userId);
+        User user = userService.get(userId);
         switch (notificationType) {
             case SLACK:
                 user.setSlackEnabled(false);
@@ -354,8 +354,9 @@ public abstract class AbstractMessageServiceImpl implements MessageService {
      * @param userId User ID
      * @param eventId Event ID
      * @param quizId Quiz ID
+     * @throws ResourceNotFoundException when quiz is not found
      */
-    protected void askNextQuestion(Long userId, Long eventId, Long quizId) {
+    protected void askNextQuestion(Long userId, Long eventId, Long quizId) throws ResourceNotFoundException {
         if (userId == null || eventId == null || quizId == null) {
             return;
         }
@@ -422,7 +423,7 @@ public abstract class AbstractMessageServiceImpl implements MessageService {
                     handleStop(userId, notificationType);
                     break;
                 case CONFIRM:
-                    user = userService.findById(userId);
+                    user = userService.get(userId);
                     if (notificationType == NotificationType.SLACK) {
                         user.setSlackVerified(true);
                     } else if (notificationType == NotificationType.SMS) {
@@ -437,7 +438,7 @@ public abstract class AbstractMessageServiceImpl implements MessageService {
                             NotificationEventType.USER_VERIFIED);
                     break;
                 case DECLINE:
-                    user = userService.findById(userId);
+                    user = userService.get(userId);
                     if (notificationType == NotificationType.SLACK) {
                         user.setSlackEnabled(false);
                     } else if (notificationType == NotificationType.SMS) {

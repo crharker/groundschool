@@ -7,11 +7,13 @@ package com.starfireaviation.groundschool.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.hazelcast.core.HazelcastInstance;
 import com.starfireaviation.groundschool.model.ReferenceMaterial;
 import com.starfireaviation.groundschool.model.sql.QuestionReferenceMaterialEntity;
 import com.starfireaviation.groundschool.model.sql.ReferenceMaterialEntity;
@@ -47,6 +49,17 @@ public class ReferenceMaterialServiceImpl implements ReferenceMaterialService {
     private MapperFacade mapper;
 
     /**
+     * HazelcastInstance
+     */
+    @Autowired
+    private HazelcastInstance hazelcastInstance;
+
+    /**
+     * ReferenceMaterialCache
+     */
+    private Map<Long, ReferenceMaterial> referenceMaterialCache;
+
+    /**
      * Initializes an instance of <code>UserServiceImpl</code> with the default data.
      */
     public ReferenceMaterialServiceImpl() {
@@ -58,10 +71,12 @@ public class ReferenceMaterialServiceImpl implements ReferenceMaterialService {
      *
      * @param referenceMaterialRepository ReferenceMaterialRepository
      * @param mapperFacade MapperFacade
+     * @param hazelcastInstance HazelcastInstance
      */
     public ReferenceMaterialServiceImpl(
             ReferenceMaterialRepository referenceMaterialRepository,
-            MapperFacade mapperFacade) {
+            MapperFacade mapperFacade,
+            HazelcastInstance hazelcastInstance) {
         this.referenceMaterialRepository = referenceMaterialRepository;
         mapper = mapperFacade;
     }
@@ -74,6 +89,10 @@ public class ReferenceMaterialServiceImpl implements ReferenceMaterialService {
         if (referenceMaterial == null) {
             return referenceMaterial;
         }
+        if (referenceMaterial.getId() != null) {
+            initCache();
+            referenceMaterialCache.remove(referenceMaterial.getId());
+        }
         return mapper.map(
                 referenceMaterialRepository.save(mapper.map(referenceMaterial, ReferenceMaterialEntity.class)),
                 ReferenceMaterial.class);
@@ -84,8 +103,10 @@ public class ReferenceMaterialServiceImpl implements ReferenceMaterialService {
      */
     @Override
     public ReferenceMaterial delete(long id) {
-        ReferenceMaterial referenceMaterial = mapper.map(findReferenceMaterialById(id), ReferenceMaterial.class);
+        ReferenceMaterial referenceMaterial = mapper.map(get(id), ReferenceMaterial.class);
         if (referenceMaterial != null) {
+            initCache();
+            referenceMaterialCache.remove(id);
             referenceMaterialRepository.delete(mapper.map(referenceMaterial, ReferenceMaterialEntity.class));
             for (QuestionReferenceMaterialEntity questionReferenceMaterial : questionReferenceMaterialRepository
                     .findByReferenceMaterialId(id)) {
@@ -99,11 +120,11 @@ public class ReferenceMaterialServiceImpl implements ReferenceMaterialService {
      * {@inheritDoc} Required implementation.
      */
     @Override
-    public List<ReferenceMaterial> findAllReferenceMaterials() {
+    public List<ReferenceMaterial> getAll() {
         List<ReferenceMaterial> referenceMaterials = new ArrayList<>();
         List<ReferenceMaterialEntity> referenceMaterialEntities = referenceMaterialRepository.findAll();
         for (ReferenceMaterialEntity referenceMaterialEntity : referenceMaterialEntities) {
-            referenceMaterials.add(mapper.map(referenceMaterialEntity, ReferenceMaterial.class));
+            referenceMaterials.add(get(referenceMaterialEntity.getId()));
         }
         return referenceMaterials;
     }
@@ -120,10 +141,8 @@ public class ReferenceMaterialServiceImpl implements ReferenceMaterialService {
             questionReferenceMaterialEntities
                     .parallelStream()
                     .map(
-                            questionReferenceMaterialEntity -> mapper.map(
-                                    referenceMaterialRepository.findById(
-                                            questionReferenceMaterialEntity.getReferenceMaterialId()),
-                                    ReferenceMaterial.class))
+                            questionReferenceMaterialEntity -> get(
+                                    questionReferenceMaterialEntity.getReferenceMaterialId()))
                     .collect(Collectors.toList());
         }
         return referenceMaterials;
@@ -133,8 +152,26 @@ public class ReferenceMaterialServiceImpl implements ReferenceMaterialService {
      * {@inheritDoc} Required implementation.
      */
     @Override
-    public ReferenceMaterial findReferenceMaterialById(long id) {
-        return mapper.map(referenceMaterialRepository.findById(id), ReferenceMaterial.class);
+    public ReferenceMaterial get(long id) {
+        initCache();
+        if (referenceMaterialCache.containsKey(id)) {
+            return referenceMaterialCache.get(id);
+        }
+        final ReferenceMaterial referenceMaterial = mapper.map(
+                referenceMaterialRepository.findById(id),
+                ReferenceMaterial.class);
+        referenceMaterialCache.put(id, referenceMaterial);
+        return referenceMaterial;
+    }
+
+    /**
+     * Initializes Hazelcast cache
+     */
+    private void initCache() {
+        if (referenceMaterialCache == null) {
+            //hazelcastInstance = Hazelcast.newHazelcastInstance(new Config());
+            referenceMaterialCache = hazelcastInstance.getMap("referencematerials");
+        }
     }
 
 }

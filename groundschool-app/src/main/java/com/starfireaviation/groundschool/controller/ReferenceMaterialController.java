@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.starfireaviation.groundschool.exception.ResourceNotFoundException;
 import com.starfireaviation.groundschool.model.ReferenceMaterial;
 import com.starfireaviation.groundschool.service.ReferenceMaterialService;
 
@@ -85,13 +86,15 @@ public class ReferenceMaterialController {
      * @param referenceMaterialId Long
      * @param principal Principal
      * @return ReferenceMaterial
+     * @throws ResourceNotFoundException when reference material is not found
      */
     @GetMapping(path = {
             "/{referenceMaterialId}"
     })
-    public ReferenceMaterial get(@PathVariable("referenceMaterialId") long referenceMaterialId, Principal principal) {
+    public ReferenceMaterial get(@PathVariable("referenceMaterialId") long referenceMaterialId, Principal principal)
+            throws ResourceNotFoundException {
         LOGGER.info(String.format("User is logged in as %s", principal.getName()));
-        return referenceMaterialService.findReferenceMaterialById(referenceMaterialId);
+        return referenceMaterialService.get(referenceMaterialId);
     }
 
     /**
@@ -116,13 +119,14 @@ public class ReferenceMaterialController {
      * @param referenceMaterialId Long
      * @param principal Principal
      * @return ReferenceMaterial
+     * @throws ResourceNotFoundException when reference material is not found
      */
     @DeleteMapping(path = {
             "/{referenceMaterialId}"
     })
     public ReferenceMaterial delete(
             @PathVariable("referenceMaterialId") long referenceMaterialId,
-            Principal principal) {
+            Principal principal) throws ResourceNotFoundException {
         LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         return referenceMaterialService.delete(referenceMaterialId);
     }
@@ -132,10 +136,11 @@ public class ReferenceMaterialController {
      *
      * @param principal Principal
      * @return list of ReferenceMaterial
+     * @throws ResourceNotFoundException when reference material is not found
      */
     @GetMapping
-    public List<ReferenceMaterial> list(Principal principal) {
+    public List<ReferenceMaterial> list(Principal principal) throws ResourceNotFoundException {
         LOGGER.info(String.format("User is logged in as %s", principal.getName()));
-        return referenceMaterialService.findAllReferenceMaterials();
+        return referenceMaterialService.getAll();
     }
 }

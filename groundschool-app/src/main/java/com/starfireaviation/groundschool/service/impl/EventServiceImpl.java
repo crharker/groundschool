@@ -8,13 +8,14 @@ package com.starfireaviation.groundschool.service.impl;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.hazelcast.core.HazelcastInstance;
+import com.starfireaviation.groundschool.exception.ResourceNotFoundException;
 import com.starfireaviation.groundschool.model.Event;
 import com.starfireaviation.groundschool.model.User;
 import com.starfireaviation.groundschool.model.sql.EventEntity;
@@ -33,11 +34,6 @@ import ma.glasnost.orika.MapperFacade;
  */
 @Service
 public class EventServiceImpl implements EventService {
-
-    /**
-     * Logger
-     */
-    private static final Logger LOGGER = LoggerFactory.getLogger(EventServiceImpl.class);
 
     /**
      * EventRepository
@@ -64,6 +60,17 @@ public class EventServiceImpl implements EventService {
     private MapperFacade mapper;
 
     /**
+     * HazelcastInstance
+     */
+    @Autowired
+    private HazelcastInstance hazelcastInstance;
+
+    /**
+     * EventCache
+     */
+    private Map<Long, Event> eventCache;
+
+    /**
      * Initializes an instance of <code>EventServiceImpl</code> with the default data.
      */
     public EventServiceImpl() {
@@ -75,8 +82,12 @@ public class EventServiceImpl implements EventService {
      *
      * @param eventRepository EventRepository
      * @param mapperFacade MapperFacade
+     * @param hazelcastInstance HazelcastInstance
      */
-    public EventServiceImpl(EventRepository eventRepository, MapperFacade mapperFacade) {
+    public EventServiceImpl(
+            EventRepository eventRepository,
+            MapperFacade mapperFacade,
+            HazelcastInstance hazelcastInstance) {
         this.eventRepository = eventRepository;
         mapper = mapperFacade;
     }
@@ -89,6 +100,10 @@ public class EventServiceImpl implements EventService {
         if (event == null) {
             return event;
         }
+        if (event.getId() != null) {
+            initCache();
+            eventCache.remove(event.getId());
+        }
         return mapper.map(eventRepository.save(mapper.map(event, EventEntity.class)), Event.class);
     }
 
@@ -96,10 +111,12 @@ public class EventServiceImpl implements EventService {
      * {@inheritDoc} Required implementation.
      */
     @Override
-    public Event delete(long id) {
-        Event event = mapper.map(findById(id, true), Event.class);
+    public Event delete(long id) throws ResourceNotFoundException {
+        Event event = mapper.map(get(id), Event.class);
         if (event != null) {
             eventRepository.delete(mapper.map(event, EventEntity.class));
+            initCache();
+            eventCache.remove(id);
         }
         return event;
     }
@@ -108,19 +125,11 @@ public class EventServiceImpl implements EventService {
      * {@inheritDoc} Required implementation.
      */
     @Override
-    public List<Event> findAllEvents() {
+    public List<Event> getAll() throws ResourceNotFoundException {
         List<Event> events = new ArrayList<>();
         List<EventEntity> eventEntities = eventRepository.findAll();
         for (EventEntity eventEntity : eventEntities) {
-            Event event = mapper.map(eventEntity, Event.class);
-            List<EventParticipantEntity> EventParticipantEntities = eventUserRepository.findByEventId(
-                    eventEntity.getId());
-            List<User> participants = new ArrayList<>();
-            for (EventParticipantEntity eventParticipantEntity : EventParticipantEntities) {
-                participants.add(userService.findById(eventParticipantEntity.getUserId()));
-            }
-            event.setParticipants(participants);
-            events.add(event);
+            events.add(get(eventEntity.getId()));
         }
         return events;
     }
@@ -129,33 +138,20 @@ public class EventServiceImpl implements EventService {
      * {@inheritDoc} Required implementation.
      */
     @Override
-    public Event findById(long id, boolean partial) {
-        EventEntity eventEntity = eventRepository.findById(id);
-        LOGGER.info(String.format("retrieved lessonPlanId [%s] for event [%s]", eventEntity.getLessonPlanId(), id));
-        Event event = mapper.map(eventEntity, Event.class);
-        if (!partial) {
-            List<EventParticipantEntity> EventParticipantEntities = eventUserRepository.findByEventId(id);
-            List<User> participants = new ArrayList<>();
-            for (EventParticipantEntity eventParticipantEntity : EventParticipantEntities) {
-                participants.add(userService.findById(eventParticipantEntity.getUserId()));
-            }
-            event.setParticipants(participants);
-            if (event.getParticipants() != null) {
-                LOGGER.info(
-                        String.format(
-                                "event [%s] has [%s] participants and lessonPlanId [%s]",
-                                id,
-                                event.getParticipants().size(),
-                                event.getLessonPlanId()));
-            } else {
-                LOGGER.info(
-                        String.format(
-                                "event [%s] has lessonPlanId [%s]",
-                                id,
-                                event.getParticipants().size(),
-                                event.getLessonPlanId()));
-            }
+    public Event get(long id) throws ResourceNotFoundException {
+        initCache();
+        if (eventCache.containsKey(id)) {
+            return eventCache.get(id);
         }
+        final EventEntity eventEntity = eventRepository.findById(id);
+        final Event event = mapper.map(eventEntity, Event.class);
+        final List<EventParticipantEntity> EventParticipantEntities = eventUserRepository.findByEventId(id);
+        final List<User> participants = new ArrayList<>();
+        for (final EventParticipantEntity eventParticipantEntity : EventParticipantEntities) {
+            participants.add(userService.get(eventParticipantEntity.getUserId()));
+        }
+        event.setParticipants(participants);
+        eventCache.put(id, event);
         return event;
     }
 
@@ -228,10 +224,10 @@ public class EventServiceImpl implements EventService {
      * {@inheritDoc} Required implementation.
      */
     @Override
-    public boolean checkin(Long eventId, Long userId, String code) {
+    public boolean checkin(Long eventId, Long userId, String code) throws ResourceNotFoundException {
         boolean success = false;
         EventParticipantEntity eventUserEntity = eventUserRepository.findByEventAndUserId(eventId, userId);
-        Event event = findById(eventId, true);
+        Event event = get(eventId);
         if (eventUserEntity != null
                 && event != null
                 && (!event.isCheckinCodeRequired()
@@ -293,7 +289,7 @@ public class EventServiceImpl implements EventService {
      * {@inheritDoc} Required implementation.
      */
     @Override
-    public Long isCheckedIn(Long userId) {
+    public Long isCheckedIn(Long userId) throws ResourceNotFoundException {
         Long currentEventId = getCurrentEvent();
         Long eventId = null;
         if (didCheckIn(currentEventId, userId)) {
@@ -306,9 +302,9 @@ public class EventServiceImpl implements EventService {
      * {@inheritDoc} Required implementation.
      */
     @Override
-    public Long getCurrentEvent() {
+    public Long getCurrentEvent() throws ResourceNotFoundException {
         Long eventId = null;
-        List<Event> events = findAllEvents();
+        List<Event> events = getAll();
         for (Event event : events) {
             if (event.isStarted() && !event.isCompleted()) {
                 eventId = event.getId();
@@ -330,6 +326,16 @@ public class EventServiceImpl implements EventService {
             registered = true;
         }
         return registered;
+    }
+
+    /**
+     * Initializes Hazelcast cache
+     */
+    private void initCache() {
+        if (eventCache == null) {
+            //hazelcastInstance = Hazelcast.newHazelcastInstance(new Config());
+            eventCache = hazelcastInstance.getMap("events");
+        }
     }
 
 }

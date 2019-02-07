@@ -30,25 +30,26 @@ public interface EventService {
      *
      * @param id Long
      * @return Event
+     * @throws ResourceNotFoundException when the event is not found
      */
-    public Event delete(long id);
+    public Event delete(long id) throws ResourceNotFoundException;
 
     /**
      * Gets all events
      *
      * @return list of Event
+     * @throws ResourceNotFoundException when the event is not found
      */
-    public List<Event> findAllEvents();
+    public List<Event> getAll() throws ResourceNotFoundException;
 
     /**
      * Gets a event
      *
      * @param id Long
-     * @param partial only load base event data
      * @return Event
      * @throws ResourceNotFoundException when the event is not found
      */
-    public Event findById(long id, boolean partial) throws ResourceNotFoundException;
+    public Event get(long id) throws ResourceNotFoundException;
 
     /**
      * Register a user for an event
@@ -119,8 +120,9 @@ public interface EventService {
      * Returns the current (started but not completed) event. If no event is found, null is returned
      *
      * @return Event ID
+     * @throws ResourceNotFoundException when event is not found
      */
-    public Long getCurrentEvent();
+    public Long getCurrentEvent() throws ResourceNotFoundException;
 
     /**
      * Is the user checked in to the current event?

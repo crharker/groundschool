@@ -7,10 +7,12 @@ package com.starfireaviation.groundschool.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.hazelcast.core.HazelcastInstance;
 import com.starfireaviation.groundschool.exception.ResourceNotFoundException;
 import com.starfireaviation.groundschool.model.Answer;
 import com.starfireaviation.groundschool.model.sql.AnswerEntity;
@@ -40,10 +42,21 @@ public class AnswerServiceImpl implements AnswerService {
     private QuestionRepository questionRepository;
 
     /**
+     * HazelcastInstance
+     */
+    @Autowired
+    private HazelcastInstance hazelcastInstance;
+
+    /**
      * MapperFacade
      */
     @Autowired
     private MapperFacade mapper;
+
+    /**
+     * AnswerCache
+     */
+    private Map<Long, Answer> answerCache;
 
     /**
      * Initializes an instance of <code>AnswerServiceImpl</code> with the default data.
@@ -57,8 +70,12 @@ public class AnswerServiceImpl implements AnswerService {
      *
      * @param answerRepository AnswerRepository
      * @param mapperFacade MapperFacade
+     * @param hazelcastInstance HazelcastInstance
      */
-    public AnswerServiceImpl(AnswerRepository answerRepository, MapperFacade mapperFacade) {
+    public AnswerServiceImpl(
+            AnswerRepository answerRepository,
+            MapperFacade mapperFacade,
+            HazelcastInstance hazelcastInstance) {
         this.answerRepository = answerRepository;
         mapper = mapperFacade;
     }
@@ -73,6 +90,8 @@ public class AnswerServiceImpl implements AnswerService {
         }
         AnswerEntity answerEntity = mapper.map(answer, AnswerEntity.class);
         answerEntity.setQuestion(questionRepository.findById(questionId));
+        initCache();
+        answerCache.remove(questionId);
         return mapper.map(answerRepository.save(answerEntity), Answer.class);
     }
 
@@ -81,9 +100,11 @@ public class AnswerServiceImpl implements AnswerService {
      */
     @Override
     public Answer delete(long id) throws ResourceNotFoundException {
-        Answer answer = mapper.map(findAnswerById(id), Answer.class);
+        Answer answer = mapper.map(get(id), Answer.class);
         if (answer != null) {
             answerRepository.delete(mapper.map(answer, AnswerEntity.class));
+            initCache();
+            answerCache.remove(id);
         }
         return answer;
     }
@@ -92,11 +113,11 @@ public class AnswerServiceImpl implements AnswerService {
      * {@inheritDoc} Required implementation.
      */
     @Override
-    public List<Answer> findAllAnswers() {
+    public List<Answer> getAll() throws ResourceNotFoundException {
         List<Answer> answers = new ArrayList<>();
         List<AnswerEntity> answerEntities = answerRepository.findAll();
         for (AnswerEntity answerEntity : answerEntities) {
-            answers.add(mapper.map(answerEntity, Answer.class));
+            answers.add(get(answerEntity.getId()));
         }
         return answers;
     }
@@ -105,11 +126,11 @@ public class AnswerServiceImpl implements AnswerService {
      * {@inheritDoc} Required implementation.
      */
     @Override
-    public List<Answer> findByQuestionId(Long questionId) {
+    public List<Answer> findByQuestionId(Long questionId) throws ResourceNotFoundException {
         List<Answer> answers = new ArrayList<>();
         List<AnswerEntity> answerEntities = answerRepository.findAllAnswerByQuestionId(questionId);
         for (AnswerEntity answerEntity : answerEntities) {
-            answers.add(mapper.map(answerEntity, Answer.class));
+            answers.add(get(answerEntity.getId()));
         }
         return answers;
     }
@@ -118,12 +139,28 @@ public class AnswerServiceImpl implements AnswerService {
      * {@inheritDoc} Required implementation.
      */
     @Override
-    public Answer findAnswerById(long id) throws ResourceNotFoundException {
+    public Answer get(long id) throws ResourceNotFoundException {
+        initCache();
+        if (answerCache.containsKey(id)) {
+            return answerCache.get(id);
+        }
         AnswerEntity answerEntity = answerRepository.findById(id);
         if (answerEntity == null) {
             throw new ResourceNotFoundException();
         }
-        return mapper.map(answerEntity, Answer.class);
+        final Answer answer = mapper.map(answerEntity, Answer.class);
+        answerCache.put(id, answer);
+        return answer;
+    }
+
+    /**
+     * Initializes Hazelcast cache
+     */
+    private void initCache() {
+        if (answerCache == null) {
+            //hazelcastInstance = Hazelcast.newHazelcastInstance(new Config());
+            answerCache = hazelcastInstance.getMap("answers");
+        }
     }
 
 }

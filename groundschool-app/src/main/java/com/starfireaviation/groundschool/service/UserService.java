@@ -30,23 +30,26 @@ public interface UserService {
      * Gets all users
      *
      * @return list of Users
+     * @throws ResourceNotFoundException when no user is found for the provided user ID
      */
-    public List<User> findAllUsers();
+    public List<User> getAll() throws ResourceNotFoundException;
 
     /**
      * Gets a user
      *
      * @param id Long
      * @return User
+     * @throws ResourceNotFoundException when no user is found for the provided user ID
      */
-    public User findById(long id);
+    public User get(long id) throws ResourceNotFoundException;
 
     /**
      * Gets a user by username
      *
      * @param username username
      * @return User
+     * @throws ResourceNotFoundException when no user is found for the provided user ID
      */
-    public User findByUsername(String username);
+    public User findByUsername(String username) throws ResourceNotFoundException;
 
 }

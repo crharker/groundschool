@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.starfireaviation.groundschool.exception.ResourceNotFoundException;
 import com.starfireaviation.groundschool.model.Statistic;
 import com.starfireaviation.groundschool.model.StatisticType;
 import com.starfireaviation.groundschool.service.StatisticService;
@@ -86,13 +87,15 @@ public class StatisticController {
      * @param statisticId Long
      * @param principal Principal
      * @return Statistic
+     * @throws ResourceNotFoundException when statistic is not found
      */
     @GetMapping(path = {
             "/{statisticId}"
     })
-    public Statistic get(@PathVariable("statisticId") long statisticId, Principal principal) {
+    public Statistic get(@PathVariable("statisticId") long statisticId, Principal principal)
+            throws ResourceNotFoundException {
         LOGGER.info(String.format("User is logged in as %s", principal.getName()));
-        return statisticService.findById(statisticId);
+        return statisticService.get(statisticId);
     }
 
     /**
@@ -117,11 +120,13 @@ public class StatisticController {
      * @param statisticId Long
      * @param principal Principal
      * @return Statistic
+     * @throws ResourceNotFoundException when statistic is not found
      */
     @DeleteMapping(path = {
             "/{statisticId}"
     })
-    public Statistic delete(@PathVariable("statisticId") final long statisticId, Principal principal) {
+    public Statistic delete(@PathVariable("statisticId") final long statisticId, Principal principal)
+            throws ResourceNotFoundException {
         LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         return statisticService.delete(statisticId);
     }
@@ -131,11 +136,12 @@ public class StatisticController {
      *
      * @param principal Principal
      * @return list of Statistic
+     * @throws ResourceNotFoundException when statistic is not found
      */
     @GetMapping
-    public List<Statistic> list(Principal principal) {
+    public List<Statistic> list(Principal principal) throws ResourceNotFoundException {
         LOGGER.info(String.format("User is logged in as %s", principal.getName()));
-        return statisticService.findAllStatistics();
+        return statisticService.getAll();
     }
 
     /**
@@ -145,6 +151,7 @@ public class StatisticController {
      * @param statisticType StatisticType
      * @param principal Principal
      * @return list of Statistic
+     * @throws ResourceNotFoundException when user or statistic is not found
      */
     @GetMapping(path = {
             "/user/{userId}/{statisticType}"
@@ -152,7 +159,7 @@ public class StatisticController {
     public List<Statistic> listByUser(
             @PathVariable("userId") final Long userId,
             @PathVariable("statisticType") final StatisticType statisticType,
-            Principal principal) {
+            Principal principal) throws ResourceNotFoundException {
         LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         return statisticService.findByUserId(userId, statisticType);
     }
@@ -164,6 +171,7 @@ public class StatisticController {
      * @param statisticType StatisticType
      * @param principal Principal
      * @return list of Statistic
+     * @throws ResourceNotFoundException when event or statistic is not found
      */
     @GetMapping(path = {
             "/event/{eventId}/{statisticType}"
@@ -171,7 +179,7 @@ public class StatisticController {
     public List<Statistic> listByEvent(
             @PathVariable("eventId") final Long eventId,
             @PathVariable("statisticType") final StatisticType statisticType,
-            Principal principal) {
+            Principal principal) throws ResourceNotFoundException {
         LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         return statisticService.findByEventId(eventId, statisticType);
     }
@@ -183,6 +191,7 @@ public class StatisticController {
      * @param statisticType StatisticType
      * @param principal Principal
      * @return list of Statistic
+     * @throws ResourceNotFoundException when question of statistic is not found
      */
     @GetMapping(path = {
             "/question/{questionId}/{statisticType}"
@@ -190,7 +199,7 @@ public class StatisticController {
     public List<Statistic> listByQuestion(
             @PathVariable("questionId") final Long questionId,
             @PathVariable("statisticType") final StatisticType statisticType,
-            Principal principal) {
+            Principal principal) throws ResourceNotFoundException {
         LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         return statisticService.findByQuestionId(questionId, statisticType);
     }
@@ -202,6 +211,7 @@ public class StatisticController {
      * @param statisticType StatisticType
      * @param principal Principal
      * @return list of Statistic
+     * @throws ResourceNotFoundException when quiz or statistic is not found
      */
     @GetMapping(path = {
             "/quiz/{quizId}/{statisticType}"
@@ -209,7 +219,7 @@ public class StatisticController {
     public List<Statistic> listByQuiz(
             @PathVariable("quizId") final Long quizId,
             @PathVariable("statisticType") final StatisticType statisticType,
-            Principal principal) {
+            Principal principal) throws ResourceNotFoundException {
         LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         return statisticService.findByQuizId(quizId, statisticType);
     }
