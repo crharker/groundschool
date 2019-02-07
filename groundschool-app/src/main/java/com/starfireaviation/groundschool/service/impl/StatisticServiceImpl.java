@@ -8,12 +8,14 @@ package com.starfireaviation.groundschool.service.impl;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.hazelcast.core.HazelcastInstance;
 import com.starfireaviation.groundschool.model.Statistic;
 import com.starfireaviation.groundschool.model.StatisticType;
 import com.starfireaviation.groundschool.model.sql.StatisticEntity;
@@ -57,6 +59,17 @@ public class StatisticServiceImpl implements StatisticService {
     private MapperFacade mapper;
 
     /**
+     * HazelcastInstance
+     */
+    @Autowired
+    private HazelcastInstance hazelcastInstance;
+
+    /**
+     * StatisticCache
+     */
+    private Map<Long, Statistic> statisticCache;
+
+    /**
      * Initializes an instance of <code>StatisticServiceImpl</code> with the default data.
      */
     public StatisticServiceImpl() {
@@ -68,8 +81,12 @@ public class StatisticServiceImpl implements StatisticService {
      *
      * @param statisticRepository StatisticRepository
      * @param mapperFacade MapperFacade
+     * @param hazelcastInstance HazelcastInstance
      */
-    public StatisticServiceImpl(StatisticRepository statisticRepository, MapperFacade mapperFacade) {
+    public StatisticServiceImpl(
+            StatisticRepository statisticRepository,
+            MapperFacade mapperFacade,
+            HazelcastInstance hazelcastInstance) {
         this.statisticRepository = statisticRepository;
         mapper = mapperFacade;
     }
@@ -93,6 +110,10 @@ public class StatisticServiceImpl implements StatisticService {
             default:
                 // Do nothing
         }
+        if (statistic.getId() != null) {
+            initCache();
+            statisticCache.remove(statistic.getId());
+        }
         return mapper.map(statisticRepository.save(mapper.map(statistic, StatisticEntity.class)), Statistic.class);
     }
 
@@ -101,8 +122,10 @@ public class StatisticServiceImpl implements StatisticService {
      */
     @Override
     public Statistic delete(long id) {
-        final Statistic statistic = mapper.map(findById(id), Statistic.class);
+        final Statistic statistic = mapper.map(get(id), Statistic.class);
         if (statistic != null) {
+            initCache();
+            statisticCache.remove(id);
             statisticRepository.delete(mapper.map(statistic, StatisticEntity.class));
         }
         return statistic;
@@ -112,11 +135,11 @@ public class StatisticServiceImpl implements StatisticService {
      * {@inheritDoc} Required implementation.
      */
     @Override
-    public List<Statistic> findAllStatistics() {
+    public List<Statistic> getAll() {
         final List<Statistic> statistics = new ArrayList<>();
         final List<StatisticEntity> statisticEntities = statisticRepository.findAll();
         for (final StatisticEntity statisticEntity : statisticEntities) {
-            statistics.add(mapper.map(statisticEntity, Statistic.class));
+            statistics.add(get(statisticEntity.getId()));
         }
         return statistics;
     }
@@ -125,8 +148,14 @@ public class StatisticServiceImpl implements StatisticService {
      * {@inheritDoc} Required implementation.
      */
     @Override
-    public Statistic findById(long id) {
-        return mapper.map(statisticRepository.findById(id), Statistic.class);
+    public Statistic get(long id) {
+        initCache();
+        if (statisticCache.containsKey(id)) {
+            return statisticCache.get(id);
+        }
+        final Statistic statistic = mapper.map(statisticRepository.findById(id), Statistic.class);
+        statisticCache.put(id, statistic);
+        return statistic;
     }
 
     /**
@@ -226,6 +255,16 @@ public class StatisticServiceImpl implements StatisticService {
             // Do nothing
         }
         return value;
+    }
+
+    /**
+     * Initializes Hazelcast cache
+     */
+    private void initCache() {
+        if (statisticCache == null) {
+            //hazelcastInstance = Hazelcast.newHazelcastInstance(new Config());
+            statisticCache = hazelcastInstance.getMap("statistics");
+        }
     }
 
 }

@@ -7,12 +7,14 @@ package com.starfireaviation.groundschool.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.hazelcast.core.HazelcastInstance;
 import com.starfireaviation.groundschool.exception.ResourceNotFoundException;
 import com.starfireaviation.groundschool.model.Role;
 import com.starfireaviation.groundschool.model.User;
@@ -48,6 +50,17 @@ public class UserServiceImpl implements UserService {
     private MapperFacade mapper;
 
     /**
+     * HazelcastInstance
+     */
+    @Autowired
+    private HazelcastInstance hazelcastInstance;
+
+    /**
+     * UserCache
+     */
+    private Map<Long, User> userCache;
+
+    /**
      * Initializes an instance of <code>UserServiceImpl</code> with the default data.
      */
     public UserServiceImpl() {
@@ -59,10 +72,12 @@ public class UserServiceImpl implements UserService {
      *
      * @param userRepository UserRepository
      * @param mapperFacade MapperFacade
+     * @param hazelcastInstance HazelcastInstance
      */
     public UserServiceImpl(
             UserRepository userRepository,
-            MapperFacade mapperFacade) {
+            MapperFacade mapperFacade,
+            HazelcastInstance hazelcastInstance) {
         this.userRepository = userRepository;
         mapper = mapperFacade;
     }
@@ -76,7 +91,10 @@ public class UserServiceImpl implements UserService {
             return user;
         }
         final Long userId = user.getId();
+        initCache();
+        userCache.remove(userId);
         if (userId != null) {
+            userCache.remove(userId);
             final UserEntity existingUser = findByIdWithPassword(userId);
             if (existingUser == null) {
                 final String msg = String.format("No user found for ID [%s]", userId);
@@ -105,11 +123,11 @@ public class UserServiceImpl implements UserService {
      * {@inheritDoc} Required implementation.
      */
     @Override
-    public List<User> findAllUsers() {
+    public List<User> getAll() {
         final List<User> users = new ArrayList<>();
         final List<UserEntity> userEntities = userRepository.findAll();
         for (UserEntity userEntity : userEntities) {
-            final User user = mapper.map(userEntity, User.class);
+            final User user = get(userEntity.getId());
             user.setPassword(null);
             users.add(user);
         }
@@ -120,7 +138,11 @@ public class UserServiceImpl implements UserService {
      * {@inheritDoc} Required implementation.
      */
     @Override
-    public User findById(long id) {
+    public User get(long id) {
+        initCache();
+        if (userCache.containsKey(id)) {
+            return userCache.get(id);
+        }
         final User user = mapper.map(userRepository.findById(id), User.class);
         user.setPassword(null);
         return user;
@@ -133,6 +155,8 @@ public class UserServiceImpl implements UserService {
     public User findByUsername(String username) {
         final User user = mapper.map(userRepository.findByUsername(username), User.class);
         user.setPassword(null);
+        initCache();
+        userCache.put(user.getId(), user);
         return user;
     }
 
@@ -144,6 +168,16 @@ public class UserServiceImpl implements UserService {
      */
     private UserEntity findByIdWithPassword(long userId) {
         return userRepository.findById(userId);
+    }
+
+    /**
+     * Initializes Hazelcast cache
+     */
+    private void initCache() {
+        if (userCache == null) {
+            //hazelcastInstance = Hazelcast.newHazelcastInstance(new Config());
+            userCache = hazelcastInstance.getMap("users");
+        }
     }
 
 }

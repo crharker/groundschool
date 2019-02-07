@@ -8,6 +8,7 @@ package com.starfireaviation.groundschool.service.impl;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ForkJoinPool;
 import java.util.stream.Collectors;
@@ -17,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.hazelcast.core.HazelcastInstance;
 import com.starfireaviation.groundschool.exception.ResourceNotFoundException;
 import com.starfireaviation.groundschool.model.NotificationEventType;
 import com.starfireaviation.groundschool.model.NotificationType;
@@ -92,6 +94,17 @@ public class QuizServiceImpl implements QuizService {
     private MapperFacade mapper;
 
     /**
+     * HazelcastInstance
+     */
+    @Autowired
+    private HazelcastInstance hazelcastInstance;
+
+    /**
+     * QuizCache
+     */
+    private Map<Long, Quiz> quizCache;
+
+    /**
      * Initializes an instance of <code>QuizServiceImpl</code> with the default data.
      */
     public QuizServiceImpl() {
@@ -103,8 +116,12 @@ public class QuizServiceImpl implements QuizService {
      *
      * @param quizRepository QuizRepository
      * @param mapperFacade MapperFacade
+     * @param hazelcastInstance HazelcastInstance
      */
-    public QuizServiceImpl(QuizRepository quizRepository, MapperFacade mapperFacade) {
+    public QuizServiceImpl(
+            QuizRepository quizRepository,
+            MapperFacade mapperFacade,
+            HazelcastInstance hazelcastInstance) {
         this.quizRepository = quizRepository;
         mapper = mapperFacade;
     }
@@ -113,11 +130,11 @@ public class QuizServiceImpl implements QuizService {
      * {@inheritDoc} Required implementation.
      */
     @Override
-    public Quiz store(final Quiz quiz, final boolean partial) {
+    public Quiz store(final Quiz quiz) {
         if (quiz == null) {
             return quiz;
         }
-        if (quiz.getId() != null && !partial) {
+        if (quiz.getId() != null) {
             final List<QuizQuestionEntity> quizQuestions = quizQuestionRepository.findByQuizId(quiz.getId());
             final List<QuizQuestionEntity> keepList = new ArrayList<>();
             if (quiz.getQuestions() != null && quiz.getQuestions().size() > 0) {
@@ -148,8 +165,12 @@ public class QuizServiceImpl implements QuizService {
                 }
             }
         }
+        if (quiz.getId() != null) {
+            initCache();
+            quizCache.remove(quiz.getId());
+        }
         final QuizEntity quizEntity = quizRepository.save(mapper.map(quiz, QuizEntity.class));
-        return findById(quizEntity.getId(), false);
+        return get(quizEntity.getId());
     }
 
     /**
@@ -157,9 +178,11 @@ public class QuizServiceImpl implements QuizService {
      */
     @Override
     public Quiz delete(final long id) {
-        final Quiz quiz = mapper.map(findById(id, true), Quiz.class);
+        final Quiz quiz = mapper.map(get(id), Quiz.class);
         if (quiz != null) {
             quizRepository.delete(mapper.map(quiz, QuizEntity.class));
+            initCache();
+            quizCache.remove(id);
             // TODO delete quiz/questions
         }
         return quiz;
@@ -169,12 +192,11 @@ public class QuizServiceImpl implements QuizService {
      * {@inheritDoc} Required implementation.
      */
     @Override
-    public List<Quiz> findAllQuizzes() {
+    public List<Quiz> getAll() {
         final List<Quiz> quizzes = new ArrayList<>();
         final List<QuizEntity> quizEntities = quizRepository.findAll();
         for (QuizEntity quizEntity : quizEntities) {
-            final Quiz quiz = mapper.map(quizEntity, Quiz.class);
-            quizzes.add(quiz);
+            quizzes.add(get(quizEntity.getId()));
         }
         return quizzes;
     }
@@ -183,11 +205,14 @@ public class QuizServiceImpl implements QuizService {
      * {@inheritDoc} Required implementation.
      */
     @Override
-    public Quiz findById(final long id, final boolean partial) {
-        final Quiz quiz = mapper.map(quizRepository.findById(id), Quiz.class);
-        if (!partial) {
-            addQuizQuestions(quiz);
+    public Quiz get(final long id) {
+        initCache();
+        if (quizCache.containsKey(id)) {
+            return quizCache.get(id);
         }
+        final Quiz quiz = mapper.map(quizRepository.findById(id), Quiz.class);
+        addQuizQuestions(quiz);
+        quizCache.put(id, quiz);
         return quiz;
     }
 
@@ -195,16 +220,16 @@ public class QuizServiceImpl implements QuizService {
      * {@inheritDoc} Required implementation.
      */
     @Override
-    public Quiz start(final long quizId) {
-        Quiz quiz = findById(quizId, true);
+    public Quiz start(final long quizId) throws ResourceNotFoundException {
+        Quiz quiz = get(quizId);
         if (quiz != null && !quiz.isStarted()) {
             quiz.setStarted(true);
             quiz.setStartTime(LocalDateTime.now());
             quiz.setCompleted(false);
             quiz.setCompletedTime(null);
-            quiz = store(quiz, true);
+            quiz = store(quiz);
             final Long eventId = eventService.getCurrentEvent();
-            final Long firstQuestionId = determineFirstQuestion(findById(quizId, false));
+            final Long firstQuestionId = determineFirstQuestion(get(quizId));
             final List<Long> eventUsers = eventService.getAllEventCheckedInUsers(eventId);
             for (Long userId : eventUsers) {
                 sendQuestionAskedNotification(firstQuestionId, eventId, userId);
@@ -238,11 +263,11 @@ public class QuizServiceImpl implements QuizService {
      */
     @Override
     public Quiz complete(final long quizId) {
-        Quiz quiz = findById(quizId, true);
+        Quiz quiz = get(quizId);
         if (quiz != null && quiz.isStarted()) {
             quiz.setCompleted(true);
             quiz.setCompletedTime(LocalDateTime.now());
-            quiz = store(quiz, true);
+            quiz = store(quiz);
         }
         return quiz;
     }
@@ -253,7 +278,7 @@ public class QuizServiceImpl implements QuizService {
     @Override
     public Long getCurrentQuiz() {
         Long current = null;
-        List<Quiz> quizzes = findAllQuizzes();
+        List<Quiz> quizzes = getAll();
         for (Quiz quiz : quizzes) {
             if (quiz.isStarted() && !quiz.isCompleted()) {
                 current = quiz.getId();
@@ -280,10 +305,10 @@ public class QuizServiceImpl implements QuizService {
      * {@inheritDoc} Required implementation.
      */
     @Override
-    public Quiz addQuestion(final long quizId, final long questionId) {
+    public Quiz addQuestion(final long quizId, final long questionId) throws ResourceNotFoundException {
         LOGGER.info(String.format("Adding question ID [%s] to quiz ID [%s]", questionId, quizId));
-        final Quiz quiz = findById(quizId, false);
-        final Question question = questionService.findById(questionId, true);
+        final Quiz quiz = get(quizId);
+        final Question question = questionService.get(questionId);
         List<Question> questions = quiz.getQuestions();
         // Initialize list if null
         if (questions == null) {
@@ -301,7 +326,7 @@ public class QuizServiceImpl implements QuizService {
             questions.add(question);
         }
         quiz.setQuestions(questions);
-        return store(quiz, false);
+        return store(quiz);
     }
 
     /**
@@ -310,7 +335,7 @@ public class QuizServiceImpl implements QuizService {
     @Override
     public Quiz removeQuestion(final long quizId, final long questionId) {
         LOGGER.info(String.format("Removing question ID [%s] from quiz ID [%s]", questionId, quizId));
-        final Quiz quiz = findById(quizId, false);
+        final Quiz quiz = get(quizId);
         List<Question> questions = quiz.getQuestions();
         // Initialize list if null
         if (questions == null) {
@@ -324,28 +349,14 @@ public class QuizServiceImpl implements QuizService {
             }
         }
         quiz.setQuestions(list);
-        return store(quiz, false);
-    }
-
-    /**
-     * Determines the 1st question for a quiz
-     *
-     * @param quiz Quiz
-     * @return first question ID
-     */
-    private static Long determineFirstQuestion(Quiz quiz) {
-        Long questionId = null;
-        if (quiz.getQuestions() != null && quiz.getQuestions().size() > 0) {
-            questionId = quiz.getQuestions().get(0).getId();
-        }
-        return questionId;
+        return store(quiz);
     }
 
     /**
      * {@inheritDoc} Required implementation.
      */
     @Override
-    public Long getNextQuestion(final Long quizId, final Long userId) {
+    public Long getNextQuestion(final Long quizId, final Long userId) throws ResourceNotFoundException {
         Long questionId = null;
         if (quizId == null) {
             return questionId;
@@ -398,9 +409,15 @@ public class QuizServiceImpl implements QuizService {
                                         () -> quizQuestions
                                                 .parallelStream()
                                                 .map(
-                                                        quizQuestionEntity -> questionService.findById(
-                                                                quizQuestionEntity.getQuestionId(),
-                                                                true))
+                                                        quizQuestionEntity -> {
+                                                            try {
+                                                                return questionService.get(
+                                                                        quizQuestionEntity.getQuestionId());
+                                                            } catch (ResourceNotFoundException e) {
+                                                                // TODO do something?
+                                                                return null;
+                                                            }
+                                                        })
                                                 .collect(
                                                         Collectors.toList()))
                                 .get());
@@ -434,6 +451,30 @@ public class QuizServiceImpl implements QuizService {
             }
         }
         return quizQuestionEntity;
+    }
+
+    /**
+     * Determines the 1st question for a quiz
+     *
+     * @param quiz Quiz
+     * @return first question ID
+     */
+    private static Long determineFirstQuestion(Quiz quiz) {
+        Long questionId = null;
+        if (quiz.getQuestions() != null && quiz.getQuestions().size() > 0) {
+            questionId = quiz.getQuestions().get(0).getId();
+        }
+        return questionId;
+    }
+
+    /**
+     * Initializes Hazelcast cache
+     */
+    private void initCache() {
+        if (quizCache == null) {
+            //hazelcastInstance = Hazelcast.newHazelcastInstance(new Config());
+            quizCache = hazelcastInstance.getMap("quizzes");
+        }
     }
 
 }

@@ -69,9 +69,10 @@ public class QuestionController {
      * @param question Question
      * @param principal Principal
      * @return Question
+     * @throws ResourceNotFoundException when question is not found
      */
     @PostMapping
-    public Question post(@RequestBody Question question, Principal principal) {
+    public Question post(@RequestBody Question question, Principal principal) throws ResourceNotFoundException {
         LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         if (question == null) {
             return question;
@@ -85,13 +86,15 @@ public class QuestionController {
      * @param questionId Long
      * @param principal Principal
      * @return Question
+     * @throws ResourceNotFoundException when question is not found
      */
     @GetMapping(path = {
             "/{questionId}"
     })
-    public Question get(@PathVariable("questionId") long questionId, Principal principal) {
+    public Question get(@PathVariable("questionId") long questionId, Principal principal)
+            throws ResourceNotFoundException {
         LOGGER.info(String.format("User is logged in as %s", principal.getName()));
-        return questionService.findById(questionId, false);
+        return questionService.get(questionId);
     }
 
     /**
@@ -100,9 +103,10 @@ public class QuestionController {
      * @param question Question
      * @param principal Principal
      * @return Question
+     * @throws ResourceNotFoundException when question is not found
      */
     @PutMapping
-    public Question put(@RequestBody Question question, Principal principal) {
+    public Question put(@RequestBody Question question, Principal principal) throws ResourceNotFoundException {
         LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         if (question == null) {
             return question;
@@ -116,11 +120,13 @@ public class QuestionController {
      * @param questionId Long
      * @param principal Principal
      * @return Question
+     * @throws ResourceNotFoundException when question is not found
      */
     @DeleteMapping(path = {
             "/{questionId}"
     })
-    public Question delete(@PathVariable("questionId") long questionId, Principal principal) {
+    public Question delete(@PathVariable("questionId") long questionId, Principal principal)
+            throws ResourceNotFoundException {
         LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         return questionService.delete(questionId);
     }
@@ -130,11 +136,12 @@ public class QuestionController {
      *
      * @param principal Principal
      * @return list of Question
+     * @throws ResourceNotFoundException when question is not found
      */
     @GetMapping
-    public List<Question> list(Principal principal) {
+    public List<Question> list(Principal principal) throws ResourceNotFoundException {
         LOGGER.info(String.format("User is logged in as %s", principal.getName()));
-        return questionService.findAllQuestions();
+        return questionService.getAll();
     }
 
     /**

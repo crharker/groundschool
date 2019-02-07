@@ -39,16 +39,18 @@ public interface AnswerService {
      * Gets all answers
      *
      * @return list of Answer
+     * @throws ResourceNotFoundException when no answer is found
      */
-    public List<Answer> findAllAnswers();
+    public List<Answer> getAll() throws ResourceNotFoundException;
 
     /**
      * Gets all answers for a question
      *
      * @param questionId Long
      * @return list of Answer
+     * @throws ResourceNotFoundException when no answer is found
      */
-    public List<Answer> findByQuestionId(final Long questionId);
+    public List<Answer> findByQuestionId(final Long questionId) throws ResourceNotFoundException;
 
     /**
      * Gets a answer
@@ -57,6 +59,6 @@ public interface AnswerService {
      * @return Answer
      * @throws ResourceNotFoundException when no answer is found
      */
-    public Answer findAnswerById(final long id) throws ResourceNotFoundException;
+    public Answer get(final long id) throws ResourceNotFoundException;
 
 }

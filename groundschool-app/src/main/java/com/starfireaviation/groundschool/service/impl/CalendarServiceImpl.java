@@ -120,7 +120,7 @@ public class CalendarServiceImpl implements CalendarService {
     public boolean hasEvent(Long eventId) throws ResourceNotFoundException {
         Instant start = Instant.now();
         boolean found = false;
-        com.starfireaviation.groundschool.model.Event event = eventService.findById(eventId, true);
+        com.starfireaviation.groundschool.model.Event event = eventService.get(eventId);
         if (event.getCalendarUrl() != null) {
             found = true;
         }
@@ -144,8 +144,8 @@ public class CalendarServiceImpl implements CalendarService {
     public String add(Long eventId) throws ResourceNotFoundException {
         Instant start = Instant.now();
         String eventUrl = null;
-        com.starfireaviation.groundschool.model.Event groundSchoolEvent = eventService.findById(eventId, true);
-        LessonPlan lessonPlan = lessonPlanService.findById(eventId, true);
+        com.starfireaviation.groundschool.model.Event groundSchoolEvent = eventService.get(eventId);
+        LessonPlan lessonPlan = lessonPlanService.get(eventId);
         Address address = null;
         try {
             address = addressService.findByEventId(eventId);
@@ -252,12 +252,14 @@ public class CalendarServiceImpl implements CalendarService {
      *
      * @param event Event
      * @return DateTime
+     * @throws ResourceNotFoundException when lesson plan is not found
      */
-    private DateTime computeEventEnd(com.starfireaviation.groundschool.model.Event event) {
+    private DateTime computeEventEnd(com.starfireaviation.groundschool.model.Event event)
+            throws ResourceNotFoundException {
         if (event.getCompletedTime() != null) {
             return new DateTime(sdf.format(event.getCompletedTime()));
         }
-        LessonPlan lessonPlan = lessonPlanService.findById(event.getLessonPlanId(), false);
+        LessonPlan lessonPlan = lessonPlanService.get(event.getLessonPlanId());
         LocalDateTime endTime = event.getStartTime();
         for (Activity activity : lessonPlan.getActivities()) {
             endTime = endTime.plusSeconds(activity.getDuration());

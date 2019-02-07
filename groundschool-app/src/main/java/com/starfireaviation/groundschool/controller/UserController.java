@@ -148,18 +148,20 @@ public class UserController {
      * @param principal Principal
      * @return User
      * @throws AccessDeniedException when user doesn't have permission to perform operation
+     * @throws ResourceNotFoundException when user is not found
      */
     @GetMapping(path = {
             "/{userId}"
     })
-    public User get(@PathVariable("userId") long userId, Principal principal) throws AccessDeniedException {
+    public User get(@PathVariable("userId") long userId, Principal principal) throws AccessDeniedException,
+            ResourceNotFoundException {
         LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         final User loggedInUser = userService.findByUsername(principal.getName());
         final Role role = loggedInUser.getRole();
         if (role != Role.ADMIN && role != Role.INSTRUCTOR && loggedInUser.getId() != userId) {
             throw new AccessDeniedException("Current user is not authorized to update user information");
         }
-        return userService.findById(userId);
+        return userService.get(userId);
     }
 
     /**
@@ -167,11 +169,12 @@ public class UserController {
      *
      * @param username to verify
      * @return success
+     * @throws ResourceNotFoundException when user is not found
      */
     @GetMapping(path = {
             "/username/{username}/available"
     })
-    public boolean checkUsername(@PathVariable("username") String username) {
+    public boolean checkUsername(@PathVariable("username") String username) throws ResourceNotFoundException {
         return userService.findByUsername(username) != null ? false : true;
     }
 
@@ -180,11 +183,12 @@ public class UserController {
      *
      * @param principal Principal
      * @return list of Users
+     * @throws ResourceNotFoundException when user is not found
      */
     @GetMapping
-    public List<User> list(Principal principal) {
+    public List<User> list(Principal principal) throws ResourceNotFoundException {
         LOGGER.info(String.format("User is logged in as %s", principal.getName()));
-        return userService.findAllUsers();
+        return userService.getAll();
     }
 
     /**
@@ -199,7 +203,7 @@ public class UserController {
     })
     public void verify(@PathVariable("userId") long userId, @PathVariable("type") NotificationType type)
             throws ResourceNotFoundException {
-        final User user = userService.findById(userId);
+        final User user = userService.get(userId);
         if (user != null) {
             switch (type) {
                 case EMAIL:
@@ -232,7 +236,7 @@ public class UserController {
             @PathVariable("userId") long userId,
             @PathVariable("password") String password,
             @PathVariable("verificationCode") String verificationCode) throws ResourceNotFoundException {
-        final User user = userService.findById(userId);
+        final User user = userService.get(userId);
         if (user == null) {
             final String msg = String.format("No user found for ID [%s]", userId);
             LOGGER.warn(msg);
@@ -258,7 +262,7 @@ public class UserController {
             "/{userId}/password/reset"
     })
     public boolean passwordReset(@PathVariable("userId") long userId) throws ResourceNotFoundException {
-        final User user = userService.findById(userId);
+        final User user = userService.get(userId);
         if (user == null) {
             final String msg = String.format("No user found for ID [%s]", userId);
             LOGGER.warn(msg);
@@ -293,15 +297,16 @@ public class UserController {
      * @param userId User ID
      * @param principal Principal
      * @return login success
+     * @throws ResourceNotFoundException when user is not found
      */
     @PostMapping(path = {
             "/{userId}/login"
     })
     public boolean login(
             @PathVariable("userId") long userId,
-            Principal principal) {
+            Principal principal) throws ResourceNotFoundException {
         LOGGER.info(String.format("User is logged in as %s", principal.getName()));
-        return userService.findById(userId) != null ? true : false;
+        return userService.get(userId) != null ? true : false;
     }
 
     /**
@@ -309,11 +314,12 @@ public class UserController {
      *
      * @param email Email address of user being invited
      * @param principal Principal
+     * @throws ResourceNotFoundException when user is not found
      */
     @PostMapping(path = {
             "/invite"
     })
-    public void invite(@RequestBody String email, Principal principal) {
+    public void invite(@RequestBody String email, Principal principal) throws ResourceNotFoundException {
         LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         notificationService.invite(null, email);
     }

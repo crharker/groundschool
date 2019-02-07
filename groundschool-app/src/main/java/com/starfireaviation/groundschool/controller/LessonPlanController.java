@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.starfireaviation.groundschool.exception.ResourceNotFoundException;
 import com.starfireaviation.groundschool.model.LessonPlan;
 import com.starfireaviation.groundschool.service.LessonPlanService;
 
@@ -85,13 +86,15 @@ public class LessonPlanController {
      * @param lessonPlanId Long
      * @param principal Principal
      * @return LessonPlan
+     * @throws ResourceNotFoundException when lesson plan is not found
      */
     @GetMapping(path = {
             "/{lessonPlanId}"
     })
-    public LessonPlan get(@PathVariable("lessonPlanId") long lessonPlanId, Principal principal) {
+    public LessonPlan get(@PathVariable("lessonPlanId") long lessonPlanId, Principal principal)
+            throws ResourceNotFoundException {
         LOGGER.info(String.format("User is logged in as %s", principal.getName()));
-        return lessonPlanService.findById(lessonPlanId, false);
+        return lessonPlanService.get(lessonPlanId);
     }
 
     /**
@@ -116,11 +119,13 @@ public class LessonPlanController {
      * @param lessonPlanId Long
      * @param principal Principal
      * @return LessonPlan
+     * @throws ResourceNotFoundException when lesson plan is not found
      */
     @DeleteMapping(path = {
             "/{lessonPlanId}"
     })
-    public LessonPlan delete(@PathVariable("lessonPlanId") long lessonPlanId, Principal principal) {
+    public LessonPlan delete(@PathVariable("lessonPlanId") long lessonPlanId, Principal principal)
+            throws ResourceNotFoundException {
         LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         return lessonPlanService.delete(lessonPlanId);
     }
@@ -130,10 +135,11 @@ public class LessonPlanController {
      *
      * @param principal Principal
      * @return list of LessonPlans
+     * @throws ResourceNotFoundException when lesson plan is not found
      */
     @GetMapping
-    public List<LessonPlan> list(Principal principal) {
+    public List<LessonPlan> list(Principal principal) throws ResourceNotFoundException {
         LOGGER.info(String.format("User is logged in as %s", principal.getName()));
-        return lessonPlanService.findAllLessonPlans();
+        return lessonPlanService.getAll();
     }
 }

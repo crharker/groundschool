@@ -42,19 +42,21 @@ public interface NotificationService {
      * @param notificationEventType NotificationEventType
      * @param response given by user
      * @param originalMessage to be resent
+     * @throws ResourceNotFoundException when user is not found
      */
     public void resend(
             Long userId,
             NotificationType notificationType,
             NotificationEventType notificationEventType,
             String response,
-            String originalMessage);
+            String originalMessage) throws ResourceNotFoundException;
 
     /**
      * Invite
      *
      * @param userId Long
      * @param email Email address of user being invited
+     * @throws ResourceNotFoundException when user is not found
      */
-    public void invite(Long userId, String email);
+    public void invite(Long userId, String email) throws ResourceNotFoundException;
 }
