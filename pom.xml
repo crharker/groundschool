@@ -14,6 +14,7 @@
 
     <modules>
         <module>groundschool-app</module>
+        <!-- module>groundschool-acceptance-tests</module -->
         <module>groundschool-ui</module>
     </modules>
 

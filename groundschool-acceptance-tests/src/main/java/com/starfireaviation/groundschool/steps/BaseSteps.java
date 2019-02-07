@@ -16,8 +16,7 @@ import com.starfireaviation.groundschool.controller.EventController;
 import com.starfireaviation.groundschool.model.Role;
 import com.starfireaviation.groundschool.model.User;
 
-import io.restassured.response.Response;
-import io.restassured.response.ValidatableResponse;
+import io.restassured.RestAssured;
 import io.restassured.specification.RequestSpecification;
 
 /**
@@ -35,7 +34,7 @@ public class BaseSteps {
     /**
      * APPLICATION_HOST
      */
-    protected static final String APPLICATION_HOST = "http://localhost:8080";
+    protected static final String APPLICATION_HOST = "http://34.73.26.48";
 
     /**
      * EventController
@@ -44,19 +43,9 @@ public class BaseSteps {
     protected EventController eventController;
 
     /**
-     * Response
-     */
-    protected Response response;
-
-    /**
-     * ValidatableResponse
-     */
-    protected ValidatableResponse json;
-
-    /**
      * RequestSpecification
      */
-    protected RequestSpecification request;
+    protected RequestSpecification request = RestAssured.given();
 
     /**
      * ID

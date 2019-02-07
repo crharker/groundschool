@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Index - Membership Database Application</title>
+        <link href="/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+        <meta name="viewport" content="width=device-width" />
+        <link href="/Content/site.css" rel="stylesheet"/>
+        <link href="/Content/themes/jquery-ui-1.11.4/jquery-ui.css" rel="stylesheet"/>
+        <link href="/Content/themes/jquery-ui-1.11.4/jquery-ui.structure.css" rel="stylesheet"/>
+        <link href="/Content/themes/jquery-ui-1.11.4/jquery-ui.theme.css" rel="stylesheet"/>
+        <link href="/Content/themes/jquery-ui-1.11.4/Custom.css" rel="stylesheet"/>
+        <link href="/Scripts/jMenu-master/css/jmenu.css" rel="stylesheet"/>
+        <script src="/Scripts/modernizr-2.8.3.js"></script>
+    </head>
+    <body>
+        <header>
+            <div class="content-wrapper">
+                <div class="float-none">
+                    <p class="site-title">
+                        <a href="/">
+                            <img src="/Images/EAA_690_Logo.png"  width="91" height="87"/>
+                        </a>
+                    </p>
+                </div>
+                <div class="float-right">
+                    <section id="login">
+						    
+        Hello, 
+                        <a class="username" href="/Account/Manage" title="Manage">brian.michael@yahoo.com</a>!
+                        <form action="/Account/LogOff" id="logoutForm" method="post">
+                            <a href="javascript:document.getElementById('logoutForm').submit()">Log off</a>
+                        </form>
+                    </section>
+                </div>
+                <br />
+                <nav class="float-left">
+                    <ul id="jMenu">
+                        <li>
+                            <a href="/">Home</a>
+                        </li>
+                        <li>
+                            <a href="#">Lists</a>
+                            <ul>
+                                <li>
+                                    <a href="/Member">Member List</a>
+                                </li>
+                                <li>
+                                    <a href="/NonMember">Inactive Member List</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#">Admin</a>
+                            <ul>
+                                <li>
+                                    <a href="/Distribution">Committees &amp; Distribution</a>
+                                </li>
+                                <li>
+                                    <a href="/Certificate">Certificates</a>
+                                </li>
+                                <li>
+                                    <a href="/Rating">Ratings</a>
+                                </li>
+                                <li>
+                                    <a href="/Endorsement">Endorsements</a>
+                                </li>
+                                <li>
+                                    <a href="/Account/Roles">Roles</a>
+                                </li>
+                                <li>
+                                    <a href="/EmailDistribution/Create">Email Lists</a>
+                                </li>
+                                <li>
+                                    <a href="/EmailDistribution/NavCom">Send NavCom</a>
+                                </li>
+                                <li>
+                                    <a href="/Media">Media Contact List</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#">Reports</a>
+                            <ul>
+                                <li>
+                                    <a href="/Reports/MediaList">Distribution - Media</a>
+                                </li>
+                                <li>
+                                    <a href="/Reports/BODList">BOD Distribution List</a>
+                                </li>
+                                <li>
+                                    <a href="/Reports/TrusteeList">Trustees Distribution List</a>
+                                </li>
+                                <li>
+                                    <a href="/Reports/YEList">Young Eagles Committee Distribution List</a>
+                                </li>
+                                <li>
+                                    <a href="/Reports/AllMembers">All Members</a>
+                                </li>
+                                <li>
+                                    <a href="/Reports/PaidMembers">Members</a>
+                                </li>
+                                <li>
+                                    <a href="/Reports/UnPaidMembers">UnPaid Members</a>
+                                </li>
+                                <li>
+                                    <a href="/Reports/NonPaidMembers">Inactive Members</a>
+                                </li>
+                                <li>
+                                    <a href="/Reports/YoungEagles">Youth &amp; Young Eagles List</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href ="#">Mail Chimp</a>
+                            <ul>
+                                <li>
+                                    <a href="/MailChimpMembers">Mail Chimp Lists</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="/Home/About">About</a>
+                        </li>
+                        <li>
+                            <a href="/Home/Contact">Contact</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+        <div id="body">
+            <section class="content-wrapper main-content clear-fix" style="page-break-inside:avoid">
+                <table>
+                    <tr>
+                        <td>
+      Page 2
+      of 11
+    
+          
+                            <!--<a href="/NonMember?page=1">&lt;&lt;</a>-->
+                            <a href="/NonMember?page=1">
+                                <img alt="" src="/Images/first.png" />
+                            </a>
+                            <!--<a href="/NonMember?page=1">&lt; Prev</a>-->
+                            <a href="/NonMember?page=1">
+                                <img alt="" src="/Images/previous.png" />
+                            </a>
+                            <a href="/NonMember?page=3">
+                                <img alt="" src="/Images/next.png" />
+                            </a>
+                            <!--<a href="/NonMember?page=3">Next &gt;</a>-->
+                            <!--<a href="/NonMember?page=11">&gt;&gt;</a>-->
+                            <a href="/NonMember?page=11">
+                                <img alt="" src="/Images/last.png" />
+                            </a>
+                        </td>
+                        <td>
+                            <a href="/NonMember/Create">Create New</a>
+                        </td>
+                        <form action="/NonMember?page=2" method="post">
+                            <td>
+        Search by name: 
+                                <input id="searchString" name="searchString" type="text" value="" />
+                                <input type="submit" value="Search"/>
+                            </td>
+                        </form>
+                    </tr>
+                </table>
+                <fieldset>
+                    <legend>Inactive Member Listing</legend>
+                    <table>
+                        <tr>
+                            <th>Full Name</th>
+                            <th></th>
+                            <th>Full Name</th>
+                            <th></th>
+                        </tr>
+                        <tr>
+                            <td>
+Paul Branson        </td>
+                            <td>
+                                <a href="/NonMember/Edit/518">Edit</a>           |
+                                <a href="/NonMember/Details/518">Details</a>           |
+                                <a href="/NonMember/Delete/518">Delete</a>           |
+                                <a href="/NonMember/Reactivate/518">Reactivate</a>
+                            </td>
+                            <td>
+Mark Brazier        </td>
+                            <td>
+                                <a href="/NonMember/Edit/520">Edit</a>           |
+                                <a href="/NonMember/Details/520">Details</a>           |
+                                <a href="/NonMember/Delete/520">Delete</a>           |
+                                <a href="/NonMember/Reactivate/520">Reactivate</a>
+                            </td>
+                            <tr>
+                                <td>
+Dennis Brennan        </td>
+                                <td>
+                                    <a href="/NonMember/Edit/521">Edit</a>           |
+                                    <a href="/NonMember/Details/521">Details</a>           |
+                                    <a href="/NonMember/Delete/521">Delete</a>           |
+                                    <a href="/NonMember/Reactivate/521">Reactivate</a>
+                                </td>
+                                <td>
+Grant Bright        </td>
+                                <td>
+                                    <a href="/NonMember/Edit/522">Edit</a>           |
+                                    <a href="/NonMember/Details/522">Details</a>           |
+                                    <a href="/NonMember/Delete/522">Delete</a>           |
+                                    <a href="/NonMember/Reactivate/522">Reactivate</a>
+                                </td>
+                                <tr>
+                                    <td>
+Michele Bromberek        </td>
+                                    <td>
+                                        <a href="/NonMember/Edit/524">Edit</a>           |
+                                        <a href="/NonMember/Details/524">Details</a>           |
+                                        <a href="/NonMember/Delete/524">Delete</a>           |
+                                        <a href="/NonMember/Reactivate/524">Reactivate</a>
+                                    </td>
+                                    <td>
+Ron Brown        </td>
+                                    <td>
+                                        <a href="/NonMember/Edit/1548">Edit</a>           |
+                                        <a href="/NonMember/Details/1548">Details</a>           |
+                                        <a href="/NonMember/Delete/1548">Delete</a>           |
+                                        <a href="/NonMember/Reactivate/1548">Reactivate</a>
+                                    </td>
+                                    <tr>
+                                        <td>
+Laura Bruce        </td>
+                                        <td>
+                                            <a href="/NonMember/Edit/1092">Edit</a>           |
+                                            <a href="/NonMember/Details/1092">Details</a>           |
+                                            <a href="/NonMember/Delete/1092">Delete</a>           |
+                                            <a href="/NonMember/Reactivate/1092">Reactivate</a>
+                                        </td>
+                                        <td>
+Ruth Bruhns        </td>
+                                        <td>
+                                            <a href="/NonMember/Edit/375">Edit</a>           |
+                                            <a href="/NonMember/Details/375">Details</a>           |
+                                            <a href="/NonMember/Delete/375">Delete</a>           |
+                                            <a href="/NonMember/Reactivate/375">Reactivate</a>
+                                        </td>
+                                        <tr>
+                                            <td>
+Dennis Bryant        </td>
+                                            <td>
+                                                <a href="/NonMember/Edit/1290">Edit</a>           |
+                                                <a href="/NonMember/Details/1290">Details</a>           |
+                                                <a href="/NonMember/Delete/1290">Delete</a>           |
+                                                <a href="/NonMember/Reactivate/1290">Reactivate</a>
+                                            </td>
+                                            <td>
+Chris Buff        </td>
+                                            <td>
+                                                <a href="/NonMember/Edit/535">Edit</a>           |
+                                                <a href="/NonMember/Details/535">Details</a>           |
+                                                <a href="/NonMember/Delete/535">Delete</a>           |
+                                                <a href="/NonMember/Reactivate/535">Reactivate</a>
+                                            </td>
+                                            <tr>
+                                                <td>
+Anita Bullard        </td>
+                                                <td>
+                                                    <a href="/NonMember/Edit/141">Edit</a>           |
+                                                    <a href="/NonMember/Details/141">Details</a>           |
+                                                    <a href="/NonMember/Delete/141">Delete</a>           |
+                                                    <a href="/NonMember/Reactivate/141">Reactivate</a>
+                                                </td>
+                                                <td>
+Phil Burgess        </td>
+                                                <td>
+                                                    <a href="/NonMember/Edit/538">Edit</a>           |
+                                                    <a href="/NonMember/Details/538">Details</a>           |
+                                                    <a href="/NonMember/Delete/538">Delete</a>           |
+                                                    <a href="/NonMember/Reactivate/538">Reactivate</a>
+                                                </td>
+                                                <tr>
+                                                    <td>
+Michael Burns        </td>
+                                                    <td>
+                                                        <a href="/NonMember/Edit/1192">Edit</a>           |
+                                                        <a href="/NonMember/Details/1192">Details</a>           |
+                                                        <a href="/NonMember/Delete/1192">Delete</a>           |
+                                                        <a href="/NonMember/Reactivate/1192">Reactivate</a>
+                                                    </td>
+                                                    <td>
+Don Bush        </td>
+                                                    <td>
+                                                        <a href="/NonMember/Edit/543">Edit</a>           |
+                                                        <a href="/NonMember/Details/543">Details</a>           |
+                                                        <a href="/NonMember/Delete/543">Delete</a>           |
+                                                        <a href="/NonMember/Reactivate/543">Reactivate</a>
+                                                    </td>
+                                                    <tr>
+                                                        <td>
+Tim Cailloux        </td>
+                                                        <td>
+                                                            <a href="/NonMember/Edit/548">Edit</a>           |
+                                                            <a href="/NonMember/Details/548">Details</a>           |
+                                                            <a href="/NonMember/Delete/548">Delete</a>           |
+                                                            <a href="/NonMember/Reactivate/548">Reactivate</a>
+                                                        </td>
+                                                        <td>
+Edward Canipelli        </td>
+                                                        <td>
+                                                            <a href="/NonMember/Edit/551">Edit</a>           |
+                                                            <a href="/NonMember/Details/551">Details</a>           |
+                                                            <a href="/NonMember/Delete/551">Delete</a>           |
+                                                            <a href="/NonMember/Reactivate/551">Reactivate</a>
+                                                        </td>
+                                                        <tr>
+                                                            <td>
+Chris Canon        </td>
+                                                            <td>
+                                                                <a href="/NonMember/Edit/1396">Edit</a>           |
+                                                                <a href="/NonMember/Details/1396">Details</a>           |
+                                                                <a href="/NonMember/Delete/1396">Delete</a>           |
+                                                                <a href="/NonMember/Reactivate/1396">Reactivate</a>
+                                                            </td>
+                                                            <td>
+Chris Capps        </td>
+                                                            <td>
+                                                                <a href="/NonMember/Edit/552">Edit</a>           |
+                                                                <a href="/NonMember/Details/552">Details</a>           |
+                                                                <a href="/NonMember/Delete/552">Delete</a>           |
+                                                                <a href="/NonMember/Reactivate/552">Reactivate</a>
+                                                            </td>
+                                                            <tr>
+                                                                <td>
+Burt Carlisle        </td>
+                                                                <td>
+                                                                    <a href="/NonMember/Edit/1094">Edit</a>           |
+                                                                    <a href="/NonMember/Details/1094">Details</a>           |
+                                                                    <a href="/NonMember/Delete/1094">Delete</a>           |
+                                                                    <a href="/NonMember/Reactivate/1094">Reactivate</a>
+                                                                </td>
+                                                                <td>
+Burton Carlisle        </td>
+                                                                <td>
+                                                                    <a href="/NonMember/Edit/1095">Edit</a>           |
+                                                                    <a href="/NonMember/Details/1095">Details</a>           |
+                                                                    <a href="/NonMember/Delete/1095">Delete</a>           |
+                                                                    <a href="/NonMember/Reactivate/1095">Reactivate</a>
+                                                                </td>
+                                                                <tr>
+                                                                    <td>
+Virginia Carlisle        </td>
+                                                                    <td>
+                                                                        <a href="/NonMember/Edit/1096">Edit</a>           |
+                                                                        <a href="/NonMember/Details/1096">Details</a>           |
+                                                                        <a href="/NonMember/Delete/1096">Delete</a>           |
+                                                                        <a href="/NonMember/Reactivate/1096">Reactivate</a>
+                                                                    </td>
+                                                                    <td>
+Mike Casey        </td>
+                                                                    <td>
+                                                                        <a href="/NonMember/Edit/556">Edit</a>           |
+                                                                        <a href="/NonMember/Details/556">Details</a>           |
+                                                                        <a href="/NonMember/Delete/556">Delete</a>           |
+                                                                        <a href="/NonMember/Reactivate/556">Reactivate</a>
+                                                                    </td>
+                                                                    <tr>
+                                                                        <td>
+Bob Chafer        </td>
+                                                                        <td>
+                                                                            <a href="/NonMember/Edit/560">Edit</a>           |
+                                                                            <a href="/NonMember/Details/560">Details</a>           |
+                                                                            <a href="/NonMember/Delete/560">Delete</a>           |
+                                                                            <a href="/NonMember/Reactivate/560">Reactivate</a>
+                                                                        </td>
+                                                                        <td>
+Charlie Churchman        </td>
+                                                                        <td>
+                                                                            <a href="/NonMember/Edit/568">Edit</a>           |
+                                                                            <a href="/NonMember/Details/568">Details</a>           |
+                                                                            <a href="/NonMember/Delete/568">Delete</a>           |
+                                                                            <a href="/NonMember/Reactivate/568">Reactivate</a>
+                                                                        </td>
+                                                                        <tr>
+                                                                            <td>
+Mike Ciochetti        </td>
+                                                                            <td>
+                                                                                <a href="/NonMember/Edit/569">Edit</a>           |
+                                                                                <a href="/NonMember/Details/569">Details</a>           |
+                                                                                <a href="/NonMember/Delete/569">Delete</a>           |
+                                                                                <a href="/NonMember/Reactivate/569">Reactivate</a>
+                                                                            </td>
+                                                                            <td>
+Zak Clement        </td>
+                                                                            <td>
+                                                                                <a href="/NonMember/Edit/1097">Edit</a>           |
+                                                                                <a href="/NonMember/Details/1097">Details</a>           |
+                                                                                <a href="/NonMember/Delete/1097">Delete</a>           |
+                                                                                <a href="/NonMember/Reactivate/1097">Reactivate</a>
+                                                                            </td>
+                                                                            <tr>
+                                                                                <td>
+Tad Co        </td>
+                                                                                <td>
+                                                                                    <a href="/NonMember/Edit/1239">Edit</a>           |
+                                                                                    <a href="/NonMember/Details/1239">Details</a>           |
+                                                                                    <a href="/NonMember/Delete/1239">Delete</a>           |
+                                                                                    <a href="/NonMember/Reactivate/1239">Reactivate</a>
+                                                                                </td>
+                                                                                <td>
+Margaret Coklan        </td>
+                                                                                <td>
+                                                                                    <a href="/NonMember/Edit/1200">Edit</a>           |
+                                                                                    <a href="/NonMember/Details/1200">Details</a>           |
+                                                                                    <a href="/NonMember/Delete/1200">Delete</a>           |
+                                                                                    <a href="/NonMember/Reactivate/1200">Reactivate</a>
+                                                                                </td>
+                                                                                <tr>
+                                                                                    <td>
+Blaine Cole        </td>
+                                                                                    <td>
+                                                                                        <a href="/NonMember/Edit/574">Edit</a>           |
+                                                                                        <a href="/NonMember/Details/574">Details</a>           |
+                                                                                        <a href="/NonMember/Delete/574">Delete</a>           |
+                                                                                        <a href="/NonMember/Reactivate/574">Reactivate</a>
+                                                                                    </td>
+                                                                                    <td>
+Sam Cook        </td>
+                                                                                    <td>
+                                                                                        <a href="/NonMember/Edit/580">Edit</a>           |
+                                                                                        <a href="/NonMember/Details/580">Details</a>           |
+                                                                                        <a href="/NonMember/Delete/580">Delete</a>           |
+                                                                                        <a href="/NonMember/Reactivate/580">Reactivate</a>
+                                                                                    </td>
+                                                                                    <tr>
+                                                                                        <td>
+Matthew Cooper        </td>
+                                                                                        <td>
+                                                                                            <a href="/NonMember/Edit/581">Edit</a>           |
+                                                                                            <a href="/NonMember/Details/581">Details</a>           |
+                                                                                            <a href="/NonMember/Delete/581">Delete</a>           |
+                                                                                            <a href="/NonMember/Reactivate/581">Reactivate</a>
+                                                                                        </td>
+                                                                                        <td>
+Paul Cooper        </td>
+                                                                                        <td>
+                                                                                            <a href="/NonMember/Edit/1393">Edit</a>           |
+                                                                                            <a href="/NonMember/Details/1393">Details</a>           |
+                                                                                            <a href="/NonMember/Delete/1393">Delete</a>           |
+                                                                                            <a href="/NonMember/Reactivate/1393">Reactivate</a>
+                                                                                        </td>
+                                                                                        <tr>
+                                                                                            <td>
+Joe Counter        </td>
+                                                                                            <td>
+                                                                                                <a href="/NonMember/Edit/1201">Edit</a>           |
+                                                                                                <a href="/NonMember/Details/1201">Details</a>           |
+                                                                                                <a href="/NonMember/Delete/1201">Delete</a>           |
+                                                                                                <a href="/NonMember/Reactivate/1201">Reactivate</a>
+                                                                                            </td>
+                                                                                            <td>
+Joe Cox        </td>
+                                                                                            <td>
+                                                                                                <a href="/NonMember/Edit/584">Edit</a>           |
+                                                                                                <a href="/NonMember/Details/584">Details</a>           |
+                                                                                                <a href="/NonMember/Delete/584">Delete</a>           |
+                                                                                                <a href="/NonMember/Reactivate/584">Reactivate</a>
+                                                                                            </td>
+                                                                                            <tr>
+                                                                                                <td>
+Mark Croney        </td>
+                                                                                                <td>
+                                                                                                    <a href="/NonMember/Edit/587">Edit</a>           |
+                                                                                                    <a href="/NonMember/Details/587">Details</a>           |
+                                                                                                    <a href="/NonMember/Delete/587">Delete</a>           |
+                                                                                                    <a href="/NonMember/Reactivate/587">Reactivate</a>
+                                                                                                </td>
+                                                                                                <td>
+Jim Crunkleton        </td>
+                                                                                                <td>
+                                                                                                    <a href="/NonMember/Edit/590">Edit</a>           |
+                                                                                                    <a href="/NonMember/Details/590">Details</a>           |
+                                                                                                    <a href="/NonMember/Delete/590">Delete</a>           |
+                                                                                                    <a href="/NonMember/Reactivate/590">Reactivate</a>
+                                                                                                </td>
+                                                                                                <tr>
+                                                                                                    <td>
+Herb Daniel        </td>
+                                                                                                    <td>
+                                                                                                        <a href="/NonMember/Edit/1100">Edit</a>           |
+                                                                                                        <a href="/NonMember/Details/1100">Details</a>           |
+                                                                                                        <a href="/NonMember/Delete/1100">Delete</a>           |
+                                                                                                        <a href="/NonMember/Reactivate/1100">Reactivate</a>
+                                                                                                    </td>
+                                                                                                    <td>
+Frank Darby        </td>
+                                                                                                    <td>
+                                                                                                        <a href="/NonMember/Edit/594">Edit</a>           |
+                                                                                                        <a href="/NonMember/Details/594">Details</a>           |
+                                                                                                        <a href="/NonMember/Delete/594">Delete</a>           |
+                                                                                                        <a href="/NonMember/Reactivate/594">Reactivate</a>
+                                                                                                    </td>
+                                                                                                    <tr>
+                                                                                                        <td>
+Michael Davidson        </td>
+                                                                                                        <td>
+                                                                                                            <a href="/NonMember/Edit/386">Edit</a>           |
+                                                                                                            <a href="/NonMember/Details/386">Details</a>           |
+                                                                                                            <a href="/NonMember/Delete/386">Delete</a>           |
+                                                                                                            <a href="/NonMember/Reactivate/386">Reactivate</a>
+                                                                                                        </td>
+                                                                                                        <td>
+Eric Davis        </td>
+                                                                                                        <td>
+                                                                                                            <a href="/NonMember/Edit/1249">Edit</a>           |
+                                                                                                            <a href="/NonMember/Details/1249">Details</a>           |
+                                                                                                            <a href="/NonMember/Delete/1249">Delete</a>           |
+                                                                                                            <a href="/NonMember/Reactivate/1249">Reactivate</a>
+                                                                                                        </td>
+                                                                                                    </tr>
+                                                                                                </table>
+                                                                                            </fieldset>
+                                                                                            <table>
+                                                                                                <tr>
+                                                                                                    <td>
+      Page 2
+      of 11
+    
+          
+                                                                                                        <!--<a href="/NonMember?page=1">&lt;&lt;</a>-->
+                                                                                                        <a href="/NonMember?page=1">
+                                                                                                            <img alt="" src="/Images/first.png" />
+                                                                                                        </a>
+                                                                                                        <!--<a href="/NonMember?page=1">&lt; Prev</a>-->
+                                                                                                        <a href="/NonMember?page=1">
+                                                                                                            <img alt="" src="/Images/previous.png" />
+                                                                                                        </a>
+                                                                                                        <a href="/NonMember?page=3">
+                                                                                                            <img alt="" src="/Images/next.png" />
+                                                                                                        </a>
+                                                                                                        <!--<a href="/NonMember?page=3">Next &gt;</a>-->
+                                                                                                        <!--<a href="/NonMember?page=11">&gt;&gt;</a>-->
+                                                                                                        <a href="/NonMember?page=11">
+                                                                                                            <img alt="" src="/Images/last.png" />
+                                                                                                        </a>
+                                                                                                    </td>
+                                                                                                    <form action="/NonMember?page=2" method="post">
+                                                                                                        <td>
+        Search by name: 
+                                                                                                            <input id="searchString" name="searchString" type="text" value="" />
+                                                                                                            <input type="submit" value="Search"/>
+                                                                                                        </td>
+                                                                                                    </form>
+                                                                                                </tr>
+                                                                                            </table>
+                                                                                        </section>
+                                                                                    </div>
+                                                                                    <footer>
+                                                                                        <div class="content-wrapper">
+                                                                                            <div class="float-left">
+                                                                                                <p>&copy; 2018 - EAA Chapter 690, Lawrenceville, GA</p>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </footer>
+                                                                                    <script src="/Scripts/jquery-3.1.1.js"></script>
+                                                                                    <script src="/Scripts/jquery-3.3.1.js"></script>
+                                                                                    <script src="/Scripts/jquery-ui-1.12.1.js"></script>
+                                                                                    <script src="/Scripts/jMenu-master/js/jMenu.jquery.js"></script>
+                                                                                    <script>
+		$("#nav").menu({icons: {submenu: "ui-icon-arrowthick-1-s" }}, { position: { at: "right-15 bottom+5" } });
+		</script>
+                                                                                    <script type="text/javascript">
+			$(document).ready(function () {
+				// simple jMenu plugin called
+				//$("#jMenu").jMenu();
+				// more complex jMenu plugin called
+				$("#jMenu").jMenu({
+					ulWidth: '150',
+					effects: {
+						effectSpeedOpen: 300,
+						effectTypeClose: 'fade'
+					},
+					animatedText: false
+				});
+			});
+</script>
+                                                                                </body>
+                                                                            </html>
