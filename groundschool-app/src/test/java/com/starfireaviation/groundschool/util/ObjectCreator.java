@@ -6,6 +6,9 @@
 package com.starfireaviation.groundschool.util;
 
 import java.util.Date;
+
+import com.starfireaviation.groundschool.model.QuestionPreference;
+import com.starfireaviation.groundschool.model.Role;
 import com.starfireaviation.groundschool.model.User;
 import com.starfireaviation.groundschool.model.sql.UserEntity;
 
@@ -127,6 +130,11 @@ public class ObjectCreator {
     public static final String EAA_NUMBER = "123456";
 
     /**
+     * CERTIFICATE_NUMBER
+     */
+    public static final String CERTIFICATE_NUMBER = "123456";
+
+    /**
      * FIRST_NAME
      */
     public static final String FIRST_NAME = "Bob";
@@ -167,6 +175,11 @@ public class ObjectCreator {
     public static final String TAIL_NUMBER = "tail";
 
     /**
+     * SLACK
+     */
+    public static final String SLACK = "slack";
+
+    /**
      * TAIL_NUMBER
      */
     public static final Date CHAPTER_DATE_PAID = new Date();
@@ -189,9 +202,10 @@ public class ObjectCreator {
     /**
      * Gets a staticly defined User
      *
+     * @param role Role
      * @return User
      */
-    public static User getUser() {
+    public static User getUser(Role role) {
         User mockUser = new User();
         mockUser.setId(ID);
         mockUser.setUsername(USERNAME);
@@ -199,6 +213,22 @@ public class ObjectCreator {
         mockUser.setFirstName(FIRST_NAME);
         mockUser.setLastName(LAST_NAME);
         mockUser.setEmail(EMAIL);
+        mockUser.setEaaNumber(EAA_NUMBER);
+        mockUser.setEmailEnabled(false);
+        mockUser.setEmailVerified(false);
+        mockUser.setQuestionPreference(QuestionPreference.SLACK);
+        mockUser.setSlack(SLACK);
+        mockUser.setSlackEnabled(false);
+        mockUser.setSlackVerified(false);
+        mockUser.setSms(PHONE);
+        mockUser.setSmsEnabled(false);
+        mockUser.setSmsVerified(false);
+        if (role == Role.INSTRUCTOR) {
+            mockUser.setCertificateNumber(CERTIFICATE_NUMBER + "CFI");
+        } else {
+            mockUser.setCertificateNumber(CERTIFICATE_NUMBER);
+        }
+        mockUser.setRole(role);
         return mockUser;
     }
 

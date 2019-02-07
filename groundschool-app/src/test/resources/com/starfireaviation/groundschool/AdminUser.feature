@@ -36,6 +36,7 @@ Background:
 
   @acceptance
   Scenario: Admin signs up
+    Given I want to signup
     When I signup
     Then I should receive the user details
 

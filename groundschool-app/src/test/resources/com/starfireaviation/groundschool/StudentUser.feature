@@ -5,6 +5,12 @@ Background:
   Given I am a student user
 
   @acceptance
+  Scenario: Student signs up
+    Given I want to signup
+    When I signup
+    Then I should receive the user details
+
+  @acceptance
   Scenario: Student invites a new user
     Given a user does not exist
     When I invite a new user
@@ -19,26 +25,21 @@ Background:
   @acceptance
   Scenario: Student lists all users
     When I list all users
-    Then I should receive a operation not permitted error
+    Then I should receive a access denied error
 
   @acceptance
   Scenario: Student lists all members
     When I list all members
-    Then I should receive a operation not permitted error
+    Then I should receive a access denied error
 
   @acceptance
   Scenario: Student retrieves a user
     When I retrieve a user
-    Then I should receive a operation not permitted error
+    Then I should receive a access denied error
 
   @acceptance
   Scenario: Student retrieves their details
     When I retrieve my details
-    Then I should receive the user details
-
-  @acceptance
-  Scenario: Student signs up
-    When I signup
     Then I should receive the user details
 
   @acceptance

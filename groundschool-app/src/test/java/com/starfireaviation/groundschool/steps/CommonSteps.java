@@ -23,23 +23,7 @@ public class CommonSteps extends BaseSteps {
      */
     @Before
     public void before(Scenario scenario) {
-        // Reset objects
-        event = null;
-        lessonPlan = null;
-        question = null;
-        quiz = null;
-        referenceMaterial = null;
-        statistic = null;
-        user = null;
-
-        // Reset lists
-        events = null;
-        lessonPlans = null;
-        questions = null;
-        quizzes = null;
-        referenceMaterials = null;
-        statistics = null;
-        users = null;
+        // Before
     }
 
     /**
@@ -47,8 +31,8 @@ public class CommonSteps extends BaseSteps {
      *
      * @throws Exception when things go wrong
      */
-    @Then("^I should receive a operation not permitted error$")
-    public void iShouldReceiveAOperationNotPermittedError() throws Exception {
+    @Then("^I should receive a access denied error$")
+    public void iShouldReceiveAAccessDeniedError() throws Exception {
         // Do something
         // TODO throw new PendingException();
     }

@@ -7,16 +7,18 @@ package com.starfireaviation.groundschool.steps;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import com.starfireaviation.groundschool.controller.EventController;
-import com.starfireaviation.groundschool.model.Event;
-import com.starfireaviation.groundschool.model.LessonPlan;
-import com.starfireaviation.groundschool.model.Question;
-import com.starfireaviation.groundschool.model.Quiz;
-import com.starfireaviation.groundschool.model.ReferenceMaterial;
-import com.starfireaviation.groundschool.model.Statistic;
+import com.starfireaviation.groundschool.model.Role;
 import com.starfireaviation.groundschool.model.User;
+
+import io.restassured.response.Response;
+import io.restassured.response.ValidatableResponse;
+import io.restassured.specification.RequestSpecification;
 
 /**
  * BaseSteps
@@ -26,10 +28,35 @@ import com.starfireaviation.groundschool.model.User;
 public class BaseSteps {
 
     /**
+     * Logger
+     */
+    protected final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+
+    /**
+     * APPLICATION_HOST
+     */
+    protected static final String APPLICATION_HOST = "http://localhost:8080";
+
+    /**
      * EventController
      */
     @Autowired
     protected EventController eventController;
+
+    /**
+     * Response
+     */
+    protected Response response;
+
+    /**
+     * ValidatableResponse
+     */
+    protected ValidatableResponse json;
+
+    /**
+     * RequestSpecification
+     */
+    protected RequestSpecification request;
 
     /**
      * ID
@@ -42,64 +69,9 @@ public class BaseSteps {
     protected Exception exception;
 
     /**
-     * Event
+     * Role
      */
-    protected Event event;
-
-    /**
-     * Events
-     */
-    protected List<Event> events;
-
-    /**
-     * LessonPlan
-     */
-    protected LessonPlan lessonPlan;
-
-    /**
-     * LessonPlans
-     */
-    protected List<LessonPlan> lessonPlans;
-
-    /**
-     * Question
-     */
-    protected Question question;
-
-    /**
-     * Questions
-     */
-    protected List<Question> questions;
-
-    /**
-     * Quiz
-     */
-    protected Quiz quiz;
-
-    /**
-     * Quizzes
-     */
-    protected List<Quiz> quizzes;
-
-    /**
-     * ReferenceMaterial
-     */
-    protected ReferenceMaterial referenceMaterial;
-
-    /**
-     * ReferenceMaterials
-     */
-    protected List<ReferenceMaterial> referenceMaterials;
-
-    /**
-     * Statistic
-     */
-    protected Statistic statistic;
-
-    /**
-     * Statistics
-     */
-    protected List<Statistic> statistics;
+    protected Role role = Role.STUDENT;
 
     /**
      * User
@@ -110,5 +82,18 @@ public class BaseSteps {
      * Users
      */
     protected List<User> users;
+
+    /**
+     * Get HttpHeaders
+     *
+     * @return HttpHeaders
+     */
+    protected HttpHeaders getHeaders() {
+        final HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON.toString());
+        headers.add(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON.toString());
+        //headers.add(HttpHeaders.AUTHORIZATION, basicAuthUtil.generateBasicAuthString(username, password));
+        return headers;
+    }
 
 }

@@ -5,6 +5,10 @@
  */
 package com.starfireaviation.groundschool.steps;
 
+import org.junit.Assert;
+import com.starfireaviation.groundschool.model.Role;
+import com.starfireaviation.groundschool.model.User;
+import com.starfireaviation.groundschool.util.ObjectCreator;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.When;
 import cucumber.api.java.en.Then;
@@ -23,7 +27,19 @@ public class UserSteps extends BaseSteps {
      */
     @Given("^a user exists$")
     public void aUserExists() throws Exception {
-        // Do something
+        user = ObjectCreator.getUser(Role.STUDENT);
+    }
+
+    /**
+     * Given I want to signup
+     *
+     * @throws Exception when things go wrong
+     */
+    @Given("^I want to signup$")
+    public void iWantToSignup() throws Exception {
+        final User prospect = ObjectCreator.getUser(role);
+        prospect.setId(null);
+        user = prospect;
     }
 
     /**
@@ -32,8 +48,8 @@ public class UserSteps extends BaseSteps {
      * @throws Exception when things go wrong
      */
     @Given("^a user does not exist$")
-    public void anUserDoesNotExists() throws Exception {
-        // Do something
+    public void aUserDoesNotExists() throws Exception {
+        user = null;
     }
 
     /**
@@ -43,7 +59,15 @@ public class UserSteps extends BaseSteps {
      */
     @When("^I list all users$")
     public void iListAllUsers() throws Exception {
-        // Do something
+        users = request
+                .when()
+                .headers(getHeaders())
+                .get(APPLICATION_HOST + "/users")
+                .then()
+                .extract()
+                .body()
+                .jsonPath()
+                .getList(".", User.class);
     }
 
     /**
@@ -53,7 +77,13 @@ public class UserSteps extends BaseSteps {
      */
     @When("^I retrieve a user$")
     public void iRetrieveAUser() throws Exception {
-        // Do something
+        user = request
+                .when()
+                .headers(getHeaders())
+                .get(APPLICATION_HOST + "/users/" + user.getId())
+                .then()
+                .extract()
+                .as(User.class);
     }
 
     /**
@@ -83,6 +113,10 @@ public class UserSteps extends BaseSteps {
      */
     @When("^I delete a user$")
     public void iDeleteAUser() throws Exception {
+        request
+                .when()
+                .headers(getHeaders())
+                .delete(APPLICATION_HOST + "/users");
         // Do something
     }
 
@@ -93,7 +127,13 @@ public class UserSteps extends BaseSteps {
      */
     @When("^I signup$")
     public void iSignup() throws Exception {
-        // Do something
+        user = request
+                .when()
+                .headers(getHeaders())
+                .post(APPLICATION_HOST + "/users", user)
+                .then()
+                .extract()
+                .as(User.class);
     }
 
     /**
@@ -103,7 +143,10 @@ public class UserSteps extends BaseSteps {
      */
     @When("^I login$")
     public void iLogin() throws Exception {
-        // Do something
+        request
+                .when()
+                .headers(getHeaders())
+                .post(APPLICATION_HOST + "/users/" + user.getId() + "/login");
     }
 
     /**
@@ -114,7 +157,9 @@ public class UserSteps extends BaseSteps {
      */
     @When("^I verify my (.+) setting$")
     public void iVerifySetting(String setting) throws Exception {
-        // Do something
+        request
+                .when()
+                .get(APPLICATION_HOST + "/users/" + user.getId() + "/verify/" + setting.toUpperCase());
     }
 
     /**
@@ -134,7 +179,16 @@ public class UserSteps extends BaseSteps {
      */
     @Then("^I should receive the user details$")
     public void receiveTheUser() throws Exception {
-        // Do something
+        Assert.assertNotNull("User is null", user);
+        Assert.assertNotNull("User ID is null", user.getId());
+        Assert.assertEquals(
+                String.format("First name values, expected=[%s] actual=[%s], do not match"),
+                ObjectCreator.FIRST_NAME,
+                user.getFirstName());
+        Assert.assertEquals(
+                String.format("Last name values, expected=[%s] actual=[%s], do not match"),
+                ObjectCreator.LAST_NAME,
+                user.getLastName());
     }
 
     /**
