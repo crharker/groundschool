@@ -136,9 +136,9 @@ public class NotificationServiceImpl implements NotificationService {
             NotificationType notificationType,
             NotificationEventType notificationEventType,
             String response,
-            String originalMessage) {
+            String originalMessage) throws ResourceNotFoundException {
         if (NotificationType.SMS == notificationType && NotificationEventType.USER_SETTINGS == notificationEventType) {
-            smsService.resendUserSettingsChangeMsg(userService.findById(userId), response, originalMessage);
+            smsService.resendUserSettingsChangeMsg(userService.get(userId), response, originalMessage);
         }
     }
 
@@ -146,11 +146,11 @@ public class NotificationServiceImpl implements NotificationService {
      * {@inheritDoc} Required implementation.
      */
     @Override
-    public void invite(Long userId, String email) {
+    public void invite(Long userId, String email) throws ResourceNotFoundException {
         if (userId == null) {
             return;
         }
-        emailService.sendInviteMsg(userService.findById(userId), email);
+        emailService.sendInviteMsg(userService.get(userId), email);
     }
 
     /**
@@ -161,7 +161,7 @@ public class NotificationServiceImpl implements NotificationService {
      * @throws ResourceNotFoundException when no user is found
      */
     private void userSettingsVerified(Long userId, NotificationType notificationType) throws ResourceNotFoundException {
-        final User user = userService.findById(userId);
+        final User user = userService.get(userId);
         if (user == null) {
             LOGGER.warn("userSettingsVerified() returning as no user was found");
             return;
@@ -199,9 +199,10 @@ public class NotificationServiceImpl implements NotificationService {
      *
      * @param userId Long
      * @param notificationType NotificationType
+     * @throws ResourceNotFoundException when user is not found
      */
-    private void userSettings(Long userId, NotificationType notificationType) {
-        final User user = userService.findById(userId);
+    private void userSettings(Long userId, NotificationType notificationType) throws ResourceNotFoundException {
+        final User user = userService.get(userId);
         if (user == null) {
             LOGGER.warn("userSettings() returning as no user was found");
             return;
@@ -238,9 +239,10 @@ public class NotificationServiceImpl implements NotificationService {
      *
      * @param userId Long
      * @param notificationType NotificationType
+     * @throws ResourceNotFoundException when user is not found
      */
-    private void passwordReset(Long userId, NotificationType notificationType) {
-        final User user = userService.findById(userId);
+    private void passwordReset(Long userId, NotificationType notificationType) throws ResourceNotFoundException {
+        final User user = userService.get(userId);
         if (user == null) {
             LOGGER.warn("passwordReset() returning as no user was found");
             return;
@@ -277,9 +279,10 @@ public class NotificationServiceImpl implements NotificationService {
      *
      * @param userId Long
      * @param notificationType NotificationType
+     * @throws ResourceNotFoundException when user is not found
      */
-    private void userDelete(Long userId, NotificationType notificationType) {
-        final User user = userService.findById(userId);
+    private void userDelete(Long userId, NotificationType notificationType) throws ResourceNotFoundException {
+        final User user = userService.get(userId);
         if (user == null) {
             LOGGER.warn("userDelete() returning as no user was found");
             return;
@@ -320,8 +323,8 @@ public class NotificationServiceImpl implements NotificationService {
      */
     private void eventStart(Long userId, Long eventId, NotificationType notificationType)
             throws ResourceNotFoundException {
-        final User user = userService.findById(userId);
-        final Event event = eventService.findById(eventId, true);
+        final User user = userService.get(userId);
+        final Event event = eventService.get(eventId);
         if (user == null) {
             LOGGER.warn("eventStart() returning as no user was found");
             return;
@@ -361,10 +364,12 @@ public class NotificationServiceImpl implements NotificationService {
      * @param userId Long
      * @param questionId Long
      * @param notificationType NotificationType
+     * @throws ResourceNotFoundException when question is not found
      */
-    private void questionAsked(Long userId, Long questionId, NotificationType notificationType) {
-        final User user = userService.findById(userId);
-        final Question question = questionService.findById(questionId, false);
+    private void questionAsked(Long userId, Long questionId, NotificationType notificationType)
+            throws ResourceNotFoundException {
+        final User user = userService.get(userId);
+        final Question question = questionService.get(questionId);
         if (user == null) {
             LOGGER.warn("questionAsked() returning as no user was found");
             return;
@@ -403,9 +408,10 @@ public class NotificationServiceImpl implements NotificationService {
      *
      * @param userId Long
      * @param notificationType NotificationType
+     * @throws ResourceNotFoundException when user is not found
      */
-    private void quizComplete(Long userId, NotificationType notificationType) {
-        final User user = userService.findById(userId);
+    private void quizComplete(Long userId, NotificationType notificationType) throws ResourceNotFoundException {
+        final User user = userService.get(userId);
         if (user == null) {
             LOGGER.warn("questionAsked() returning as no user was found");
             return;
@@ -449,8 +455,8 @@ public class NotificationServiceImpl implements NotificationService {
      */
     private void eventRSVP(Long userId, Long eventId, NotificationType notificationType)
             throws ResourceNotFoundException {
-        final User user = userService.findById(userId);
-        final Event event = eventService.findById(eventId, true);
+        final User user = userService.get(userId);
+        final Event event = eventService.get(eventId);
         if (user == null) {
             LOGGER.warn("eventRSVP() returning as no user was found");
             return;
@@ -491,8 +497,8 @@ public class NotificationServiceImpl implements NotificationService {
      */
     private void eventRegister(Long userId, Long eventId, NotificationType notificationType)
             throws ResourceNotFoundException {
-        final User user = userService.findById(userId);
-        final Event event = eventService.findById(eventId, true);
+        final User user = userService.get(userId);
+        final Event event = eventService.get(eventId);
         if (user == null) {
             LOGGER.warn("eventRegister() returning as no user was found");
             return;
@@ -533,8 +539,8 @@ public class NotificationServiceImpl implements NotificationService {
      */
     private void eventUnregister(Long userId, Long eventId, NotificationType notificationType)
             throws ResourceNotFoundException {
-        final User user = userService.findById(userId);
-        final Event event = eventService.findById(eventId, true);
+        final User user = userService.get(userId);
+        final Event event = eventService.get(eventId);
         if (user == null) {
             LOGGER.warn("eventUnregister() returning as no user was found");
             return;

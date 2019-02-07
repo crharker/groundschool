@@ -23,32 +23,35 @@ public interface QuestionService {
      *
      * @param question Question
      * @return Question
+     * @throws ResourceNotFoundException when reference material is not found
      */
-    public Question store(Question question);
+    public Question store(Question question) throws ResourceNotFoundException;
 
     /**
      * Deletes a question
      *
      * @param id Long
      * @return Question
+     * @throws ResourceNotFoundException when question is not found
      */
-    public Question delete(long id);
+    public Question delete(long id) throws ResourceNotFoundException;
 
     /**
      * Gets all questions
      *
      * @return list of Question
+     * @throws ResourceNotFoundException when question is not found
      */
-    public List<Question> findAllQuestions();
+    public List<Question> getAll() throws ResourceNotFoundException;
 
     /**
      * Gets a question
      *
      * @param id Long
-     * @param partial whether or not to load answers to question
      * @return Question
+     * @throws ResourceNotFoundException when question is not found
      */
-    public Question findById(final long id, final boolean partial);
+    public Question get(final long id) throws ResourceNotFoundException;
 
     /**
      * Answers a question for a user

@@ -77,7 +77,7 @@ public class QuizController {
         if (quiz == null) {
             return quiz;
         }
-        return quizService.store(quiz, false);
+        return quizService.store(quiz);
     }
 
     /**
@@ -86,13 +86,14 @@ public class QuizController {
      * @param quizId Long
      * @param principal Principal
      * @return Quiz
+     * @throws ResourceNotFoundException when quiz is not found
      */
     @GetMapping(path = {
             "/{quizId}"
     })
-    public Quiz get(@PathVariable("quizId") long quizId, Principal principal) {
+    public Quiz get(@PathVariable("quizId") long quizId, Principal principal) throws ResourceNotFoundException {
         LOGGER.info(String.format("User is logged in as %s", principal.getName()));
-        return quizService.findById(quizId, false);
+        return quizService.get(quizId);
     }
 
     /**
@@ -108,7 +109,7 @@ public class QuizController {
         if (quiz == null) {
             return quiz;
         }
-        return quizService.store(quiz, false);
+        return quizService.store(quiz);
     }
 
     /**
@@ -117,11 +118,12 @@ public class QuizController {
      * @param quizId Long
      * @param principal Principal
      * @return Quiz
+     * @throws ResourceNotFoundException when quiz is not found
      */
     @DeleteMapping(path = {
             "/{quizId}"
     })
-    public Quiz delete(@PathVariable("quizId") long quizId, Principal principal) {
+    public Quiz delete(@PathVariable("quizId") long quizId, Principal principal) throws ResourceNotFoundException {
         LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         return quizService.delete(quizId);
     }
@@ -131,11 +133,12 @@ public class QuizController {
      *
      * @param principal Principal
      * @return list of Quiz
+     * @throws ResourceNotFoundException when quiz is not found
      */
     @GetMapping
-    public List<Quiz> list(Principal principal) {
+    public List<Quiz> list(Principal principal) throws ResourceNotFoundException {
         LOGGER.info(String.format("User is logged in as %s", principal.getName()));
-        return quizService.findAllQuizzes();
+        return quizService.getAll();
     }
 
     /**
@@ -176,6 +179,7 @@ public class QuizController {
      * @param questionId Long
      * @param principal Principal
      * @return completed quiz
+     * @throws ResourceNotFoundException when quiz or question is not found
      */
     @PostMapping(path = {
             "/{quizId}/add/{questionId}"
@@ -183,7 +187,7 @@ public class QuizController {
     public Quiz addQuestion(
             @PathVariable("quizId") long quizId,
             @PathVariable("questionId") long questionId,
-            Principal principal) {
+            Principal principal) throws ResourceNotFoundException {
         LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         return quizService.addQuestion(quizId, questionId);
     }
@@ -195,6 +199,7 @@ public class QuizController {
      * @param questionId Long
      * @param principal Principal
      * @return completed quiz
+     * @throws ResourceNotFoundException when quiz or question is not found
      */
     @PostMapping(path = {
             "/{quizId}/remove/{questionId}"
@@ -202,7 +207,7 @@ public class QuizController {
     public Quiz removeQuestion(
             @PathVariable("quizId") long quizId,
             @PathVariable("questionId") long questionId,
-            Principal principal) {
+            Principal principal) throws ResourceNotFoundException {
         LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         return quizService.removeQuestion(quizId, questionId);
     }

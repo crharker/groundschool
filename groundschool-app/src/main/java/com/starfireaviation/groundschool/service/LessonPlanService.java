@@ -7,6 +7,7 @@ package com.starfireaviation.groundschool.service;
 
 import java.util.List;
 
+import com.starfireaviation.groundschool.exception.ResourceNotFoundException;
 import com.starfireaviation.groundschool.model.LessonPlan;
 
 /**
@@ -29,23 +30,25 @@ public interface LessonPlanService {
      *
      * @param id Long
      * @return LessonPlan
+     * @throws ResourceNotFoundException when lesson plan is not found
      */
-    public LessonPlan delete(long id);
+    public LessonPlan delete(long id) throws ResourceNotFoundException;
 
     /**
      * Gets all lessonPlan
      *
      * @return list of LessonPlan
+     * @throws ResourceNotFoundException when lesson plan is not found
      */
-    public List<LessonPlan> findAllLessonPlans();
+    public List<LessonPlan> getAll() throws ResourceNotFoundException;
 
     /**
      * Gets a lessonPlan
      *
      * @param id Long
-     * @param partial whether or not to load activities for lesson plan
      * @return LessonPlan
+     * @throws ResourceNotFoundException when lesson plan is not found
      */
-    public LessonPlan findById(long id, boolean partial);
+    public LessonPlan get(long id) throws ResourceNotFoundException;
 
 }

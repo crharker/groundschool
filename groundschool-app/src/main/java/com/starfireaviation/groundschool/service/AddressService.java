@@ -39,8 +39,9 @@ public interface AddressService {
      * Gets all addresses
      *
      * @return list of Address
+     * @throws ResourceNotFoundException when an address is not found
      */
-    public List<Address> findAllAddresses();
+    public List<Address> getAll() throws ResourceNotFoundException;
 
     /**
      * Gets address for an event
@@ -58,6 +59,6 @@ public interface AddressService {
      * @return Address
      * @throws ResourceNotFoundException when no address is found
      */
-    public Address findAddressById(long id) throws ResourceNotFoundException;
+    public Address get(long id) throws ResourceNotFoundException;
 
 }

@@ -7,6 +7,7 @@ package com.starfireaviation.groundschool.service;
 
 import java.util.List;
 
+import com.starfireaviation.groundschool.exception.ResourceNotFoundException;
 import com.starfireaviation.groundschool.model.ReferenceMaterial;
 
 /**
@@ -29,30 +30,34 @@ public interface ReferenceMaterialService {
      *
      * @param id Long
      * @return ReferenceMaterial
+     * @throws ResourceNotFoundException when reference material is not found
      */
-    public ReferenceMaterial delete(long id);
+    public ReferenceMaterial delete(long id) throws ResourceNotFoundException;
 
     /**
      * Gets all referenceMaterials
      *
      * @return list of ReferenceMaterial
+     * @throws ResourceNotFoundException when reference material is not found
      */
-    public List<ReferenceMaterial> findAllReferenceMaterials();
+    public List<ReferenceMaterial> getAll() throws ResourceNotFoundException;
 
     /**
      * Gets a referenceMaterial
      *
      * @param questionId Long
      * @return list of ReferenceMaterial
+     * @throws ResourceNotFoundException when reference material is not found
      */
-    public List<ReferenceMaterial> findByQuestionId(long questionId);
+    public List<ReferenceMaterial> findByQuestionId(long questionId) throws ResourceNotFoundException;
 
     /**
      * Gets a referenceMaterial
      *
      * @param id Long
      * @return ReferenceMaterial
+     * @throws ResourceNotFoundException when reference material is not found
      */
-    public ReferenceMaterial findReferenceMaterialById(long id);
+    public ReferenceMaterial get(long id) throws ResourceNotFoundException;
 
 }

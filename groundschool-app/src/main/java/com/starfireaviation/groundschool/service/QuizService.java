@@ -21,25 +21,26 @@ public interface QuizService {
      * Creates a quiz
      *
      * @param quiz Quiz
-     * @param partial only store base quiz data
      * @return Quiz
      */
-    public Quiz store(final Quiz quiz, final boolean partial);
+    public Quiz store(final Quiz quiz);
 
     /**
      * Deletes a quiz
      *
      * @param id Long
      * @return Quiz
+     * @throws ResourceNotFoundException when quiz is not found
      */
-    public Quiz delete(final long id);
+    public Quiz delete(final long id) throws ResourceNotFoundException;
 
     /**
      * Gets all quizzes
      *
      * @return list of Quiz
+     * @throws ResourceNotFoundException when quiz is not found
      */
-    public List<Quiz> findAllQuizzes();
+    public List<Quiz> getAll() throws ResourceNotFoundException;
 
     /**
      * Gets all quizzes for a given lesson plan
@@ -53,17 +54,17 @@ public interface QuizService {
      * Gets a quiz
      *
      * @param id Long
-     * @param partial only load base quiz data
      * @return Quiz
+     * @throws ResourceNotFoundException when quiz is not found
      */
-    public Quiz findById(final long id, final boolean partial);
+    public Quiz get(final long id) throws ResourceNotFoundException;
 
     /**
      * Starts a quiz
      *
      * @param quizId Long
      * @return started quiz
-     * @throws ResourceNotFoundException when things go wrong
+     * @throws ResourceNotFoundException when quiz is not found
      */
     public Quiz start(final long quizId) throws ResourceNotFoundException;
 
@@ -90,8 +91,9 @@ public interface QuizService {
      * @param quizId Long
      * @param questionId Long
      * @return Quiz with question added
+     * @throws ResourceNotFoundException when quiz or question is not found
      */
-    public Quiz addQuestion(final long quizId, final long questionId);
+    public Quiz addQuestion(final long quizId, final long questionId) throws ResourceNotFoundException;
 
     /**
      * Removes a question from a quiz
@@ -99,8 +101,9 @@ public interface QuizService {
      * @param quizId Long
      * @param questionId Long
      * @return Quiz with question added
+     * @throws ResourceNotFoundException when quiz or question is not found
      */
-    public Quiz removeQuestion(final long quizId, final long questionId);
+    public Quiz removeQuestion(final long quizId, final long questionId) throws ResourceNotFoundException;
 
     /**
      * Determines the next question for a quiz.
@@ -110,6 +113,7 @@ public interface QuizService {
      * @param quizId Quiz ID
      * @param userId User ID
      * @return next question ID
+     * @throws ResourceNotFoundException when statistic is not found
      */
-    public Long getNextQuestion(final Long quizId, final Long userId);
+    public Long getNextQuestion(final Long quizId, final Long userId) throws ResourceNotFoundException;
 }

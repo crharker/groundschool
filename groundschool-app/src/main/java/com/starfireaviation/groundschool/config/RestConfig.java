@@ -1,6 +1,6 @@
 /*
  *-----------------------------------------------------------------------------
- * Copyright 2019 NCR Corporation
+ * Copyright 2019 Starfire Aviation, LLC
  *-----------------------------------------------------------------------------
  */
 package com.starfireaviation.groundschool.config;
@@ -50,4 +50,5 @@ public class RestConfig {
                 .additionalMessageConverters(new MappingJackson2HttpMessageConverter())
                 .build();
     }
+
 }

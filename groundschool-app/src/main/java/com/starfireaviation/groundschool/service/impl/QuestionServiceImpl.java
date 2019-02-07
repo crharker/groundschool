@@ -10,10 +10,13 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import com.hazelcast.core.HazelcastInstance;
 import com.starfireaviation.groundschool.exception.ResourceNotFoundException;
 import com.starfireaviation.groundschool.model.Answer;
 import com.starfireaviation.groundschool.model.Question;
@@ -26,7 +29,6 @@ import com.starfireaviation.groundschool.repository.QuestionReferenceMaterialRep
 import com.starfireaviation.groundschool.repository.QuestionRepository;
 import com.starfireaviation.groundschool.service.AnswerService;
 import com.starfireaviation.groundschool.service.EventService;
-import com.starfireaviation.groundschool.service.LessonPlanService;
 import com.starfireaviation.groundschool.service.QuestionService;
 import com.starfireaviation.groundschool.service.QuizService;
 import com.starfireaviation.groundschool.service.ReferenceMaterialService;
@@ -91,6 +93,17 @@ public class QuestionServiceImpl implements QuestionService {
     private MapperFacade mapper;
 
     /**
+     * HazelcastInstance
+     */
+    @Autowired
+    private HazelcastInstance hazelcastInstance;
+
+    /**
+     * AddressCache
+     */
+    private Map<Long, Question> questionCache;
+
+    /**
      * Initializes an instance of <code>QuestionServiceImpl</code> with the default data.
      */
     public QuestionServiceImpl() {
@@ -102,8 +115,12 @@ public class QuestionServiceImpl implements QuestionService {
      *
      * @param questionRepository QuestionRepository
      * @param mapperFacade MapperFacade
+     * @param hazelcastInstance HazelcastInstance
      */
-    public QuestionServiceImpl(QuestionRepository questionRepository, MapperFacade mapperFacade) {
+    public QuestionServiceImpl(
+            QuestionRepository questionRepository,
+            MapperFacade mapperFacade,
+            HazelcastInstance hazelcastInstance) {
         this.questionRepository = questionRepository;
         mapper = mapperFacade;
     }
@@ -112,9 +129,13 @@ public class QuestionServiceImpl implements QuestionService {
      * {@inheritDoc} Required implementation.
      */
     @Override
-    public Question store(Question question) {
+    public Question store(Question question) throws ResourceNotFoundException {
         if (question == null) {
             return question;
+        }
+        if (question.getId() != null) {
+            initCache();
+            questionCache.remove(question.getId());
         }
         Question response = mapper.map(
                 questionRepository.save(mapper.map(question, QuestionEntity.class)),
@@ -145,8 +166,8 @@ public class QuestionServiceImpl implements QuestionService {
      * {@inheritDoc} Required implementation.
      */
     @Override
-    public Question delete(long id) {
-        final Question question = mapper.map(findById(id, true), Question.class);
+    public Question delete(long id) throws ResourceNotFoundException {
+        final Question question = mapper.map(get(id), Question.class);
         if (question != null) {
             for (Answer answer : question.getAnswers()) {
                 try {
@@ -159,6 +180,8 @@ public class QuestionServiceImpl implements QuestionService {
                     .findByQuestionId(id)) {
                 questionReferenceMaterialRepository.delete(questionReferenceMaterial);
             }
+            initCache();
+            questionCache.remove(id);
             questionRepository.delete(mapper.map(question, QuestionEntity.class));
         }
         return question;
@@ -168,11 +191,11 @@ public class QuestionServiceImpl implements QuestionService {
      * {@inheritDoc} Required implementation.
      */
     @Override
-    public List<Question> findAllQuestions() {
+    public List<Question> getAll() throws ResourceNotFoundException {
         final List<Question> questions = new ArrayList<>();
         final List<QuestionEntity> questionEntities = questionRepository.findAll();
         for (QuestionEntity questionEntity : questionEntities) {
-            questions.add(mapper.map(questionEntity, Question.class));
+            questions.add(get(questionEntity.getId()));
         }
         return questions;
     }
@@ -181,12 +204,15 @@ public class QuestionServiceImpl implements QuestionService {
      * {@inheritDoc} Required implementation.
      */
     @Override
-    public Question findById(final long id, final boolean partial) {
-        Question response = mapper.map(questionRepository.findById(id), Question.class);
-        if (!partial) {
-            response.setAnswers(answerService.findByQuestionId(id));
-            response.setReferenceMaterials(referenceMaterialService.findByQuestionId(id));
+    public Question get(final long id) throws ResourceNotFoundException {
+        initCache();
+        if (questionCache.containsKey(id)) {
+            return questionCache.get(id);
         }
+        Question response = mapper.map(questionRepository.findById(id), Question.class);
+        response.setAnswers(answerService.findByQuestionId(id));
+        response.setReferenceMaterials(referenceMaterialService.findByQuestionId(id));
+        questionCache.put(id, response);
         return response;
     }
 
@@ -194,10 +220,11 @@ public class QuestionServiceImpl implements QuestionService {
      * {@inheritDoc} Required implementation.
      */
     @Override
-    public boolean answer(long questionId, long userId, String selection, Date startTime) {
+    public boolean answer(long questionId, long userId, String selection, Date startTime)
+            throws ResourceNotFoundException {
         final Instant start = startTime == null ? Instant.now() : startTime.toInstant();
         boolean answeredCorrectly = false;
-        final Question question = findById(questionId, false);
+        final Question question = get(questionId);
         if (question == null) {
             return answeredCorrectly;
         }
@@ -230,10 +257,10 @@ public class QuestionServiceImpl implements QuestionService {
      * {@inheritDoc} Required implementation.
      */
     @Override
-    public boolean assignReferenceMaterial(long questionId, long referenceMaterialId) {
+    public boolean assignReferenceMaterial(long questionId, long referenceMaterialId) throws ResourceNotFoundException {
         boolean success = false;
-        Question question = findById(questionId, false);
-        ReferenceMaterial referenceMaterial = referenceMaterialService.findReferenceMaterialById(referenceMaterialId);
+        Question question = get(questionId);
+        ReferenceMaterial referenceMaterial = referenceMaterialService.get(referenceMaterialId);
         if (question != null
                 && referenceMaterial != null
                 && questionReferenceMaterialRepository.findByQuestionAndReferenceMaterialId(
@@ -263,6 +290,16 @@ public class QuestionServiceImpl implements QuestionService {
             success = true;
         }
         return success;
+    }
+
+    /**
+     * Initializes Hazelcast cache
+     */
+    private void initCache() {
+        if (questionCache == null) {
+            //hazelcastInstance = Hazelcast.newHazelcastInstance(new Config());
+            questionCache = hazelcastInstance.getMap("questions");
+        }
     }
 
 }
