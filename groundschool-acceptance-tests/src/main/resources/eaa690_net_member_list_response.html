@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Index - Membership Database Application</title>
+        <link href="/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+        <meta name="viewport" content="width=device-width" />
+        <link href="/Content/site.css" rel="stylesheet"/>
+        <link href="/Content/themes/jquery-ui-1.11.4/jquery-ui.css" rel="stylesheet"/>
+        <link href="/Content/themes/jquery-ui-1.11.4/jquery-ui.structure.css" rel="stylesheet"/>
+        <link href="/Content/themes/jquery-ui-1.11.4/jquery-ui.theme.css" rel="stylesheet"/>
+        <link href="/Content/themes/jquery-ui-1.11.4/Custom.css" rel="stylesheet"/>
+        <link href="/Scripts/jMenu-master/css/jmenu.css" rel="stylesheet"/>
+        <script src="/Scripts/modernizr-2.8.3.js"></script>
+    </head>
+    <body>
+        <header>
+            <div class="content-wrapper">
+                <div class="float-none">
+                    <p class="site-title">
+                        <a href="/">
+                            <img src="/Images/EAA_690_Logo.png"  width="91" height="87"/>
+                        </a>
+                    </p>
+                </div>
+                <div class="float-right">
+                    <section id="login">
+						    
+        Hello, 
+                        <a class="username" href="/Account/Manage" title="Manage">brian.michael@yahoo.com</a>!
+                        <form action="/Account/LogOff" id="logoutForm" method="post">
+                            <a href="javascript:document.getElementById('logoutForm').submit()">Log off</a>
+                        </form>
+                    </section>
+                </div>
+                <br />
+                <nav class="float-left">
+                    <ul id="jMenu">
+                        <li>
+                            <a href="/">Home</a>
+                        </li>
+                        <li>
+                            <a href="#">Lists</a>
+                            <ul>
+                                <li>
+                                    <a href="/Member">Member List</a>
+                                </li>
+                                <li>
+                                    <a href="/NonMember">Inactive Member List</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#">Admin</a>
+                            <ul>
+                                <li>
+                                    <a href="/Distribution">Committees &amp; Distribution</a>
+                                </li>
+                                <li>
+                                    <a href="/Certificate">Certificates</a>
+                                </li>
+                                <li>
+                                    <a href="/Rating">Ratings</a>
+                                </li>
+                                <li>
+                                    <a href="/Endorsement">Endorsements</a>
+                                </li>
+                                <li>
+                                    <a href="/Account/Roles">Roles</a>
+                                </li>
+                                <li>
+                                    <a href="/EmailDistribution/Create">Email Lists</a>
+                                </li>
+                                <li>
+                                    <a href="/EmailDistribution/NavCom">Send NavCom</a>
+                                </li>
+                                <li>
+                                    <a href="/Media">Media Contact List</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#">Reports</a>
+                            <ul>
+                                <li>
+                                    <a href="/Reports/MediaList">Distribution - Media</a>
+                                </li>
+                                <li>
+                                    <a href="/Reports/BODList">BOD Distribution List</a>
+                                </li>
+                                <li>
+                                    <a href="/Reports/TrusteeList">Trustees Distribution List</a>
+                                </li>
+                                <li>
+                                    <a href="/Reports/YEList">Young Eagles Committee Distribution List</a>
+                                </li>
+                                <li>
+                                    <a href="/Reports/AllMembers">All Members</a>
+                                </li>
+                                <li>
+                                    <a href="/Reports/PaidMembers">Members</a>
+                                </li>
+                                <li>
+                                    <a href="/Reports/UnPaidMembers">UnPaid Members</a>
+                                </li>
+                                <li>
+                                    <a href="/Reports/NonPaidMembers">Inactive Members</a>
+                                </li>
+                                <li>
+                                    <a href="/Reports/YoungEagles">Youth &amp; Young Eagles List</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href ="#">Mail Chimp</a>
+                            <ul>
+                                <li>
+                                    <a href="/MailChimpMembers">Mail Chimp Lists</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="/Home/About">About</a>
+                        </li>
+                        <li>
+                            <a href="/Home/Contact">Contact</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+        <div id="body">
+            <section class="content-wrapper main-content clear-fix" style="page-break-inside:avoid">
+                <table>
+                    <tr>
+                        <td>Page 2
+			of 11
+
+				
+                            <!--<a href="/Member?page=1">&lt;&lt;</a>-->
+                            <a href="/Member?page=1">
+                                <img alt="" src="/Images/first.png" />
+                            </a>
+                            <!--<a href="/Member?page=1">&lt; Prev</a>-->
+                            <a href="/Member?page=1">
+                                <img alt="" src="/Images/previous.png" />
+                            </a>
+                            <a href="/Member?page=3">
+                                <img alt="" src="/Images/next.png" />
+                            </a>
+                            <!--<a href="/Member?page=3">Next &gt;</a>-->
+                            <!--<a href="/Member?page=11">&gt;&gt;</a>-->
+                            <a href="/Member?page=11">
+                                <img alt="" src="/Images/last.png" />
+                            </a>
+                        </td>
+                        <td>
+                            <a href="/Member/Create">Create New</a>
+                        </td>
+                        <form action="/Member?page=2" method="post">
+                            <td>Search by name: 
+                                <input id="searchString" name="searchString" type="text" value="" />
+                                <input type="submit" value="Search" />
+                            </td>
+                        </form>
+                    </tr>
+                </table>
+                <fieldset>
+                    <legend>Membership Listing</legend>
+                    <table>
+                        <tr>
+                            <th>Full Name</th>
+                            <th>BOD / Trustee</th>
+                            <th></th>
+                            <th>Full Name</th>
+                            <th>BOD / Trustee</th>
+                            <th></th>
+                        </tr>
+                        <tr>
+                            <td>
+Bruce Buell				</td>
+                            <td class="centered">
+					</td>
+                            <td>
+                                <a href="/Member/Edit/1093">Edit</a>					 |
+                                <a href="/Member/Details/1093">Details</a>					 |
+                                <a href="/Member/Delete/1093">Deactivate</a>					 |
+                                <a href="/Member/UserRole/1093">Roles</a>
+                            </td>
+                            <td>
+James Burke				</td>
+                            <td class="centered">
+					</td>
+                            <td>
+                                <a href="/Member/Edit/376">Edit</a>					 |
+                                <a href="/Member/Details/376">Details</a>					 |
+                                <a href="/Member/Delete/376">Deactivate</a>					 |
+                                <a href="/Member/UserRole/376">Roles</a>
+                            </td>
+                            <tr>
+                                <td>
+William M. Bush				</td>
+                                <td class="centered">
+					</td>
+                                <td>
+                                    <a href="/Member/Edit/542">Edit</a>					 |
+                                    <a href="/Member/Details/542">Details</a>					 |
+                                    <a href="/Member/Delete/542">Deactivate</a>					 |
+                                    <a href="/Member/UserRole/542">Roles</a>
+                                </td>
+                                <td>
+Andrew Butler				</td>
+                                <td class="centered">
+					</td>
+                                <td>
+                                    <a href="/Member/Edit/1543">Edit</a>					 |
+                                    <a href="/Member/Details/1543">Details</a>					 |
+                                    <a href="/Member/Delete/1543">Deactivate</a>					 |
+                                    <a href="/Member/UserRole/1543">Roles</a>
+                                </td>
+                                <tr>
+                                    <td>
+Anne Cadet-Baker				</td>
+                                    <td class="centered">
+					</td>
+                                    <td>
+                                        <a href="/Member/Edit/1761">Edit</a>					 |
+                                        <a href="/Member/Details/1761">Details</a>					 |
+                                        <a href="/Member/Delete/1761">Deactivate</a>					 |
+                                        <a href="/Member/UserRole/1761">Roles</a>
+                                    </td>
+                                    <td>
+John Cadia				</td>
+                                    <td class="centered">
+					</td>
+                                    <td>
+                                        <a href="/Member/Edit/1747">Edit</a>					 |
+                                        <a href="/Member/Details/1747">Details</a>					 |
+                                        <a href="/Member/Delete/1747">Deactivate</a>					 |
+                                        <a href="/Member/UserRole/1747">Roles</a>
+                                    </td>
+                                    <tr>
+                                        <td>
+James Allen Campbell				</td>
+                                        <td class="centered">
+					</td>
+                                        <td>
+                                            <a href="/Member/Edit/1755">Edit</a>					 |
+                                            <a href="/Member/Details/1755">Details</a>					 |
+                                            <a href="/Member/Delete/1755">Deactivate</a>					 |
+                                            <a href="/Member/UserRole/1755">Roles</a>
+                                        </td>
+                                        <td>
+David Campbell				</td>
+                                        <td class="centered">
+					</td>
+                                        <td>
+                                            <a href="/Member/Edit/549">Edit</a>					 |
+                                            <a href="/Member/Details/549">Details</a>					 |
+                                            <a href="/Member/Delete/549">Deactivate</a>					 |
+                                            <a href="/Member/UserRole/549">Roles</a>
+                                        </td>
+                                        <tr>
+                                            <td>
+R Michael Carter				</td>
+                                            <td class="centered">
+					</td>
+                                            <td>
+                                                <a href="/Member/Edit/378">Edit</a>					 |
+                                                <a href="/Member/Details/378">Details</a>					 |
+                                                <a href="/Member/Delete/378">Deactivate</a>					 |
+                                                <a href="/Member/UserRole/378">Roles</a>
+                                            </td>
+                                            <td>
+Zac Carter				</td>
+                                            <td class="centered">
+					</td>
+                                            <td>
+                                                <a href="/Member/Edit/1560">Edit</a>					 |
+                                                <a href="/Member/Details/1560">Details</a>					 |
+                                                <a href="/Member/Delete/1560">Deactivate</a>					 |
+                                                <a href="/Member/UserRole/1560">Roles</a>
+                                            </td>
+                                            <tr>
+                                                <td>
+David Carter				</td>
+                                                <td class="centered">
+					</td>
+                                                <td>
+                                                    <a href="/Member/Edit/1728">Edit</a>					 |
+                                                    <a href="/Member/Details/1728">Details</a>					 |
+                                                    <a href="/Member/Delete/1728">Deactivate</a>					 |
+                                                    <a href="/Member/UserRole/1728">Roles</a>
+                                                </td>
+                                                <td>
+James Catlin				</td>
+                                                <td class="centered">
+					</td>
+                                                <td>
+                                                    <a href="/Member/Edit/379">Edit</a>					 |
+                                                    <a href="/Member/Details/379">Details</a>					 |
+                                                    <a href="/Member/Delete/379">Deactivate</a>					 |
+                                                    <a href="/Member/UserRole/379">Roles</a>
+                                                </td>
+                                                <tr>
+                                                    <td>
+Joseph  Chambers				</td>
+                                                    <td class="centered">
+					</td>
+                                                    <td>
+                                                        <a href="/Member/Edit/1329">Edit</a>					 |
+                                                        <a href="/Member/Details/1329">Details</a>					 |
+                                                        <a href="/Member/Delete/1329">Deactivate</a>					 |
+                                                        <a href="/Member/UserRole/1329">Roles</a>
+                                                    </td>
+                                                    <td>
+Steve Champness				</td>
+                                                    <td class="centered">
+					</td>
+                                                    <td>
+                                                        <a href="/Member/Edit/561">Edit</a>					 |
+                                                        <a href="/Member/Details/561">Details</a>					 |
+                                                        <a href="/Member/Delete/561">Deactivate</a>					 |
+                                                        <a href="/Member/UserRole/561">Roles</a>
+                                                    </td>
+                                                    <tr>
+                                                        <td>
+Charles Ron Childress				</td>
+                                                        <td class="centered">
+					</td>
+                                                        <td>
+                                                            <a href="/Member/Edit/1360">Edit</a>					 |
+                                                            <a href="/Member/Details/1360">Details</a>					 |
+                                                            <a href="/Member/Delete/1360">Deactivate</a>					 |
+                                                            <a href="/Member/UserRole/1360">Roles</a>
+                                                        </td>
+                                                        <td>
+Mark Clark				</td>
+                                                        <td class="centered">
+					</td>
+                                                        <td>
+                                                            <a href="/Member/Edit/1398">Edit</a>					 |
+                                                            <a href="/Member/Details/1398">Details</a>					 |
+                                                            <a href="/Member/Delete/1398">Deactivate</a>					 |
+                                                            <a href="/Member/UserRole/1398">Roles</a>
+                                                        </td>
+                                                        <tr>
+                                                            <td>
+Mary Clement				</td>
+                                                            <td class="centered">
+					</td>
+                                                            <td>
+                                                                <a href="/Member/Edit/381">Edit</a>					 |
+                                                                <a href="/Member/Details/381">Details</a>					 |
+                                                                <a href="/Member/Delete/381">Deactivate</a>					 |
+                                                                <a href="/Member/UserRole/381">Roles</a>
+                                                            </td>
+                                                            <td>
+Jeff Coffey				</td>
+                                                            <td class="centered">
+					</td>
+                                                            <td>
+                                                                <a href="/Member/Edit/1767">Edit</a>					 |
+                                                                <a href="/Member/Details/1767">Details</a>					 |
+                                                                <a href="/Member/Delete/1767">Deactivate</a>					 |
+                                                                <a href="/Member/UserRole/1767">Roles</a>
+                                                            </td>
+                                                            <tr>
+                                                                <td>
+Roger F. Cole				</td>
+                                                                <td class="centered">
+					</td>
+                                                                <td>
+                                                                    <a href="/Member/Edit/383">Edit</a>					 |
+                                                                    <a href="/Member/Details/383">Details</a>					 |
+                                                                    <a href="/Member/Delete/383">Deactivate</a>					 |
+                                                                    <a href="/Member/UserRole/383">Roles</a>
+                                                                </td>
+                                                                <td>
+Bill Coleman				</td>
+                                                                <td class="centered">
+					</td>
+                                                                <td>
+                                                                    <a href="/Member/Edit/575">Edit</a>					 |
+                                                                    <a href="/Member/Details/575">Details</a>					 |
+                                                                    <a href="/Member/Delete/575">Deactivate</a>					 |
+                                                                    <a href="/Member/UserRole/575">Roles</a>
+                                                                </td>
+                                                                <tr>
+                                                                    <td>
+Sam  Collins				</td>
+                                                                    <td class="centered">
+					</td>
+                                                                    <td>
+                                                                        <a href="/Member/Edit/1583">Edit</a>					 |
+                                                                        <a href="/Member/Details/1583">Details</a>					 |
+                                                                        <a href="/Member/Delete/1583">Deactivate</a>					 |
+                                                                        <a href="/Member/UserRole/1583">Roles</a>
+                                                                    </td>
+                                                                    <td>
+Hugh Colton				</td>
+                                                                    <td class="centered">
+					</td>
+                                                                    <td>
+                                                                        <a href="/Member/Edit/1098">Edit</a>					 |
+                                                                        <a href="/Member/Details/1098">Details</a>					 |
+                                                                        <a href="/Member/Delete/1098">Deactivate</a>					 |
+                                                                        <a href="/Member/UserRole/1098">Roles</a>
+                                                                    </td>
+                                                                    <tr>
+                                                                        <td>
+Ty Connell				</td>
+                                                                        <td class="centered">
+					</td>
+                                                                        <td>
+                                                                            <a href="/Member/Edit/1493">Edit</a>					 |
+                                                                            <a href="/Member/Details/1493">Details</a>					 |
+                                                                            <a href="/Member/Delete/1493">Deactivate</a>					 |
+                                                                            <a href="/Member/UserRole/1493">Roles</a>
+                                                                        </td>
+                                                                        <td>
+Dennis Crosgrove				</td>
+                                                                        <td class="centered">
+					</td>
+                                                                        <td>
+                                                                            <a href="/Member/Edit/1185">Edit</a>					 |
+                                                                            <a href="/Member/Details/1185">Details</a>					 |
+                                                                            <a href="/Member/Delete/1185">Deactivate</a>					 |
+                                                                            <a href="/Member/UserRole/1185">Roles</a>
+                                                                        </td>
+                                                                        <tr>
+                                                                            <td>
+Frederic Culleton				</td>
+                                                                            <td class="centered">
+					</td>
+                                                                            <td>
+                                                                                <a href="/Member/Edit/1720">Edit</a>					 |
+                                                                                <a href="/Member/Details/1720">Details</a>					 |
+                                                                                <a href="/Member/Delete/1720">Deactivate</a>					 |
+                                                                                <a href="/Member/UserRole/1720">Roles</a>
+                                                                            </td>
+                                                                            <td>
+Adam Davidson				</td>
+                                                                            <td class="centered">
+					</td>
+                                                                            <td>
+                                                                                <a href="/Member/Edit/1326">Edit</a>					 |
+                                                                                <a href="/Member/Details/1326">Details</a>					 |
+                                                                                <a href="/Member/Delete/1326">Deactivate</a>					 |
+                                                                                <a href="/Member/UserRole/1326">Roles</a>
+                                                                            </td>
+                                                                            <tr>
+                                                                                <td>
+Benjamin Lee Davis				</td>
+                                                                                <td class="centered">
+					</td>
+                                                                                <td>
+                                                                                    <a href="/Member/Edit/1743">Edit</a>					 |
+                                                                                    <a href="/Member/Details/1743">Details</a>					 |
+                                                                                    <a href="/Member/Delete/1743">Deactivate</a>					 |
+                                                                                    <a href="/Member/UserRole/1743">Roles</a>
+                                                                                </td>
+                                                                                <td>
+Alexander Dawson				</td>
+                                                                                <td class="centered">
+					</td>
+                                                                                <td>
+                                                                                    <a href="/Member/Edit/1738">Edit</a>					 |
+                                                                                    <a href="/Member/Details/1738">Details</a>					 |
+                                                                                    <a href="/Member/Delete/1738">Deactivate</a>					 |
+                                                                                    <a href="/Member/UserRole/1738">Roles</a>
+                                                                                </td>
+                                                                                <tr>
+                                                                                    <td>
+Francois  de Fromont				</td>
+                                                                                    <td class="centered">
+					</td>
+                                                                                    <td>
+                                                                                        <a href="/Member/Edit/1681">Edit</a>					 |
+                                                                                        <a href="/Member/Details/1681">Details</a>					 |
+                                                                                        <a href="/Member/Delete/1681">Deactivate</a>					 |
+                                                                                        <a href="/Member/UserRole/1681">Roles</a>
+                                                                                    </td>
+                                                                                    <td>
+Walter Deere				</td>
+                                                                                    <td class="centered">
+					</td>
+                                                                                    <td>
+                                                                                        <a href="/Member/Edit/387">Edit</a>					 |
+                                                                                        <a href="/Member/Details/387">Details</a>					 |
+                                                                                        <a href="/Member/Delete/387">Deactivate</a>					 |
+                                                                                        <a href="/Member/UserRole/387">Roles</a>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </table>
+                                                                        </fieldset>
+                                                                        <table>
+                                                                            <tr>
+                                                                                <td>Page 2
+			of 11
+
+				
+                                                                                    <!--<a href="/Member?page=1">&lt;&lt;</a>-->
+                                                                                    <a href="/Member?page=1">
+                                                                                        <img alt="" src="/Images/first.png" />
+                                                                                    </a>
+                                                                                    <!--<a href="/Member?page=1">&lt; Prev</a>-->
+                                                                                    <a href="/Member?page=1">
+                                                                                        <img alt="" src="/Images/previous.png" />
+                                                                                    </a>
+                                                                                    <a href="/Member?page=3">
+                                                                                        <img alt="" src="/Images/next.png" />
+                                                                                    </a>
+                                                                                    <!--<a href="/Member?page=3">Next &gt;</a>-->
+                                                                                    <!--<a href="/Member?page=11">&gt;&gt;</a>-->
+                                                                                    <a href="/Member?page=11">
+                                                                                        <img alt="" src="/Images/last.png" />
+                                                                                    </a>
+                                                                                </td>
+                                                                                <form action="/Member?page=2" method="post">
+                                                                                    <td>Search by name: 
+                                                                                        <input id="searchString" name="searchString" type="text" value="" />
+                                                                                        <input type="submit" value="Search" />
+                                                                                    </td>
+                                                                                </form>
+                                                                            </tr>
+                                                                        </table>
+                                                                    </section>
+                                                                </div>
+                                                                <footer>
+                                                                    <div class="content-wrapper">
+                                                                        <div class="float-left">
+                                                                            <p>&copy; 2018 - EAA Chapter 690, Lawrenceville, GA</p>
+                                                                        </div>
+                                                                    </div>
+                                                                </footer>
+                                                                <script src="/Scripts/jquery-3.1.1.js"></script>
+                                                                <script src="/Scripts/jquery-3.3.1.js"></script>
+                                                                <script src="/Scripts/jquery-ui-1.12.1.js"></script>
+                                                                <script src="/Scripts/jMenu-master/js/jMenu.jquery.js"></script>
+                                                                <script>
+		$("#nav").menu({icons: {submenu: "ui-icon-arrowthick-1-s" }}, { position: { at: "right-15 bottom+5" } });
+		</script>
+                                                                <script type="text/javascript">
+			$(document).ready(function () {
+				// simple jMenu plugin called
+				//$("#jMenu").jMenu();
+				// more complex jMenu plugin called
+				$("#jMenu").jMenu({
+					ulWidth: '150',
+					effects: {
+						effectSpeedOpen: 300,
+						effectTypeClose: 'fade'
+					},
+					animatedText: false
+				});
+			});
+</script>
+                                                            </body>
+                                                        </html>

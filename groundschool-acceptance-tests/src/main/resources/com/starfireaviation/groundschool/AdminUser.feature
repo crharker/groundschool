@@ -1,43 +1,42 @@
-@StudentUser
-Feature: Student user endpoint tests
+@AdminUser
+Feature: User endpoint tests
 
 Background:
-  Given I am a student user
+  Given I am a admin user
 
   @acceptance
-  Scenario: Student invites a new user
+  Scenario: Admin invites a new user
     Given a user does not exist
     When I invite a new user
     Then An email is sent to the user
 
   @acceptance
-  Scenario: Student invites an existing user
+  Scenario: Admin invites an existing user
     Given a user does exist
     When I invite a new user
     Then An email is not sent to the user
 
   @acceptance
-  Scenario: Student lists all users
+  Scenario: Admin lists all users
+    Given a user exists
     When I list all users
-    Then I should receive a operation not permitted error
+    Then I should receive a list of users
 
   @acceptance
-  Scenario: Student lists all members
+  Scenario: Admin lists all members
+    Given a member exists
     When I list all members
-    Then I should receive a operation not permitted error
+    Then I should receive a list of members
 
   @acceptance
-  Scenario: Student retrieves a user
+  Scenario: Admin retrieves a user
+    Given a user exists
     When I retrieve a user
-    Then I should receive a operation not permitted error
-
-  @acceptance
-  Scenario: Student retrieves their details
-    When I retrieve my details
     Then I should receive the user details
 
   @acceptance
-  Scenario: Student signs up
+  Scenario: Admin signs up
+    Given I want to signup
     When I signup
     Then I should receive the user details
 
@@ -53,6 +52,6 @@ Background:
     | slack |
 
   @acceptance
-  Scenario: Student logs in
+  Scenario: Admin logs in
     When I login
     Then I should receive an authentication token

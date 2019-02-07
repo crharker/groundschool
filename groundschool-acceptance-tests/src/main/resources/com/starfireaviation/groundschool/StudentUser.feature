@@ -1,42 +1,45 @@
-@AdminUser
-Feature: User endpoint tests
+@StudentUser
+Feature: Student user endpoint tests
 
 Background:
-  Given I am a admin user
+  Given I am a student user
 
   @acceptance
-  Scenario: Admin invites a new user
+  Scenario: Student signs up
+    Given I want to signup
+    When I signup
+    Then I should receive the user details
+
+  @acceptance
+  Scenario: Student invites a new user
     Given a user does not exist
     When I invite a new user
     Then An email is sent to the user
 
   @acceptance
-  Scenario: Admin invites an existing user
+  Scenario: Student invites an existing user
     Given a user does exist
     When I invite a new user
     Then An email is not sent to the user
 
   @acceptance
-  Scenario: Admin lists all users
-    Given a user exists
+  Scenario: Student lists all users
     When I list all users
-    Then I should receive a list of users
+    Then I should receive a access denied error
 
   @acceptance
-  Scenario: Admin lists all members
-    Given a member exists
+  Scenario: Student lists all members
     When I list all members
-    Then I should receive a list of members
+    Then I should receive a access denied error
 
   @acceptance
-  Scenario: Admin retrieves a user
-    Given a user exists
+  Scenario: Student retrieves a user
     When I retrieve a user
-    Then I should receive the user details
+    Then I should receive a access denied error
 
   @acceptance
-  Scenario: Admin signs up
-    When I signup
+  Scenario: Student retrieves their details
+    When I retrieve my details
     Then I should receive the user details
 
   @acceptance
@@ -51,6 +54,6 @@ Background:
     | slack |
 
   @acceptance
-  Scenario: Admin logs in
+  Scenario: Student logs in
     When I login
     Then I should receive an authentication token
