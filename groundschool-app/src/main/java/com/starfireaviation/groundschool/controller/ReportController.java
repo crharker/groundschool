@@ -7,8 +7,6 @@ package com.starfireaviation.groundschool.controller;
 
 import org.jfree.chart.ChartUtils;
 import org.jfree.chart.JFreeChart;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -35,11 +33,6 @@ import java.io.IOException;
         "/reports"
 })
 public class ReportController {
-
-    /**
-     * Logger
-     */
-    private static final Logger LOGGER = LoggerFactory.getLogger(ReportController.class);
 
     /**
      * ReportService
@@ -77,6 +70,27 @@ public class ReportController {
     public @ResponseBody byte[] getQuizCompletionChart(
             @PathVariable("quizId") long quizId) throws IOException, ResourceNotFoundException {
         final JFreeChart chart = reportService.getQuizCompletionChart(quizId);
+        final ByteArrayOutputStream out = new ByteArrayOutputStream();
+        ChartUtils.writeChartAsPNG(out, chart, 640, 480);
+        return out.toByteArray();
+    }
+
+    /**
+     * Generates a pie chart image of a quiz user's results
+     *
+     * @param quizId Quiz ID
+     * @param userId User ID
+     * @return chart image
+     * @throws IOException when chart image is not producible
+     * @throws ResourceNotFoundException when quiz or user is not found
+     */
+    @GetMapping(
+            path = "/quizzes/{quizId}/user/{userId}/results",
+            produces = MediaType.IMAGE_PNG_VALUE)
+    public @ResponseBody byte[] getQuizUserResultsChart(
+            @PathVariable("quizId") long quizId,
+            @PathVariable("userId") long userId) throws IOException, ResourceNotFoundException {
+        final JFreeChart chart = reportService.getQuizUserResultsChart(quizId, userId);
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
         ChartUtils.writeChartAsPNG(out, chart, 640, 480);
         return out.toByteArray();
