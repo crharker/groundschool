@@ -23,7 +23,17 @@ public interface ReportService {
      * @return JFreeChart
      * @throws ResourceNotFoundException when quiz is not found
      */
-    JFreeChart getQuizCompletionChart(Long quizId) throws ResourceNotFoundException;
+    JFreeChart getQuizCompletionChart(final Long quizId) throws ResourceNotFoundException;
+
+    /**
+     * Generates a quiz completion pie chart
+     *
+     * @param quizId Quiz ID
+     * @param userId User ID
+     * @return JFreeChart
+     * @throws ResourceNotFoundException when quiz is not found
+     */
+    JFreeChart getQuizUserResultsChart(final Long quizId, final Long userId) throws ResourceNotFoundException;
 
     /**
      * Generates a quiz results chart
@@ -32,5 +42,5 @@ public interface ReportService {
      * @return JFreeChart
      * @throws ResourceNotFoundException when quiz is not found
      */
-    JFreeChart getQuizResultsChart(Long quizId) throws ResourceNotFoundException;
+    JFreeChart getQuizResultsChart(final Long quizId) throws ResourceNotFoundException;
 }
