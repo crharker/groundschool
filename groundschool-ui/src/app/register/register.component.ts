@@ -29,6 +29,12 @@ export class RegisterComponent implements OnInit {
             firstName: ['', Validators.required],
             lastName: ['', Validators.required],
             username: ['', Validators.required],
+            email: ['', [Validators.required, Validators.email]],
+            sms: ['', [Validators.minLength(10), Validators.maxLength(10)]],
+            slack: [''],
+            eaaNumber: [''],
+            certificateNumber: [''],
+            questionPreference: [''],
             password: ['', [Validators.required, Validators.minLength(6)]]
         });
     }
