@@ -5,8 +5,9 @@
  */
 package com.starfireaviation.groundschool.service;
 
-import java.util.List;
-import java.util.Map;
+import org.jfree.chart.JFreeChart;
+
+import com.starfireaviation.groundschool.exception.ResourceNotFoundException;
 
 /**
  * ReportService
@@ -16,26 +17,30 @@ import java.util.Map;
 public interface ReportService {
 
     /**
-     * Gets all answered questions by a user
-     *
-     * @param userId User ID
-     * @return list of all answered question details
-     */
-    List<Map<String, String>> getAllAnswersForUser(Long userId);
-
-    /**
-     * Gets all answered questions for an event
-     *
-     * @param eventId Event ID
-     * @return list of all answered question details
-     */
-    List<Map<String, String>> getAllAnswersForEvent(Long eventId);
-
-    /**
-     * Gets all answered questions for a quiz
+     * Generates a quiz completion pie chart
      *
      * @param quizId Quiz ID
-     * @return list of all answered question details
+     * @return JFreeChart
+     * @throws ResourceNotFoundException when quiz is not found
      */
-    List<Map<String, String>> getAllAnswersForQuiz(Long quizId);
+    JFreeChart getQuizCompletionChart(final Long quizId) throws ResourceNotFoundException;
+
+    /**
+     * Generates a quiz completion pie chart
+     *
+     * @param quizId Quiz ID
+     * @param userId User ID
+     * @return JFreeChart
+     * @throws ResourceNotFoundException when quiz is not found
+     */
+    JFreeChart getQuizUserResultsChart(final Long quizId, final Long userId) throws ResourceNotFoundException;
+
+    /**
+     * Generates a quiz results chart
+     *
+     * @param quizId Quiz ID
+     * @return JFreeChart
+     * @throws ResourceNotFoundException when quiz is not found
+     */
+    JFreeChart getQuizResultsChart(final Long quizId) throws ResourceNotFoundException;
 }

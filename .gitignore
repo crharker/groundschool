@@ -58,6 +58,8 @@ bin/
 compile.sh
 run.sh
 run_test.sh
+buildApp.sh
+buildTestApp.sh
 *.commit
 *.test
 *.prod

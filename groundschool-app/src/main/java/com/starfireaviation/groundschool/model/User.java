@@ -105,7 +105,7 @@ public class User extends Base {
     /**
      * QuestionPreference
      */
-    private QuestionPreference questionPreference;
+    private QuestionPreference questionPreference = QuestionPreference.WEB;
 
     /**
      * Retrieves the value for {@link #username}.

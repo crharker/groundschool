@@ -3133,6 +3133,235 @@
 						"description": "http://{{host-app}}/users/1/password/password/SKYC"
 					},
 					"response": []
+				},
+				{
+					"name": "login",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{host-app}}/users/1/login",
+							"protocol": "http",
+							"host": [
+								"{{host-app}}"
+							],
+							"path": [
+								"users",
+								"1",
+								"login"
+							]
+						},
+						"description": "http://{{host-app}}/users/1/login"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "reports",
+			"item": [
+				{
+					"name": "Quiz Completion",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{instructor-password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{instructor-user}}",
+									"type": "string"
+								},
+								{
+									"key": "saveHelperData",
+									"type": "any"
+								},
+								{
+									"key": "showPassword",
+									"value": false,
+									"type": "boolean"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "image/png"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{host-app}}/reports/quizzes/1/completion",
+							"protocol": "http",
+							"host": [
+								"{{host-app}}"
+							],
+							"path": [
+								"reports",
+								"quizzes",
+								"1",
+								"completion"
+							]
+						},
+						"description": "http://{{host-app}}/reports/quizzes/1/completion"
+					},
+					"response": []
+				},
+				{
+					"name": "Quiz Results",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{instructor-password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{instructor-user}}",
+									"type": "string"
+								},
+								{
+									"key": "saveHelperData",
+									"type": "any"
+								},
+								{
+									"key": "showPassword",
+									"value": false,
+									"type": "boolean"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "image/png"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{host-app}}/reports/quizzes/1/results",
+							"protocol": "http",
+							"host": [
+								"{{host-app}}"
+							],
+							"path": [
+								"reports",
+								"quizzes",
+								"1",
+								"results"
+							]
+						},
+						"description": "http://{{host-app}}/reports/quizzes/1/results"
+					},
+					"response": []
+				},
+				{
+					"name": "Quiz User Results",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{instructor-password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{instructor-user}}",
+									"type": "string"
+								},
+								{
+									"key": "saveHelperData",
+									"type": "any"
+								},
+								{
+									"key": "showPassword",
+									"value": false,
+									"type": "boolean"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "image/png"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{host-app}}/reports/quizzes/1/user/1/results",
+							"protocol": "http",
+							"host": [
+								"{{host-app}}"
+							],
+							"path": [
+								"reports",
+								"quizzes",
+								"1",
+								"user",
+								"1",
+								"results"
+							]
+						},
+						"description": "http://{{host-app}}/reports/quizzes/1/user/1/results"
+					},
+					"response": []
 				}
 			]
 		}
