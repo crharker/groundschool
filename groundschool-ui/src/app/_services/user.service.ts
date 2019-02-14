@@ -12,7 +12,7 @@ export class UserService {
         return this.http.get<User[]>(`${environment.apiUrl}/users`);
     }
 
-    getById(id: number) {
+    get(id: number) {
         return this.http.get(`${environment.apiUrl}/users/${id}`);
     }
 
