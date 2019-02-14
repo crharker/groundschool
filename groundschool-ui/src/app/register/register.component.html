@@ -1,0 +1,94 @@
+﻿<h2>Register for EAA 690's Ground School</h2>
+<form class="col-10" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+    <div class="form-group row">
+        <label class="col col-sm-4" for="firstName"><font color="red">*</font> First Name:</label>
+        <div class="col">
+            <input type="text" formControlName="firstName" class="form-control form-control-sm col-sm-10" [ngClass]="{ 'is-invalid': submitted && f.firstName.errors }" placeholder="John"/>
+            <div *ngIf="submitted && f.firstName.errors" class="invalid-feedback">
+                <div *ngIf="f.firstName.errors.required">First Name is required</div>
+            </div>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col col-sm-4" for="lastName"><font color="red">*</font> Last Name:</label>
+        <div class="col">
+            <input type="text" formControlName="lastName" class="form-control form-control-sm col-sm-10" [ngClass]="{ 'is-invalid': submitted && f.lastName.errors }" placeholder="Doe"/>
+            <div *ngIf="submitted && f.lastName.errors" class="invalid-feedback">
+                <div *ngIf="f.lastName.errors.required">Last Name is required</div>
+            </div>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col col-sm-4" for="email"><font color="red">*</font> Email Address:</label>
+        <div class="col">
+            <input type="text" formControlName="email" class="form-control form-control-sm col-sm-10" [ngClass]="{ 'is-invalid': submitted && f.email.errors }" placeholder="someone@somewhere.com"/>
+            <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
+                <div *ngIf="f.email.errors.required">Email is required</div>
+                <div *ngIf="f.email.errors.valid">A valid email address must be provided</div>
+            </div>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col col-sm-4" for="username"><font color="red">*</font> Username:</label>
+        <div class="col">
+            <input type="text" formControlName="username" class="form-control form-control-sm col-sm-10" [ngClass]="{ 'is-invalid': submitted && f.username.errors }" placeholder="username" />
+            <div *ngIf="submitted && f.username.errors" class="invalid-feedback">
+                <div *ngIf="f.username.errors.required">Username is required</div>
+            </div>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col col-sm-4" for="password"><font color="red">*</font> Password:</label>
+        <div class="col">
+            <input type="password" formControlName="password" class="form-control form-control-sm col-sm-10" [ngClass]="{ 'is-invalid': submitted && f.password.errors }" placeholder="******" />
+            <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
+                <div *ngIf="f.password.errors.required">Password is required</div>
+                <div *ngIf="f.password.errors.minlength">Password must be at least 6 characters</div>
+            </div>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col col-sm-4" for="sms">Cell Phone:</label>
+        <div class="col">
+            <input type="text" formControlName="sms" class="form-control form-control-sm col-sm-10" [ngClass]="{ 'is-invalid': submitted && f.sms.errors }" placeholder="4048675309"/>
+            <div *ngIf="submitted && f.sms.errors" class="invalid-feedback">
+                <div *ngIf="f.sms.errors.required">Phone number format is incorrect</div>
+            </div>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col col-sm-4" for="slack">Slack Name:</label>
+        <div class="col">
+            <input type="text" formControlName="slack" class="form-control form-control-sm col-sm-10" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col col-sm-4" for="eaaNumber">EAA Number:</label>
+        <div class="col">
+            <input type="text" formControlName="eaaNumber" class="form-control form-control-sm col-sm-10" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col col-sm-4" for="certificateNumber">FAA Certificate Number:</label>
+        <div class="col">
+            <input type="text" formControlName="certificateNumber" class="form-control form-control-sm col-sm-10" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col col-sm-4" for="questionPreference">Question Delivery Preference:</label>
+        <div class="col">
+            <select class="form-control col-sm-10" id="questionPreference">
+                <option>Web</option>
+                <option>Slack</option>
+                <option>SMS</option>
+                <option>Email</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <button [disabled]="loading" class="btn btn-primary col col-sm-3">Register</button>
+        <img *ngIf="loading" class="pl-3" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+        <a routerLink="/login" class="btn btn-link col col-sm-4">Cancel</a>
+    </div>
+    <p><font color="red">*</font>  Indicates a required field</p>
+</form>

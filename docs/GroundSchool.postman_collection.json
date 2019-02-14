@@ -12,28 +12,7 @@
 					"name": "event",
 					"request": {
 						"auth": {
-							"type": "basic",
-							"basic": [
-								{
-									"key": "password",
-									"value": "{{instructor-password}}",
-									"type": "string"
-								},
-								{
-									"key": "username",
-									"value": "{{instructor-user}}",
-									"type": "string"
-								},
-								{
-									"key": "saveHelperData",
-									"type": "any"
-								},
-								{
-									"key": "showPassword",
-									"value": false,
-									"type": "boolean"
-								}
-							]
+							"type": "noauth"
 						},
 						"method": "POST",
 						"header": [
@@ -45,6 +24,11 @@
 							{
 								"key": "Content-Type",
 								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
 								"type": "text"
 							}
 						],
@@ -73,28 +57,7 @@
 					},
 					"request": {
 						"auth": {
-							"type": "basic",
-							"basic": [
-								{
-									"key": "password",
-									"value": "{{instructor-password}}",
-									"type": "string"
-								},
-								{
-									"key": "username",
-									"value": "{{instructor-user}}",
-									"type": "string"
-								},
-								{
-									"key": "saveHelperData",
-									"type": "any"
-								},
-								{
-									"key": "showPassword",
-									"value": false,
-									"type": "boolean"
-								}
-							]
+							"type": "noauth"
 						},
 						"method": "GET",
 						"header": [
@@ -106,6 +69,11 @@
 							{
 								"key": "Content-Type",
 								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
 								"type": "text"
 							}
 						],
@@ -132,28 +100,7 @@
 					"name": "event",
 					"request": {
 						"auth": {
-							"type": "basic",
-							"basic": [
-								{
-									"key": "password",
-									"value": "{{instructor-password}}",
-									"type": "string"
-								},
-								{
-									"key": "username",
-									"value": "{{instructor-user}}",
-									"type": "string"
-								},
-								{
-									"key": "saveHelperData",
-									"type": "any"
-								},
-								{
-									"key": "showPassword",
-									"value": false,
-									"type": "boolean"
-								}
-							]
+							"type": "noauth"
 						},
 						"method": "PUT",
 						"header": [
@@ -165,6 +112,11 @@
 							{
 								"key": "Content-Type",
 								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
 								"type": "text"
 							}
 						],
@@ -190,28 +142,7 @@
 					"name": "event",
 					"request": {
 						"auth": {
-							"type": "basic",
-							"basic": [
-								{
-									"key": "password",
-									"value": "{{instructor-password}}",
-									"type": "string"
-								},
-								{
-									"key": "username",
-									"value": "{{instructor-user}}",
-									"type": "string"
-								},
-								{
-									"key": "saveHelperData",
-									"type": "any"
-								},
-								{
-									"key": "showPassword",
-									"value": false,
-									"type": "boolean"
-								}
-							]
+							"type": "noauth"
 						},
 						"method": "DELETE",
 						"header": [
@@ -223,6 +154,11 @@
 							{
 								"key": "Content-Type",
 								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
 								"type": "text"
 							}
 						],
@@ -249,28 +185,7 @@
 					"name": "events",
 					"request": {
 						"auth": {
-							"type": "basic",
-							"basic": [
-								{
-									"key": "password",
-									"value": "{{instructor-password}}",
-									"type": "string"
-								},
-								{
-									"key": "username",
-									"value": "{{instructor-user}}",
-									"type": "string"
-								},
-								{
-									"key": "saveHelperData",
-									"type": "any"
-								},
-								{
-									"key": "showPassword",
-									"value": false,
-									"type": "boolean"
-								}
-							]
+							"type": "noauth"
 						},
 						"method": "GET",
 						"header": [
@@ -282,6 +197,11 @@
 							{
 								"key": "Content-Type",
 								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
 								"type": "text"
 							}
 						],
@@ -383,28 +303,7 @@
 					"name": "assign lessonplan",
 					"request": {
 						"auth": {
-							"type": "basic",
-							"basic": [
-								{
-									"key": "password",
-									"value": "{{instructor-password}}",
-									"type": "string"
-								},
-								{
-									"key": "username",
-									"value": "{{instructor-user}}",
-									"type": "string"
-								},
-								{
-									"key": "saveHelperData",
-									"type": "any"
-								},
-								{
-									"key": "showPassword",
-									"value": false,
-									"type": "boolean"
-								}
-							]
+							"type": "noauth"
 						},
 						"method": "POST",
 						"header": [
@@ -416,6 +315,11 @@
 							{
 								"key": "Content-Type",
 								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
 								"type": "text"
 							}
 						],
@@ -445,28 +349,7 @@
 					"name": "unassign lessonplan",
 					"request": {
 						"auth": {
-							"type": "basic",
-							"basic": [
-								{
-									"key": "password",
-									"value": "{{instructor-password}}",
-									"type": "string"
-								},
-								{
-									"key": "username",
-									"value": "{{instructor-user}}",
-									"type": "string"
-								},
-								{
-									"key": "saveHelperData",
-									"type": "any"
-								},
-								{
-									"key": "showPassword",
-									"value": false,
-									"type": "boolean"
-								}
-							]
+							"type": "noauth"
 						},
 						"method": "POST",
 						"header": [
@@ -478,6 +361,11 @@
 							{
 								"key": "Content-Type",
 								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
 								"type": "text"
 							}
 						],
@@ -507,28 +395,7 @@
 					"name": "start",
 					"request": {
 						"auth": {
-							"type": "basic",
-							"basic": [
-								{
-									"key": "password",
-									"value": "{{instructor-password}}",
-									"type": "string"
-								},
-								{
-									"key": "username",
-									"value": "{{instructor-user}}",
-									"type": "string"
-								},
-								{
-									"key": "saveHelperData",
-									"type": "any"
-								},
-								{
-									"key": "showPassword",
-									"value": false,
-									"type": "boolean"
-								}
-							]
+							"type": "noauth"
 						},
 						"method": "POST",
 						"header": [
@@ -540,6 +407,11 @@
 							{
 								"key": "Content-Type",
 								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
 								"type": "text"
 							}
 						],
@@ -567,28 +439,7 @@
 					"name": "complete",
 					"request": {
 						"auth": {
-							"type": "basic",
-							"basic": [
-								{
-									"key": "password",
-									"value": "{{instructor-password}}",
-									"type": "string"
-								},
-								{
-									"key": "username",
-									"value": "{{instructor-user}}",
-									"type": "string"
-								},
-								{
-									"key": "saveHelperData",
-									"type": "any"
-								},
-								{
-									"key": "showPassword",
-									"value": false,
-									"type": "boolean"
-								}
-							]
+							"type": "noauth"
 						},
 						"method": "POST",
 						"header": [
@@ -600,6 +451,11 @@
 							{
 								"key": "Content-Type",
 								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
 								"type": "text"
 							}
 						],
@@ -627,28 +483,7 @@
 					"name": "checkin",
 					"request": {
 						"auth": {
-							"type": "basic",
-							"basic": [
-								{
-									"key": "password",
-									"value": "{{instructor-password}}",
-									"type": "string"
-								},
-								{
-									"key": "username",
-									"value": "{{instructor-user}}",
-									"type": "string"
-								},
-								{
-									"key": "saveHelperData",
-									"type": "any"
-								},
-								{
-									"key": "showPassword",
-									"value": false,
-									"type": "boolean"
-								}
-							]
+							"type": "noauth"
 						},
 						"method": "POST",
 						"header": [
@@ -661,6 +496,11 @@
 								"key": "Content-Type",
 								"type": "text",
 								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
 							}
 						],
 						"body": {
@@ -694,28 +534,7 @@
 					"name": "lessonplan",
 					"request": {
 						"auth": {
-							"type": "basic",
-							"basic": [
-								{
-									"key": "password",
-									"value": "{{instructor-password}}",
-									"type": "string"
-								},
-								{
-									"key": "username",
-									"value": "{{instructor-user}}",
-									"type": "string"
-								},
-								{
-									"key": "saveHelperData",
-									"type": "any"
-								},
-								{
-									"key": "showPassword",
-									"value": false,
-									"type": "boolean"
-								}
-							]
+							"type": "noauth"
 						},
 						"method": "POST",
 						"header": [
@@ -727,6 +546,11 @@
 							{
 								"key": "Content-Type",
 								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
 								"type": "text"
 							}
 						],
@@ -752,28 +576,7 @@
 					"name": "lessonplan",
 					"request": {
 						"auth": {
-							"type": "basic",
-							"basic": [
-								{
-									"key": "password",
-									"value": "{{instructor-password}}",
-									"type": "string"
-								},
-								{
-									"key": "username",
-									"value": "{{instructor-user}}",
-									"type": "string"
-								},
-								{
-									"key": "saveHelperData",
-									"type": "any"
-								},
-								{
-									"key": "showPassword",
-									"value": false,
-									"type": "boolean"
-								}
-							]
+							"type": "noauth"
 						},
 						"method": "GET",
 						"header": [
@@ -785,6 +588,11 @@
 							{
 								"key": "Content-Type",
 								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
 								"type": "text"
 							}
 						],
@@ -811,28 +619,7 @@
 					"name": "lessonplan",
 					"request": {
 						"auth": {
-							"type": "basic",
-							"basic": [
-								{
-									"key": "password",
-									"value": "{{instructor-password}}",
-									"type": "string"
-								},
-								{
-									"key": "username",
-									"value": "{{instructor-user}}",
-									"type": "string"
-								},
-								{
-									"key": "saveHelperData",
-									"type": "any"
-								},
-								{
-									"key": "showPassword",
-									"value": false,
-									"type": "boolean"
-								}
-							]
+							"type": "noauth"
 						},
 						"method": "DELETE",
 						"header": [
@@ -844,6 +631,11 @@
 							{
 								"key": "Content-Type",
 								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
 								"type": "text"
 							}
 						],
@@ -870,28 +662,7 @@
 					"name": "lessonplans",
 					"request": {
 						"auth": {
-							"type": "basic",
-							"basic": [
-								{
-									"key": "password",
-									"value": "{{instructor-password}}",
-									"type": "string"
-								},
-								{
-									"key": "username",
-									"value": "{{instructor-user}}",
-									"type": "string"
-								},
-								{
-									"key": "saveHelperData",
-									"type": "any"
-								},
-								{
-									"key": "showPassword",
-									"value": false,
-									"type": "boolean"
-								}
-							]
+							"type": "noauth"
 						},
 						"method": "GET",
 						"header": [
@@ -903,6 +674,11 @@
 							{
 								"key": "Content-Type",
 								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
 								"type": "text"
 							}
 						],
@@ -979,28 +755,7 @@
 							"name": "question 2",
 							"request": {
 								"auth": {
-									"type": "basic",
-									"basic": [
-										{
-											"key": "password",
-											"value": "{{instructor-password}}",
-											"type": "string"
-										},
-										{
-											"key": "username",
-											"value": "{{instructor-user}}",
-											"type": "string"
-										},
-										{
-											"key": "saveHelperData",
-											"type": "any"
-										},
-										{
-											"key": "showPassword",
-											"value": false,
-											"type": "boolean"
-										}
-									]
+									"type": "noauth"
 								},
 								"method": "POST",
 								"header": [
@@ -1012,6 +767,11 @@
 									{
 										"key": "Content-Type",
 										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "{{token}}",
 										"type": "text"
 									}
 								],
@@ -1037,28 +797,7 @@
 							"name": "question 3",
 							"request": {
 								"auth": {
-									"type": "basic",
-									"basic": [
-										{
-											"key": "password",
-											"value": "{{instructor-password}}",
-											"type": "string"
-										},
-										{
-											"key": "username",
-											"value": "{{instructor-user}}",
-											"type": "string"
-										},
-										{
-											"key": "saveHelperData",
-											"type": "any"
-										},
-										{
-											"key": "showPassword",
-											"value": false,
-											"type": "boolean"
-										}
-									]
+									"type": "noauth"
 								},
 								"method": "POST",
 								"header": [
@@ -1070,6 +809,11 @@
 									{
 										"key": "Content-Type",
 										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "{{token}}",
 										"type": "text"
 									}
 								],
@@ -1095,28 +839,7 @@
 							"name": "question 4",
 							"request": {
 								"auth": {
-									"type": "basic",
-									"basic": [
-										{
-											"key": "password",
-											"value": "{{instructor-password}}",
-											"type": "string"
-										},
-										{
-											"key": "username",
-											"value": "{{instructor-user}}",
-											"type": "string"
-										},
-										{
-											"key": "saveHelperData",
-											"type": "any"
-										},
-										{
-											"key": "showPassword",
-											"value": false,
-											"type": "boolean"
-										}
-									]
+									"type": "noauth"
 								},
 								"method": "POST",
 								"header": [
@@ -1128,6 +851,11 @@
 									{
 										"key": "Content-Type",
 										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "{{token}}",
 										"type": "text"
 									}
 								],
@@ -1153,28 +881,7 @@
 							"name": "question 5",
 							"request": {
 								"auth": {
-									"type": "basic",
-									"basic": [
-										{
-											"key": "password",
-											"value": "{{instructor-password}}",
-											"type": "string"
-										},
-										{
-											"key": "username",
-											"value": "{{instructor-user}}",
-											"type": "string"
-										},
-										{
-											"key": "saveHelperData",
-											"type": "any"
-										},
-										{
-											"key": "showPassword",
-											"value": false,
-											"type": "boolean"
-										}
-									]
+									"type": "noauth"
 								},
 								"method": "POST",
 								"header": [
@@ -1186,6 +893,11 @@
 									{
 										"key": "Content-Type",
 										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "{{token}}",
 										"type": "text"
 									}
 								],
@@ -1211,28 +923,7 @@
 							"name": "question 6",
 							"request": {
 								"auth": {
-									"type": "basic",
-									"basic": [
-										{
-											"key": "password",
-											"value": "{{instructor-password}}",
-											"type": "string"
-										},
-										{
-											"key": "username",
-											"value": "{{instructor-user}}",
-											"type": "string"
-										},
-										{
-											"key": "saveHelperData",
-											"type": "any"
-										},
-										{
-											"key": "showPassword",
-											"value": false,
-											"type": "boolean"
-										}
-									]
+									"type": "noauth"
 								},
 								"method": "POST",
 								"header": [
@@ -1244,6 +935,11 @@
 									{
 										"key": "Content-Type",
 										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "{{token}}",
 										"type": "text"
 									}
 								],
@@ -1269,28 +965,7 @@
 							"name": "question 7",
 							"request": {
 								"auth": {
-									"type": "basic",
-									"basic": [
-										{
-											"key": "password",
-											"value": "{{instructor-password}}",
-											"type": "string"
-										},
-										{
-											"key": "username",
-											"value": "{{instructor-user}}",
-											"type": "string"
-										},
-										{
-											"key": "saveHelperData",
-											"type": "any"
-										},
-										{
-											"key": "showPassword",
-											"value": false,
-											"type": "boolean"
-										}
-									]
+									"type": "noauth"
 								},
 								"method": "POST",
 								"header": [
@@ -1302,6 +977,11 @@
 									{
 										"key": "Content-Type",
 										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "{{token}}",
 										"type": "text"
 									}
 								],
@@ -1327,28 +1007,7 @@
 							"name": "question 8",
 							"request": {
 								"auth": {
-									"type": "basic",
-									"basic": [
-										{
-											"key": "password",
-											"value": "{{instructor-password}}",
-											"type": "string"
-										},
-										{
-											"key": "username",
-											"value": "{{instructor-user}}",
-											"type": "string"
-										},
-										{
-											"key": "saveHelperData",
-											"type": "any"
-										},
-										{
-											"key": "showPassword",
-											"value": false,
-											"type": "boolean"
-										}
-									]
+									"type": "noauth"
 								},
 								"method": "POST",
 								"header": [
@@ -1360,6 +1019,11 @@
 									{
 										"key": "Content-Type",
 										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "{{token}}",
 										"type": "text"
 									}
 								],
@@ -1385,28 +1049,7 @@
 							"name": "question 9",
 							"request": {
 								"auth": {
-									"type": "basic",
-									"basic": [
-										{
-											"key": "password",
-											"value": "{{instructor-password}}",
-											"type": "string"
-										},
-										{
-											"key": "username",
-											"value": "{{instructor-user}}",
-											"type": "string"
-										},
-										{
-											"key": "saveHelperData",
-											"type": "any"
-										},
-										{
-											"key": "showPassword",
-											"value": false,
-											"type": "boolean"
-										}
-									]
+									"type": "noauth"
 								},
 								"method": "POST",
 								"header": [
@@ -1418,6 +1061,11 @@
 									{
 										"key": "Content-Type",
 										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "{{token}}",
 										"type": "text"
 									}
 								],
@@ -1446,28 +1094,7 @@
 					"name": "question",
 					"request": {
 						"auth": {
-							"type": "basic",
-							"basic": [
-								{
-									"key": "password",
-									"value": "{{instructor-password}}",
-									"type": "string"
-								},
-								{
-									"key": "username",
-									"value": "{{instructor-user}}",
-									"type": "string"
-								},
-								{
-									"key": "saveHelperData",
-									"type": "any"
-								},
-								{
-									"key": "showPassword",
-									"value": false,
-									"type": "boolean"
-								}
-							]
+							"type": "noauth"
 						},
 						"method": "POST",
 						"header": [
@@ -1479,6 +1106,11 @@
 							{
 								"key": "Content-Type",
 								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
 								"type": "text"
 							}
 						],
@@ -1504,28 +1136,7 @@
 					"name": "questions",
 					"request": {
 						"auth": {
-							"type": "basic",
-							"basic": [
-								{
-									"key": "password",
-									"value": "{{instructor-password}}",
-									"type": "string"
-								},
-								{
-									"key": "username",
-									"value": "{{instructor-user}}",
-									"type": "string"
-								},
-								{
-									"key": "saveHelperData",
-									"type": "any"
-								},
-								{
-									"key": "showPassword",
-									"value": false,
-									"type": "boolean"
-								}
-							]
+							"type": "noauth"
 						},
 						"method": "GET",
 						"header": [
@@ -1537,6 +1148,11 @@
 							{
 								"key": "Content-Type",
 								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
 								"type": "text"
 							}
 						],
@@ -1597,28 +1213,7 @@
 					"name": "question",
 					"request": {
 						"auth": {
-							"type": "basic",
-							"basic": [
-								{
-									"key": "password",
-									"value": "{{instructor-password}}",
-									"type": "string"
-								},
-								{
-									"key": "username",
-									"value": "{{instructor-user}}",
-									"type": "string"
-								},
-								{
-									"key": "saveHelperData",
-									"type": "any"
-								},
-								{
-									"key": "showPassword",
-									"value": false,
-									"type": "boolean"
-								}
-							]
+							"type": "noauth"
 						},
 						"method": "DELETE",
 						"header": [
@@ -1630,6 +1225,11 @@
 							{
 								"key": "Content-Type",
 								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
 								"type": "text"
 							}
 						],
@@ -1656,28 +1256,7 @@
 					"name": "answer",
 					"request": {
 						"auth": {
-							"type": "basic",
-							"basic": [
-								{
-									"key": "password",
-									"value": "{{student-password}}",
-									"type": "string"
-								},
-								{
-									"key": "username",
-									"value": "{{student-user}}",
-									"type": "string"
-								},
-								{
-									"key": "saveHelperData",
-									"type": "any"
-								},
-								{
-									"key": "showPassword",
-									"value": false,
-									"type": "boolean"
-								}
-							]
+							"type": "noauth"
 						},
 						"method": "POST",
 						"header": [
@@ -1689,6 +1268,11 @@
 							{
 								"key": "Content-Type",
 								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
 								"type": "text"
 							}
 						],
@@ -1723,28 +1307,7 @@
 					"name": "quiz",
 					"request": {
 						"auth": {
-							"type": "basic",
-							"basic": [
-								{
-									"key": "password",
-									"value": "{{instructor-password}}",
-									"type": "string"
-								},
-								{
-									"key": "username",
-									"value": "{{instructor-user}}",
-									"type": "string"
-								},
-								{
-									"key": "saveHelperData",
-									"type": "any"
-								},
-								{
-									"key": "showPassword",
-									"value": false,
-									"type": "boolean"
-								}
-							]
+							"type": "noauth"
 						},
 						"method": "POST",
 						"header": [
@@ -1756,6 +1319,11 @@
 							{
 								"key": "Content-Type",
 								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
 								"type": "text"
 							}
 						],
@@ -1781,28 +1349,7 @@
 					"name": "quiz",
 					"request": {
 						"auth": {
-							"type": "basic",
-							"basic": [
-								{
-									"key": "password",
-									"value": "{{instructor-password}}",
-									"type": "string"
-								},
-								{
-									"key": "username",
-									"value": "{{instructor-user}}",
-									"type": "string"
-								},
-								{
-									"key": "saveHelperData",
-									"type": "any"
-								},
-								{
-									"key": "showPassword",
-									"value": false,
-									"type": "boolean"
-								}
-							]
+							"type": "noauth"
 						},
 						"method": "PUT",
 						"header": [
@@ -1814,6 +1361,11 @@
 							{
 								"key": "Content-Type",
 								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
 								"type": "text"
 							}
 						],
@@ -1873,28 +1425,7 @@
 					"name": "quiz",
 					"request": {
 						"auth": {
-							"type": "basic",
-							"basic": [
-								{
-									"key": "password",
-									"value": "{{instructor-password}}",
-									"type": "string"
-								},
-								{
-									"key": "username",
-									"value": "{{instructor-user}}",
-									"type": "string"
-								},
-								{
-									"key": "saveHelperData",
-									"type": "any"
-								},
-								{
-									"key": "showPassword",
-									"value": false,
-									"type": "boolean"
-								}
-							]
+							"type": "noauth"
 						},
 						"method": "GET",
 						"header": [
@@ -1906,6 +1437,11 @@
 							{
 								"key": "Content-Type",
 								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
 								"type": "text"
 							}
 						],
@@ -1932,28 +1468,7 @@
 					"name": "quiz",
 					"request": {
 						"auth": {
-							"type": "basic",
-							"basic": [
-								{
-									"key": "password",
-									"value": "{{instructor-password}}",
-									"type": "string"
-								},
-								{
-									"key": "username",
-									"value": "{{instructor-user}}",
-									"type": "string"
-								},
-								{
-									"key": "saveHelperData",
-									"type": "any"
-								},
-								{
-									"key": "showPassword",
-									"value": false,
-									"type": "boolean"
-								}
-							]
+							"type": "noauth"
 						},
 						"method": "DELETE",
 						"header": [
@@ -1965,6 +1480,11 @@
 							{
 								"key": "Content-Type",
 								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
 								"type": "text"
 							}
 						],
@@ -1991,28 +1511,7 @@
 					"name": "add question",
 					"request": {
 						"auth": {
-							"type": "basic",
-							"basic": [
-								{
-									"key": "password",
-									"value": "{{instructor-password}}",
-									"type": "string"
-								},
-								{
-									"key": "username",
-									"value": "{{instructor-user}}",
-									"type": "string"
-								},
-								{
-									"key": "saveHelperData",
-									"type": "any"
-								},
-								{
-									"key": "showPassword",
-									"value": false,
-									"type": "boolean"
-								}
-							]
+							"type": "noauth"
 						},
 						"method": "POST",
 						"header": [
@@ -2024,6 +1523,11 @@
 							{
 								"key": "Content-Type",
 								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
 								"type": "text"
 							}
 						],
@@ -2052,28 +1556,7 @@
 					"name": "start",
 					"request": {
 						"auth": {
-							"type": "basic",
-							"basic": [
-								{
-									"key": "password",
-									"value": "{{instructor-password}}",
-									"type": "string"
-								},
-								{
-									"key": "username",
-									"value": "{{instructor-user}}",
-									"type": "string"
-								},
-								{
-									"key": "saveHelperData",
-									"type": "any"
-								},
-								{
-									"key": "showPassword",
-									"value": false,
-									"type": "boolean"
-								}
-							]
+							"type": "noauth"
 						},
 						"method": "POST",
 						"header": [
@@ -2085,6 +1568,11 @@
 							{
 								"key": "Content-Type",
 								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
 								"type": "text"
 							}
 						],
@@ -2112,28 +1600,7 @@
 					"name": "complete",
 					"request": {
 						"auth": {
-							"type": "basic",
-							"basic": [
-								{
-									"key": "password",
-									"value": "{{instructor-password}}",
-									"type": "string"
-								},
-								{
-									"key": "username",
-									"value": "{{instructor-user}}",
-									"type": "string"
-								},
-								{
-									"key": "saveHelperData",
-									"type": "any"
-								},
-								{
-									"key": "showPassword",
-									"value": false,
-									"type": "boolean"
-								}
-							]
+							"type": "noauth"
 						},
 						"method": "POST",
 						"header": [
@@ -2145,6 +1612,11 @@
 							{
 								"key": "Content-Type",
 								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
 								"type": "text"
 							}
 						],
@@ -2177,28 +1649,7 @@
 					"name": "referencematerial",
 					"request": {
 						"auth": {
-							"type": "basic",
-							"basic": [
-								{
-									"key": "password",
-									"value": "{{instructor-password}}",
-									"type": "string"
-								},
-								{
-									"key": "username",
-									"value": "{{instructor-user}}",
-									"type": "string"
-								},
-								{
-									"key": "saveHelperData",
-									"type": "any"
-								},
-								{
-									"key": "showPassword",
-									"value": false,
-									"type": "boolean"
-								}
-							]
+							"type": "noauth"
 						},
 						"method": "POST",
 						"header": [
@@ -2210,6 +1661,11 @@
 							{
 								"key": "Content-Type",
 								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
 								"type": "text"
 							}
 						],
@@ -2270,28 +1726,7 @@
 					"name": "referencematerial",
 					"request": {
 						"auth": {
-							"type": "basic",
-							"basic": [
-								{
-									"key": "password",
-									"value": "{{instructor-password}}",
-									"type": "string"
-								},
-								{
-									"key": "username",
-									"value": "{{instructor-user}}",
-									"type": "string"
-								},
-								{
-									"key": "saveHelperData",
-									"type": "any"
-								},
-								{
-									"key": "showPassword",
-									"value": false,
-									"type": "boolean"
-								}
-							]
+							"type": "noauth"
 						},
 						"method": "DELETE",
 						"header": [
@@ -2303,6 +1738,11 @@
 							{
 								"key": "Content-Type",
 								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
 								"type": "text"
 							}
 						],
@@ -2437,28 +1877,7 @@
 					"name": "statistic",
 					"request": {
 						"auth": {
-							"type": "basic",
-							"basic": [
-								{
-									"key": "password",
-									"value": "{{instructor-password}}",
-									"type": "string"
-								},
-								{
-									"key": "username",
-									"value": "{{instructor-user}}",
-									"type": "string"
-								},
-								{
-									"key": "saveHelperData",
-									"type": "any"
-								},
-								{
-									"key": "showPassword",
-									"value": false,
-									"type": "boolean"
-								}
-							]
+							"type": "noauth"
 						},
 						"method": "DELETE",
 						"header": [
@@ -2470,6 +1889,11 @@
 							{
 								"key": "Content-Type",
 								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
 								"type": "text"
 							}
 						],
@@ -2530,28 +1954,7 @@
 					"name": "statistics by user (ALL)",
 					"request": {
 						"auth": {
-							"type": "basic",
-							"basic": [
-								{
-									"key": "password",
-									"value": "{{instructor-password}}",
-									"type": "string"
-								},
-								{
-									"key": "username",
-									"value": "{{instructor-user}}",
-									"type": "string"
-								},
-								{
-									"key": "saveHelperData",
-									"type": "any"
-								},
-								{
-									"key": "showPassword",
-									"value": false,
-									"type": "boolean"
-								}
-							]
+							"type": "noauth"
 						},
 						"method": "GET",
 						"header": [
@@ -2563,6 +1966,11 @@
 							{
 								"key": "Content-Type",
 								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
 								"type": "text"
 							}
 						],
@@ -2591,28 +1999,7 @@
 					"name": "statistics by event (ALL)",
 					"request": {
 						"auth": {
-							"type": "basic",
-							"basic": [
-								{
-									"key": "password",
-									"value": "{{instructor-password}}",
-									"type": "string"
-								},
-								{
-									"key": "username",
-									"value": "{{instructor-user}}",
-									"type": "string"
-								},
-								{
-									"key": "saveHelperData",
-									"type": "any"
-								},
-								{
-									"key": "showPassword",
-									"value": false,
-									"type": "boolean"
-								}
-							]
+							"type": "noauth"
 						},
 						"method": "GET",
 						"header": [
@@ -2624,6 +2011,11 @@
 							{
 								"key": "Content-Type",
 								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
 								"type": "text"
 							}
 						],
@@ -2652,28 +2044,7 @@
 					"name": "statistics by question (ALL)",
 					"request": {
 						"auth": {
-							"type": "basic",
-							"basic": [
-								{
-									"key": "password",
-									"value": "{{instructor-password}}",
-									"type": "string"
-								},
-								{
-									"key": "username",
-									"value": "{{instructor-user}}",
-									"type": "string"
-								},
-								{
-									"key": "saveHelperData",
-									"type": "any"
-								},
-								{
-									"key": "showPassword",
-									"value": false,
-									"type": "boolean"
-								}
-							]
+							"type": "noauth"
 						},
 						"method": "GET",
 						"header": [
@@ -2685,6 +2056,11 @@
 							{
 								"key": "Content-Type",
 								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
 								"type": "text"
 							}
 						],
@@ -2713,28 +2089,7 @@
 					"name": "statistics by quiz (ALL)",
 					"request": {
 						"auth": {
-							"type": "basic",
-							"basic": [
-								{
-									"key": "password",
-									"value": "{{instructor-password}}",
-									"type": "string"
-								},
-								{
-									"key": "username",
-									"value": "{{instructor-user}}",
-									"type": "string"
-								},
-								{
-									"key": "saveHelperData",
-									"type": "any"
-								},
-								{
-									"key": "showPassword",
-									"value": false,
-									"type": "boolean"
-								}
-							]
+							"type": "noauth"
 						},
 						"method": "GET",
 						"header": [
@@ -2746,6 +2101,11 @@
 							{
 								"key": "Content-Type",
 								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
 								"type": "text"
 							}
 						],
@@ -2779,28 +2139,7 @@
 					"name": "user",
 					"request": {
 						"auth": {
-							"type": "basic",
-							"basic": [
-								{
-									"key": "password",
-									"value": "{{instructor-password}}",
-									"type": "string"
-								},
-								{
-									"key": "username",
-									"value": "{{instructor-user}}",
-									"type": "string"
-								},
-								{
-									"key": "saveHelperData",
-									"type": "any"
-								},
-								{
-									"key": "showPassword",
-									"value": false,
-									"type": "boolean"
-								}
-							]
+							"type": "noauth"
 						},
 						"method": "GET",
 						"header": [
@@ -2812,6 +2151,11 @@
 							{
 								"key": "Content-Type",
 								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
 								"type": "text"
 							}
 						],
@@ -2838,28 +2182,7 @@
 					"name": "user",
 					"request": {
 						"auth": {
-							"type": "basic",
-							"basic": [
-								{
-									"key": "password",
-									"value": "{{instructor-password}}",
-									"type": "string"
-								},
-								{
-									"key": "username",
-									"value": "{{instructor-user}}",
-									"type": "string"
-								},
-								{
-									"key": "saveHelperData",
-									"type": "any"
-								},
-								{
-									"key": "showPassword",
-									"value": false,
-									"type": "boolean"
-								}
-							]
+							"type": "noauth"
 						},
 						"method": "PUT",
 						"header": [
@@ -2871,6 +2194,11 @@
 							{
 								"key": "Accept",
 								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
 								"type": "text"
 							}
 						],
@@ -2933,28 +2261,7 @@
 					"name": "users",
 					"request": {
 						"auth": {
-							"type": "basic",
-							"basic": [
-								{
-									"key": "password",
-									"value": "{{instructor-password}}",
-									"type": "string"
-								},
-								{
-									"key": "username",
-									"value": "{{instructor-user}}",
-									"type": "string"
-								},
-								{
-									"key": "saveHelperData",
-									"type": "any"
-								},
-								{
-									"key": "showPassword",
-									"value": false,
-									"type": "boolean"
-								}
-							]
+							"type": "noauth"
 						},
 						"method": "GET",
 						"header": [
@@ -2966,6 +2273,11 @@
 							{
 								"key": "Content-Type",
 								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
 								"type": "text"
 							}
 						],
@@ -3136,6 +2448,20 @@
 				},
 				{
 					"name": "login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "371ef747-21db-414b-82ef-29088e54d3d8",
+								"exec": [
+									"//This stores the bearer token that is returned",
+									"//into an environment variable",
+									"postman.setEnvironmentVariable(\"token\", postman.getResponseHeader(\"Authorization\"));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"auth": {
 							"type": "noauth"
@@ -3155,17 +2481,15 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": ""
+							"raw": "{\n\t\"username\": \"{{instructor-user}}\",\n\t\"password\": \"{{instructor-password}}\"\n}"
 						},
 						"url": {
-							"raw": "http://{{host-app}}/users/1/login",
+							"raw": "http://{{host-app}}/login",
 							"protocol": "http",
 							"host": [
 								"{{host-app}}"
 							],
 							"path": [
-								"users",
-								"1",
 								"login"
 							]
 						},
@@ -3182,40 +2506,25 @@
 					"name": "Quiz Completion",
 					"request": {
 						"auth": {
-							"type": "basic",
-							"basic": [
-								{
-									"key": "password",
-									"value": "{{instructor-password}}",
-									"type": "string"
-								},
-								{
-									"key": "username",
-									"value": "{{instructor-user}}",
-									"type": "string"
-								},
-								{
-									"key": "saveHelperData",
-									"type": "any"
-								},
-								{
-									"key": "showPassword",
-									"value": false,
-									"type": "boolean"
-								}
-							]
+							"type": "noauth"
 						},
 						"method": "GET",
 						"header": [
 							{
 								"key": "Accept",
 								"type": "text",
-								"value": "image/png"
+								"value": "image/png",
+								"disabled": true
 							},
 							{
 								"key": "Content-Type",
 								"type": "text",
 								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
 							}
 						],
 						"body": {
@@ -3243,28 +2552,7 @@
 					"name": "Quiz Results",
 					"request": {
 						"auth": {
-							"type": "basic",
-							"basic": [
-								{
-									"key": "password",
-									"value": "{{instructor-password}}",
-									"type": "string"
-								},
-								{
-									"key": "username",
-									"value": "{{instructor-user}}",
-									"type": "string"
-								},
-								{
-									"key": "saveHelperData",
-									"type": "any"
-								},
-								{
-									"key": "showPassword",
-									"value": false,
-									"type": "boolean"
-								}
-							]
+							"type": "noauth"
 						},
 						"method": "GET",
 						"header": [
@@ -3277,6 +2565,11 @@
 								"key": "Content-Type",
 								"type": "text",
 								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
 							}
 						],
 						"body": {
@@ -3304,28 +2597,7 @@
 					"name": "Quiz User Results",
 					"request": {
 						"auth": {
-							"type": "basic",
-							"basic": [
-								{
-									"key": "password",
-									"value": "{{instructor-password}}",
-									"type": "string"
-								},
-								{
-									"key": "username",
-									"value": "{{instructor-user}}",
-									"type": "string"
-								},
-								{
-									"key": "saveHelperData",
-									"type": "any"
-								},
-								{
-									"key": "showPassword",
-									"value": false,
-									"type": "boolean"
-								}
-							]
+							"type": "noauth"
 						},
 						"method": "GET",
 						"header": [
@@ -3338,6 +2610,11 @@
 								"key": "Content-Type",
 								"type": "text",
 								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
 							}
 						],
 						"body": {
@@ -3360,6 +2637,181 @@
 							]
 						},
 						"description": "http://{{host-app}}/reports/quizzes/1/user/1/results"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "lesson",
+			"item": [
+				{
+					"name": "lesson",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"course\": \"Private Pilot\",\n\t\"unit\": \"Unit 1\",\n    \"subUnit\": \"Section 1\",\n    \"text\": \"This is some text\"\n}"
+						},
+						"url": {
+							"raw": "http://{{host-app}}/lessons",
+							"protocol": "http",
+							"host": [
+								"{{host-app}}"
+							],
+							"path": [
+								"lessons"
+							]
+						},
+						"description": "http://{{host-app}}/lessons"
+					},
+					"response": []
+				},
+				{
+					"name": "lesson",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{host-app}}/lessons/1",
+							"protocol": "http",
+							"host": [
+								"{{host-app}}"
+							],
+							"path": [
+								"lessons",
+								"1"
+							]
+						},
+						"description": "http://{{host-app}}/lessons/1"
+					},
+					"response": []
+				},
+				{
+					"name": "lessons",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{host-app}}/lessons",
+							"protocol": "http",
+							"host": [
+								"{{host-app}}"
+							],
+							"path": [
+								"lessons"
+							]
+						},
+						"description": "http://{{host-app}}/lessons"
+					},
+					"response": []
+				},
+				{
+					"name": "lesson",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{host-app}}/lessons/1",
+							"protocol": "http",
+							"host": [
+								"{{host-app}}"
+							],
+							"path": [
+								"lessons",
+								"1"
+							]
+						},
+						"description": "http://{{host-app}}/lessons/1"
 					},
 					"response": []
 				}
