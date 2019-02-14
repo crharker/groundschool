@@ -1,184 +1,67 @@
 ﻿import { Injectable } from '@angular/core';
-import { Router, NavigationStart } from '@angular/router';
-import { Observable, Subject } from 'rxjs';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Http, Response, Headers, RequestOptions } from "@angular/http";
+import { HttpClient } from '@angular/common/http';
 
-// Import RxJs required methods
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/catch';
+import { environment } from '@environments/environment';
+import { Event } from '@app/_models';
 
-import { environment } from '../../environments/environment';
-import { Event } from '../_models/event';
-
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class EventService {
-    backendUrl = environment.apiUrl;
+    constructor(private http: HttpClient) { }
   
-    constructor(private http: Http) { }
-  
-    get(id: number): Observable<Event> {
-        let headers = new Headers({
-          "Accept": "application/json",
-          "Content-Type": "application/json"
-        });
-        let options = new RequestOptions({ headers: headers });
-  
-        return this.http.get(this.backendUrl + "/events/" + id, options)
-          .map((res: Response) => Object.assign(new Event(), res.json()))
-          .catch((error: any) => Observable.throw(error.json().error || 'Server error'));
+    get(id: number) {
+      return this.http.get(`${environment.apiUrl}/events/${id}`);
     }
 
-    create(event: Event): Observable<Event> {
-        let body = JSON.stringify(event);
-        let headers = new Headers({
-            "Accept": "application/json",
-            "Content-Type": "application/json"
-        });
-        let options = new RequestOptions({ headers: headers });
-      
-        return this.http.post(this.backendUrl + "/events", body, options)
-          .map((res: Response) => Object.assign(new Event(), res.json()))
-          .catch((error: any) => Observable.throw(error.json().error || 'Server error'));
+    create(event: Event) {
+      return this.http.post(`${environment.apiUrl}/events`, event);
     }
 
-    update(event: Event): Observable<Event> {
-        let body = JSON.stringify(event);
-        let headers = new Headers({
-            "Accept": "application/json",
-            "Content-Type": "application/json"
-        });
-        let options = new RequestOptions({ headers: headers });
-        
-        return this.http.put(this.backendUrl + "/events", body, options)
-          .map((res: Response) => Object.assign(new Event(), res.json()))
-          .catch((error: any) => Observable.throw(error.json().error || 'Server error'));
-      }
-
-    delete(id: number): Observable<Event> {
-        let headers = new Headers({
-            "Accept": "application/json",
-            "Content-Type": "application/json"
-        });
-        let options = new RequestOptions({ headers: headers });
-        
-        return this.http.delete(this.backendUrl + "/events/" + id, options)
-          .catch((error: any) => Observable.throw(error.json().error || 'Server error'));
+    update(event: Event) {
+      return this.http.put(`${environment.apiUrl}/events`, event);
     }
 
-    getAll(): Observable<Event[]> {
-        let headers = new Headers({
-          "Accept": "application/json",
-          "Content-Type": "application/json"
-        });
-        let options = new RequestOptions({ headers: headers });
-  
-        return this.http.get(this.backendUrl + "/events", options)
-          .map((res: Response) => Object.assign(new Event(), res.json()))
-          .catch((error: any) => Observable.throw(error.json().error || 'Server error'));
+    delete(id: number) {
+      return this.http.delete(`${environment.apiUrl}/events/${id}`);
     }
 
-    rsvp(eventId: number, userId: number, confirm: boolean): void {
-        let headers = new Headers({
-          "Accept": "application/json",
-          "Content-Type": "application/json"
-        });
-        let options = new RequestOptions({ headers: headers });
-  
-        this.http.get(this.backendUrl + "/events/" + eventId + "/rsvp/" + userId + "/" + confirm + "/WEB", options)
-          .catch((error: any) => Observable.throw(error.json().error || 'Server error'));
+    getAll() {
+      return this.http.get<Event[]>(`${environment.apiUrl}/events`);
     }
 
-    register(eventId: number, userId: number): void {
-        let headers = new Headers({
-          "Accept": "application/json",
-          "Content-Type": "application/json"
-        });
-        let options = new RequestOptions({ headers: headers });
-  
-        this.http.get(this.backendUrl + "/events/" + eventId + "/register/" + userId, options)
-          .catch((error: any) => Observable.throw(error.json().error || 'Server error'));
+    rsvp(eventId: number, userId: number, confirm: boolean) {
+      this.http.get(`${environment.apiUrl}/events/${eventId}/rsvp/${userId}/${confirm}/WEB`);
     }
 
-    unregister(eventId: number, userId: number): void {
-        let headers = new Headers({
-          "Accept": "application/json",
-          "Content-Type": "application/json"
-        });
-        let options = new RequestOptions({ headers: headers });
-  
-        this.http.get(this.backendUrl + "/events/" + eventId + "/unregister/" + userId, options)
-          .catch((error: any) => Observable.throw(error.json().error || 'Server error'));
+    register(eventId: number, userId: number) {
+      this.http.get(`${environment.apiUrl}/events/${eventId}/register/${userId}`);
     }
 
-    getCheckinCode(eventId: number): Observable<string> {
-        let headers = new Headers({
-          "Accept": "application/json",
-          "Content-Type": "application/json"
-        });
-        let options = new RequestOptions({ headers: headers });
-  
-        return this.http.get(this.backendUrl + "/events/" + eventId + "/checkincode", options)
-        .map((res: Response) => Object.assign(new String(), res.json()))
-        .catch((error: any) => Observable.throw(error.json().error || 'Server error'));
+    unregister(eventId: number, userId: number) {
+      this.http.get(`${environment.apiUrl}/events/${eventId}/unregister/${userId}`);
     }
 
-    assignLessonPlan(eventId: number, lessonPlanId: number): void {
-        let headers = new Headers({
-          "Accept": "application/json",
-          "Content-Type": "application/json"
-        });
-        let options = new RequestOptions({ headers: headers });
-  
-        this.http.post(this.backendUrl + "/events/" + eventId + "/assign/lessonplan/" + lessonPlanId, options)
-          .catch((error: any) => Observable.throw(error.json().error || 'Server error'));
+    getCheckinCode(eventId: number) {
+      return this.http.get(`${environment.apiUrl}/events/${eventId}/checkincode`);
     }
 
-    unassignLessonPlan(eventId: number, lessonPlanId: number): void {
-        let headers = new Headers({
-          "Accept": "application/json",
-          "Content-Type": "application/json"
-        });
-        let options = new RequestOptions({ headers: headers });
-  
-        this.http.post(this.backendUrl + "/events/" + eventId + "/unassign/lessonplan/" + lessonPlanId, options)
-          .catch((error: any) => Observable.throw(error.json().error || 'Server error'));
+    assignLessonPlan(eventId: number, lessonPlanId: number) {
+      this.http.post(`${environment.apiUrl}/events/${eventId}/assign/lessonplan/${lessonPlanId}`, null);
     }
 
-    checkin(eventId: number, userId: number, code: string): Observable<Boolean> {
-        let headers = new Headers({
-          "Accept": "application/json",
-          "Content-Type": "application/json"
-        });
-        let options = new RequestOptions({ headers: headers });
-  
-        return this.http.post(this.backendUrl + "/events/" + eventId + "/checkin/" + userId + "/" + code, options)
-          .map((res: Response) => Object.assign(new Boolean(), res.json()))
-          .catch((error: any) => Observable.throw(error.json().error || 'Server error'));
+    unassignLessonPlan(eventId: number, lessonPlanId: number) {
+      this.http.post(`${environment.apiUrl}/events/${eventId}/unassign/lessonplan/${lessonPlanId}`, null);
     }
 
-    start(eventId: number): Observable<Event> {
-        let headers = new Headers({
-          "Accept": "application/json",
-          "Content-Type": "application/json"
-        });
-        let options = new RequestOptions({ headers: headers });
-  
-        return this.http.post(this.backendUrl + "/events/" + eventId + "/start", options)
-          .map((res: Response) => Object.assign(new Event(), res.json()))
-          .catch((error: any) => Observable.throw(error.json().error || 'Server error'));
+    checkin(eventId: number, userId: number, code: string) {
+      return this.http.post(`${environment.apiUrl}/events/${eventId}/checkin/${userId}/${code}`, null);
     }
 
-    complete(eventId: number): Observable<Event> {
-        let headers = new Headers({
-          "Accept": "application/json",
-          "Content-Type": "application/json"
-        });
-        let options = new RequestOptions({ headers: headers });
-  
-        return this.http.post(this.backendUrl + "/events/" + eventId + "/complete", options)
-          .map((res: Response) => Object.assign(new Event(), res.json()))
-          .catch((error: any) => Observable.throw(error.json().error || 'Server error'));
+    start(eventId: number) {
+      return this.http.post(`${environment.apiUrl}/events/${eventId}/start`, null);
+    }
+
+    complete(eventId: number) {
+      return this.http.post(`${environment.apiUrl}/events/${eventId}/complete`, null);
     }
 
 }

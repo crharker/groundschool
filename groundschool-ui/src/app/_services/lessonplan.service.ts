@@ -1,81 +1,31 @@
 ﻿import { Injectable } from '@angular/core';
-import { Router, NavigationStart } from '@angular/router';
-import { Observable, Subject } from 'rxjs';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Http, Response, Headers, RequestOptions } from "@angular/http";
+import { HttpClient } from '@angular/common/http';
 
-// Import RxJs required methods
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/catch';
+import { environment } from '@environments/environment';
+import { LessonPlan } from '@app/_models';
 
-import { environment } from '../../environments/environment';
-import { LessonPlan } from '../_models/lessonplan';
-
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class LessonPlanService {
-    backendUrl = environment.apiUrl;
+    constructor(private http: HttpClient) { }
   
-    constructor(private http: Http) { }
-  
-    get(id: number): Observable<LessonPlan> {
-        let headers = new Headers({
-          "Accept": "application/json",
-          "Content-Type": "application/json"
-        });
-        let options = new RequestOptions({ headers: headers });
-  
-        return this.http.get(this.backendUrl + "/lessonplans/" + id, options)
-          .map((res: Response) => Object.assign(new LessonPlan(), res.json()))
-          .catch((error: any) => Observable.throw(error.json().error || 'Server error'));
+    get(id: number) {
+      return this.http.get(`${environment.apiUrl}/lessonplans/${id}`);
     }
 
-    create(lessonplan: LessonPlan): Observable<LessonPlan> {
-        let body = JSON.stringify(lessonplan);
-        let headers = new Headers({
-            "Accept": "application/json",
-            "Content-Type": "application/json"
-        });
-        let options = new RequestOptions({ headers: headers });
-      
-        return this.http.post(this.backendUrl + "/lessonplans", body, options)
-          .map((res: Response) => Object.assign(new LessonPlan(), res.json()))
-          .catch((error: any) => Observable.throw(error.json().error || 'Server error'));
+    create(lessonplan: LessonPlan) {
+      return this.http.post(`${environment.apiUrl}/lessonplans`, lessonplan);
     }
 
-    update(lessonplan: LessonPlan): Observable<LessonPlan> {
-        let body = JSON.stringify(lessonplan);
-        let headers = new Headers({
-            "Accept": "application/json",
-            "Content-Type": "application/json"
-        });
-        let options = new RequestOptions({ headers: headers });
-        
-        return this.http.put(this.backendUrl + "/lessonplans", body, options)
-          .map((res: Response) => Object.assign(new LessonPlan(), res.json()))
-          .catch((error: any) => Observable.throw(error.json().error || 'Server error'));
-      }
-
-    delete(id: number): Observable<LessonPlan> {
-        let headers = new Headers({
-            "Accept": "application/json",
-            "Content-Type": "application/json"
-        });
-        let options = new RequestOptions({ headers: headers });
-        
-        return this.http.delete(this.backendUrl + "/lessonplans/" + id, options)
-          .catch((error: any) => Observable.throw(error.json().error || 'Server error'));
+    update(lessonplan: LessonPlan) {
+      return this.http.put(`${environment.apiUrl}/lessonplans`, lessonplan);
     }
 
-    getAll(): Observable<LessonPlan[]> {
-        let headers = new Headers({
-          "Accept": "application/json",
-          "Content-Type": "application/json"
-        });
-        let options = new RequestOptions({ headers: headers });
-  
-        return this.http.get(this.backendUrl + "/lessonplans", options)
-          .map((res: Response) => Object.assign(new LessonPlan(), res.json()))
-          .catch((error: any) => Observable.throw(error.json().error || 'Server error'));
+    delete(id: number) {
+      return this.http.delete(`${environment.apiUrl}/lessonplans/${id}`);
+    }
+
+    getAll() {
+      return this.http.get<LessonPlan[]>(`${environment.apiUrl}/lessonplans`);
     }
 
 }

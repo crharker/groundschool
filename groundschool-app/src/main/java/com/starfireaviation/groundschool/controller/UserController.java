@@ -230,12 +230,12 @@ public class UserController {
      *
      */
     @PostMapping(path = {
-            "/{userId}/password/{password}/{verificationCode}"
+            "/{userId}/password/{verificationCode}"
     })
     public boolean updatePassword(
             @PathVariable("userId") long userId,
-            @PathVariable("password") String password,
-            @PathVariable("verificationCode") String verificationCode) throws ResourceNotFoundException {
+            @PathVariable("verificationCode") String verificationCode,
+            @RequestBody String password) throws ResourceNotFoundException {
         final User user = userService.get(userId);
         if (user == null) {
             final String msg = String.format("No user found for ID [%s]", userId);
@@ -289,24 +289,6 @@ public class UserController {
         if (auth != null) {
             new SecurityContextLogoutHandler().logout(request, response, auth);
         }
-    }
-
-    /**
-     * Login
-     *
-     * @param userId User ID
-     * @param principal Principal
-     * @return login success
-     * @throws ResourceNotFoundException when user is not found
-     */
-    @PostMapping(path = {
-            "/{userId}/login"
-    })
-    public boolean login(
-            @PathVariable("userId") long userId,
-            Principal principal) throws ResourceNotFoundException {
-        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
-        return userService.get(userId) != null ? true : false;
     }
 
     /**

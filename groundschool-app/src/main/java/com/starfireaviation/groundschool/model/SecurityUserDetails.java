@@ -34,6 +34,13 @@ public class SecurityUserDetails extends UserEntity implements UserDetails {
 
     /**
      * Initializes an instance of <code>SecurityUserDetails</code> with the default data.
+     */
+    public SecurityUserDetails() {
+        // Default constructor
+    }
+
+    /**
+     * Initializes an instance of <code>SecurityUserDetails</code> with the default data.
      *
      * @param user User
      * @param userRoles List of user roles
