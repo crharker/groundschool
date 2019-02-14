@@ -47,6 +47,10 @@ public class HazelcastConfig {
         eventsMapConfig.setTimeToLiveSeconds(hazelcastProperties.getTtl());
         cfg.addMapConfig(eventsMapConfig);
 
+        final MapConfig lessonsMapConfig = new MapConfig("lessons");
+        lessonsMapConfig.setTimeToLiveSeconds(hazelcastProperties.getTtl());
+        cfg.addMapConfig(lessonsMapConfig);
+
         final MapConfig lessonPlansMapConfig = new MapConfig("lessonplans");
         lessonPlansMapConfig.setTimeToLiveSeconds(hazelcastProperties.getTtl());
         cfg.addMapConfig(lessonPlansMapConfig);

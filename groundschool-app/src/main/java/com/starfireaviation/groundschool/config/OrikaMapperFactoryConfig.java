@@ -9,6 +9,7 @@ import com.starfireaviation.groundschool.model.Activity;
 import com.starfireaviation.groundschool.model.Address;
 import com.starfireaviation.groundschool.model.Answer;
 import com.starfireaviation.groundschool.model.Event;
+import com.starfireaviation.groundschool.model.Lesson;
 import com.starfireaviation.groundschool.model.LessonPlan;
 import com.starfireaviation.groundschool.model.Question;
 import com.starfireaviation.groundschool.model.Quiz;
@@ -19,6 +20,7 @@ import com.starfireaviation.groundschool.model.sql.ActivityEntity;
 import com.starfireaviation.groundschool.model.sql.AddressEntity;
 import com.starfireaviation.groundschool.model.sql.AnswerEntity;
 import com.starfireaviation.groundschool.model.sql.EventEntity;
+import com.starfireaviation.groundschool.model.sql.LessonEntity;
 import com.starfireaviation.groundschool.model.sql.LessonPlanEntity;
 import com.starfireaviation.groundschool.model.sql.QuestionEntity;
 import com.starfireaviation.groundschool.model.sql.QuizEntity;
@@ -63,6 +65,10 @@ public class OrikaMapperFactoryConfig implements OrikaMapperFactoryConfigurer {
                 .register();
         mapperFactory
                 .classMap(LessonPlan.class, LessonPlanEntity.class)
+                .byDefault()
+                .register();
+        mapperFactory
+                .classMap(Lesson.class, LessonEntity.class)
                 .byDefault()
                 .register();
         mapperFactory
