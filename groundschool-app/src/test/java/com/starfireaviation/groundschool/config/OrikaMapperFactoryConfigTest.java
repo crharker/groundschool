@@ -16,6 +16,7 @@ import com.starfireaviation.groundschool.model.Activity;
 import com.starfireaviation.groundschool.model.Address;
 import com.starfireaviation.groundschool.model.Answer;
 import com.starfireaviation.groundschool.model.Event;
+import com.starfireaviation.groundschool.model.Lesson;
 import com.starfireaviation.groundschool.model.LessonPlan;
 import com.starfireaviation.groundschool.model.Question;
 import com.starfireaviation.groundschool.model.Quiz;
@@ -26,6 +27,7 @@ import com.starfireaviation.groundschool.model.sql.ActivityEntity;
 import com.starfireaviation.groundschool.model.sql.AddressEntity;
 import com.starfireaviation.groundschool.model.sql.AnswerEntity;
 import com.starfireaviation.groundschool.model.sql.EventEntity;
+import com.starfireaviation.groundschool.model.sql.LessonEntity;
 import com.starfireaviation.groundschool.model.sql.LessonPlanEntity;
 import com.starfireaviation.groundschool.model.sql.QuestionEntity;
 import com.starfireaviation.groundschool.model.sql.QuizEntity;
@@ -93,6 +95,12 @@ public class OrikaMapperFactoryConfigTest {
     private ClassMapBuilder<LessonPlan, LessonPlanEntity> lessonPlanClassMapBuilder;
 
     /**
+     * ClassMapBuilder lessonClassMapBuilder
+     */
+    @Mock
+    private ClassMapBuilder<Lesson, LessonEntity> lessonClassMapBuilder;
+
+    /**
      * ClassMapBuilder quizClassMapBuilder
      */
     @Mock
@@ -135,6 +143,7 @@ public class OrikaMapperFactoryConfigTest {
         initQuestionMapper();
         initAnswerMapper();
         initReferenceMaterialMapper();
+        initLessonMapper();
         initLessonPlanMapper();
         initQuizMapper();
         initStatisticMapper();
@@ -149,6 +158,7 @@ public class OrikaMapperFactoryConfigTest {
         assertQuestionMapper();
         assertAnswerMapper();
         assertReferenceMaterialMapper();
+        assertLessonMapper();
         assertLessonPlanMapper();
         assertQuizMapper();
         assertStatisticMapper();
@@ -434,6 +444,33 @@ public class OrikaMapperFactoryConfigTest {
         Mockito.verify(mapperFactory, Mockito.times(1)).classMap(Activity.class, ActivityEntity.class);
         Mockito.verify(activityClassMapBuilder, Mockito.times(1)).byDefault();
         Mockito.verify(activityClassMapBuilder, Mockito.times(1)).register();
+    }
+
+    /**
+     * LessonMapper
+     */
+    private void initLessonMapper() {
+        Mockito.when(mapperFactory.classMap(Lesson.class, LessonEntity.class)).thenReturn(
+                lessonClassMapBuilder);
+        Mockito.when(lessonClassMapBuilder.exclude(ArgumentMatchers.any())).thenReturn(
+                lessonClassMapBuilder);
+        Mockito.when(lessonClassMapBuilder.byDefault()).thenReturn(
+                lessonClassMapBuilder);
+        Mockito
+                .when(
+                        lessonClassMapBuilder.field(
+                                ArgumentMatchers.anyString(),
+                                ArgumentMatchers.anyString()))
+                .thenReturn(lessonClassMapBuilder);
+    }
+
+    /**
+     * LessonMapper
+     */
+    private void assertLessonMapper() {
+        Mockito.verify(mapperFactory, Mockito.times(1)).classMap(Lesson.class, LessonEntity.class);
+        Mockito.verify(lessonClassMapBuilder, Mockito.times(1)).byDefault();
+        Mockito.verify(lessonClassMapBuilder, Mockito.times(1)).register();
     }
 
 }
