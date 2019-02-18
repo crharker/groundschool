@@ -63,6 +63,11 @@ public class User extends Base {
     private boolean slackEnabled;
 
     /**
+     * Youth Program Participant
+     */
+    private boolean youthProgramParticipant;
+
+    /**
      * Username
      */
     private String username;
@@ -429,6 +434,24 @@ public class User extends Base {
      */
     public void setQuestionPreference(QuestionPreference questionPreference) {
         this.questionPreference = questionPreference;
+    }
+
+    /**
+     * Retrieves the value for {@link #youthProgramParticipant}.
+     *
+     * @return the current value
+     */
+    public boolean isYouthProgramParticipant() {
+        return youthProgramParticipant;
+    }
+
+    /**
+     * Provides a value for {@link #youthProgramParticipant}.
+     *
+     * @param youthProgramParticipant the new value to set
+     */
+    public void setYouthProgramParticipant(boolean youthProgramParticipant) {
+        this.youthProgramParticipant = youthProgramParticipant;
     }
 
 }

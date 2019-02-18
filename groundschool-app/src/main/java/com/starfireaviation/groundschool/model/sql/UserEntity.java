@@ -73,6 +73,12 @@ public class UserEntity extends BaseEntity {
     private boolean slackEnabled;
 
     /**
+     * Youth Program Participant
+     */
+    @Column(name = "youth_program_participant")
+    private boolean youthProgramParticipant;
+
+    /**
      * Username
      */
     @Column(name = "username", nullable = false)
@@ -503,6 +509,24 @@ public class UserEntity extends BaseEntity {
      */
     public void setQuestionPreference(String questionPreference) {
         this.questionPreference = questionPreference;
+    }
+
+    /**
+     * Retrieves the value for {@link #youthProgramParticipant}.
+     *
+     * @return the current value
+     */
+    public boolean isYouthProgramParticipant() {
+        return youthProgramParticipant;
+    }
+
+    /**
+     * Provides a value for {@link #youthProgramParticipant}.
+     *
+     * @param youthProgramParticipant the new value to set
+     */
+    public void setYouthProgramParticipant(boolean youthProgramParticipant) {
+        this.youthProgramParticipant = youthProgramParticipant;
     }
 
 }

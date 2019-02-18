@@ -17,34 +17,10 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class SlackProperties {
 
     /**
-     * From address for Slack messages
-     */
-    @Value("${groundschool.slack.from-address}")
-    private String fromAddress;
-
-    /**
      * Slack BOT Token
      */
     @Value("${slack.bot.key}")
     private String token;
-
-    /**
-     * Retrieves the value for {@link #fromAddress}.
-     *
-     * @return the current value
-     */
-    public String getFromAddress() {
-        return fromAddress;
-    }
-
-    /**
-     * Provides a value for {@link #fromAddress}.
-     *
-     * @param fromAddress the new value to set
-     */
-    public void setFromAddress(String fromAddress) {
-        this.fromAddress = fromAddress;
-    }
 
     /**
      * Retrieves the value for {@link #token}.

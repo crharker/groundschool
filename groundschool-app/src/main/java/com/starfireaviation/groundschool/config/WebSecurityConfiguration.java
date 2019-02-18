@@ -5,8 +5,6 @@
  */
 package com.starfireaviation.groundschool.config;
 
-import javax.sql.DataSource;
-
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -24,7 +22,6 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.starfireaviation.groundschool.properties.ApplicationProperties;
-import com.starfireaviation.groundschool.properties.DatabaseProperties;
 
 /**
  * WebSecurityConfiguration
@@ -34,8 +31,7 @@ import com.starfireaviation.groundschool.properties.DatabaseProperties;
 @Configuration
 @EnableWebSecurity
 @EnableConfigurationProperties({
-        ApplicationProperties.class,
-        DatabaseProperties.class
+        ApplicationProperties.class
 })
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
@@ -44,12 +40,6 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
      */
     @Autowired
     private UserDetailsService userDetailsService;
-
-    /**
-     * DatabaseProperties
-     */
-    @Autowired
-    private DatabaseProperties databaseProperties;
 
     /**
      * Configure authentication
@@ -179,18 +169,4 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
-    /**
-     * DataSource
-     *
-     * @return DataSource
-     */
-    @Bean
-    public DataSource dataSource() {
-        BasicDataSource dataSource = new BasicDataSource();
-        dataSource.setDriverClassName(databaseProperties.getDriver());
-        dataSource.setUrl(databaseProperties.getUrl());
-        dataSource.setUsername(databaseProperties.getUsername());
-        dataSource.setPassword(databaseProperties.getPassword());
-        return dataSource;
-    }
 }
