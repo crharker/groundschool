@@ -14,7 +14,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
-import com.starfireaviation.groundschool.properties.EAA690Properties;
 import com.starfireaviation.groundschool.properties.SlackProperties;
 import com.starfireaviation.groundschool.properties.TimeoutProperties;
 
@@ -26,7 +25,6 @@ import com.starfireaviation.groundschool.properties.TimeoutProperties;
 @Configuration
 @EnableConfigurationProperties({
         TimeoutProperties.class,
-        EAA690Properties.class,
         SlackProperties.class
 })
 public class RestConfig {

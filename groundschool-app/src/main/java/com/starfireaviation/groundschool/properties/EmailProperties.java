@@ -23,12 +23,6 @@ public class EmailProperties {
     private String fromAddress;
 
     /**
-     * BCC address for emails
-     */
-    @Value("${groundschool.email.bcc-address}")
-    private String bccAddress;
-
-    /**
      * Host
      */
     @Value("${groundschool.email.host}")
@@ -68,24 +62,6 @@ public class EmailProperties {
      */
     public void setFromAddress(String fromAddress) {
         this.fromAddress = fromAddress;
-    }
-
-    /**
-     * Retrieves the value for {@link #bccAddress}.
-     *
-     * @return the current value
-     */
-    public String getBccAddress() {
-        return bccAddress;
-    }
-
-    /**
-     * Provides a value for {@link #bccAddress}.
-     *
-     * @param bccAddress the new value to set
-     */
-    public void setBccAddress(String bccAddress) {
-        this.bccAddress = bccAddress;
     }
 
     /**
