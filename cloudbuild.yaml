@@ -1,6 +1,6 @@
 steps:
 # This step builds the container image.
-- name: 'gcr.io/aerie-starfire-aviation/github.com/bsmichael/groundschool-app/docker'
+- name: 'gcr.io/aerie-starfire-aviation/github.com/bsmichael/groundschool-app'
   id: Build
   args:
   - 'build'
@@ -11,7 +11,7 @@ steps:
 # This step pushes the image to Container Registry
 # The PROJECT_ID and SHORT_SHA variables are automatically
 # replaced by Cloud Build.
-- name: 'gcr.io/aerie-starfire-aviation/github.com/bsmichael/groundschool-app/docker'
+- name: 'gcr.io/aerie-starfire-aviation/github.com/bsmichael/groundschool-app'
   id: Push
   args:
   - 'push'
