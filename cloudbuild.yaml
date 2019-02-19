@@ -1,0 +1,36 @@
+# This step clones the groundschool-cloudbuild-env repository
+- name: 'gcr.io/aerie-starfire-aviation/github.com/bsmichael/groundschool-app/gcloud'
+  id: Clone env repository
+  entrypoint: /bin/sh
+  args:
+  - '-c'
+  - |
+    gcloud source repos clone groundschool-cloudbuild-env && \
+    cd groundschool-cloudbuild-env && \
+    git checkout candidate && \
+    git config user.email $(gcloud auth list --filter=status:ACTIVE --format='value(account)')
+
+# This step generates the new manifest
+- name: 'gcr.io/aerie-starfire-aviation/github.com/bsmichael/groundschool-app/gcloud'
+  id: Generate manifest
+  entrypoint: /bin/sh
+  args:
+  - '-c'
+  - |
+     sed "s/GOOGLE_CLOUD_PROJECT/${PROJECT_ID}/g" kubernetes.yaml.tpl | \
+     sed "s/COMMIT_SHA/${SHORT_SHA}/g" > groundschool-cloudbuild-env/kubernetes.yaml
+
+# This step pushes the manifest back to groundschool-cloudbuild-env
+- name: 'gcr.io/aerie-starfire-aviation/github.com/bsmichael/groundschool-app/gcloud'
+  id: Push manifest
+  entrypoint: /bin/sh
+  args:
+  - '-c'
+  - |
+    set -x && \
+    cd groundschool-cloudbuild-env && \
+    git add kubernetes.yaml && \
+    git commit -m "Deploying image gcr.io/${PROJECT_ID}/github.com/bsmichael/groundschool-app:${SHORT_SHA}
+    Built from commit ${COMMIT_SHA} of repository groundschool-cloudbuild-app
+    Author: $(git log --format='%an <%ae>' -n 1 HEAD)" && \
+    git push origin candidate
