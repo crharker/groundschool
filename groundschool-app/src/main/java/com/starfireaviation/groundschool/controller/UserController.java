@@ -45,7 +45,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author brianmichael
  */
-@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping({
         "/users"

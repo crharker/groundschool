@@ -29,7 +29,7 @@ import java.util.List;
  *
  * @author brianmichael
  */
-@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping({
         "/questions"

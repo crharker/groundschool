@@ -363,13 +363,11 @@ public class QuizServiceImpl implements QuizService {
         }
         final List<QuizQuestionEntity> quizQuestions = quizQuestionRepository.findByQuizId(quizId);
         if (quizQuestions != null && quizQuestions.size() > 0) {
-            LOGGER.info(String.format("getNextQuestion() found [%s] quiz questions", quizQuestions.size()));
             List<Long> quizQuestionIds = quizQuestions
                     .stream()
                     .map(quizQuestionEntity -> quizQuestionEntity.getQuestionId())
                     .collect(Collectors.toList());
             final List<Statistic> statistics = statisticService.findByQuizId(quizId, StatisticType.QUESTION_ANSWERED);
-            LOGGER.info(String.format("getNextQuestion() found [%s] statistics", statistics.size()));
             final List<Long> userAnsweredQuestions = statistics
                     .stream()
                     .filter(statistic -> statistic.getUserId() == userId)
