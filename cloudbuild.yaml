@@ -16,8 +16,5 @@ steps:
   dir: 'groundschool-app'
   id: Push
   args:
-  - 'cd'
-  - 'groundschool-app'
-  - '&&'
   - 'push'
   - 'gcr.io/$PROJECT_ID/groundschool-app:$SHORT_SHA'
