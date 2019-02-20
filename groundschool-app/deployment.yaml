@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: "groundschool-app-test"
-        image: "gcr.io/aerie-starfire-aviation/github.com/bsmichael/groundschool-app@sha256:41110b755468c1fdf83e1297e96a552ac2b9d559e4af6aded0d1fc6561322f7f"
+        image: "gcr.io/aerie-starfire-aviation/groundschool-app@sha256:dae22aedb5734eb4d6c0bddfbe7c11daa4aa7771f6dcfdc21b7f17f7fa45df07"
         ports:
         - containerPort: 8080
         env:
