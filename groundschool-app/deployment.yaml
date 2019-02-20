@@ -1,0 +1,148 @@
+apiVersion: "extensions/v1beta1"
+kind: "Deployment"
+metadata:
+  name: "groundschool-app-test"
+  namespace: "default"
+  labels:
+    app: "groundschool-app-test"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: "groundschool-app-test"
+  template:
+    metadata:
+      labels:
+        app: "groundschool-app-test"
+    spec:
+      containers:
+      - name: "groundschool-app-test"
+        image: "gcr.io/aerie-starfire-aviation/groundschool-app@sha256:dae22aedb5734eb4d6c0bddfbe7c11daa4aa7771f6dcfdc21b7f17f7fa45df07"
+        ports:
+        - containerPort: 8080
+        env:
+        - name: applicationhost
+          valueFrom:
+            secretKeyRef:
+              name: groundschool-test
+              key: applicationhost
+        - name: applicationsecuritysecret
+          valueFrom:
+            secretKeyRef:
+              name: groundschool-test
+              key: applicationsecuritysecret
+        - name: applicationsecurityexpirationtime
+          valueFrom:
+            secretKeyRef:
+              name: groundschool-test
+              key: applicationsecurityexpirationtime
+        - name: springdatasourceurl
+          valueFrom:
+            secretKeyRef:
+              name: groundschool-test
+              key: springdatasourceurl
+        - name: springdatasourceusername
+          valueFrom:
+            secretKeyRef:
+              name: groundschool-test
+              key: springdatasourceusername
+        - name: springdatasourcepassword
+          valueFrom:
+            secretKeyRef:
+              name: groundschool-test
+              key: springdatasourcepassword
+        - name: groundschoolemailfromaddress
+          valueFrom:
+            secretKeyRef:
+              name: groundschool-test
+              key: groundschoolemailfromaddress
+        - name: groundschoolemailhost
+          valueFrom:
+            secretKeyRef:
+              name: groundschool-test
+              key: groundschoolemailhost
+        - name: groundschoolemailport
+          valueFrom:
+            secretKeyRef:
+              name: groundschool-test
+              key: groundschoolemailport
+        - name: groundschoolemailusername
+          valueFrom:
+            secretKeyRef:
+              name: groundschool-test
+              key: groundschoolemailusername
+        - name: groundschoolemailpassword
+          valueFrom:
+            secretKeyRef:
+              name: groundschool-test
+              key: groundschoolemailpassword
+        - name: groundschoolsmsfromaddress
+          valueFrom:
+            secretKeyRef:
+              name: groundschool-test
+              key: groundschoolsmsfromaddress
+        - name: groundschoolsmsaccountsid
+          valueFrom:
+            secretKeyRef:
+              name: groundschool-test
+              key: groundschoolsmsaccountsid
+        - name: groundschoolsmsauthid
+          valueFrom:
+            secretKeyRef:
+              name: groundschool-test
+              key: groundschoolsmsauthid
+        - name: slackbotkey
+          valueFrom:
+            secretKeyRef:
+              name: groundschool-test
+              key: slackbotkey
+        - name: slackbotchannel
+          valueFrom:
+            secretKeyRef:
+              name: groundschool-test
+              key: slackbotchannel
+        - name: slackbotname
+          valueFrom:
+            secretKeyRef:
+              name: groundschool-test
+              key: slackbotname
+        - name: groundschooltimeoutread
+          valueFrom:
+            secretKeyRef:
+              name: groundschool-test
+              key: groundschooltimeoutread
+        - name: groundschooltimeoutconnect
+          valueFrom:
+            secretKeyRef:
+              name: groundschool-test
+              key: groundschooltimeoutconnect
+        - name: groundschooltimeoutaccesstokenvalidity
+          valueFrom:
+            secretKeyRef:
+              name: groundschool-test
+              key: groundschooltimeoutaccesstokenvalidity
+        - name: hazelcastcachettl
+          valueFrom:
+            secretKeyRef:
+              name: groundschool-test
+              key: hazelcastcachettl
+---
+apiVersion: "autoscaling/v2beta1"
+kind: "HorizontalPodAutoscaler"
+metadata:
+  name: "groundschool-test-hpa"
+  namespace: "default"
+  labels:
+    app: "groundschool-test"
+spec:
+  scaleTargetRef:
+    kind: "Deployment"
+    name: "groundschool-test"
+    apiVersion: "apps/v1beta1"
+  minReplicas: 1
+  maxReplicas: 5
+  metrics:
+  - type: "Resource"
+    resource:
+      name: "cpu"
+      targetAverageUtilization: 80

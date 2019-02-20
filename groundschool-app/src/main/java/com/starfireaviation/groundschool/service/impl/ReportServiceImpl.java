@@ -6,9 +6,11 @@
 package com.starfireaviation.groundschool.service.impl;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -16,6 +18,7 @@ import java.util.stream.Collectors;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.StandardChartTheme;
 import org.jfree.chart.axis.CategoryAxis;
 import org.jfree.chart.axis.CategoryLabelPositions;
 import org.jfree.chart.plot.CategoryPlot;
@@ -155,6 +158,7 @@ public class ReportServiceImpl implements ReportService {
         plot.setSectionPaint(NOT_ANSWERED + " [" + notAnswered + "]", BLUE);
         plot.setSectionPaint(ANSWERED_CORRECTLY + " [" + answeredCorrectly + "]", GREEN);
         plot.setSectionPaint(ANSWERED_INCORRECTLY + " [" + answeredIncorrectly + "]", RED);
+        applyChartTheme(chart);
         return chart;
     }
 
@@ -202,6 +206,7 @@ public class ReportServiceImpl implements ReportService {
         plot.setSectionPaint(NOT_ANSWERED + " [" + notAnswered + "]", BLUE);
         plot.setSectionPaint(ANSWERED_CORRECTLY + " [" + answeredCorrectly + "]", GREEN);
         plot.setSectionPaint(ANSWERED_INCORRECTLY + " [" + answeredIncorrectly + "]", RED);
+        applyChartTheme(chart);
         return chart;
     }
 
@@ -262,7 +267,40 @@ public class ReportServiceImpl implements ReportService {
         CategoryAxis domainAxis = new CategoryAxis();
         domainAxis.setCategoryLabelPositions(CategoryLabelPositions.UP_45);
         plot.setDomainAxis(domainAxis);
+        applyChartTheme(chart);
         return chart;
+    }
+
+    /**
+     * Applies font theme to chart
+     *
+     * @param chart JFreeChart
+     */
+    private static void applyChartTheme(JFreeChart chart) {
+        final StandardChartTheme chartTheme = (StandardChartTheme) org.jfree.chart.StandardChartTheme
+                .createJFreeTheme();
+
+        if (Locale.getDefault().getLanguage().equals(Locale.US.getLanguage())) {
+            final Font oldExtraLargeFont = chartTheme.getExtraLargeFont();
+            final Font oldLargeFont = chartTheme.getLargeFont();
+            final Font oldRegularFont = chartTheme.getRegularFont();
+            final Font oldSmallFont = chartTheme.getSmallFont();
+
+            final Font extraLargeFont = new Font(
+                    "Sans-serif",
+                    oldExtraLargeFont.getStyle(),
+                    oldExtraLargeFont.getSize());
+            final Font largeFont = new Font("Sans-serif", oldLargeFont.getStyle(), oldLargeFont.getSize());
+            final Font regularFont = new Font("Sans-serif", oldRegularFont.getStyle(), oldRegularFont.getSize());
+            final Font smallFont = new Font("Sans-serif", oldSmallFont.getStyle(), oldSmallFont.getSize());
+
+            chartTheme.setExtraLargeFont(extraLargeFont);
+            chartTheme.setLargeFont(largeFont);
+            chartTheme.setRegularFont(regularFont);
+            chartTheme.setSmallFont(smallFont);
+        }
+
+        chartTheme.apply(chart);
     }
 
     /**

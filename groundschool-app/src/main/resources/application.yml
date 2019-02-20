@@ -1,20 +1,15 @@
 application:
-  host: ${application.host}
+  host: ${applicationhost}
   security:
-    secret: ${application.security.secret}
-    expiration-time: ${application.security.expiration-time}
+    secret: ${applicationsecuritysecret}
+    expiration-time: ${applicationsecurityexpirationtime}
 
 spring:
   datasource:
-    url: ${spring_datasource_url}
-    username: ${spring_datasource_username}
-    password: ${spring_datasource_password}
+    url: ${springdatasourceurl}
+    username: ${springdatasourceusername}
+    password: ${springdatasourcepassword}
     driver-class-name: com.mysql.cj.jdbc.Driver
-  cloud:
-    gcp:
-      sql:
-        database-name: ${spring_cloud_gcp_sql_database_name}
-        instance-connection-name: ${spring_cloud_gcp_sql_instance_connection_name}
   jpa:
     properties:
       hibernate:
@@ -40,26 +35,26 @@ logging:
 hazelcast:
   cache:
     # time to live in seconds
-    ttl: ${hazelcast.cache.ttl}
+    ttl: ${hazelcastcachettl}
 
 groundschool:
   timeout:
-    read: ${groundschool.timeout.read}
-    connect: ${groundschool.timeout.connect}
-    access-token-validity: ${groundschool.timeout.access-token-validity}
+    read: ${groundschooltimeoutread}
+    connect: ${groundschooltimeoutconnect}
+    access-token-validity: ${groundschooltimeoutaccesstokenvalidity}
   email:
-    from-address: ${groundschool.email.from-address}
-    host: ${groundschool.email.host}
-    port: ${groundschool.email.port}
-    username: ${groundschool.email.username}
-    password: ${groundschool.email.password}
+    from-address: ${groundschoolemailfromaddress}
+    host: ${groundschoolemailhost}
+    port: ${groundschoolemailport}
+    username: ${groundschoolemailusername}
+    password: ${groundschoolemailpassword}
   sms:
-    from-address: ${groundschool.sms.from-address}
-    account-sid: ${groundschool.sms.account-sid}
-    auth-id: ${groundschool.sms.auth-id}
+    from-address: ${groundschoolsmsfrom-address}
+    account-sid: ${groundschoolsmsaccount-sid}
+    auth-id: ${groundschoolsmsauth-id}
 
 slack:
   bot:
-    key: ${slack.bot.key}
-    channel: ${slack.bot.channel}
-    name: ${slack.bot.name}
+    key: ${slackbotkey}
+    channel: ${slackbotchannel}
+    name: ${slackbotname}
