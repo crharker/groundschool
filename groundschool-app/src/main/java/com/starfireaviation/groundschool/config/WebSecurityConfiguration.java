@@ -5,7 +5,6 @@
  */
 package com.starfireaviation.groundschool.config;
 
-import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -22,6 +21,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.starfireaviation.groundschool.properties.ApplicationProperties;
+import com.starfireaviation.groundschool.service.UserService;
 
 /**
  * WebSecurityConfiguration
@@ -40,6 +40,12 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
      */
     @Autowired
     private UserDetailsService userDetailsService;
+
+    /**
+     * UserService
+     */
+    @Autowired
+    private UserService userService;
 
     /**
      * Configure authentication
@@ -77,6 +83,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/events/**/unregister/**")
                 .permitAll()
                 .antMatchers(HttpMethod.POST, "/users/verify/**")
+                .permitAll()
+                .antMatchers(HttpMethod.GET, "/users/username/**")
                 .permitAll()
                 .antMatchers(HttpMethod.POST, "/users/logout")
                 .permitAll()
@@ -129,13 +137,11 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .hasAnyAuthority("ADMIN", "INSTRUCTOR")
                 .antMatchers(HttpMethod.DELETE, "/users/*")
                 .hasAnyAuthority("ADMIN", "INSTRUCTOR")
-                .antMatchers(HttpMethod.GET, "/users/*")
-                .hasAnyAuthority("ADMIN", "INSTRUCTOR")
                 // Everything else requires one of Admin, Instructor, or Student
                 .anyRequest()
                 .authenticated()
                 .and()
-                .addFilter(new JWTAuthenticationFilter(authenticationManager()))
+                .addFilter(new JWTAuthenticationFilter(authenticationManager(), userService))
                 .addFilter(new JWTAuthorizationFilter(authenticationManager()));
     }
 

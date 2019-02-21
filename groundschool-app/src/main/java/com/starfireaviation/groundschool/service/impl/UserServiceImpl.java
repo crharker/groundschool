@@ -91,9 +91,8 @@ public class UserServiceImpl implements UserService {
             return user;
         }
         final Long userId = user.getId();
-        initCache();
-        userCache.remove(userId);
         if (userId != null) {
+            initCache();
             userCache.remove(userId);
             final UserEntity existingUser = findByIdWithPassword(userId);
             if (existingUser == null) {

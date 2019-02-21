@@ -179,6 +179,24 @@ public class UserController {
     }
 
     /**
+     * Gets a user by username
+     *
+     * @param username username
+     * @param principal Principal
+     * @return User
+     * @throws ResourceNotFoundException when user is not found
+     * @throws AccessDeniedException when user doesn't have permission to perform operation
+     */
+    @GetMapping(path = {
+            "/username/{username}"
+    })
+    public User getByUserName(@PathVariable("username") String username, Principal principal)
+            throws ResourceNotFoundException, AccessDeniedException {
+        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
+        return userService.findByUsername(username);
+    }
+
+    /**
      * Get all users
      *
      * @param principal Principal
