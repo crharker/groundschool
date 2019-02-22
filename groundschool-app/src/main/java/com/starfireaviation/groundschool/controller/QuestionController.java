@@ -5,8 +5,6 @@
  */
 package com.starfireaviation.groundschool.controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,9 +16,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.starfireaviation.groundschool.exception.AccessDeniedException;
+import com.starfireaviation.groundschool.exception.InvalidPayloadException;
 import com.starfireaviation.groundschool.exception.ResourceNotFoundException;
 import com.starfireaviation.groundschool.model.Question;
 import com.starfireaviation.groundschool.service.QuestionService;
+import com.starfireaviation.groundschool.validation.QuestionValidator;
+
 import java.security.Principal;
 import java.util.List;
 
@@ -37,15 +39,16 @@ import java.util.List;
 public class QuestionController {
 
     /**
-     * Logger
-     */
-    private static final Logger LOGGER = LoggerFactory.getLogger(QuestionController.class);
-
-    /**
      * QuestionService
      */
     @Autowired
     private QuestionService questionService;
+
+    /**
+     * QuestionValidator
+     */
+    @Autowired
+    private QuestionValidator questionValidator;
 
     /**
      * Initializes an instance of <code>QuestionController</code> with the default data.
@@ -70,13 +73,14 @@ public class QuestionController {
      * @param principal Principal
      * @return Question
      * @throws ResourceNotFoundException when question is not found
+     * @throws AccessDeniedException when user doesn't have permission to perform operation
+     * @throws InvalidPayloadException when invalid data is provided
      */
     @PostMapping
-    public Question post(@RequestBody Question question, Principal principal) throws ResourceNotFoundException {
-        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
-        if (question == null) {
-            return question;
-        }
+    public Question post(@RequestBody Question question, Principal principal) throws ResourceNotFoundException,
+            InvalidPayloadException, AccessDeniedException {
+        questionValidator.validate(question);
+        questionValidator.access(principal);
         return questionService.store(question);
     }
 
@@ -93,7 +97,6 @@ public class QuestionController {
     })
     public Question get(@PathVariable("questionId") long questionId, Principal principal)
             throws ResourceNotFoundException {
-        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         return questionService.get(questionId);
     }
 
@@ -104,13 +107,14 @@ public class QuestionController {
      * @param principal Principal
      * @return Question
      * @throws ResourceNotFoundException when question is not found
+     * @throws AccessDeniedException when user doesn't have permission to perform operation
+     * @throws InvalidPayloadException when invalid data is provided
      */
     @PutMapping
-    public Question put(@RequestBody Question question, Principal principal) throws ResourceNotFoundException {
-        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
-        if (question == null) {
-            return question;
-        }
+    public Question put(@RequestBody Question question, Principal principal) throws ResourceNotFoundException,
+            InvalidPayloadException, AccessDeniedException {
+        questionValidator.validate(question);
+        questionValidator.access(principal);
         return questionService.store(question);
     }
 
@@ -121,13 +125,14 @@ public class QuestionController {
      * @param principal Principal
      * @return Question
      * @throws ResourceNotFoundException when question is not found
+     * @throws AccessDeniedException when user doesn't have permission to perform operation
      */
     @DeleteMapping(path = {
             "/{questionId}"
     })
     public Question delete(@PathVariable("questionId") long questionId, Principal principal)
-            throws ResourceNotFoundException {
-        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
+            throws ResourceNotFoundException, AccessDeniedException {
+        questionValidator.access(principal);
         return questionService.delete(questionId);
     }
 
@@ -137,10 +142,11 @@ public class QuestionController {
      * @param principal Principal
      * @return list of Question
      * @throws ResourceNotFoundException when question is not found
+     * @throws AccessDeniedException when user doesn't have permission to perform operation
      */
     @GetMapping
-    public List<Question> list(Principal principal) throws ResourceNotFoundException {
-        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
+    public List<Question> list(Principal principal) throws ResourceNotFoundException, AccessDeniedException {
+        questionValidator.access(principal);
         return questionService.getAll();
     }
 
@@ -162,7 +168,6 @@ public class QuestionController {
             @PathVariable("userId") long userId,
             @PathVariable("selection") String selection,
             Principal principal) throws ResourceNotFoundException {
-        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         return questionService.answer(questionId, userId, selection, null);
     }
 
@@ -173,6 +178,7 @@ public class QuestionController {
      * @param referenceMaterialId LessonPlan ID
      * @param principal Principal
      * @throws ResourceNotFoundException when question is not found
+     * @throws AccessDeniedException when user doesn't have permission to perform operation
      */
     @PostMapping(path = {
             "/{questionId}/assign/referencematerial/{referenceMaterialId}"
@@ -180,8 +186,8 @@ public class QuestionController {
     public void assignReferenceMaterial(
             @PathVariable("questionId") long questionId,
             @PathVariable("referenceMaterialId") long referenceMaterialId,
-            Principal principal) throws ResourceNotFoundException {
-        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
+            Principal principal) throws ResourceNotFoundException, AccessDeniedException {
+        questionValidator.access(principal);
         questionService.assignReferenceMaterial(questionId, referenceMaterialId);
     }
 
@@ -192,6 +198,7 @@ public class QuestionController {
      * @param referenceMaterialId LessonPlan ID
      * @param principal Principal
      * @throws ResourceNotFoundException when question is not found
+     * @throws AccessDeniedException when user doesn't have permission to perform operation
      */
     @PostMapping(path = {
             "/{questionId}/unassign/referencematerial/{referenceMaterialId}"
@@ -199,8 +206,8 @@ public class QuestionController {
     public void unassignReferenceMaterial(
             @PathVariable("questionId") long questionId,
             @PathVariable("referenceMaterialId") long referenceMaterialId,
-            Principal principal) throws ResourceNotFoundException {
-        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
+            Principal principal) throws ResourceNotFoundException, AccessDeniedException {
+        questionValidator.access(principal);
         questionService.unassignReferenceMaterial(questionId, referenceMaterialId);
     }
 

@@ -6,7 +6,11 @@
 package com.starfireaviation.groundschool.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.starfireaviation.groundschool.exception.ResourceNotFoundException;
 import com.starfireaviation.groundschool.model.SecurityUserDetails;
+import com.starfireaviation.groundschool.model.User;
+import com.starfireaviation.groundschool.service.UserService;
+
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
@@ -61,12 +65,19 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     private AuthenticationManager authenticationManager;
 
     /**
+     * UserService
+     */
+    private UserService userService;
+
+    /**
      * Initializes an instance of <code>JWTAuthenticationFilter</code> with the default data.
      *
      * @param authenticationManager AuthenticationManager
+     * @param userService UserService
      */
-    public JWTAuthenticationFilter(AuthenticationManager authenticationManager) {
+    public JWTAuthenticationFilter(AuthenticationManager authenticationManager, UserService userService) {
         this.authenticationManager = authenticationManager;
+        this.userService = userService;
     }
 
     /**
@@ -100,10 +111,28 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             FilterChain chain,
             Authentication auth) {
 
-        final SecurityUserDetails user = (SecurityUserDetails) auth.getPrincipal();
-        res.addHeader(
-                HEADER_STRING,
-                TOKEN_PREFIX + " " + generateToken(user.getUsername(), user.getId()));
+        final SecurityUserDetails securityUserDetails = (SecurityUserDetails) auth.getPrincipal();
+        try {
+            final User user = userService.findByUsername(securityUserDetails.getUsername());
+            res.addHeader("Access-Control-Expose-Headers", "Authorization");
+            res.addHeader(
+                    "Access-Control-Allow-Headers",
+                    "Authorization, X-PINGOTHER, Origin, X-Requested-With, Content-Type, Accept, X-Custom-header");
+            final String token = generateToken(securityUserDetails.getUsername(), user.getId());
+            securityUserDetails.setId(user.getId());
+            securityUserDetails.setToken(token);
+            securityUserDetails.setPassword(null);
+            res.addHeader(
+                    HEADER_STRING,
+                    TOKEN_PREFIX + " " + token);
+            res.getWriter().write(new ObjectMapper().writeValueAsString(securityUserDetails));
+            res.getWriter().flush();
+            res.getWriter().close();
+        } catch (IOException e) {
+            // TODO log something
+        } catch (ResourceNotFoundException e) {
+            // TODO log something
+        }
     }
 
     /**

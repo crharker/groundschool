@@ -1,5 +1,6 @@
 ﻿import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 import { environment } from '@environments/environment';
 import { User } from '@app/_models';
@@ -13,35 +14,39 @@ export class UserService {
     }
 
     get(id: number) {
-        return this.http.get(`${environment.apiUrl}/users/${id}`);
+        return this.http.get<User>(`${environment.apiUrl}/users/${id}`);
+    }
+
+    getByUsername(username: string) {
+        return this.http.get<User>(`${environment.apiUrl}/users/username/${username}`);
     }
 
     create(user: User) {
-        return this.http.post(`${environment.apiUrl}/users`, user);
+        return this.http.post<User>(`${environment.apiUrl}/users`, user);
     }
 
     update(user: User) {
-        return this.http.put(`${environment.apiUrl}/users`, user);
+        return this.http.put<User>(`${environment.apiUrl}/users`, user);
     }
 
     delete(id: number) {
-        return this.http.delete(`${environment.apiUrl}/users/${id}`);
+        return this.http.delete<User>(`${environment.apiUrl}/users/${id}`);
     }
 
     getUsernameAvailability(username: string) {
-        return this.http.get(`${environment.apiUrl}/users/username/${username}/available`);
+        return this.http.get<boolean>(`${environment.apiUrl}/users/username/${username}/available`);
     }
 
     verifyNotificationSettings(userId: number, type: string) {
-        return this.http.get(`${environment.apiUrl}/users/${userId}/verify/${type}`);
+        this.http.get(`${environment.apiUrl}/users/${userId}/verify/${type}`);
     }
 
     updatePassword(userId: number, password: string, verificationCode: string) {
-        return this.http.post(`${environment.apiUrl}/users/${userId}/password/${verificationCode}`, password);
+        return this.http.post<boolean>(`${environment.apiUrl}/users/${userId}/password/${verificationCode}`, password);
     }
 
     passwordReset(userId: number) {
-        return this.http.post(`${environment.apiUrl}/users/${userId}/password/reset`, null);
+        return this.http.post<boolean>(`${environment.apiUrl}/users/${userId}/password/reset`, null);
     }
 
     logout() {
@@ -49,7 +54,7 @@ export class UserService {
     }
 
     invite(email: string) {
-        return this.http.post(`${environment.apiUrl}/users/invite`, email);
+        this.http.post(`${environment.apiUrl}/users/invite`, email);
     }
 
 }

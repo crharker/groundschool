@@ -5,8 +5,6 @@
  */
 package com.starfireaviation.groundschool.controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,9 +16,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.starfireaviation.groundschool.exception.AccessDeniedException;
+import com.starfireaviation.groundschool.exception.InvalidPayloadException;
 import com.starfireaviation.groundschool.exception.ResourceNotFoundException;
 import com.starfireaviation.groundschool.model.Lesson;
 import com.starfireaviation.groundschool.service.LessonService;
+import com.starfireaviation.groundschool.validation.LessonValidator;
 
 import java.security.Principal;
 import java.util.List;
@@ -38,15 +39,16 @@ import java.util.List;
 public class LessonController {
 
     /**
-     * Logger
-     */
-    private static final Logger LOGGER = LoggerFactory.getLogger(LessonController.class);
-
-    /**
      * LessonService
      */
     @Autowired
     private LessonService lessonService;
+
+    /**
+     * LessonValidator
+     */
+    @Autowired
+    private LessonValidator lessonValidator;
 
     /**
      * Initializes an instance of <code>LessonController</code> with the default data.
@@ -70,13 +72,15 @@ public class LessonController {
      * @param lesson Lesson
      * @param principal Principal
      * @return Lesson
+     * @throws ResourceNotFoundException when user is not found
+     * @throws AccessDeniedException when user doesn't have permission to perform operation
+     * @throws InvalidPayloadException when invalid data is provided
      */
     @PostMapping
-    public Lesson post(@RequestBody Lesson lesson, Principal principal) {
-        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
-        if (lesson == null) {
-            return lesson;
-        }
+    public Lesson post(@RequestBody Lesson lesson, Principal principal) throws ResourceNotFoundException,
+            AccessDeniedException, InvalidPayloadException {
+        lessonValidator.validate(lesson);
+        lessonValidator.access(principal);
         return lessonService.store(lesson);
     }
 
@@ -87,13 +91,14 @@ public class LessonController {
      * @param principal Principal
      * @return Lesson
      * @throws ResourceNotFoundException when lesson is not found
+     * @throws AccessDeniedException when user doesn't have permission to perform operation
      */
     @GetMapping(path = {
             "/{lessonId}"
     })
     public Lesson get(@PathVariable("lessonId") long lessonId, Principal principal)
-            throws ResourceNotFoundException {
-        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
+            throws ResourceNotFoundException, AccessDeniedException {
+        lessonValidator.access(principal);
         return lessonService.get(lessonId);
     }
 
@@ -103,13 +108,15 @@ public class LessonController {
      * @param lesson Lesson
      * @param principal Principal
      * @return Lesson
+     * @throws ResourceNotFoundException when user is not found
+     * @throws AccessDeniedException when user doesn't have permission to perform operation
+     * @throws InvalidPayloadException when invalid data is provided
      */
     @PutMapping
-    public Lesson put(@RequestBody Lesson lesson, Principal principal) {
-        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
-        if (lesson == null) {
-            return lesson;
-        }
+    public Lesson put(@RequestBody Lesson lesson, Principal principal) throws InvalidPayloadException,
+            ResourceNotFoundException, AccessDeniedException {
+        lessonValidator.validate(lesson);
+        lessonValidator.access(principal);
         return lessonService.store(lesson);
     }
 
@@ -120,13 +127,14 @@ public class LessonController {
      * @param principal Principal
      * @return Lesson
      * @throws ResourceNotFoundException when lesson is not found
+     * @throws AccessDeniedException when user doesn't have permission to perform operation
      */
     @DeleteMapping(path = {
             "/{lessonId}"
     })
     public Lesson delete(@PathVariable("lessonId") long lessonId, Principal principal)
-            throws ResourceNotFoundException {
-        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
+            throws ResourceNotFoundException, AccessDeniedException {
+        lessonValidator.access(principal);
         return lessonService.delete(lessonId);
     }
 
@@ -136,10 +144,11 @@ public class LessonController {
      * @param principal Principal
      * @return list of Lessons
      * @throws ResourceNotFoundException when lesson is not found
+     * @throws AccessDeniedException when user doesn't have permission to perform operation
      */
     @GetMapping
-    public List<Lesson> list(Principal principal) throws ResourceNotFoundException {
-        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
+    public List<Lesson> list(Principal principal) throws ResourceNotFoundException, AccessDeniedException {
+        lessonValidator.access(principal);
         return lessonService.getAll();
     }
 }

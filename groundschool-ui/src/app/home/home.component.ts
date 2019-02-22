@@ -2,17 +2,18 @@
 import { Subscription } from 'rxjs';
 import { first } from 'rxjs/operators';
 
-import { User } from '@app/_models';
-import { UserService, AuthenticationService } from '@app/_services';
+import { Event, User } from '@app/_models';
+import { EventService, UserService, AuthenticationService } from '@app/_services';
 
 @Component({ templateUrl: 'home.component.html' })
 export class HomeComponent implements OnInit, OnDestroy {
     currentUser: User;
     currentUserSubscription: Subscription;
-    users: User[] = [];
+    events: Event[] = [];
 
     constructor(
         private authenticationService: AuthenticationService,
+        private eventService: EventService,
         private userService: UserService
     ) {
         this.currentUserSubscription = this.authenticationService.currentUser.subscribe(user => {
@@ -21,7 +22,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.loadAllUsers();
+        this.loadUpcomingEvents();
     }
 
     ngOnDestroy() {
@@ -31,13 +32,13 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     deleteUser(id: number) {
         this.userService.delete(id).pipe(first()).subscribe(() => {
-            this.loadAllUsers()
+            this.loadUpcomingEvents()
         });
     }
 
-    private loadAllUsers() {
-        this.userService.getAll().pipe(first()).subscribe(users => {
-            this.users = users;
+    private loadUpcomingEvents() {
+        this.eventService.upcoming(10).pipe(first()).subscribe(events => {
+            this.events = events;
         });
     }
 }
