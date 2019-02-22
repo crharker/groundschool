@@ -5,8 +5,6 @@
  */
 package com.starfireaviation.groundschool.controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -39,11 +37,6 @@ import java.util.List;
         "/questions"
 })
 public class QuestionController {
-
-    /**
-     * Logger
-     */
-    private static final Logger LOGGER = LoggerFactory.getLogger(QuestionController.class);
 
     /**
      * QuestionService
@@ -86,7 +79,6 @@ public class QuestionController {
     @PostMapping
     public Question post(@RequestBody Question question, Principal principal) throws ResourceNotFoundException,
             InvalidPayloadException, AccessDeniedException {
-        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         questionValidator.validate(question);
         questionValidator.access(principal);
         return questionService.store(question);
@@ -105,7 +97,6 @@ public class QuestionController {
     })
     public Question get(@PathVariable("questionId") long questionId, Principal principal)
             throws ResourceNotFoundException {
-        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         return questionService.get(questionId);
     }
 
@@ -122,7 +113,6 @@ public class QuestionController {
     @PutMapping
     public Question put(@RequestBody Question question, Principal principal) throws ResourceNotFoundException,
             InvalidPayloadException, AccessDeniedException {
-        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         questionValidator.validate(question);
         questionValidator.access(principal);
         return questionService.store(question);
@@ -142,7 +132,6 @@ public class QuestionController {
     })
     public Question delete(@PathVariable("questionId") long questionId, Principal principal)
             throws ResourceNotFoundException, AccessDeniedException {
-        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         questionValidator.access(principal);
         return questionService.delete(questionId);
     }
@@ -157,7 +146,6 @@ public class QuestionController {
      */
     @GetMapping
     public List<Question> list(Principal principal) throws ResourceNotFoundException, AccessDeniedException {
-        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         questionValidator.access(principal);
         return questionService.getAll();
     }
@@ -180,7 +168,6 @@ public class QuestionController {
             @PathVariable("userId") long userId,
             @PathVariable("selection") String selection,
             Principal principal) throws ResourceNotFoundException {
-        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         return questionService.answer(questionId, userId, selection, null);
     }
 
@@ -200,7 +187,6 @@ public class QuestionController {
             @PathVariable("questionId") long questionId,
             @PathVariable("referenceMaterialId") long referenceMaterialId,
             Principal principal) throws ResourceNotFoundException, AccessDeniedException {
-        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         questionValidator.access(principal);
         questionService.assignReferenceMaterial(questionId, referenceMaterialId);
     }
@@ -221,7 +207,6 @@ public class QuestionController {
             @PathVariable("questionId") long questionId,
             @PathVariable("referenceMaterialId") long referenceMaterialId,
             Principal principal) throws ResourceNotFoundException, AccessDeniedException {
-        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         questionValidator.access(principal);
         questionService.unassignReferenceMaterial(questionId, referenceMaterialId);
     }

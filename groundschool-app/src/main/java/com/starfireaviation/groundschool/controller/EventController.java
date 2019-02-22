@@ -5,8 +5,6 @@
  */
 package com.starfireaviation.groundschool.controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -49,11 +47,6 @@ import java.util.stream.Collectors;
         "/events"
 })
 public class EventController {
-
-    /**
-     * Logger
-     */
-    private static final Logger LOGGER = LoggerFactory.getLogger(EventController.class);
 
     /**
      * MAX_UPCOMING_COUNT
@@ -119,7 +112,6 @@ public class EventController {
     @PostMapping
     public Event post(@RequestBody Event event, Principal principal) throws ResourceNotFoundException,
             AccessDeniedException, InvalidPayloadException {
-        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         eventValidator.validate(event);
         eventValidator.access(principal);
         if (event == null) {
@@ -145,7 +137,6 @@ public class EventController {
             "/{eventId}"
     })
     public Event get(@PathVariable("eventId") long eventId, Principal principal) throws ResourceNotFoundException {
-        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         Event event = eventService.get(eventId);
         event.setAddress(addressService.findByEventId(event.getId()));
         return event;
@@ -163,7 +154,6 @@ public class EventController {
     @PutMapping
     public Event put(@RequestBody Event event, Principal principal) throws ResourceNotFoundException,
             AccessDeniedException {
-        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         eventValidator.access(principal);
         if (event == null) {
             return event;
@@ -190,7 +180,6 @@ public class EventController {
     })
     public Event delete(@PathVariable("eventId") long eventId, Principal principal) throws ResourceNotFoundException,
             AccessDeniedException {
-        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         eventValidator.access(principal);
         return eventService.delete(eventId);
     }
@@ -206,7 +195,6 @@ public class EventController {
      */
     @GetMapping
     public List<Event> list(Principal principal) throws ResourceNotFoundException, AccessDeniedException {
-        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         eventValidator.access(principal);
         List<Event> events = eventService.getAll();
         for (Event event : events) {
@@ -228,7 +216,6 @@ public class EventController {
     })
     public List<Event> upcoming(@PathVariable("count") int count, Principal principal)
             throws ResourceNotFoundException {
-        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         int actualCount = count;
         if (actualCount > MAX_UPCOMING_COUNT) {
             actualCount = MAX_UPCOMING_COUNT;
@@ -319,7 +306,6 @@ public class EventController {
             @PathVariable("eventId") long eventId,
             @PathVariable("lessonPlanId") long lessonPlanId,
             Principal principal) throws ResourceNotFoundException, AccessDeniedException {
-        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         eventValidator.access(principal);
         //final LessonPlan lessonPlan =
         lessonPlanService.get(lessonPlanId);
@@ -341,7 +327,6 @@ public class EventController {
             @PathVariable("eventId") long eventId,
             @PathVariable("lessonPlanId") long lessonPlanId,
             Principal principal) throws ResourceNotFoundException, AccessDeniedException {
-        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         eventValidator.access(principal);
         //final LessonPlan lessonPlan =
         lessonPlanService.get(lessonPlanId);
@@ -360,7 +345,6 @@ public class EventController {
     })
     public String getCheckinCode(@PathVariable("eventId") long eventId, Principal principal)
             throws ResourceNotFoundException {
-        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         String code = null;
         Event event = eventService.get(eventId);
         if (event != null) {
@@ -387,7 +371,6 @@ public class EventController {
             @PathVariable("userId") long userId,
             @PathVariable("code") String code,
             Principal principal) throws ResourceNotFoundException {
-        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         return eventService.checkin(eventId, userId, code);
     }
 
@@ -405,7 +388,6 @@ public class EventController {
     })
     public Event start(@PathVariable("eventId") long eventId, Principal principal) throws ResourceNotFoundException,
             AccessDeniedException {
-        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         eventValidator.access(principal);
         Event event = eventService.get(eventId);
         if (event != null && !event.isStarted()) {
@@ -444,7 +426,6 @@ public class EventController {
     })
     public Event complete(@PathVariable("eventId") long eventId, Principal principal) throws ResourceNotFoundException,
             AccessDeniedException {
-        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         eventValidator.access(principal);
         Event event = eventService.get(eventId);
         if (event != null && event.isStarted()) {

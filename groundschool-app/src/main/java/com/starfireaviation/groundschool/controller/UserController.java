@@ -124,7 +124,6 @@ public class UserController {
     @PutMapping
     public User put(@RequestBody User user, Principal principal) throws ResourceNotFoundException,
             AccessDeniedException, InvalidPayloadException, ConflictException {
-        LOGGER.info(String.format("put() User is logged in as %s", principal.getName()));
         userValidator.validate(user);
         userValidator.access(user.getId(), principal);
         final User loggedInUser = userService.findByUsername(principal.getName());
@@ -156,7 +155,6 @@ public class UserController {
     })
     public User get(@PathVariable("userId") long userId, Principal principal) throws AccessDeniedException,
             ResourceNotFoundException {
-        LOGGER.info(String.format("get() User is logged in as %s", principal.getName()));
         userValidator.access(userId, principal);
         return userService.get(userId);
     }
@@ -185,7 +183,6 @@ public class UserController {
      */
     @GetMapping
     public List<User> list(Principal principal) throws ResourceNotFoundException, AccessDeniedException {
-        LOGGER.info(String.format("list() User is logged in as %s", principal.getName()));
         final User loggedInUser = userService.findByUsername(principal.getName());
         final Role role = loggedInUser.getRole();
         if (role != Role.ADMIN && role != Role.INSTRUCTOR) {
@@ -305,7 +302,6 @@ public class UserController {
             "/invite"
     })
     public void invite(@RequestBody String email, Principal principal) throws ResourceNotFoundException {
-        LOGGER.info(String.format("invite() User is logged in as %s", principal.getName()));
         notificationService.invite(null, email);
     }
 

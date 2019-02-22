@@ -5,8 +5,6 @@
  */
 package com.starfireaviation.groundschool.controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -39,11 +37,6 @@ import java.util.List;
         "/quizzes"
 })
 public class QuizController {
-
-    /**
-     * Logger
-     */
-    private static final Logger LOGGER = LoggerFactory.getLogger(QuizController.class);
 
     /**
      * QuizService
@@ -86,7 +79,6 @@ public class QuizController {
     @PostMapping
     public Quiz post(@RequestBody Quiz quiz, Principal principal) throws InvalidPayloadException,
             ResourceNotFoundException, AccessDeniedException {
-        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         quizValidator.validate(quiz);
         quizValidator.access(principal);
         return quizService.store(quiz);
@@ -104,7 +96,6 @@ public class QuizController {
             "/{quizId}"
     })
     public Quiz get(@PathVariable("quizId") long quizId, Principal principal) throws ResourceNotFoundException {
-        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         return quizService.get(quizId);
     }
 
@@ -121,7 +112,6 @@ public class QuizController {
     @PutMapping
     public Quiz put(@RequestBody Quiz quiz, Principal principal) throws ResourceNotFoundException,
             AccessDeniedException, InvalidPayloadException {
-        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         quizValidator.validate(quiz);
         quizValidator.access(principal);
         return quizService.store(quiz);
@@ -141,7 +131,6 @@ public class QuizController {
     })
     public Quiz delete(@PathVariable("quizId") long quizId, Principal principal) throws ResourceNotFoundException,
             AccessDeniedException {
-        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         quizValidator.access(principal);
         return quizService.delete(quizId);
     }
@@ -156,7 +145,6 @@ public class QuizController {
      */
     @GetMapping
     public List<Quiz> list(Principal principal) throws ResourceNotFoundException, AccessDeniedException {
-        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         quizValidator.access(principal);
         return quizService.getAll();
     }
@@ -175,7 +163,6 @@ public class QuizController {
     })
     public Quiz start(@PathVariable("quizId") long quizId, Principal principal) throws ResourceNotFoundException,
             AccessDeniedException {
-        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         quizValidator.access(principal);
         return quizService.start(quizId);
     }
@@ -194,7 +181,6 @@ public class QuizController {
     })
     public Quiz complete(@PathVariable("quizId") long quizId, Principal principal) throws ResourceNotFoundException,
             AccessDeniedException {
-        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         quizValidator.access(principal);
         return quizService.complete(quizId);
     }
@@ -216,7 +202,6 @@ public class QuizController {
             @PathVariable("quizId") long quizId,
             @PathVariable("questionId") long questionId,
             Principal principal) throws ResourceNotFoundException, AccessDeniedException {
-        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         quizValidator.access(principal);
         return quizService.addQuestion(quizId, questionId);
     }
@@ -238,7 +223,6 @@ public class QuizController {
             @PathVariable("quizId") long quizId,
             @PathVariable("questionId") long questionId,
             Principal principal) throws ResourceNotFoundException, AccessDeniedException {
-        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         quizValidator.access(principal);
         return quizService.removeQuestion(quizId, questionId);
     }
