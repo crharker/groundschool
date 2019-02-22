@@ -15,23 +15,23 @@ import org.springframework.stereotype.Component;
 import com.starfireaviation.groundschool.exception.AccessDeniedException;
 import com.starfireaviation.groundschool.exception.InvalidPayloadException;
 import com.starfireaviation.groundschool.exception.ResourceNotFoundException;
-import com.starfireaviation.groundschool.model.Event;
+import com.starfireaviation.groundschool.model.LessonPlan;
 import com.starfireaviation.groundschool.model.Role;
 import com.starfireaviation.groundschool.model.User;
 import com.starfireaviation.groundschool.service.UserService;
 
 /**
- * EventValidator
+ * LessonPlanValidator
  *
  * @author brianmichael
  */
 @Component
-public class EventValidator {
+public class LessonPlanValidator {
 
     /**
      * Logger
      */
-    private static final Logger LOGGER = LoggerFactory.getLogger(EventValidator.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(LessonPlanValidator.class);
 
     /**
      * UserService
@@ -40,13 +40,13 @@ public class EventValidator {
     private UserService userService;
 
     /**
-     * Event Validation
+     * LessonPlan Validation
      *
-     * @param event Event
-     * @throws InvalidPayloadException when event information is invalid
+     * @param lessonPlan LessonPlan
+     * @throws InvalidPayloadException when lesson plan information is invalid
      */
-    public void validate(Event event) throws InvalidPayloadException {
-        empty(event);
+    public void validate(LessonPlan lessonPlan) throws InvalidPayloadException {
+        empty(lessonPlan);
     }
 
     /**
@@ -66,14 +66,14 @@ public class EventValidator {
     }
 
     /**
-     * Ensures event object is not null
+     * Ensures lesson plan object is not null
      *
-     * @param event Event
-     * @throws InvalidPayloadException when event is null
+     * @param lessonPlan LessonPlan
+     * @throws InvalidPayloadException when lesson plan is null
      */
-    private static void empty(Event event) throws InvalidPayloadException {
-        if (event == null) {
-            String msg = "No event information was provided";
+    private static void empty(LessonPlan lessonPlan) throws InvalidPayloadException {
+        if (lessonPlan == null) {
+            String msg = "No lesson plan information was provided";
             LOGGER.warn(msg);
             throw new InvalidPayloadException(msg);
         }

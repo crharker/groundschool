@@ -15,23 +15,23 @@ import org.springframework.stereotype.Component;
 import com.starfireaviation.groundschool.exception.AccessDeniedException;
 import com.starfireaviation.groundschool.exception.InvalidPayloadException;
 import com.starfireaviation.groundschool.exception.ResourceNotFoundException;
-import com.starfireaviation.groundschool.model.Event;
+import com.starfireaviation.groundschool.model.ReferenceMaterial;
 import com.starfireaviation.groundschool.model.Role;
 import com.starfireaviation.groundschool.model.User;
 import com.starfireaviation.groundschool.service.UserService;
 
 /**
- * EventValidator
+ * ReferenceMaterialValidator
  *
  * @author brianmichael
  */
 @Component
-public class EventValidator {
+public class ReferenceMaterialValidator {
 
     /**
      * Logger
      */
-    private static final Logger LOGGER = LoggerFactory.getLogger(EventValidator.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ReferenceMaterialValidator.class);
 
     /**
      * UserService
@@ -40,17 +40,17 @@ public class EventValidator {
     private UserService userService;
 
     /**
-     * Event Validation
+     * ReferenceMaterial Validation
      *
-     * @param event Event
-     * @throws InvalidPayloadException when event information is invalid
+     * @param referenceMaterial ReferenceMaterial
+     * @throws InvalidPayloadException when reference material information is invalid
      */
-    public void validate(Event event) throws InvalidPayloadException {
-        empty(event);
+    public void validate(ReferenceMaterial referenceMaterial) throws InvalidPayloadException {
+        empty(referenceMaterial);
     }
 
     /**
-     * Validates access to an event by the principal user
+     * Validates access to an reference material by the principal user
      *
      * @param principal Principal
      * @throws ResourceNotFoundException when principal user is not found
@@ -66,14 +66,14 @@ public class EventValidator {
     }
 
     /**
-     * Ensures event object is not null
+     * Ensures reference material object is not null
      *
-     * @param event Event
-     * @throws InvalidPayloadException when event is null
+     * @param referenceMaterial ReferenceMaterial
+     * @throws InvalidPayloadException when referenceMaterial is null
      */
-    private static void empty(Event event) throws InvalidPayloadException {
-        if (event == null) {
-            String msg = "No event information was provided";
+    private static void empty(ReferenceMaterial referenceMaterial) throws InvalidPayloadException {
+        if (referenceMaterial == null) {
+            String msg = "No reference material information was provided";
             LOGGER.warn(msg);
             throw new InvalidPayloadException(msg);
         }

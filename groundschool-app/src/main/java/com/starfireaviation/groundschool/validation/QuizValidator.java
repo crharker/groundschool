@@ -15,23 +15,23 @@ import org.springframework.stereotype.Component;
 import com.starfireaviation.groundschool.exception.AccessDeniedException;
 import com.starfireaviation.groundschool.exception.InvalidPayloadException;
 import com.starfireaviation.groundschool.exception.ResourceNotFoundException;
-import com.starfireaviation.groundschool.model.Event;
+import com.starfireaviation.groundschool.model.Quiz;
 import com.starfireaviation.groundschool.model.Role;
 import com.starfireaviation.groundschool.model.User;
 import com.starfireaviation.groundschool.service.UserService;
 
 /**
- * EventValidator
+ * QuizValidator
  *
  * @author brianmichael
  */
 @Component
-public class EventValidator {
+public class QuizValidator {
 
     /**
      * Logger
      */
-    private static final Logger LOGGER = LoggerFactory.getLogger(EventValidator.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(QuizValidator.class);
 
     /**
      * UserService
@@ -40,17 +40,17 @@ public class EventValidator {
     private UserService userService;
 
     /**
-     * Event Validation
+     * Quiz Validation
      *
-     * @param event Event
-     * @throws InvalidPayloadException when event information is invalid
+     * @param quiz Quiz
+     * @throws InvalidPayloadException when quiz information is invalid
      */
-    public void validate(Event event) throws InvalidPayloadException {
-        empty(event);
+    public void validate(Quiz quiz) throws InvalidPayloadException {
+        empty(quiz);
     }
 
     /**
-     * Validates access to an event by the principal user
+     * Validates access to an quiz by the principal user
      *
      * @param principal Principal
      * @throws ResourceNotFoundException when principal user is not found
@@ -66,14 +66,14 @@ public class EventValidator {
     }
 
     /**
-     * Ensures event object is not null
+     * Ensures quiz object is not null
      *
-     * @param event Event
-     * @throws InvalidPayloadException when event is null
+     * @param quiz Quiz
+     * @throws InvalidPayloadException when quiz is null
      */
-    private static void empty(Event event) throws InvalidPayloadException {
-        if (event == null) {
-            String msg = "No event information was provided";
+    private static void empty(Quiz quiz) throws InvalidPayloadException {
+        if (quiz == null) {
+            String msg = "No quiz information was provided";
             LOGGER.warn(msg);
             throw new InvalidPayloadException(msg);
         }
