@@ -28,6 +28,10 @@ export class EventService {
       return this.http.get<Event[]>(`${environment.apiUrl}/events`);
     }
 
+    upcoming(count: number) {
+      return this.http.get<Event[]>(`${environment.apiUrl}/events/upcoming/${count}`);
+    }
+
     rsvp(eventId: number, userId: number, confirm: boolean) {
       this.http.get(`${environment.apiUrl}/events/${eventId}/rsvp/${userId}/${confirm}/WEB`);
     }

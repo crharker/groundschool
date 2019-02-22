@@ -43,4 +43,5 @@ public interface ReportService {
      * @throws ResourceNotFoundException when quiz is not found
      */
     JFreeChart getQuizResultsChart(final Long quizId) throws ResourceNotFoundException;
+
 }

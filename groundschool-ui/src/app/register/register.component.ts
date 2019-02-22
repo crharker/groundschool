@@ -10,6 +10,8 @@ export class RegisterComponent implements OnInit {
     registerForm: FormGroup;
     loading = false;
     submitted = false;
+    questionPreferenceChoices: string[] = ['WEB', 'SLACK', 'SMS', 'EMAIL'];
+    questionPreferenceDefault: string = 'WEB';
 
     constructor(
         private formBuilder: FormBuilder,
@@ -33,10 +35,14 @@ export class RegisterComponent implements OnInit {
             sms: ['', [Validators.minLength(10), Validators.maxLength(10)]],
             slack: [''],
             eaaNumber: [''],
+            youthProgramParticipant: [''],
             certificateNumber: [''],
             questionPreference: [''],
             password: ['', [Validators.required, Validators.minLength(6)]]
         });
+        this.registerForm
+            .controls['questionPreference']
+            .setValue(this.questionPreferenceDefault, {onlySelf: true});
     }
 
     // convenience getter for easy access to form fields

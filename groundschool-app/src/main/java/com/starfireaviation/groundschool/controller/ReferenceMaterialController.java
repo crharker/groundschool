@@ -5,8 +5,6 @@
  */
 package com.starfireaviation.groundschool.controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,9 +16,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.starfireaviation.groundschool.exception.AccessDeniedException;
+import com.starfireaviation.groundschool.exception.InvalidPayloadException;
 import com.starfireaviation.groundschool.exception.ResourceNotFoundException;
 import com.starfireaviation.groundschool.model.ReferenceMaterial;
 import com.starfireaviation.groundschool.service.ReferenceMaterialService;
+import com.starfireaviation.groundschool.validation.ReferenceMaterialValidator;
 
 import java.security.Principal;
 import java.util.List;
@@ -30,7 +31,7 @@ import java.util.List;
  *
  * @author brianmichael
  */
-@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping({
         "/referencematerials"
@@ -38,15 +39,16 @@ import java.util.List;
 public class ReferenceMaterialController {
 
     /**
-     * Logger
-     */
-    private static final Logger LOGGER = LoggerFactory.getLogger(ReferenceMaterialController.class);
-
-    /**
      * ReferenceMaterialService
      */
     @Autowired
     private ReferenceMaterialService referenceMaterialService;
+
+    /**
+     * EventValidator
+     */
+    @Autowired
+    private ReferenceMaterialValidator referenceMaterialValidator;
 
     /**
      * Initializes an instance of <code>ReferenceMaterialController</code> with the default data.
@@ -70,13 +72,15 @@ public class ReferenceMaterialController {
      * @param referenceMaterial ReferenceMaterial
      * @param principal Principal
      * @return ReferenceMaaterial
+     * @throws ResourceNotFoundException when no reference material is found
+     * @throws AccessDeniedException when user doesn't have permission to perform operation
+     * @throws InvalidPayloadException when invalid data is provided
      */
     @PostMapping
-    public ReferenceMaterial post(@RequestBody ReferenceMaterial referenceMaterial, Principal principal) {
-        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
-        if (referenceMaterial == null) {
-            return referenceMaterial;
-        }
+    public ReferenceMaterial post(@RequestBody ReferenceMaterial referenceMaterial, Principal principal)
+            throws InvalidPayloadException, ResourceNotFoundException, AccessDeniedException {
+        referenceMaterialValidator.validate(referenceMaterial);
+        referenceMaterialValidator.access(principal);
         return referenceMaterialService.store(referenceMaterial);
     }
 
@@ -93,7 +97,6 @@ public class ReferenceMaterialController {
     })
     public ReferenceMaterial get(@PathVariable("referenceMaterialId") long referenceMaterialId, Principal principal)
             throws ResourceNotFoundException {
-        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
         return referenceMaterialService.get(referenceMaterialId);
     }
 
@@ -103,13 +106,15 @@ public class ReferenceMaterialController {
      * @param referenceMaterial ReferenceMaterial
      * @param principal Principal
      * @return ReferenceMaterial
+     * @throws AccessDeniedException when user doesn't have permission to perform operation
+     * @throws ResourceNotFoundException when no reference material is found
+     * @throws InvalidPayloadException when invalid data is provided
      */
     @PutMapping
-    public ReferenceMaterial put(@RequestBody ReferenceMaterial referenceMaterial, Principal principal) {
-        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
-        if (referenceMaterial == null) {
-            return referenceMaterial;
-        }
+    public ReferenceMaterial put(@RequestBody ReferenceMaterial referenceMaterial, Principal principal)
+            throws ResourceNotFoundException, AccessDeniedException, InvalidPayloadException {
+        referenceMaterialValidator.validate(referenceMaterial);
+        referenceMaterialValidator.access(principal);
         return referenceMaterialService.store(referenceMaterial);
     }
 
@@ -120,14 +125,15 @@ public class ReferenceMaterialController {
      * @param principal Principal
      * @return ReferenceMaterial
      * @throws ResourceNotFoundException when reference material is not found
+     * @throws AccessDeniedException when user doesn't have permission to perform operation
      */
     @DeleteMapping(path = {
             "/{referenceMaterialId}"
     })
     public ReferenceMaterial delete(
             @PathVariable("referenceMaterialId") long referenceMaterialId,
-            Principal principal) throws ResourceNotFoundException {
-        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
+            Principal principal) throws ResourceNotFoundException, AccessDeniedException {
+        referenceMaterialValidator.access(principal);
         return referenceMaterialService.delete(referenceMaterialId);
     }
 
@@ -137,10 +143,11 @@ public class ReferenceMaterialController {
      * @param principal Principal
      * @return list of ReferenceMaterial
      * @throws ResourceNotFoundException when reference material is not found
+     * @throws AccessDeniedException when user doesn't have permission to perform operation
      */
     @GetMapping
-    public List<ReferenceMaterial> list(Principal principal) throws ResourceNotFoundException {
-        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
+    public List<ReferenceMaterial> list(Principal principal) throws ResourceNotFoundException, AccessDeniedException {
+        referenceMaterialValidator.access(principal);
         return referenceMaterialService.getAll();
     }
 }
