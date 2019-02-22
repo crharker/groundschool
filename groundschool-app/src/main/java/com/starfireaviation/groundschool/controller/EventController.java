@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.starfireaviation.groundschool.exception.AccessDeniedException;
+import com.starfireaviation.groundschool.exception.InvalidPayloadException;
 import com.starfireaviation.groundschool.exception.ResourceNotFoundException;
 import com.starfireaviation.groundschool.model.Address;
 import com.starfireaviation.groundschool.model.Event;
@@ -28,11 +30,13 @@ import com.starfireaviation.groundschool.service.EventService;
 import com.starfireaviation.groundschool.service.LessonPlanService;
 import com.starfireaviation.groundschool.service.NotificationService;
 import com.starfireaviation.groundschool.util.CodeGenerator;
-
+import com.starfireaviation.groundschool.validation.EventValidator;
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * EventController
@@ -50,6 +54,11 @@ public class EventController {
      * Logger
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(EventController.class);
+
+    /**
+     * MAX_UPCOMING_COUNT
+     */
+    public static final int MAX_UPCOMING_COUNT = 10;
 
     /**
      * EventService
@@ -76,6 +85,12 @@ public class EventController {
     private NotificationService notificationService;
 
     /**
+     * EventValidator
+     */
+    @Autowired
+    private EventValidator eventValidator;
+
+    /**
      * Initializes an instance of <code>EventController</code> with the default data.
      */
     public EventController() {
@@ -97,10 +112,16 @@ public class EventController {
      * @param event Event
      * @param principal Principal
      * @return Event
+     * @throws ResourceNotFoundException when no event is found
+     * @throws AccessDeniedException when user doesn't have permission to perform operation
+     * @throws InvalidPayloadException when invalid data is provided
      */
     @PostMapping
-    public Event post(@RequestBody Event event, Principal principal) {
+    public Event post(@RequestBody Event event, Principal principal) throws ResourceNotFoundException,
+            AccessDeniedException, InvalidPayloadException {
         LOGGER.info(String.format("User is logged in as %s", principal.getName()));
+        eventValidator.validate(event);
+        eventValidator.access(principal);
         if (event == null) {
             return event;
         }
@@ -136,10 +157,14 @@ public class EventController {
      * @param event Event
      * @param principal Principal
      * @return Event
+     * @throws ResourceNotFoundException when no event is found
+     * @throws AccessDeniedException when user doesn't have permission to perform operation
      */
     @PutMapping
-    public Event put(@RequestBody Event event, Principal principal) {
+    public Event put(@RequestBody Event event, Principal principal) throws ResourceNotFoundException,
+            AccessDeniedException {
         LOGGER.info(String.format("User is logged in as %s", principal.getName()));
+        eventValidator.access(principal);
         if (event == null) {
             return event;
         }
@@ -158,12 +183,15 @@ public class EventController {
      * @param principal Principal
      * @return Event
      * @throws ResourceNotFoundException when event is not found
+     * @throws AccessDeniedException when user doesn't have permission to perform operation
      */
     @DeleteMapping(path = {
             "/{eventId}"
     })
-    public Event delete(@PathVariable("eventId") long eventId, Principal principal) throws ResourceNotFoundException {
+    public Event delete(@PathVariable("eventId") long eventId, Principal principal) throws ResourceNotFoundException,
+            AccessDeniedException {
         LOGGER.info(String.format("User is logged in as %s", principal.getName()));
+        eventValidator.access(principal);
         return eventService.delete(eventId);
     }
 
@@ -174,15 +202,49 @@ public class EventController {
      *
      * @return list of Event
      * @throws ResourceNotFoundException when address is not found
+     * @throws AccessDeniedException when user doesn't have permission to perform operation
      */
     @GetMapping
-    public List<Event> list(Principal principal) throws ResourceNotFoundException {
+    public List<Event> list(Principal principal) throws ResourceNotFoundException, AccessDeniedException {
         LOGGER.info(String.format("User is logged in as %s", principal.getName()));
+        eventValidator.access(principal);
         List<Event> events = eventService.getAll();
         for (Event event : events) {
             event.setAddress(addressService.findByEventId(event.getId()));
         }
         return events;
+    }
+
+    /**
+     * Get X upcoming events
+     *
+     * @param count number of events to be returned
+     * @param principal Principal
+     * @return list of Event
+     * @throws ResourceNotFoundException when address is not found
+     */
+    @GetMapping(path = {
+            "/upcoming/{count}"
+    })
+    public List<Event> upcoming(@PathVariable("count") int count, Principal principal)
+            throws ResourceNotFoundException {
+        LOGGER.info(String.format("User is logged in as %s", principal.getName()));
+        int actualCount = count;
+        if (actualCount > MAX_UPCOMING_COUNT) {
+            actualCount = MAX_UPCOMING_COUNT;
+        }
+        List<Event> upcomingEvents = eventService
+                .getAll()
+                .stream()
+                .filter(event -> event.getStartTime().isAfter(LocalDateTime.now()))
+                .sorted(Comparator.comparing(Event::getStartTime))
+                .limit(actualCount)
+                .collect(Collectors.toList());
+        for (Event event : upcomingEvents) {
+            event.setAddress(addressService.findByEventId(event.getId()));
+        }
+
+        return upcomingEvents;
     }
 
     /**
@@ -248,6 +310,7 @@ public class EventController {
      * @param lessonPlanId LessonPlan ID
      * @param principal Principal
      * @throws ResourceNotFoundException when lesson plan is not found
+     * @throws AccessDeniedException when user doesn't have permission to perform operation
      */
     @PostMapping(path = {
             "/{eventId}/assign/lessonplan/{lessonPlanId}"
@@ -255,8 +318,9 @@ public class EventController {
     public void assignLessonPlan(
             @PathVariable("eventId") long eventId,
             @PathVariable("lessonPlanId") long lessonPlanId,
-            Principal principal) throws ResourceNotFoundException {
+            Principal principal) throws ResourceNotFoundException, AccessDeniedException {
         LOGGER.info(String.format("User is logged in as %s", principal.getName()));
+        eventValidator.access(principal);
         //final LessonPlan lessonPlan =
         lessonPlanService.get(lessonPlanId);
     }
@@ -268,6 +332,7 @@ public class EventController {
      * @param lessonPlanId LessonPlan ID
      * @param principal Principal
      * @throws ResourceNotFoundException when lesson plan is not found
+     * @throws AccessDeniedException when user doesn't have permission to perform operation
      */
     @PostMapping(path = {
             "/{eventId}/unassign/lessonplan/{lessonPlanId}"
@@ -275,8 +340,9 @@ public class EventController {
     public void unassignLessonPlan(
             @PathVariable("eventId") long eventId,
             @PathVariable("lessonPlanId") long lessonPlanId,
-            Principal principal) throws ResourceNotFoundException {
+            Principal principal) throws ResourceNotFoundException, AccessDeniedException {
         LOGGER.info(String.format("User is logged in as %s", principal.getName()));
+        eventValidator.access(principal);
         //final LessonPlan lessonPlan =
         lessonPlanService.get(lessonPlanId);
     }
@@ -332,12 +398,15 @@ public class EventController {
      * @param principal Principal
      * @return started event
      * @throws ResourceNotFoundException when event is not found
+     * @throws AccessDeniedException when user doesn't have permission to perform operation
      */
     @PostMapping(path = {
             "/{eventId}/start"
     })
-    public Event start(@PathVariable("eventId") long eventId, Principal principal) throws ResourceNotFoundException {
+    public Event start(@PathVariable("eventId") long eventId, Principal principal) throws ResourceNotFoundException,
+            AccessDeniedException {
         LOGGER.info(String.format("User is logged in as %s", principal.getName()));
+        eventValidator.access(principal);
         Event event = eventService.get(eventId);
         if (event != null && !event.isStarted()) {
             event.setStarted(true);
@@ -368,12 +437,15 @@ public class EventController {
      * @param principal Principal
      * @return completed event
      * @throws ResourceNotFoundException when event is not found
+     * @throws AccessDeniedException when user doesn't have permission to perform operation
      */
     @PostMapping(path = {
             "/{eventId}/complete"
     })
-    public Event complete(@PathVariable("eventId") long eventId, Principal principal) throws ResourceNotFoundException {
+    public Event complete(@PathVariable("eventId") long eventId, Principal principal) throws ResourceNotFoundException,
+            AccessDeniedException {
         LOGGER.info(String.format("User is logged in as %s", principal.getName()));
+        eventValidator.access(principal);
         Event event = eventService.get(eventId);
         if (event != null && event.isStarted()) {
             event.setCompleted(true);

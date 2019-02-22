@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "5fb0a557-b713-4ca8-a436-1dd1059a96fa",
+		"_postman_id": "f304c9bc-ccf4-4656-98c2-df20146b6e20",
 		"name": "GroundSchool",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -37,8 +37,7 @@
 							"raw": "{\n\t\"title\": \"Airplanes & Aerodynamics: Flight Controls & Aerodynamic Forces\",\n\t\"startTime\": \"2019-02-01T14:00:00.0\",\n\t\"started\": false,\n\t\"completed\": false,\n\t\"completedTime\": null,\n\t\"calendarUrl\": null,\n\t\"checkinCode\": null,\n\t\"checkinCodeRequired\": false,\n\t\"lessonPlanId\": 1,\n\t\"address\": {\n\t\t\"addressLine1\": \"Hangar #1\",\n\t\t\"addressLine2\": \"690 Airport Road\",\n\t\t\"city\": \"Lawrenceville\",\n\t\t\"state\": \"GA\",\n\t\t\"zipCode\": \"30046\"\n\t},\n\t\"participants\": null\n}"
 						},
 						"url": {
-							"raw": "http://{{host-app}}/events",
-							"protocol": "http",
+							"raw": "{{host-app}}/events",
 							"host": [
 								"{{host-app}}"
 							],
@@ -82,8 +81,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://{{host-app}}/events/1",
-							"protocol": "http",
+							"raw": "{{host-app}}/events/1",
 							"host": [
 								"{{host-app}}"
 							],
@@ -125,8 +123,7 @@
 							"raw": "{\n\t\"id\": 1,\n\t\"title\": \"Airplanes & Aerodynamics: Flight Controls & Aerodynamic Forces\",\n\t\"startTime\": \"2019-02-01T14:00:00.0\",\n\t\"started\": false,\n\t\"completed\": false,\n\t\"completedTime\": null,\n\t\"calendarUrl\": null,\n\t\"checkinCode\": null,\n\t\"checkinCodeRequired\": false,\n\t\"lessonPlanId\": 1,\n\t\"address\": {\n\t\t\"addressLine1\": \"Hangar #1\",\n\t\t\"addressLine2\": \"690 Airport Road\",\n\t\t\"city\": \"Lawrenceville\",\n\t\t\"state\": \"GA\",\n\t\t\"zipCode\": \"30046\"\n\t},\n\t\"participants\": null\n}"
 						},
 						"url": {
-							"raw": "http://{{host-app}}/events",
-							"protocol": "http",
+							"raw": "{{host-app}}/events",
 							"host": [
 								"{{host-app}}"
 							],
@@ -167,8 +164,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://{{host-app}}/events/1",
-							"protocol": "http",
+							"raw": "{{host-app}}/events/1",
 							"host": [
 								"{{host-app}}"
 							],
@@ -210,8 +206,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://{{host-app}}/events",
-							"protocol": "http",
+							"raw": "{{host-app}}/events",
 							"host": [
 								"{{host-app}}"
 							],
@@ -244,8 +239,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://{{host-app}}/events/1/register/1",
-							"protocol": "http",
+							"raw": "{{host-app}}/events/1/register/1",
 							"host": [
 								"{{host-app}}"
 							],
@@ -281,8 +275,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://{{host-app}}/events/rsvp/1/1/true/EMAIL",
-							"protocol": "http",
+							"raw": "{{host-app}}/events/rsvp/1/1/true/EMAIL",
 							"host": [
 								"{{host-app}}"
 							],
@@ -328,8 +321,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://{{host-app}}/events/1/assign/lessonplan/1",
-							"protocol": "http",
+							"raw": "{{host-app}}/events/1/assign/lessonplan/1",
 							"host": [
 								"{{host-app}}"
 							],
@@ -374,8 +366,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://{{host-app}}/events/1/unassign/lessonplan/1",
-							"protocol": "http",
+							"raw": "{{host-app}}/events/1/unassign/lessonplan/1",
 							"host": [
 								"{{host-app}}"
 							],
@@ -420,8 +411,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://{{host-app}}/events/1/start",
-							"protocol": "http",
+							"raw": "{{host-app}}/events/1/start",
 							"host": [
 								"{{host-app}}"
 							],
@@ -464,8 +454,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://{{host-app}}/events/1/complete",
-							"protocol": "http",
+							"raw": "{{host-app}}/events/1/complete",
 							"host": [
 								"{{host-app}}"
 							],
@@ -508,8 +497,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://{{host-app}}/events/1/checkin/1/ABC123",
-							"protocol": "http",
+							"raw": "{{host-app}}/events/1/checkin/1/ABC123",
 							"host": [
 								"{{host-app}}"
 							],
@@ -522,6 +510,49 @@
 							]
 						},
 						"description": "http://{{host-app}}/users/1/checkin/1/ABC123"
+					},
+					"response": []
+				},
+				{
+					"name": "upcoming",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{host-app}}/events/upcoming/10",
+							"host": [
+								"{{host-app}}"
+							],
+							"path": [
+								"events",
+								"upcoming",
+								"10"
+							]
+						},
+						"description": "{{host-app}}/events/upcoming/10"
 					},
 					"response": []
 				}
@@ -559,8 +590,7 @@
 							"raw": "{\n\t\"title\": \"Airplanes & Aerodynamics: Flight Controls & Aerodynamic Forces\",\n\t\"summary\": \"Clear understanding of airplane flight controls, the 4 forces acting on an airplane, and Bernoulli's Principle\",\n    \"objective\": \"\",\n    \"content\": \"\",\n    \"schedule\": \"\",\n    \"equipment\": \"\",\n    \"instructorActions\": \"\",\n    \"studentActions\": \"\",\n    \"completionStandards\": \"\"\n}"
 						},
 						"url": {
-							"raw": "http://{{host-app}}/lessonplans",
-							"protocol": "http",
+							"raw": "{{host-app}}/lessonplans",
 							"host": [
 								"{{host-app}}"
 							],
@@ -601,8 +631,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://{{host-app}}/lessonplans/1",
-							"protocol": "http",
+							"raw": "{{host-app}}/lessonplans/1",
 							"host": [
 								"{{host-app}}"
 							],
@@ -644,8 +673,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://{{host-app}}/lessonplans/1",
-							"protocol": "http",
+							"raw": "{{host-app}}/lessonplans/1",
 							"host": [
 								"{{host-app}}"
 							],
@@ -687,8 +715,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://{{host-app}}/lessonplans",
-							"protocol": "http",
+							"raw": "{{host-app}}/lessonplans",
 							"host": [
 								"{{host-app}}"
 							],
@@ -729,8 +756,7 @@
 							"raw": "ToCountry=US&ToState=GA&SmsMessageSid=SMa0652fcce9dd2db0bf6596f6885019d9&NumMedia=0&ToCity=ATLANTA&FromZip=30319&SmsSid=SMa0652fcce9dd2db0bf6596f6885019d9&FromState=GA&SmsStatus=received&FromCity=ATLANTA&Body=Confirm&FromCountry=US&To=%2B14704227400&ToZip=&NumSegments=1&MessageSid=SMa0652fcce9dd2db0bf6596f6885019d9&AccountSid=ACfd7999f66d142ea0147b95f7e8dc12a5&From=%2B14047355660&ApiVersion=2010-04-01"
 						},
 						"url": {
-							"raw": "http://{{host-app}}/notifications/sms",
-							"protocol": "http",
+							"raw": "{{host-app}}/notifications/sms",
 							"host": [
 								"{{host-app}}"
 							],
@@ -780,8 +806,7 @@
 									"raw": "{\n\t\"text\": \"One of the main functions of flaps during approach and landing is to\",\n\t\"course\": \"Private Pilot\",\n\t\"unit\": \"1: Airplanes and Aerodynamics\", \n\t\"subUnit\": \"1: Flight Controls\",\n\t\"discussion\": \"Source: FAA-H-8083-25B Chap 6\",\n\t\"learningStatementCode\": \"PLT473\",\n\t\"duration\": 90,\n\t\"referenceMaterials\": [\n                {\n                        \"id\": 1,\n                        \"title\": \"FAA-H-8083-25B\",\n                        \"resourceLocation\": \"https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/phak/media/pilot_handbook.pdf\"\n                }\n        ],\n\t\"answers\": [\n\t\t{\n                        \"choice\": \"A\",\n\t\t\t\"correct\": false,\n\t\t\t\"text\": \"decrease the angle of descent without increasing the airspeed.\",\n\t\t\t\"discussion\": \"Extending the flaps increases lift and induced drag, which enables the pilot to increase (not decrease) the angle of descent without increasing the airspeed.\"\n\t\t},\n\t\t{\n                        \"choice\": \"B\",\n\t\t\t\"correct\": false,\n\t\t\t\"text\": \"permit a touchdown at a higher indicated airspeed.\",\n\t\t\t\"discussion\": \"Flaps increase lift at slow airspeed, which permits touchdown at a lower (not higher) indicated airspeed.\"\n\t\t},\n\t\t{\n                        \"choice\": \"C\",\n\t\t\t\"correct\": true,\n\t\t\t\"text\": \"increase the angle of descent without increasing the airspeed.\",\n\t\t\t\"discussion\": \"Extending the flaps increases the wing camber and the angle of attack of the wing. This increases wing lift and induced drag, which enables the pilot to increase the angle of descent without increasing the airspeed.\"\n\t\t}\n\t]\n}"
 								},
 								"url": {
-									"raw": "http://{{host-app}}/questions",
-									"protocol": "http",
+									"raw": "{{host-app}}/questions",
 									"host": [
 										"{{host-app}}"
 									],
@@ -822,8 +847,7 @@
 									"raw": "{\n\t\"text\": \"What is the purpose of the rudder on an airplane?\",\n\t\"course\": \"Private Pilot\",\n\t\"unit\": \"1: Airplanes and Aerodynamics\", \n\t\"subUnit\": \"1: Flight Controls\",\n\t\"discussion\": \"Source: FAA-H-8083-25B Chap 6\",\n\t\"learningStatementCode\": \"PLT346\",\n\t\"duration\": 90,\n\t\"referenceMaterials\": [\n                {\n                        \"id\": 1,\n                        \"title\": \"FAA-H-8083-25B\",\n                        \"resourceLocation\": \"https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/phak/media/pilot_handbook.pdf\"\n                }\n        ],\n\t\"answers\": [\n\t\t{\n                        \"choice\": \"A\",\n\t\t\t\"correct\": true,\n\t\t\t\"text\": \"To control yaw.\",\n\t\t\t\"discussion\": \"The rudder is used to control yaw, which is rotation about the airplane’s vertical axis.\"\n\t\t},\n\t\t{\n                        \"choice\": \"B\",\n\t\t\t\"correct\": false,\n\t\t\t\"text\": \"To control overbanking tendency.\",\n\t\t\t\"discussion\": \"The ailerons (not the rudder) control overbanking. Overbanking tendency refers to the outside wing traveling significantly faster than the inside wing in a steep turn and generating incremental lift to raise the outside wing higher unless corrected by aileron pressure.\"\n\t\t},\n\t\t{\n                        \"choice\": \"C\",\n\t\t\t\"correct\": false,\n\t\t\t\"text\": \"To control roll.\",\n\t\t\t\"discussion\": \"Roll is movement about the longitudinal axis and is controlled by ailerons.\"\n\t\t}\n\t]\n}"
 								},
 								"url": {
-									"raw": "http://{{host-app}}/questions",
-									"protocol": "http",
+									"raw": "{{host-app}}/questions",
 									"host": [
 										"{{host-app}}"
 									],
@@ -864,8 +888,7 @@
 									"raw": "{\n\t\"text\": \"Which is not a primary flight control surface?\",\n\t\"course\": \"Private Pilot\",\n\t\"unit\": \"1: Airplanes and Aerodynamics\", \n\t\"subUnit\": \"1: Flight Controls\",\n\t\"discussion\": \"Source: FAA-H-8083-25B Chap 6\",\n\t\"learningStatementCode\": \"PLT346\",\n\t\"duration\": 90,\n\t\"referenceMaterials\": [\n                {\n                        \"id\": 1,\n                        \"title\": \"FAA-H-8083-25B\",\n                        \"resourceLocation\": \"https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/phak/media/pilot_handbook.pdf\"\n                }\n        ],\n\t\"answers\": [\n\t\t{\n                        \"choice\": \"A\",\n\t\t\t\"correct\": true,\n\t\t\t\"text\": \"Flaps.\",\n\t\t\t\"discussion\": \"The three primary flight controls of an airplane are the ailerons, the elevator (or stabilator), and the rudder.\"\n\t\t},\n\t\t{\n                        \"choice\": \"B\",\n\t\t\t\"correct\": false,\n\t\t\t\"text\": \"Stabilator.\",\n\t\t\t\"discussion\": \"The stabilator, or elevator, is a primary flight control surface.\"\n\t\t},\n\t\t{\n                        \"choice\": \"C\",\n\t\t\t\"correct\": false,\n\t\t\t\"text\": \"Ailerons.\",\n\t\t\t\"discussion\": \"Ailerons are a primary flight control surface.\"\n\t\t}\n\t]\n}"
 								},
 								"url": {
-									"raw": "http://{{host-app}}/questions",
-									"protocol": "http",
+									"raw": "{{host-app}}/questions",
 									"host": [
 										"{{host-app}}"
 									],
@@ -906,8 +929,7 @@
 									"raw": "{\n\t\"text\": \"The elevator controls movement around which axis?\",\n\t\"course\": \"Private Pilot\",\n\t\"unit\": \"1: Airplanes and Aerodynamics\", \n\t\"subUnit\": \"1: Flight Controls\",\n\t\"discussion\": \"Source: FAA-H-8083-25B Chap 6\",\n\t\"learningStatementCode\": \"PLT346\",\n\t\"duration\": 90,\n\t\"referenceMaterials\": [\n                {\n                        \"id\": 1,\n                        \"title\": \"FAA-H-8083-25B\",\n                        \"resourceLocation\": \"https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/phak/media/pilot_handbook.pdf\"\n                }\n        ],\n\t\"answers\": [\n\t\t{\n                        \"choice\": \"A\",\n\t\t\t\"correct\": false,\n\t\t\t\"text\": \"Longitudinal.\",\n\t\t\t\"discussion\": \"Ailerons are control surfaces attached to each wing that move in the opposite direction from one another to control roll about the longitudinal axis.\"\n\t\t},\n\t\t{\n                        \"choice\": \"B\",\n\t\t\t\"correct\": true,\n\t\t\t\"text\": \"Lateral.\",\n\t\t\t\"discussion\": \"The elevator is the primary control device for changing the pitch attitude of an airplane about the lateral axis.\"\n\t\t},\n\t\t{\n                        \"choice\": \"C\",\n\t\t\t\"correct\": false,\n\t\t\t\"text\": \"Vertical.\",\n\t\t\t\"discussion\": \"The rudder controls movement of the aircraft about its vertical axis.\"\n\t\t}\n\t]\n}"
 								},
 								"url": {
-									"raw": "http://{{host-app}}/questions",
-									"protocol": "http",
+									"raw": "{{host-app}}/questions",
 									"host": [
 										"{{host-app}}"
 									],
@@ -948,8 +970,7 @@
 									"raw": "{\n\t\"text\": \"Which statement is true concerning primary flight controls?\",\n\t\"course\": \"Private Pilot\",\n\t\"unit\": \"1: Airplanes and Aerodynamics\", \n\t\"subUnit\": \"1: Flight Controls\",\n\t\"discussion\": \"Source: FAA-H-8083-25B Chap 6\",\n\t\"learningStatementCode\": \"PLT346\",\n\t\"duration\": 90,\n\t\"referenceMaterials\": [\n                {\n                        \"id\": 1,\n                        \"title\": \"FAA-H-8083-25B\",\n                        \"resourceLocation\": \"https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/phak/media/pilot_handbook.pdf\"\n                }\n        ],\n\t\"answers\": [\n\t\t{\n                        \"choice\": \"A\",\n\t\t\t\"correct\": true,\n\t\t\t\"text\": \"The effectiveness of each control surface increases with speed because there is more airflow over them.\",\n\t\t\t\"discussion\": \"Rudder, aileron, and elevator effectiveness increase with speed because there is more airflow over the surface of the control device.\"\n\t\t},\n\t\t{\n                        \"choice\": \"B\",\n\t\t\t\"correct\": false,\n\t\t\t\"text\": \"Only when all three primary flight controls move in sequence do the airflow and pressure distribution change over and around the airfoil.\",\n\t\t\t\"discussion\": \"Movement of any primary flight control surface changes the airflow and pressure distribution over and around the airfoil.\"\n\t\t},\n\t\t{\n                        \"choice\": \"C\",\n\t\t\t\"correct\": false,\n\t\t\t\"text\": \"Primary flight controls include ailerons, rudder, elevator, and trim systems.\",\n\t\t\t\"discussion\": \"The primary flight controls do not include trim systems; these are considered secondary flight controls.\"\n\t\t}\n\t]\n}"
 								},
 								"url": {
-									"raw": "http://{{host-app}}/questions",
-									"protocol": "http",
+									"raw": "{{host-app}}/questions",
 									"host": [
 										"{{host-app}}"
 									],
@@ -990,8 +1011,7 @@
 									"raw": "{\n\t\"text\": \"Which of the following is true concerning flaps?\",\n\t\"course\": \"Private Pilot\",\n\t\"unit\": \"1: Airplanes and Aerodynamics\", \n\t\"subUnit\": \"1: Flight Controls\",\n\t\"discussion\": \"Source: FAA-H-8083-25B Chap 6\",\n\t\"learningStatementCode\": \"PLT346\",\n\t\"duration\": 90,\n\t\"referenceMaterials\": [\n                {\n                        \"id\": 1,\n                        \"title\": \"FAA-H-8083-25B\",\n                        \"resourceLocation\": \"https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/phak/media/pilot_handbook.pdf\"\n                }\n        ],\n\t\"answers\": [\n\t\t{\n                        \"choice\": \"A\",\n\t\t\t\"correct\": false,\n\t\t\t\"text\": \"Flaps are attached to the leading edge of the wing and are used to increase wing lift.\",\n\t\t\t\"discussion\": \"Flaps are attached to the trailing edge, not the leading edge, of the wing.\"\n\t\t},\n\t\t{\n                        \"choice\": \"B\",\n\t\t\t\"correct\": true,\n\t\t\t\"text\": \"Flaps allow an increase in the angle of descent without increasing airspeed.\",\n\t\t\t\"discussion\": \"Flaps are attached to the trailing edge of the wing and are used during approach and landing to increase wing lift. This allows an increase in the angle of descent without increasing airspeed.\"\n\t\t},\n\t\t{\n                        \"choice\": \"C\",\n\t\t\t\"correct\": false,\n\t\t\t\"text\": \"Flaps are high drag devices deployed from the wings to reduce lift.\",\n\t\t\t\"discussion\": \"Spoilers, not flaps, are high-drag devices deployed from the wings to reduce lift and increase drag.\"\n\t\t}\n\t]\n}"
 								},
 								"url": {
-									"raw": "http://{{host-app}}/questions",
-									"protocol": "http",
+									"raw": "{{host-app}}/questions",
 									"host": [
 										"{{host-app}}"
 									],
@@ -1032,8 +1052,7 @@
 									"raw": "{\n\t\"text\": \"Which device is a secondary flight control?\",\n\t\"course\": \"Private Pilot\",\n\t\"unit\": \"1: Airplanes and Aerodynamics\", \n\t\"subUnit\": \"1: Flight Controls\",\n\t\"discussion\": \"Source: FAA-H-8083-25B Chap 6\",\n\t\"learningStatementCode\": \"PLT346\",\n\t\"duration\": 90,\n\t\"referenceMaterials\": [\n                {\n                        \"id\": 1,\n                        \"title\": \"FAA-H-8083-25B\",\n                        \"resourceLocation\": \"https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/phak/media/pilot_handbook.pdf\"\n                }\n        ],\n\t\"answers\": [\n\t\t{\n                        \"choice\": \"A\",\n\t\t\t\"correct\": true,\n\t\t\t\"text\": \"Spoilers.\",\n\t\t\t\"discussion\": \"Spoilers are high-drag devices that assist an aircraft in slowing down and losing altitude without gaining extra speed. They are common on gliders and some high-speed aircraft.\"\n\t\t},\n\t\t{\n                        \"choice\": \"B\",\n\t\t\t\"correct\": false,\n\t\t\t\"text\": \"Ailerons.\",\n\t\t\t\"discussion\": \"Ailerons control the roll of the aircraft and are a primary flight control surface.\"\n\t\t},\n\t\t{\n                        \"choice\": \"C\",\n\t\t\t\"correct\": false,\n\t\t\t\"text\": \"Stabilators.\",\n\t\t\t\"discussion\": \"Stabilators function as both a horizontal stabilizer and an elevator, which makes them a primary control surface.\"\n\t\t}\n\t]\n}"
 								},
 								"url": {
-									"raw": "http://{{host-app}}/questions",
-									"protocol": "http",
+									"raw": "{{host-app}}/questions",
 									"host": [
 										"{{host-app}}"
 									],
@@ -1074,8 +1093,7 @@
 									"raw": "{\n\t\"text\": \"Trim systems are designed to do what?\",\n\t\"course\": \"Private Pilot\",\n\t\"unit\": \"1: Airplanes and Aerodynamics\", \n\t\"subUnit\": \"1: Flight Controls\",\n\t\"discussion\": \"Source: FAA-H-8083-25B Chap 6\",\n\t\"learningStatementCode\": \"PLT346\",\n\t\"duration\": 90,\n\t\"referenceMaterials\": [\n                {\n                        \"id\": 1,\n                        \"title\": \"FAA-H-8083-25B\",\n                        \"resourceLocation\": \"https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/phak/media/pilot_handbook.pdf\"\n                }\n        ],\n\t\"answers\": [\n\t\t{\n                        \"choice\": \"A\",\n\t\t\t\"correct\": true,\n\t\t\t\"text\": \"They relieve the pilot of the need to maintain constant pressure on the flight controls.\",\n\t\t\t\"discussion\": \"Trim systems are used to relieve the pilot of the need to maintain constant pressure on the flight controls. They include trim tabs, anti-servo tabs, and ground adjustable tabs.\"\n\t\t},\n\t\t{\n                        \"choice\": \"B\",\n\t\t\t\"correct\": false,\n\t\t\t\"text\": \"They are used during approach and landing to increase wing lift.\",\n\t\t\t\"discussion\": \"Flaps, not trim systems, are used during approach and landing to increase lift. This allows an increase in the angle of descent without increasing airspeed.\"\n\t\t},\n\t\t{\n                        \"choice\": \"C\",\n\t\t\t\"correct\": false,\n\t\t\t\"text\": \"They move in the opposite direction from one another to control roll.\",\n\t\t\t\"discussion\": \"Ailerons are control surfaces attached to each wing that move in the opposite direction from one another to control roll about the longitudinal axis.\"\n\t\t}\n\t]\n}"
 								},
 								"url": {
-									"raw": "http://{{host-app}}/questions",
-									"protocol": "http",
+									"raw": "{{host-app}}/questions",
 									"host": [
 										"{{host-app}}"
 									],
@@ -1119,8 +1137,7 @@
 							"raw": "{\n\t\"text\": \"What is one purpose of wing flaps?\",\n\t\"course\": \"Private Pilot\",\n\t\"unit\": \"1: Airplanes and Aerodynamics\", \n\t\"subUnit\": \"1: Flight Controls\",\n\t\"discussion\": \"Source: FAA-H-8083-25B Chap 6\",\n\t\"learningStatementCode\": \"PLT473\",\n\t\"duration\": 90,\n\t\"referenceMaterials\": [\n                {\n                        \"id\": 1,\n                        \"title\": \"FAA-H-8083-25B\",\n                        \"resourceLocation\": \"https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/phak/media/pilot_handbook.pdf\"\n                }\n        ],\n\t\"answers\": [\n\t\t{\n                        \"choice\": \"A\",\n\t\t\t\"correct\": true,\n\t\t\t\"text\": \"To enable the pilot to make steeper approaches to a landing without increasing the airspeed.\",\n\t\t\t\"discussion\": \"Extending the flaps increases the wing camber and the angle of attack of the wing. This increases wing lift and induced drag, which enables the pilot to make steeper approaches to a landing without an increase in airspeed. (FAA-H-8083-25B Chap 6)\"\n\t\t},\n\t\t{\n                        \"choice\": \"B\",\n\t\t\t\"correct\": false,\n\t\t\t\"text\": \"To relieve the pilot of maintaining continuous pressure on the controls.\",\n\t\t\t\"discussion\": \"Trim tabs (not wing flaps) help relieve control pressures.\"\n\t\t},\n\t\t{\n                        \"choice\": \"C\",\n\t\t\t\"correct\": false,\n\t\t\t\"text\": \"To decrease wing area to vary the lift.\",\n\t\t\t\"discussion\": \"Wing area usually remains the same, except for certain specialized flaps that increase (not decrease) the wing area.\"\n\t\t}\n\t]\n}"
 						},
 						"url": {
-							"raw": "http://{{host-app}}/questions",
-							"protocol": "http",
+							"raw": "{{host-app}}/questions",
 							"host": [
 								"{{host-app}}"
 							],
@@ -1161,8 +1178,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://{{host-app}}/questions",
-							"protocol": "http",
+							"raw": "{{host-app}}/questions",
 							"host": [
 								"{{host-app}}"
 							],
@@ -1195,8 +1211,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://{{host-app}}/questions/1",
-							"protocol": "http",
+							"raw": "{{host-app}}/questions/1",
 							"host": [
 								"{{host-app}}"
 							],
@@ -1238,8 +1253,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://{{host-app}}/questions/5",
-							"protocol": "http",
+							"raw": "{{host-app}}/questions/5",
 							"host": [
 								"{{host-app}}"
 							],
@@ -1281,8 +1295,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://{{host-app}}/questions/1/answer/1/B",
-							"protocol": "http",
+							"raw": "{{host-app}}/questions/1/answer/1/B",
 							"host": [
 								"{{host-app}}"
 							],
@@ -1332,8 +1345,7 @@
 							"raw": "{\n\t\"title\": \"Test quiz\",\n\t\"lessonPlanId\": 1\n}"
 						},
 						"url": {
-							"raw": "http://{{host-app}}/quizzes",
-							"protocol": "http",
+							"raw": "{{host-app}}/quizzes",
 							"host": [
 								"{{host-app}}"
 							],
@@ -1374,8 +1386,7 @@
 							"raw": "{\n\t\"id\": 1,\n\t\"title\": \"Test quiz\",\n\t\"questions\": [\n\t]\n}"
 						},
 						"url": {
-							"raw": "http://{{host-app}}/quizzes",
-							"protocol": "http",
+							"raw": "{{host-app}}/quizzes",
 							"host": [
 								"{{host-app}}"
 							],
@@ -1408,8 +1419,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://{{host-app}}/quizzes",
-							"protocol": "http",
+							"raw": "{{host-app}}/quizzes",
 							"host": [
 								"{{host-app}}"
 							],
@@ -1450,8 +1460,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://{{host-app}}/quizzes/1",
-							"protocol": "http",
+							"raw": "{{host-app}}/quizzes/1",
 							"host": [
 								"{{host-app}}"
 							],
@@ -1493,8 +1502,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://{{host-app}}/quizzes/1",
-							"protocol": "http",
+							"raw": "{{host-app}}/quizzes/1",
 							"host": [
 								"{{host-app}}"
 							],
@@ -1536,8 +1544,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://{{host-app}}/quizzes/1/add/1",
-							"protocol": "http",
+							"raw": "{{host-app}}/quizzes/1/add/1",
 							"host": [
 								"{{host-app}}"
 							],
@@ -1581,8 +1588,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://{{host-app}}/quizzes/1/start",
-							"protocol": "http",
+							"raw": "{{host-app}}/quizzes/1/start",
 							"host": [
 								"{{host-app}}"
 							],
@@ -1625,8 +1631,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://{{host-app}}/quizzes/1/complete",
-							"protocol": "http",
+							"raw": "{{host-app}}/quizzes/1/complete",
 							"host": [
 								"{{host-app}}"
 							],
@@ -1674,8 +1679,7 @@
 							"raw": "{\n\t\"title\": \"FAA-H-8083-25B\",\n\t\"resourceLocation\": \"https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/phak/media/pilot_handbook.pdf\"\n}"
 						},
 						"url": {
-							"raw": "http://{{host-app}}/referencematerials",
-							"protocol": "http",
+							"raw": "{{host-app}}/referencematerials",
 							"host": [
 								"{{host-app}}"
 							],
@@ -1708,8 +1712,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://{{host-app}}/referencematerials/1",
-							"protocol": "http",
+							"raw": "{{host-app}}/referencematerials/1",
 							"host": [
 								"{{host-app}}"
 							],
@@ -1751,8 +1754,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://{{host-app}}/referencematerials/1",
-							"protocol": "http",
+							"raw": "{{host-app}}/referencematerials/1",
 							"host": [
 								"{{host-app}}"
 							],
@@ -1786,8 +1788,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://{{host-app}}/referencematerials",
-							"protocol": "http",
+							"raw": "{{host-app}}/referencematerials",
 							"host": [
 								"{{host-app}}"
 							],
@@ -1825,8 +1826,7 @@
 							"raw": "{\n\t\"userId\": 1,\n\t\"statisticType\": \"USER_SAVED\",\n\t\"date\": \"\",\n\t\"description\": \"\"\n}"
 						},
 						"url": {
-							"raw": "http://{{host-app}}/statistics",
-							"protocol": "http",
+							"raw": "{{host-app}}/statistics",
 							"host": [
 								"{{host-app}}"
 							],
@@ -1859,8 +1859,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://{{host-app}}/statistics/1",
-							"protocol": "http",
+							"raw": "{{host-app}}/statistics/1",
 							"host": [
 								"{{host-app}}"
 							],
@@ -1902,8 +1901,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://{{host-app}}/statistics/1",
-							"protocol": "http",
+							"raw": "{{host-app}}/statistics/1",
 							"host": [
 								"{{host-app}}"
 							],
@@ -1937,8 +1935,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://{{host-app}}/statistics",
-							"protocol": "http",
+							"raw": "{{host-app}}/statistics",
 							"host": [
 								"{{host-app}}"
 							],
@@ -1979,8 +1976,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://{{host-app}}/statistics/user/1/ALL",
-							"protocol": "http",
+							"raw": "{{host-app}}/statistics/user/1/ALL",
 							"host": [
 								"{{host-app}}"
 							],
@@ -2024,8 +2020,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://{{host-app}}/statistics/event/1/ALL",
-							"protocol": "http",
+							"raw": "{{host-app}}/statistics/event/1/ALL",
 							"host": [
 								"{{host-app}}"
 							],
@@ -2069,8 +2064,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://{{host-app}}/statistics/question/1/ALL",
-							"protocol": "http",
+							"raw": "{{host-app}}/statistics/question/1/ALL",
 							"host": [
 								"{{host-app}}"
 							],
@@ -2114,8 +2108,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://{{host-app}}/statistics/quiz/1/ALL",
-							"protocol": "http",
+							"raw": "{{host-app}}/statistics/quiz/1/ALL",
 							"host": [
 								"{{host-app}}"
 							],
@@ -2164,8 +2157,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://{{host-app}}/users/1",
-							"protocol": "http",
+							"raw": "{{host-app}}/users/1",
 							"host": [
 								"{{host-app}}"
 							],
@@ -2207,8 +2199,7 @@
 							"raw": "{\n\t\"id\": 1,\n    \"email\": \"brian.michael@yahoo.com\",\n    \"emailEnabled\": false,\n    \"questionPreference\": \"SLACK\",\n    \"sms\": \"4047355660\",\n    \"smsEnabled\": false,\n    \"slack\": \"bsmichael\",\n    \"slackEnabled\": true,\n    \"firstName\": \"Brian\",\n    \"lastName\": \"Michael\",\n    \"username\": \"{{instructor-user}}\",\n    \"password\": \"{{instructor-password}}\",\n    \"eaaNumber\": \"873175\",\n    \"certificateNumber\": \"3442084CFI\",\n    \"role\": \"INSTRUCTOR\"\n}"
 						},
 						"url": {
-							"raw": "http://{{host-app}}/users",
-							"protocol": "http",
+							"raw": "{{host-app}}/users",
 							"host": [
 								"{{host-app}}"
 							],
@@ -2244,8 +2235,7 @@
 							"raw": "{\n    \"email\": \"brian.michael@yahoo.com\",\n    \"emailEnabled\": true,\n    \"questionPreference\": \"SLACK\",\n    \"sms\": \"4047355660\",\n    \"smsEnabled\": true,\n    \"slack\": \"bsmichael\",\n    \"slackEnabled\": true,\n    \"firstName\": \"Brian\",\n    \"lastName\": \"Michael\",\n    \"username\": \"{{instructor-user}}\",\n    \"password\": \"{{instructor-password}}\",\n    \"eaaNumber\": \"873175\",\n    \"certificateNumber\": \"3442084CFI\",\n    \"role\": \"INSTRUCTOR\"\n}"
 						},
 						"url": {
-							"raw": "http://{{host-app}}/users",
-							"protocol": "http",
+							"raw": "{{host-app}}/users",
 							"host": [
 								"{{host-app}}"
 							],
@@ -2286,8 +2276,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://{{host-app}}/users",
-							"protocol": "http",
+							"raw": "{{host-app}}/users",
 							"host": [
 								"{{host-app}}"
 							],
@@ -2320,8 +2309,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://{{host-app}}/users/logout",
-							"protocol": "http",
+							"raw": "{{host-app}}/users/logout",
 							"host": [
 								"{{host-app}}"
 							],
@@ -2355,8 +2343,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://{{host-app}}/users/1/verify/EMAIL",
-							"protocol": "http",
+							"raw": "{{host-app}}/users/1/verify/EMAIL",
 							"host": [
 								"{{host-app}}"
 							],
@@ -2392,8 +2379,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://{{host-app}}/users/1/password/reset",
-							"protocol": "http",
+							"raw": "{{host-app}}/users/1/password/reset",
 							"host": [
 								"{{host-app}}"
 							],
@@ -2429,8 +2415,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://{{host-app}}/users/1/password/password/SKYC",
-							"protocol": "http",
+							"raw": "{{host-app}}/users/1/password/password/SKYC",
 							"host": [
 								"{{host-app}}"
 							],
@@ -2447,7 +2432,7 @@
 					"response": []
 				},
 				{
-					"name": "login",
+					"name": "login (Instructor)",
 					"event": [
 						{
 							"listen": "test",
@@ -2484,8 +2469,57 @@
 							"raw": "{\n\t\"username\": \"{{instructor-user}}\",\n\t\"password\": \"{{instructor-password}}\"\n}"
 						},
 						"url": {
-							"raw": "http://{{host-app}}/login",
-							"protocol": "http",
+							"raw": "{{host-app}}/login",
+							"host": [
+								"{{host-app}}"
+							],
+							"path": [
+								"login"
+							]
+						},
+						"description": "http://{{host-app}}/users/1/login"
+					},
+					"response": []
+				},
+				{
+					"name": "login (Student)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "371ef747-21db-414b-82ef-29088e54d3d8",
+								"exec": [
+									"//This stores the bearer token that is returned",
+									"//into an environment variable",
+									"postman.setEnvironmentVariable(\"token\", postman.getResponseHeader(\"Authorization\"));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"username\": \"{{student-user}}\",\n\t\"password\": \"{{student-password}}\"\n}"
+						},
+						"url": {
+							"raw": "{{host-app}}/login",
 							"host": [
 								"{{host-app}}"
 							],
@@ -2532,8 +2566,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://{{host-app}}/reports/quizzes/1/completion",
-							"protocol": "http",
+							"raw": "{{host-app}}/reports/quizzes/1/completion",
 							"host": [
 								"{{host-app}}"
 							],
@@ -2577,8 +2610,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://{{host-app}}/reports/quizzes/1/results",
-							"protocol": "http",
+							"raw": "{{host-app}}/reports/quizzes/1/results",
 							"host": [
 								"{{host-app}}"
 							],
@@ -2622,8 +2654,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://{{host-app}}/reports/quizzes/1/user/1/results",
-							"protocol": "http",
+							"raw": "{{host-app}}/reports/quizzes/1/user/1/results",
 							"host": [
 								"{{host-app}}"
 							],
@@ -2674,8 +2705,7 @@
 							"raw": "{\n\t\"course\": \"Private Pilot\",\n\t\"unit\": \"Unit 1\",\n    \"subUnit\": \"Section 1\",\n    \"text\": \"This is some text\"\n}"
 						},
 						"url": {
-							"raw": "http://{{host-app}}/lessons",
-							"protocol": "http",
+							"raw": "{{host-app}}/lessons",
 							"host": [
 								"{{host-app}}"
 							],
@@ -2716,8 +2746,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://{{host-app}}/lessons/1",
-							"protocol": "http",
+							"raw": "{{host-app}}/lessons/1",
 							"host": [
 								"{{host-app}}"
 							],
@@ -2759,8 +2788,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://{{host-app}}/lessons",
-							"protocol": "http",
+							"raw": "{{host-app}}/lessons",
 							"host": [
 								"{{host-app}}"
 							],
@@ -2801,8 +2829,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://{{host-app}}/lessons/1",
-							"protocol": "http",
+							"raw": "{{host-app}}/lessons/1",
 							"host": [
 								"{{host-app}}"
 							],

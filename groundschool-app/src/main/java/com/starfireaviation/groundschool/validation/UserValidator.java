@@ -5,16 +5,22 @@
  */
 package com.starfireaviation.groundschool.validation;
 
+import java.security.Principal;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.starfireaviation.groundschool.exception.AccessDeniedException;
 import com.starfireaviation.groundschool.exception.ConflictException;
 import com.starfireaviation.groundschool.exception.InvalidPayloadException;
+import com.starfireaviation.groundschool.exception.ResourceNotFoundException;
+import com.starfireaviation.groundschool.model.Role;
 import com.starfireaviation.groundschool.model.User;
 import com.starfireaviation.groundschool.model.sql.UserEntity;
 import com.starfireaviation.groundschool.repository.UserRepository;
+import com.starfireaviation.groundschool.service.UserService;
 
 /**
  * UserValidator
@@ -36,6 +42,12 @@ public class UserValidator {
     private UserRepository userRepository;
 
     /**
+     * UserService
+     */
+    @Autowired
+    private UserService userService;
+
+    /**
      * User Validation
      *
      * @param user User
@@ -45,6 +57,23 @@ public class UserValidator {
     public void validate(User user) throws ConflictException, InvalidPayloadException {
         empty(user);
         conflict(user);
+    }
+
+    /**
+     * Validates access to a user's information by the principal user
+     *
+     * @param userId User ID
+     * @param principal Principal
+     * @throws ResourceNotFoundException when principal user is not found
+     * @throws AccessDeniedException when principal user is not permitted to access user info
+     */
+    public void access(long userId, Principal principal) throws ResourceNotFoundException,
+            AccessDeniedException {
+        final User loggedInUser = userService.findByUsername(principal.getName());
+        final Role role = loggedInUser.getRole();
+        if (role != Role.ADMIN && role != Role.INSTRUCTOR && loggedInUser.getId() != userId) {
+            throw new AccessDeniedException("Current user is not authorized to retrieve this user's information");
+        }
     }
 
     /**

@@ -75,6 +75,10 @@ public class HazelcastConfig {
         usersMapConfig.setTimeToLiveSeconds(hazelcastProperties.getTtl());
         cfg.addMapConfig(usersMapConfig);
 
+        final MapConfig usernamesMapConfig = new MapConfig("usernames");
+        usernamesMapConfig.setTimeToLiveSeconds(hazelcastProperties.getTtl());
+        cfg.addMapConfig(usernamesMapConfig);
+
         return Hazelcast.newHazelcastInstance(cfg);
     }
 }

@@ -61,6 +61,11 @@ public class UserServiceImpl implements UserService {
     private Map<Long, User> userCache;
 
     /**
+     * UserNameCache
+     */
+    private Map<String, Long> userNameCache;
+
+    /**
      * Initializes an instance of <code>UserServiceImpl</code> with the default data.
      */
     public UserServiceImpl() {
@@ -93,7 +98,11 @@ public class UserServiceImpl implements UserService {
         final Long userId = user.getId();
         if (userId != null) {
             initCache();
-            userCache.remove(userId);
+            if (userCache.containsKey(userId)) {
+                final User cachedUser = userCache.get(userId);
+                userNameCache.remove(cachedUser.getUsername());
+                userCache.remove(userId);
+            }
             final UserEntity existingUser = findByIdWithPassword(userId);
             if (existingUser == null) {
                 final String msg = String.format("No user found for ID [%s]", userId);
@@ -127,7 +136,6 @@ public class UserServiceImpl implements UserService {
         final List<UserEntity> userEntities = userRepository.findAll();
         for (UserEntity userEntity : userEntities) {
             final User user = get(userEntity.getId());
-            user.setPassword(null);
             users.add(user);
         }
         return users;
@@ -144,6 +152,8 @@ public class UserServiceImpl implements UserService {
         }
         final User user = mapper.map(userRepository.findById(id), User.class);
         user.setPassword(null);
+        userNameCache.put(user.getUsername(), user.getId());
+        userCache.put(user.getId(), user);
         return user;
     }
 
@@ -152,9 +162,13 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public User findByUsername(String username) {
+        initCache();
+        if (userNameCache.containsKey(username)) {
+            return userCache.get(userNameCache.get(username));
+        }
         final User user = mapper.map(userRepository.findByUsername(username), User.class);
         user.setPassword(null);
-        initCache();
+        userNameCache.put(username, user.getId());
         userCache.put(user.getId(), user);
         return user;
     }
@@ -174,8 +188,8 @@ public class UserServiceImpl implements UserService {
      */
     private void initCache() {
         if (userCache == null) {
-            //hazelcastInstance = Hazelcast.newHazelcastInstance(new Config());
             userCache = hazelcastInstance.getMap("users");
+            userNameCache = hazelcastInstance.getMap("usernames");
         }
     }
 

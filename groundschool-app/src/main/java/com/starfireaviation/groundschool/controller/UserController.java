@@ -126,6 +126,7 @@ public class UserController {
             AccessDeniedException, InvalidPayloadException, ConflictException {
         LOGGER.info(String.format("put() User is logged in as %s", principal.getName()));
         userValidator.validate(user);
+        userValidator.access(user.getId(), principal);
         final User loggedInUser = userService.findByUsername(principal.getName());
         final Role role = loggedInUser.getRole();
         if (role != Role.ADMIN && role != Role.INSTRUCTOR && loggedInUser.getId() != user.getId()) {
@@ -156,11 +157,7 @@ public class UserController {
     public User get(@PathVariable("userId") long userId, Principal principal) throws AccessDeniedException,
             ResourceNotFoundException {
         LOGGER.info(String.format("get() User is logged in as %s", principal.getName()));
-        final User loggedInUser = userService.findByUsername(principal.getName());
-        final Role role = loggedInUser.getRole();
-        if (role != Role.ADMIN && role != Role.INSTRUCTOR && loggedInUser.getId() != userId) {
-            throw new AccessDeniedException("Current user is not authorized to update user information");
-        }
+        userValidator.access(userId, principal);
         return userService.get(userId);
     }
 
@@ -184,10 +181,16 @@ public class UserController {
      * @param principal Principal
      * @return list of Users
      * @throws ResourceNotFoundException when user is not found
+     * @throws AccessDeniedException when user doesn't have permission to perform operation
      */
     @GetMapping
-    public List<User> list(Principal principal) throws ResourceNotFoundException {
+    public List<User> list(Principal principal) throws ResourceNotFoundException, AccessDeniedException {
         LOGGER.info(String.format("list() User is logged in as %s", principal.getName()));
+        final User loggedInUser = userService.findByUsername(principal.getName());
+        final Role role = loggedInUser.getRole();
+        if (role != Role.ADMIN && role != Role.INSTRUCTOR) {
+            throw new AccessDeniedException("Current user is not authorized to retrieve this user's information");
+        }
         return userService.getAll();
     }
 
