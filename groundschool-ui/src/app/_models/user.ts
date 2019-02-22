@@ -18,5 +18,6 @@
     certificateNumber: string;
     questionPreference: string;
     code: string;
+    role: string;
     token: string;
 }

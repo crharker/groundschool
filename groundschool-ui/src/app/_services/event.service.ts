@@ -29,7 +29,7 @@ export class EventService {
     }
 
     upcoming(count: number) {
-      return this.http.get<Event[]>(`${environment.apiUrl}/upcoming/${count}`);
+      return this.http.get<Event[]>(`${environment.apiUrl}/events/upcoming/${count}`);
     }
 
     rsvp(eventId: number, userId: number, confirm: boolean) {

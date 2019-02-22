@@ -15,7 +15,13 @@ import { HomeComponent } from './home';
 import { LoginComponent } from './login';
 import { RegisterComponent } from './register';
 import { TokenInterceptor } from './auth/token.interceptor';
-import { UserComponent } from './user/user.component'
+import { UserComponent } from './user/user.component';
+import { EventComponent } from './event/event.component';
+import { LessonComponent } from './lesson/lesson.component';
+import { LessonPlanComponent } from './lesson-plan/lesson-plan.component';
+import { QuestionComponent } from './question/question.component';
+import { QuizComponent } from './quiz/quiz.component';
+import { ReferenceMaterialComponent } from './reference-material/reference-material.component';
 
 @NgModule({
     imports: [
@@ -30,7 +36,13 @@ import { UserComponent } from './user/user.component'
         HomeComponent,
         LoginComponent,
         RegisterComponent,
-        UserComponent
+        UserComponent,
+        EventComponent,
+        LessonComponent,
+        LessonPlanComponent,
+        QuestionComponent,
+        QuizComponent,
+        ReferenceMaterialComponent
     ],
     providers: [
         { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
