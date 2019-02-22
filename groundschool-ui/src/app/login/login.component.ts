@@ -1,9 +1,7 @@
 ﻿import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { BehaviorSubject, Observable } from 'rxjs';
 import { first } from 'rxjs/operators';
-import { User } from '@app/_models';
 
 import { AlertService, AuthenticationService, UserService } from '@app/_services';
 
@@ -13,18 +11,14 @@ export class LoginComponent implements OnInit {
     loading = false;
     submitted = false;
     returnUrl: string;
-    private currentUserSubject: BehaviorSubject<User>;
 
     constructor(
         private formBuilder: FormBuilder,
         private route: ActivatedRoute,
         private router: Router,
         private authenticationService: AuthenticationService,
-        private userService: UserService,
         private alertService: AlertService
     ) {
-        this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentUser')));
-
         // redirect to home if already logged in
         if (this.authenticationService.currentUserValue) { 
             this.router.navigate(['/']);
@@ -53,7 +47,17 @@ export class LoginComponent implements OnInit {
         }
 
         this.loading = true;
-        this.authenticationService.login(this.f.username.value, this.f.password.value)
-        this.loading = false;
+        this.authenticationService
+            .login(this.f.username.value, this.f.password.value)
+            .pipe(first())
+            .subscribe(
+                data => {
+                    this.router.navigate([this.returnUrl]);
+                },
+                error => {
+                    this.alertService.error(error);
+                    this.loading = false;
+                }
+            );
     }
 }

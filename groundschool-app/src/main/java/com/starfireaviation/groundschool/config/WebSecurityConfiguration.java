@@ -84,8 +84,6 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .antMatchers(HttpMethod.POST, "/users/verify/**")
                 .permitAll()
-                .antMatchers(HttpMethod.GET, "/users/username/**")
-                .permitAll()
                 .antMatchers(HttpMethod.POST, "/users/logout")
                 .permitAll()
                 // Allow only Admin and Instructors to access
