@@ -174,6 +174,16 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
+     * {@inheritDoc} Required implementation.
+     */
+    @Override
+    public User findByEmail(String email) {
+        final User user = mapper.map(userRepository.findByEmail(email), User.class);
+        user.setPassword(null);
+        return user;
+    }
+
+    /**
      * Gets UserEntity including the user's password
      *
      * @param userId User ID

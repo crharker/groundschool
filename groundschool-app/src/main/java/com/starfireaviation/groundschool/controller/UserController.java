@@ -253,26 +253,35 @@ public class UserController {
     /**
      * Start the user password reset process
      *
-     * @param userId User ID
+     * @param email User's email address
      * @return success
-     * @throws ResourceNotFoundException when no user is found
      *
      */
     @PostMapping(path = {
-            "/{userId}/password/reset"
+            "/password/reset"
     })
-    public boolean passwordReset(@PathVariable("userId") long userId) throws ResourceNotFoundException {
-        final User user = userService.get(userId);
-        if (user == null) {
-            final String msg = String.format("No user found for ID [%s]", userId);
-            LOGGER.warn(msg);
-            throw new ResourceNotFoundException(msg);
+    public boolean passwordReset(@RequestBody String email) {
+        boolean success = false;
+        try {
+            final User user = userService.findByEmail(email);
+            if (user != null) {
+                user.setCode(CodeGenerator.generateCode(4));
+                userService.store(user);
+                notificationService.send(
+                        user.getId(),
+                        null,
+                        null,
+                        NotificationType.ALL,
+                        NotificationEventType.PASSWORD_RESET);
+                success = true;
+            }
+        } catch (ResourceNotFoundException rnfe) {
+            LOGGER.warn(
+                    String.format(
+                            "A password reset was attempted for email [%s] but no email address was found in the database.",
+                            email));
         }
-        // TODO do something with verificationCode
-        user.setCode(CodeGenerator.generateCode(4));
-        userService.store(user);
-        notificationService.send(userId, null, null, NotificationType.ALL, NotificationEventType.PASSWORD_RESET);
-        return true;
+        return success;
     }
 
     /**

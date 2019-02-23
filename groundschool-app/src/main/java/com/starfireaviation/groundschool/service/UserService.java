@@ -52,4 +52,13 @@ public interface UserService {
      */
     public User findByUsername(String username) throws ResourceNotFoundException;
 
+    /**
+     * Gets a user by email
+     *
+     * @param email User's email address
+     * @return User
+     * @throws ResourceNotFoundException when no user is found for the provided user ID
+     */
+    public User findByEmail(String email) throws ResourceNotFoundException;
+
 }

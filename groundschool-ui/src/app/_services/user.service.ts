@@ -45,8 +45,8 @@ export class UserService {
         return this.http.post<boolean>(`${environment.apiUrl}/users/${userId}/password/${verificationCode}`, password);
     }
 
-    passwordReset(userId: number) {
-        return this.http.post<boolean>(`${environment.apiUrl}/users/${userId}/password/reset`, null);
+    passwordReset(email: string) {
+        return this.http.post<boolean>(`${environment.apiUrl}/users/password/reset`, { email });
     }
 
     logout() {

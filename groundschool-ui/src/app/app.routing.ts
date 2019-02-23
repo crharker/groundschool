@@ -10,6 +10,8 @@ import { QuestionComponent } from './question';
 import { QuizComponent } from './quiz';
 import { LessonPlanComponent } from './lesson-plan';
 import { ReferenceMaterialComponent } from './reference-material';
+import { ForgotPasswordComponent } from './forgot-password';
+import { PasswordResetComponent } from './password-reset';
 import { AuthGuard } from './_guards';
 
 const appRoutes: Routes = [
@@ -23,6 +25,8 @@ const appRoutes: Routes = [
     { path: 'question', component: QuestionComponent },
     { path: 'quiz', component: QuizComponent },
     { path: 'referencematerial', component: ReferenceMaterialComponent },
+    { path: 'forgotpassword', component: ForgotPasswordComponent },
+    { path: 'passwordreset', component: PasswordResetComponent },
 
     // otherwise redirect to home
     { path: '**', redirectTo: '' }

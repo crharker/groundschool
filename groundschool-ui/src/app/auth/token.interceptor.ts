@@ -18,10 +18,8 @@ export class TokenInterceptor implements HttpInterceptor {
   ) {}
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    console.log('intercept called...');
     this.token = localStorage.getItem('token');
     if (this.token) {
-      console.log('adding ' + this.token + ' to header');
       request = request.clone({
         setHeaders: {
           Authorization: `Bearer ${this.token}`

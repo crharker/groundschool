@@ -139,7 +139,7 @@ public class UserValidator {
      * @throws ConflictException when sms conflicts with another user's sms
      */
     private void sms(User user) throws ConflictException {
-        if (user.getSms() != null) {
+        if (user.getSms() != null && !"".equals(user.getSms())) {
             UserEntity existingUser = userRepository.findBySms(user.getSms());
             if (existingUser != null && existingUser.getId() != user.getId()) {
                 String msg = String.format(
@@ -162,7 +162,7 @@ public class UserValidator {
      * @throws ConflictException when slack conflicts with another user's slack
      */
     private void slack(User user) throws ConflictException {
-        if (user.getSlack() != null) {
+        if (user.getSlack() != null && !"".equals(user.getSlack())) {
             UserEntity existingUser = userRepository.findBySlack(user.getSlack());
             if (existingUser != null && existingUser.getId() != user.getId()) {
                 String msg = String.format(
@@ -185,7 +185,7 @@ public class UserValidator {
      * @throws ConflictException when email conflicts with another user's email
      */
     private void email(User user) throws ConflictException {
-        if (user.getEmail() != null) {
+        if (user.getEmail() != null && !"".equals(user.getEmail())) {
             UserEntity existingUser = userRepository.findByEmail(user.getEmail());
             if (existingUser != null && existingUser.getId() != user.getId()) {
                 String msg = String.format(
@@ -208,7 +208,7 @@ public class UserValidator {
      * @throws ConflictException when EAA number conflicts with another user's EAA number
      */
     private void eaaNumber(User user) throws ConflictException {
-        if (user.getEaaNumber() != null) {
+        if (user.getEaaNumber() != null && !"".equals(user.getEaaNumber())) {
             UserEntity existingUser = userRepository.findByEaaNumber(user.getEaaNumber());
             if (existingUser != null && existingUser.getId() != user.getId()) {
                 String msg = String.format(

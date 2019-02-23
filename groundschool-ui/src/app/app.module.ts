@@ -22,6 +22,8 @@ import { LessonPlanComponent } from './lesson-plan/lesson-plan.component';
 import { QuestionComponent } from './question/question.component';
 import { QuizComponent } from './quiz/quiz.component';
 import { ReferenceMaterialComponent } from './reference-material/reference-material.component';
+import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
+import { PasswordResetComponent } from './password-reset/password-reset.component';
 
 @NgModule({
     imports: [
@@ -42,8 +44,10 @@ import { ReferenceMaterialComponent } from './reference-material/reference-mater
         LessonPlanComponent,
         QuestionComponent,
         QuizComponent,
-        ReferenceMaterialComponent
-    ],
+        ReferenceMaterialComponent,
+        ForgotPasswordComponent ,
+        PasswordResetComponent
+   ],
     providers: [
         { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
         { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
