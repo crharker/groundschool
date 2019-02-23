@@ -3,12 +3,12 @@
     <div class="navbar-nav">
         <a class="nav-item nav-link" routerLink="/">Home</a>
         <a class="nav-item nav-link" routerLink="/user">User</a>
-        <a class="nav-item nav-link" routerLink="/event">Event</a>
-        <a class="nav-item nav-link" routerLink="/lesson">Lesson</a>
-        <a class="nav-item nav-link" routerLink="/question">Question</a>
-        <a class="nav-item nav-link" routerLink="/quiz">Quiz</a>
-        <a class="nav-item nav-link" routerLink="/lessonplan">LessonPlan</a>
-        <a class="nav-item nav-link" routerLink="/referencematerial">ReferenceMaterial</a>
+        <a class="nav-item nav-link" routerLink="/event" *ngIf="currentUser.role == 'ADMIN' || currentUser.role == 'INSTRUCTOR'">Event</a>
+        <a class="nav-item nav-link" routerLink="/lesson" *ngIf="currentUser.role == 'ADMIN' || currentUser.role == 'INSTRUCTOR'">Lesson</a>
+        <a class="nav-item nav-link" routerLink="/question" *ngIf="currentUser.role == 'ADMIN' || currentUser.role == 'INSTRUCTOR'">Question</a>
+        <a class="nav-item nav-link" routerLink="/quiz" *ngIf="currentUser.role == 'ADMIN' || currentUser.role == 'INSTRUCTOR'">Quiz</a>
+        <a class="nav-item nav-link" routerLink="/lessonplan" *ngIf="currentUser.role == 'ADMIN' || currentUser.role == 'INSTRUCTOR'">LessonPlan</a>
+        <a class="nav-item nav-link" routerLink="/referencematerial" *ngIf="currentUser.role == 'ADMIN' || currentUser.role == 'INSTRUCTOR'">ReferenceMaterial</a>
         <a class="nav-item nav-link" (click)="logout()">Logout</a>
     </div>
 </nav>
