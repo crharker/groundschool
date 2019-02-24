@@ -43,6 +43,15 @@ public interface LessonService {
     public List<Lesson> getAll() throws ResourceNotFoundException;
 
     /**
+     * Gets all lessons attended by a participant
+     *
+     * @param userId User ID
+     * @return list of Lesson
+     * @throws ResourceNotFoundException when statistic is not found
+     */
+    public List<Lesson> getAttendedLessons(Long userId) throws ResourceNotFoundException;
+
+    /**
      * Gets a lesson
      *
      * @param id Long

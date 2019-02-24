@@ -50,7 +50,7 @@ public class LessonValidator {
     }
 
     /**
-     * Validates access to an event by the principal user
+     * Validates access to a lesson by the principal user
      *
      * @param principal Principal
      * @throws ResourceNotFoundException when principal user is not found
@@ -61,6 +61,23 @@ public class LessonValidator {
         final User loggedInUser = userService.findByUsername(principal.getName());
         final Role role = loggedInUser.getRole();
         if (role != Role.ADMIN && role != Role.INSTRUCTOR) {
+            throw new AccessDeniedException("Current user is not authorized");
+        }
+    }
+
+    /**
+     * Validates access to a lesson by the principal user
+     *
+     * @param userId User ID
+     * @param principal Principal
+     * @throws ResourceNotFoundException when principal user is not found
+     * @throws AccessDeniedException when principal user is not permitted to access user info
+     */
+    public void accessIncludingUser(Long userId, Principal principal) throws ResourceNotFoundException,
+            AccessDeniedException {
+        final User loggedInUser = userService.findByUsername(principal.getName());
+        final Role role = loggedInUser.getRole();
+        if (role != Role.ADMIN && role != Role.INSTRUCTOR && (role == Role.STUDENT && userId != loggedInUser.getId())) {
             throw new AccessDeniedException("Current user is not authorized");
         }
     }

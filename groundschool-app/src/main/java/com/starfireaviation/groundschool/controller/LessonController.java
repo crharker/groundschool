@@ -139,6 +139,24 @@ public class LessonController {
     }
 
     /**
+     * Gets all attended lessons
+     *
+     * @param userId Long
+     * @param principal Principal
+     * @return list of Lesson
+     * @throws ResourceNotFoundException when lesson information is not found
+     * @throws AccessDeniedException when user doesn't have permission to perform operation
+     */
+    @GetMapping(path = {
+            "/{userId}/attended"
+    })
+    public List<Lesson> getAllAttendedLessons(@PathVariable("userId") long userId, Principal principal)
+            throws ResourceNotFoundException, AccessDeniedException {
+        lessonValidator.accessIncludingUser(userId, principal);
+        return lessonService.getAttendedLessons(userId);
+    }
+
+    /**
      * Get all lessons
      *
      * @param principal Principal

@@ -135,42 +135,6 @@ public class EventParticipantEntity extends BaseEntity {
     }
 
     /**
-     * Retrieves the value for {@link #confirmed}.
-     *
-     * @return the current value
-     */
-    public Boolean getConfirmed() {
-        return confirmed;
-    }
-
-    /**
-     * Provides a value for {@link #confirmed}.
-     *
-     * @param confirmed the new value to set
-     */
-    public void setConfirmed(Boolean confirmed) {
-        this.confirmed = confirmed;
-    }
-
-    /**
-     * Retrieves the value for {@link #declined}.
-     *
-     * @return the current value
-     */
-    public Boolean getDeclined() {
-        return declined;
-    }
-
-    /**
-     * Provides a value for {@link #declined}.
-     *
-     * @param declined the new value to set
-     */
-    public void setDeclined(Boolean declined) {
-        this.declined = declined;
-    }
-
-    /**
      * Retrieves the value for {@link #confirmationTime}.
      *
      * @return the current value
@@ -193,7 +157,7 @@ public class EventParticipantEntity extends BaseEntity {
      *
      * @return the current value
      */
-    public Boolean getCheckedIn() {
+    public Boolean isCheckedIn() {
         return checkedIn;
     }
 

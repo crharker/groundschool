@@ -73,6 +73,10 @@ public enum StatisticType {
      */
     EVENT_CANCELLED,
     /**
+     * EVENT_CHECKIN
+     */
+    EVENT_CHECKIN,
+    /**
      * FACEBOOK_EVENT_CREATED_NOTIFICATION
      */
     FACEBOOK_EVENT_CREATED_NOTIFICATION,

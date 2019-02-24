@@ -133,7 +133,11 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .hasAnyAuthority("ADMIN", "INSTRUCTOR")
                 .antMatchers(HttpMethod.DELETE, "/statistics/*")
                 .hasAnyAuthority("ADMIN", "INSTRUCTOR")
+                .antMatchers(HttpMethod.GET, "/statistics/*")
+                .hasAnyAuthority("ADMIN", "INSTRUCTOR")
                 .antMatchers(HttpMethod.DELETE, "/users/*")
+                .hasAnyAuthority("ADMIN", "INSTRUCTOR")
+                .antMatchers(HttpMethod.GET, "/lessons/*")
                 .hasAnyAuthority("ADMIN", "INSTRUCTOR")
                 // Everything else requires one of Admin, Instructor, or Student
                 .anyRequest()

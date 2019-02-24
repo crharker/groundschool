@@ -8,14 +8,26 @@ package com.starfireaviation.groundschool.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.hazelcast.core.HazelcastInstance;
+import com.starfireaviation.groundschool.exception.ResourceNotFoundException;
+import com.starfireaviation.groundschool.model.Activity;
+import com.starfireaviation.groundschool.model.ActivityType;
+import com.starfireaviation.groundschool.model.Event;
 import com.starfireaviation.groundschool.model.Lesson;
+import com.starfireaviation.groundschool.model.LessonPlan;
+import com.starfireaviation.groundschool.model.Statistic;
+import com.starfireaviation.groundschool.model.StatisticType;
 import com.starfireaviation.groundschool.model.sql.LessonEntity;
 import com.starfireaviation.groundschool.repository.LessonRepository;
+import com.starfireaviation.groundschool.service.EventService;
+import com.starfireaviation.groundschool.service.LessonPlanService;
 import com.starfireaviation.groundschool.service.LessonService;
+import com.starfireaviation.groundschool.service.StatisticService;
 
 import ma.glasnost.orika.MapperFacade;
 
@@ -44,6 +56,24 @@ public class LessonServiceImpl implements LessonService {
      */
     @Autowired
     private HazelcastInstance hazelcastInstance;
+
+    /**
+     * StatisticService
+     */
+    @Autowired
+    private StatisticService statisticService;
+
+    /**
+     * EventService
+     */
+    @Autowired
+    private EventService eventService;
+
+    /**
+     * LessonPlanService
+     */
+    @Autowired
+    private LessonPlanService lessonPlanService;
 
     /**
      * LessonCache
@@ -112,6 +142,38 @@ public class LessonServiceImpl implements LessonService {
             lessons.add(get(lessonEntity.getId()));
         }
         return lessons;
+    }
+
+    /**
+     * {@inheritDoc} Required implementation.
+     */
+    @Override
+    public List<Lesson> getAttendedLessons(Long userId) throws ResourceNotFoundException {
+        final List<Lesson> attendedLessons = new ArrayList<>();
+        final List<Statistic> statistics = statisticService.findByUserId(userId, StatisticType.EVENT_CHECKIN);
+        final List<Long> eventIds = statistics.stream().map(statistic -> statistic.getEventId()).collect(
+                Collectors.toList());
+        eventIds
+                .stream()
+                .forEach(eventId -> {
+                    try {
+                        final Event event = eventService.get(eventId);
+                        final LessonPlan lessonPlan = lessonPlanService.get(event.getLessonPlanId());
+                        final List<Activity> activities = lessonPlan.getActivities();
+                        final List<Long> lessonIds = activities
+                                .stream()
+                                .filter(activity -> activity.getActivityType() == ActivityType.LESSON)
+                                .map(activity -> activity.getReferenceId())
+                                .collect(
+                                        Collectors.toList());
+                        lessonIds
+                                .stream()
+                                .forEach(lessonId -> attendedLessons.add(get(lessonId)));
+                    } catch (ResourceNotFoundException e) {
+                        // TODO log something
+                    }
+                });
+        return attendedLessons;
     }
 
     /**

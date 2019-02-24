@@ -5,6 +5,8 @@
  */
 package com.starfireaviation.groundschool.service.impl;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,12 +19,15 @@ import org.springframework.stereotype.Service;
 import com.hazelcast.core.HazelcastInstance;
 import com.starfireaviation.groundschool.exception.ResourceNotFoundException;
 import com.starfireaviation.groundschool.model.Event;
+import com.starfireaviation.groundschool.model.Statistic;
+import com.starfireaviation.groundschool.model.StatisticType;
 import com.starfireaviation.groundschool.model.User;
 import com.starfireaviation.groundschool.model.sql.EventEntity;
 import com.starfireaviation.groundschool.model.sql.EventParticipantEntity;
 import com.starfireaviation.groundschool.repository.EventRepository;
 import com.starfireaviation.groundschool.repository.EventParticipantRepository;
 import com.starfireaviation.groundschool.service.EventService;
+import com.starfireaviation.groundschool.service.StatisticService;
 import com.starfireaviation.groundschool.service.UserService;
 
 import ma.glasnost.orika.MapperFacade;
@@ -52,6 +57,12 @@ public class EventServiceImpl implements EventService {
      */
     @Autowired
     private UserService userService;
+
+    /**
+     * StatisticService
+     */
+    @Autowired
+    private StatisticService statisticService;
 
     /**
      * MapperFacade
@@ -225,19 +236,29 @@ public class EventServiceImpl implements EventService {
      */
     @Override
     public boolean checkin(Long eventId, Long userId, String code) throws ResourceNotFoundException {
+        final Instant start = Instant.now();
         boolean success = false;
-        EventParticipantEntity eventUserEntity = eventUserRepository.findByEventAndUserId(eventId, userId);
+        EventParticipantEntity eventParticipantEntity = eventUserRepository.findByEventAndUserId(eventId, userId);
         Event event = get(eventId);
-        if (eventUserEntity != null
+        if (eventParticipantEntity != null
                 && event != null
+                && !eventParticipantEntity.isCheckedIn()
                 && (!event.isCheckinCodeRequired()
                         || (event.isCheckinCodeRequired()
                                 && event.getCheckinCode() != null
                                 && event.getCheckinCode().equalsIgnoreCase(code)))) {
-            eventUserEntity.setCheckedIn(true);
-            eventUserEntity.setCheckinTime(LocalDateTime.now());
-            eventUserRepository.save(eventUserEntity);
+            eventParticipantEntity.setCheckedIn(true);
+            eventParticipantEntity.setCheckinTime(LocalDateTime.now());
+            eventUserRepository.save(eventParticipantEntity);
             success = true;
+            statisticService.store(
+                    new Statistic(
+                            userId,
+                            eventId,
+                            null,
+                            null,
+                            StatisticType.EVENT_CHECKIN,
+                            String.format("Duration [%s]", Duration.between(start, Instant.now()))));
         }
         return success;
     }
@@ -249,8 +270,8 @@ public class EventServiceImpl implements EventService {
     public boolean didCheckIn(Long eventId, Long userId) {
         if (eventId != null && userId != null) {
             EventParticipantEntity eventUserEntity = eventUserRepository.findByEventAndUserId(eventId, userId);
-            if (eventUserEntity != null && eventUserEntity.getCheckedIn() != null) {
-                return eventUserEntity.getCheckedIn().booleanValue();
+            if (eventUserEntity != null && eventUserEntity.isCheckedIn() != null) {
+                return eventUserEntity.isCheckedIn().booleanValue();
             }
         }
         return false;

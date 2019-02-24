@@ -21,9 +21,9 @@ public enum ActivityType {
      */
     QUIZ,
     /**
-     * LECTURE
+     * LESSON
      */
-    LECTURE,
+    LESSON,
     /**
      * REVIEW
      */
