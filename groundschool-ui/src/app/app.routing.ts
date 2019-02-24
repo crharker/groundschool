@@ -9,6 +9,7 @@ import { LessonComponent } from './lesson';
 import { QuestionComponent } from './question';
 import { QuizComponent } from './quiz';
 import { LessonPlanComponent } from './lesson-plan';
+import { SyllabusComponent } from './syllabus';
 import { ReferenceMaterialComponent } from './reference-material';
 import { ForgotPasswordComponent } from './forgot-password';
 import { PasswordResetComponent } from './password-reset';
@@ -24,6 +25,7 @@ const appRoutes: Routes = [
     { path: 'lessonplan', component: LessonPlanComponent },
     { path: 'question', component: QuestionComponent },
     { path: 'quiz', component: QuizComponent },
+    { path: 'syllabus', component: SyllabusComponent },
     { path: 'referencematerial', component: ReferenceMaterialComponent },
     { path: 'forgotpassword', component: ForgotPasswordComponent },
     { path: 'passwordreset', component: PasswordResetComponent },
