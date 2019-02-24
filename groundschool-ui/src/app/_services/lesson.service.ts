@@ -28,4 +28,8 @@ export class LessonService {
       return this.http.get<Lesson[]>(`${environment.apiUrl}/lessons`);
     }
 
+    getAllAttendedLessons(userId: number) {
+      return this.http.get<Lesson[]>(`${environment.apiUrl}/lessons/${userId}/attended`);
+    }
+
 }

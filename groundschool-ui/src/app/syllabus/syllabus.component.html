@@ -1,7 +1,7 @@
 <h1>Hi {{currentUser.firstName}}!</h1>
-<h3>Syllabus:</h3>
+<h3>Attended Lessons:</h3>
 <ul>
-    <li *ngFor="let lesson of lessons">
+    <li *ngFor="let lesson of attendedLessons">
         {{lesson.course}}: {{lesson.unit}} - {{lesson.subUnit}}
     </li>
 </ul>
